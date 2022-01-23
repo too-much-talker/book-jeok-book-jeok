@@ -1,15 +1,11 @@
 package com.ssafy.bjbj.api.challenge.entity;
 
-import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.common.entity.BaseCreatedEntity;
 import com.ssafy.bjbj.common.entity.base.BaseCreatedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Getter
 //@ToString(of = {"id", "username", "age"})
@@ -29,9 +25,5 @@ public class PointHistory extends BaseCreatedEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PointDiffReason pointDiffReason;
-
-    @Column(nullable = false)
-    @ManyToOne(fetch = LAZY)
-    private Member member;
 
 }
