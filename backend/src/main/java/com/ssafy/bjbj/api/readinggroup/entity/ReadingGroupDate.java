@@ -1,6 +1,6 @@
 package com.ssafy.bjbj.api.readinggroup.entity;
 
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +22,14 @@ public class ReadingGroupDate extends BaseLastModifiedEntity {
     @Id
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime conferenceDate;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
+    @JoinColumn(name = "reading_group_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(fetch = LAZY)
     private ReadingGroup readingGroup;
+
 }
