@@ -9,11 +9,8 @@ import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.entity.PointHistory;
 import com.ssafy.bjbj.api.notice.entity.Notice;
 import com.ssafy.bjbj.api.notice.entity.NoticeComment;
-import com.ssafy.bjbj.api.readinggroup.entity.ExpHistory;
-import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
-import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
-import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.api.readinggroup.entity.*;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -57,22 +54,17 @@ public class Member extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "booklog_id")
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<Booklog> booklogs = new ArrayList<>();
-
-    @JoinColumns({
-            @JoinColumn(name = "book_info_id", referencedColumnName = "book_info_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    
+    // 내가 쓴 책 리뷰들
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<BookReview> bookReviews = new ArrayList<>();
-
-    @JoinColumns({
-            @JoinColumn(name = "booklog_id", referencedColumnName = "booklog_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    
+    // 내가 like한 북로그들
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<Like> likes = new ArrayList<>();
 
@@ -86,56 +78,54 @@ public class Member extends BaseLastModifiedEntity {
     @OneToMany
     private List<Subscribe> toMembers = new ArrayList<>();
 
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "member_id", nullable = false)
     @OneToMany
-    private List<activity> activities = new ArrayList<>();
+    private List<Activity> activities = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Notice> notices = new ArrayList<>();
 
-    @JoinColumn(name = "notice_comment_id")
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
-    @JoinColumn(name = "reading_group_id")
-    @OneToMany
+    // 내가 개설한 독서모임들
+    @OneToMany(mappedBy = "member")
     private List<ReadingGroup> readingGroups = new ArrayList<>();
 
-    @JoinColumn(name = "reading_group_board_id")
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<ReadingGroupBoard> readingGroupBoards = new ArrayList<>();
 
-    @JoinColumns({
-            @JoinColumn(name = "reading_group_id", referencedColumnName = "reading_group_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    @JoinColumn(name = "member_id")
     @OneToMany
-    private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
+    private List<ReadingGroupBoardComment> readingGroupBoardComments = new ArrayList<>();
 
-    @JoinColumn(name = "exp_history_id")
+    // 내가 들어간 독서모임들
+    @JoinColumn(name = "member_id")
+    @OneToMany
+    private List<ReadingGroupMember> joinedReadingGroups = new ArrayList<>();
+
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<ExpHistory> expHistories = new ArrayList<>();
 
     // challenge part
-    @Column(nullable = false)
-    @JoinColumn(name = "challenge_id")
-    @OneToMany
+    // 내가 개설한 챌린지들
+    @OneToMany(mappedBy = "member")
     private List<Challenge> challenges = new ArrayList<>();
 
-    @Column(nullable = false)
-    @JoinColumn(name = "challenge_auth_id")
+    @JoinColumn(name = "member_id")
     @OneToMany
     private List<ChallengeAuth> challengeAuths = new ArrayList<>();
 
-    @JoinColumns({
-            @JoinColumn(name = "challenge_id", referencedColumnName = "challenge_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    // 내가 참여한 챌린지들
+    @JoinColumn(name = "member_id")
     @OneToMany
-    private List<ChallengeMember> challengeMembers = new ArrayList<>();
+    private List<ChallengeMember> joinedChallenges = new ArrayList<>();
 
-    @Column(nullable = false)
-    @JoinColumn(name = "point_history_id")
+    @JoinColumn(name = "member_id", nullable = false)
     @OneToMany
     private List<PointHistory> pointHistories = new ArrayList<>();
+
 }
