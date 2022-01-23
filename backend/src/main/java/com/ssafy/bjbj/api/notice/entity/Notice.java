@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.notice.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,19 +25,23 @@ public class Notice extends BaseLastModifiedEntity {
     @Id
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String content;
 
-    private Integer views;
+    @Column(nullable = false)
+    private Integer views = 0;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @JoinColumn(name = "notice_comment_id")
+    @JoinColumn(name = "notice_id")
     @OneToMany
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
