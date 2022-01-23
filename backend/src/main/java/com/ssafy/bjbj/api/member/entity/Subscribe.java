@@ -6,20 +6,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Getter
 //@ToString(of = {"id", "username", "age"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@IdClass(SubscribeId.class)
 @Table(name = "tb_subscribe")
 @Entity
 public class Subscribe {
 
-    @Column(name = "from_member_id")
-    @ManyToOne
+    @JoinColumn(name = "from_member_id")
+    @ManyToOne(fetch = LAZY)
     @Id
     private Member fromMember;
 
-    @Column(name = "to_member_id")
-    @ManyToOne
+    @JoinColumn(name = "to_member_id")
+    @ManyToOne(fetch = LAZY)
     @Id
     private Member toMember;
 
