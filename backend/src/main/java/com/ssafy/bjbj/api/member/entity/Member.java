@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.member.entity;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.entity.Like;
+import com.ssafy.bjbj.api.notice.entity.Notice;
 import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
 import lombok.*;
 
@@ -78,5 +79,8 @@ public class Member extends BaseLastModifiedEntity {
     @JoinColumn(name = "activity_id")
     @OneToMany
     private List<activity> activities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Notice> notices = new ArrayList<>();
 
 }
