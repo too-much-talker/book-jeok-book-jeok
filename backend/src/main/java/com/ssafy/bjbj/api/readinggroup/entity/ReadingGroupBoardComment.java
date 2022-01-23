@@ -16,4 +16,19 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "tb_reading_group_board_comment")
 @Entity
 public class ReadingGroupBoardComment extends BaseLastModifiedEntity {
+
+    @Column(name = "reading_group_board_comment_id")
+    @GeneratedValue
+    @Id
+    private Long id;
+
+    private String content;
+
+    private boolean isDeleted;
+
+    @ManyToOne(fetch = LAZY)
+    private Member member;
+
+    @ManyToOne(fetch = LAZY)
+    private ReadingGroupBoard readingGroupBoard;
 }
