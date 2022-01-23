@@ -15,16 +15,17 @@ import java.time.LocalDateTime;
 public class Activity {
 
     @Column(name = "activity_id")
-    @GeneratedValue
     @Id
     private Long id;
 
-    private Long entityId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ActivityType activityType;
 
-    private Type type;
-
+    @Column(nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime time;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
 }
