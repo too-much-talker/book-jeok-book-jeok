@@ -1,13 +1,11 @@
-package com.ssafy.bjbj.common.entity;
+package com.ssafy.bjbj.common.entity.file;
 
-import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import static javax.persistence.FetchType.*;
 
 @Getter
 //@ToString(of = {"id", "username", "age"})
@@ -17,19 +15,19 @@ import static javax.persistence.FetchType.*;
 public class FileInfo extends BaseLastModifiedEntity {
 
     @Column(name = "file_info_id")
-    @GeneratedValue
     @Id
     private Long id;
 
+    @Column(nullable = false)
     private String originFileName;
 
+    @Column(nullable = false)
     private String encodedFileName;
 
+    @Column(nullable = false)
     private String savedPath;
 
+    @Column(nullable = false)
     private boolean isDeleted;
-
-    @ManyToOne(fetch = LAZY)
-    private Member member;
 
 }
