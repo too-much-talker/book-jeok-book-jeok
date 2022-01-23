@@ -5,6 +5,10 @@ import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.entity.Like;
 import com.ssafy.bjbj.api.notice.entity.Notice;
 import com.ssafy.bjbj.api.notice.entity.NoticeComment;
+import com.ssafy.bjbj.api.readinggroup.entity.ExpHistory;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
 import lombok.*;
 
@@ -88,4 +92,22 @@ public class Member extends BaseLastModifiedEntity {
     @OneToMany
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
+    @JoinColumn(name = "reading_group_id")
+    @OneToMany
+    private List<ReadingGroup> readingGroups = new ArrayList<>();
+
+    @JoinColumn(name = "reading_group_board_id")
+    @OneToMany
+    private List<ReadingGroupBoard> readingGroupBoards = new ArrayList<>();
+
+    @JoinColumns({
+            @JoinColumn(name = "reading_group_id", referencedColumnName = "reading_group_id"),
+            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    })
+    @OneToMany
+    private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
+
+    @JoinColumn(name = "exp_history_id")
+    @OneToMany
+    private List<ExpHistory> expHistories = new ArrayList<>();
 }
