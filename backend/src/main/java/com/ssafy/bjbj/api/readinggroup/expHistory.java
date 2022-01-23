@@ -1,7 +1,8 @@
 package com.ssafy.bjbj.api.readinggroup.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.common.entity.BaseCreatedEntity;
+import com.ssafy.bjbj.api.readinggroup.entity.ExpDiffReason;
+import com.ssafy.bjbj.common.entity.base.BaseCreatedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
