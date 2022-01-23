@@ -12,4 +12,15 @@ import javax.persistence.*;
 @Table(name = "tb_subscribe")
 @Entity
 public class Subscribe {
+
+    @Column(name = "from_member_id")
+    @ManyToOne
+    @Id
+    private Member fromMember;
+
+    @Column(name = "to_member_id")
+    @ManyToOne
+    @Id
+    private Member toMember;
+
 }
