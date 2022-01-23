@@ -3,6 +3,10 @@ package com.ssafy.bjbj.api.member.entity;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.entity.Like;
+import com.ssafy.bjbj.api.challenge.entity.Challenge;
+import com.ssafy.bjbj.api.challenge.entity.ChallengeAuth;
+import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
+import com.ssafy.bjbj.api.challenge.entity.PointHistory;
 import com.ssafy.bjbj.api.notice.entity.Notice;
 import com.ssafy.bjbj.api.notice.entity.NoticeComment;
 import com.ssafy.bjbj.api.readinggroup.entity.ExpHistory;
@@ -110,4 +114,27 @@ public class Member extends BaseLastModifiedEntity {
     @JoinColumn(name = "exp_history_id")
     @OneToMany
     private List<ExpHistory> expHistories = new ArrayList<>();
+
+    // challenge part
+    @Column(nullable = false)
+    @JoinColumn(name = "challenge_id")
+    @OneToMany
+    private List<Challenge> challenges = new ArrayList<>();
+
+    @Column(nullable = false)
+    @JoinColumn(name = "challenge_auth_id")
+    @OneToMany
+    private List<ChallengeAuth> challengeAuths = new ArrayList<>();
+
+    @JoinColumns({
+            @JoinColumn(name = "challenge_id", referencedColumnName = "challenge_id"),
+            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    })
+    @OneToMany
+    private List<ChallengeMember> challengeMembers = new ArrayList<>();
+
+    @Column(nullable = false)
+    @JoinColumn(name = "point_history_id")
+    @OneToMany
+    private List<PointHistory> pointHistories = new ArrayList<>();
 }
