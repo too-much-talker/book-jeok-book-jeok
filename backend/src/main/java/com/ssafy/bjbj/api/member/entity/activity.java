@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 //@ToString(of = {"id", "username", "age"})
@@ -13,4 +13,18 @@ import javax.persistence.Table;
 @Table(name = "tb_activity")
 @Entity
 public class activity {
+
+    @Column(name = "activity_id")
+    @GeneratedValue
+    @Id
+    private Long id;
+
+    private Long entityId;
+
+    private Type type;
+
+    private LocalDateTime time;
+
+    private boolean isDeleted;
+
 }
