@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.entity;
 
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -89,10 +89,8 @@ public class BookInfo extends BaseLastModifiedEntity {
     @OneToMany(mappedBy = "bookInfo")
     private List<Booklog> booklogs = new ArrayList<>();
 
-    @JoinColumns({
-            @JoinColumn(name = "book_info_id", referencedColumnName = "book_info_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    // 나에 대해 리뷰를 쓴 멤버들
+    @JoinColumn(name = "book_info_id")
     @OneToMany
     private List<BookReview> bookReviews = new ArrayList<>();
 
