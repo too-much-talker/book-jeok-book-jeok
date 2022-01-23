@@ -7,20 +7,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Getter
 //@ToString(of = {"id", "username", "age"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@IdClass(BooklogMemberId.class)
 @Table(name = "tb_like")
 @Entity
 public class Like {
 
-    @Column(name = "booklog_id")
-    @ManyToOne
+    @JoinColumn(name = "booklog_id")
+    @ManyToOne(fetch = LAZY)
     @Id
     private Booklog booklog;
 
-    @Column(name = "member_id")
-    @ManyToOne
+    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = LAZY)
     @Id
     private Member member;
 
