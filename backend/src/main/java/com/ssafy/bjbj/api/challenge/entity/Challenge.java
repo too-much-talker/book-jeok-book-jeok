@@ -1,8 +1,8 @@
 package com.ssafy.bjbj.api.challenge.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.api.readinggroup.entity.Status;
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.common.entity.Status;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +33,7 @@ public class Challenge extends BaseLastModifiedEntity {
     private String content;
 
     @Column(nullable = false)
-    private Integer views;
+    private Integer views = 0;
 
     @Column(nullable = false)
     private LocalDateTime deadline;
@@ -53,25 +53,23 @@ public class Challenge extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private Integer reward;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private Status status = Status.PRE;
 
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @Column(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "challenge_auth_id")
+    @JoinColumn(name = "challenge_id")
     @OneToMany
     private List<ChallengeAuth> challengeAuths = new ArrayList<>();
 
-    @JoinColumns({
-            @JoinColumn(name = "challenge_id", referencedColumnName = "challenge_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    // 챌린지에 참여한 사람들
+    @JoinColumn(name = "challenge_id")
     @OneToMany
     private List<ChallengeMember> challengeMembers = new ArrayList<>();
 
