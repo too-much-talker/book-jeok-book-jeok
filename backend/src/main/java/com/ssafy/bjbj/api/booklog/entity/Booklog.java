@@ -2,7 +2,7 @@ package com.ssafy.bjbj.api.booklog.entity;
 
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,21 +41,21 @@ public class Booklog extends BaseLastModifiedEntity {
     private boolean isOpen;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private Integer views = 0;
 
     @Column(nullable = false)
+    private boolean isDeleted;
+
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "book_info_id")
+    @JoinColumn(name = "book_info_id", nullable = false)
     @ManyToOne(fetch = LAZY)
     private BookInfo bookInfo;
 
-    @JoinColumns({
-            @JoinColumn(name = "booklog_id", referencedColumnName = "booklog_id"),
-            @JoinColumn(name = "member_id", referencedColumnName = "member_id")
-    })
+    // 나를 like한 멤버들
+    @JoinColumn(name = "booklog_id")
     @OneToMany
     private List<Like> likes = new ArrayList<>();
 
