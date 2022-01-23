@@ -1,8 +1,7 @@
 package com.ssafy.bjbj.api.readinggroup.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.api.notice.entity.NoticeComment;
-import com.ssafy.bjbj.common.entity.BaseLastModifiedEntity;
+import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,21 +25,28 @@ public class ReadingGroupBoard extends BaseLastModifiedEntity {
     @Id
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String content;
 
-    private Integer views;
+    @Column(nullable = false)
+    private Integer views = 0;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Member member;
 
+    @JoinColumn(name = "reading_group_id", nullable = false)
     @ManyToOne(fetch = LAZY)
     private ReadingGroup readingGroup;
 
-    @JoinColumn(name = "reading_group_board_comment_id")
+    @JoinColumn(name = "reading_group_board_id")
     @OneToMany
     private List<ReadingGroupBoardComment> readingGroupBoardComments = new ArrayList<>();
+
 }
