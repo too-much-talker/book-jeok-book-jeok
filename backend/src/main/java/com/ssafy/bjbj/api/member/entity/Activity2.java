@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_activity")
 @Entity
-public class activity {
+public class Activity2 {
 
     @Column(name = "activity_id")
     @GeneratedValue
