@@ -44,14 +44,15 @@ public class Member extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String nickname;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
     @Column(nullable = false)
-    private Integer point;
+    private Integer point = 100;
 
     @Column(nullable = false)
-    private Integer exp;
+    private Integer exp = 0;
 
     @Column(nullable = false)
     private boolean isDeleted;
