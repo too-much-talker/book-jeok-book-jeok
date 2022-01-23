@@ -75,4 +75,8 @@ public class Member extends BaseLastModifiedEntity {
     @OneToMany
     private List<Subscribe> toMembers = new ArrayList<>();
 
+    @JoinColumn(name = "activity_id")
+    @OneToMany
+    private List<activity> activities = new ArrayList<>();
+
 }
