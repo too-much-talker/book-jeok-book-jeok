@@ -1,4 +1,4 @@
-package com.ssafy.bjbj.common.entity;
+package com.ssafy.bjbj.common.entity.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 public abstract class BaseLastModifiedEntity extends BaseCreatedEntity {
 
     @LastModifiedDate
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime lastModifiedDate;
 
     @LastModifiedBy
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private String lastModifiedBy;
 
 }

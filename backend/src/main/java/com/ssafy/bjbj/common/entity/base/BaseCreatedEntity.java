@@ -1,4 +1,4 @@
-package com.ssafy.bjbj.common.entity;
+package com.ssafy.bjbj.common.entity.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 public abstract class BaseCreatedEntity {
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdDate;
 
     @CreatedBy
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private String createdBy;
 
 }
