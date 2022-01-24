@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class MemberController {
     public BaseResponseDto register(@Valid @RequestBody MemberDto memberDto, Errors errors) {
         log.debug("MemberController.register");
         Map<String, Object> responseData = new HashMap<>();
-        
+
         if (errors.hasErrors()) {
             if (errors.hasFieldErrors()) {
                 // field error
@@ -127,6 +128,35 @@ public class MemberController {
             responseData.put("message", "로그인에 성공했습니다.");
             responseData.put("memberInfo", memberDto);
             responseData.put("jwtToken", jwtToken);
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/email/{email}/exist")
+    public BaseResponseDto isExistEmail(@PathVariable String email) {
+        log.debug("이메일 중복체크 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+        
+        String regx = "^[0-9a-zA-Z]+([.-]?[0-9a-zA-Z]+)*@[0-9a-zA-Z]+([.-]+[0-9a-zA-Z]+)*(\\.[0-9a-zA-Z]{2,3})+$";
+        Pattern pattern = Pattern.compile(regx);
+
+        if (pattern.matcher(email).matches()) {
+            if (memberService.hasEmail(email)) {
+                status = HttpStatus.OK.value();
+                responseData.put("msg", "이미 존재하는 이메일입니다.");
+            } else {
+                status = HttpStatus.NO_CONTENT.value();
+                responseData.put("msg", "사용하실 수 있는 이메일입니다.");
+            }
+        } else {
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", "이메일 형식에 맞지 않습니다.");
         }
 
         return BaseResponseDto.builder()
