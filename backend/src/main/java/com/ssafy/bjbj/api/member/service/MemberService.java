@@ -6,4 +6,6 @@ public interface MemberService {
 
     boolean hasEmail(String email);
 
+    boolean hasNickname(String nickname);
+
 }
