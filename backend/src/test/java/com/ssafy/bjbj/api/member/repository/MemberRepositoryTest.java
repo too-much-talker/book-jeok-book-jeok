@@ -77,4 +77,37 @@ class MemberRepositoryTest {
         assertThat(result2).isTrue();
     }
     
+    @DisplayName("회원가입 테스트")
+    @Test
+    public void save() {
+        // 회원 가입 전
+        Member member = Member.builder()
+                .email("bjbj_test@test.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .exp(0)
+                .point(100)
+                .role(Role.MEMBER)
+                .build();
+
+        // 회원가입
+        memberRepository.save(member);
+
+        em.flush();
+        em.clear();
+        
+        // db에서 가져온 회원
+        Member savedMember = memberRepository.findById(member.getId()).get();
+
+        assertThat(member.getId()).isEqualTo(savedMember.getId());
+        assertThat(member.getEmail()).isEqualTo(savedMember.getEmail());
+        assertThat(member.getPassword()).isEqualTo(savedMember.getPassword());
+        assertThat(member.getName()).isEqualTo(savedMember.getName());
+        assertThat(member.getNickname()).isEqualTo(savedMember.getNickname());
+        assertThat(member.getExp()).isEqualTo(savedMember.getExp());
+        assertThat(member.getPoint()).isEqualTo(savedMember.getPoint());
+        assertThat(member.getRole()).isEqualTo(savedMember.getRole());
+    }
+
 }
