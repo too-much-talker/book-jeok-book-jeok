@@ -20,6 +20,8 @@ import java.util.List;
 @Getter
 //@ToString(of = {"id", "username", "age"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Table(name = "tb_member")
 @Entity
 public class Member extends BaseLastModifiedEntity {
