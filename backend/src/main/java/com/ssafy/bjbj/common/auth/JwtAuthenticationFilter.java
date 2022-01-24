@@ -70,6 +70,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             // If so, then grab user details and create spring auth token using username, pass, authorities/roles
             if (email != null) {
                     // jwt 토큰에 포함된 email 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
+                    // 이후에 Security 관련 작업하면 Dto로 수정
             		Member member = memberService.findMemberByEmail(email);
                 if(member != null) {
                         // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
