@@ -25,7 +25,7 @@ import java.util.List;
 public class Member extends BaseLastModifiedEntity {
 
     @Column(name = "member_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
