@@ -48,10 +48,10 @@ public class Member extends BaseLastModifiedEntity {
     private Role role;
 
     @Column(nullable = false)
-    private Integer point = 100;
+    private Integer point;
 
     @Column(nullable = false)
-    private Integer exp = 0;
+    private Integer exp;
 
     @Column(nullable = false)
     private boolean isDeleted;

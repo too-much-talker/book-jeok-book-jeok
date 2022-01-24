@@ -1,12 +1,17 @@
 package com.ssafy.bjbj.api.member.controller;
 
+import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.MemberDto;
+import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +27,8 @@ import java.util.regex.Pattern;
 public class MemberController {
 
     private final MemberService memberService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     public BaseResponseDto register(@Valid @RequestBody MemberDto memberDto, Errors errors) {
@@ -79,13 +86,63 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/login")
+    public BaseResponseDto login(@Valid @RequestBody LoginDto loginDto, Errors errors) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        if (errors.hasErrors()) {
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+
+                return BaseResponseDto.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .data(responseData)
+                        .build();
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+                return BaseResponseDto.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .data(responseData)
+                        .build();
+            }
+        }
+
+        MemberDto targetMemberDto = memberService.findMemberDtoByEmail(loginDto.getEmail());
+
+        if (targetMemberDto == null) {
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "존재하지 않은 회원입니다.");
+        } else if (!passwordEncoder.matches(loginDto.getPassword(), targetMemberDto.getPassword())) {
+            status = HttpStatus.UNAUTHORIZED.value();
+            responseData.put("msg", "잘못된 비밀번호입니다.");
+        } else {
+            MemberDto memberDto = memberService.findMemberDtoByEmail(loginDto.getEmail());
+            String jwtToken = JwtTokenUtil.getToken(memberDto.getEmail());
+
+            status = status = HttpStatus.OK.value();
+            responseData.put("message", "로그인에 성공했습니다.");
+            responseData.put("memberInfo", memberDto);
+            responseData.put("jwtToken", jwtToken);
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
     @GetMapping("/email/{email}/exist")
     public BaseResponseDto isExistEmail(@PathVariable String email) {
         log.debug("이메일 중복체크 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
-
+        
         String regx = "^[0-9a-zA-Z]+([.-]?[0-9a-zA-Z]+)*@[0-9a-zA-Z]+([.-]+[0-9a-zA-Z]+)*(\\.[0-9a-zA-Z]{2,3})+$";
         Pattern pattern = Pattern.compile(regx);
 
