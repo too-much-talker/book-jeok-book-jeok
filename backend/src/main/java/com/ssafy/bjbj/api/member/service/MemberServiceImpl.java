@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.member.service;
 
+import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.MemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
@@ -49,9 +50,18 @@ public class MemberServiceImpl implements MemberService {
         return savedMember.getId() != null;
     }
 
+    /**
+     * @param email
+     * @return 회원엔티티반환
+     */
     @Override
     public Member findMemberByEmail(String email) {
         return memberRepository.findMemberByEmail(email);
     }
 
+
+    @Override
+    public MemberDto findMemberDtoByEmail(String email) {
+        return memberRepository.findMemberDtoByEmail(email);
+    }
 }
