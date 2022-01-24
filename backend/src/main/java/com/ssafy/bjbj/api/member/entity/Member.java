@@ -18,14 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-//@ToString(of = {"id", "username", "age"})
+@ToString(of = {"id", "email", "password", "name", "nickname", "exp", "point", "role", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Table(name = "tb_member")
 @Entity
 public class Member extends BaseLastModifiedEntity {
 
     @Column(name = "member_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
