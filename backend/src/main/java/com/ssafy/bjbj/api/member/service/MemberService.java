@@ -9,6 +9,8 @@ public interface MemberService {
 
     boolean hasNickname(String nickname);
 
+    boolean saveMember(MemberDto memberDto);
+
     Member findMemberByEmail(String email);
 
 }
