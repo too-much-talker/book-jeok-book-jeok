@@ -21,4 +21,9 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByNickname(nickname);
     }
 
+    @Override
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findMemberByEmail(email);
+    }
+
 }
