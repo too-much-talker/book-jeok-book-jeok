@@ -51,4 +51,30 @@ class MemberRepositoryTest {
         assertThat(result2).isTrue();
     }
 
+    @DisplayName("닉네임 중복 확인 테스트")
+    @Test
+    public void existsByNickname() {
+        // 1. 회원가입 전 -> 닉네임 존재하지 않음
+        String nickname = "bjbj";
+        boolean result1 = memberRepository.existsByNickname(nickname);
+        assertThat(result1).isFalse();
+
+        // 2. 회원가입
+        memberRepository.save(Member.builder()
+                .email("bjbj_test@test.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname(nickname)
+                .exp(0)
+                .point(100)
+                .role(Role.MEMBER)
+                .build());
+
+        // 3. 회원가입 후 -> 닉네임 존재
+        em.flush();
+        em.clear();
+        boolean result2 = memberRepository.existsByNickname(nickname);
+        assertThat(result2).isTrue();
+    }
+    
 }
