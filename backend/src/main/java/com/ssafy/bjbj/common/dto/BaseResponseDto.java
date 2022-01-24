@@ -6,4 +6,9 @@ import lombok.Getter;
 @Builder
 @Getter
 public class BaseResponseDto {
+    
+    private Integer status;
+
+    private Object data;
+
 }
