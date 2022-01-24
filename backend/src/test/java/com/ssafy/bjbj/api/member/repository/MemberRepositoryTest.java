@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.member.repository;
 
+import com.ssafy.bjbj.api.member.dto.MemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import org.assertj.core.api.Assertions;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -108,6 +110,29 @@ class MemberRepositoryTest {
         assertThat(member.getExp()).isEqualTo(savedMember.getExp());
         assertThat(member.getPoint()).isEqualTo(savedMember.getPoint());
         assertThat(member.getRole()).isEqualTo(savedMember.getRole());
+    }
+
+    @Test
+    public void findMemberDtoByEmail() {
+        // 회원 가입 전
+        String email1 = "test@test.com";
+        MemberDto result1 = memberRepository.findMemberDtoByEmail(email1);
+        assertThat(result1).isNull();
+
+        // 회원 가입
+        memberRepository.save(Member.builder()
+                .email(email1)
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(100)
+                .build());
+
+        // 회원 가입 후
+        MemberDto result2 = memberRepository.findMemberDtoByEmail(email1);
+        assertThat(result2).isNotNull();
     }
 
 }
