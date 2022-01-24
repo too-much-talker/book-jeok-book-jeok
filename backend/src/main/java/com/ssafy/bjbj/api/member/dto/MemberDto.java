@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.member.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -8,7 +9,6 @@ import javax.validation.constraints.Email;
 @ToString(of = {"email", "password", "name", "nickname"})
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
 @Builder
 public class MemberDto {
 
@@ -37,4 +37,11 @@ public class MemberDto {
     @Length(min = 3, max = 8, message = "닉네임은 3자 이상 8자 이하로 입력해주세요.")
     private String nickname;
 
+    @QueryProjection
+    public MemberDto(String email, String password, String name, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+    }
 }
