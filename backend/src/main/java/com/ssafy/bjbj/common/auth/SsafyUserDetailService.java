@@ -20,6 +20,7 @@ public class SsafyUserDetailService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+			// 이후에 Security 관련 작업하면 Dto로 수정
     		Member member = memberService.findMemberByEmail(username);
     		if(member != null) {
     			SsafyUserDetails userDetails = new SsafyUserDetails(member);
