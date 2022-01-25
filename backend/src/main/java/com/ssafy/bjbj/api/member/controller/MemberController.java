@@ -164,4 +164,32 @@ public class MemberController {
                 .build();
     }
 
+    @GetMapping("/nickname/{nickname}/exist")
+    public BaseResponseDto isExistNickname(@PathVariable String nickname) {
+        log.debug("닉네임 중복체크 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        String regx = "^[가-힣]{2,8}|[a-z]{3,12}$";
+        Pattern pattern = Pattern.compile(regx);
+
+        if (pattern.matcher(nickname).matches()) {
+            if (memberService.hasNickname(nickname)) {
+                status = HttpStatus.OK.value();
+                responseData.put("msg", "이미 존재하는 닉네임입니다.");
+            } else {
+                status = HttpStatus.NO_CONTENT.value();
+                responseData.put("msg", "사용할 수 있는 닉네임입니다.");
+            }
+        } else {
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", "닉네임 형식에 맞지 않습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
 }
