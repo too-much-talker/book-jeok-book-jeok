@@ -1,15 +1,12 @@
 package com.ssafy.bjbj.api.member.controller;
 
 import com.ssafy.bjbj.api.member.dto.LoginDto;
-import com.ssafy.bjbj.api.member.dto.MemberDto;
-import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
@@ -31,59 +28,46 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping
-    public BaseResponseDto register(@Valid @RequestBody MemberDto memberDto, Errors errors) {
+    public BaseResponseDto register(@Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
         log.debug("MemberController.register");
+
+        Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
+        String password = memberDto.getPassword();
+
         if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
             if (errors.hasFieldErrors()) {
                 // field error
                 responseData.put("field", errors.getFieldError().getField());
                 responseData.put("msg", errors.getFieldError().getDefaultMessage());
-
-                return BaseResponseDto.builder()
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .data(responseData)
-                        .build();
             } else {
                 // global error
                 responseData.put("msg", "global error");
-                return BaseResponseDto.builder()
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .data(responseData)
-                        .build();
             }
-        }
-
-        if (memberService.hasEmail(memberDto.getEmail())) {
+        } else if (memberService.hasEmail(memberDto.getEmail())) {
+            // 이메일 중복
+            status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 이메일입니다.");
-            return BaseResponseDto.builder()
-                    .status(HttpStatus.CONFLICT.value())
-                    .data(responseData)
-                    .build();
-        }
-
-        if (memberService.hasNickname(memberDto.getNickname())) {
+        } else if (memberService.hasNickname(memberDto.getNickname())) {
+            // 닉네임 중복
+            status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 닉네임입니다.");
-            return BaseResponseDto.builder()
-                    .status(HttpStatus.CONFLICT.value())
-                    .data(responseData)
-                    .build();
+        } else if (!memberService.saveMember(memberDto)) {
+            // 회원가입 실패
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "회원가입 실패");
+        } else {
+            // 회원가입 성공
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "회원가입 성공");
         }
 
-        if (memberService.saveMember(memberDto)) {
-            responseData.put("msg", "회원가입 성공");
-            return BaseResponseDto.builder()
-                    .status(HttpStatus.CREATED.value())
-                    .data(responseData)
-                    .build();
-        } else {
-            responseData.put("msg", "회원가입 실패");
-            return BaseResponseDto.builder()
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .data(responseData)
-                    .build();
-        }
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
     }
 
     @PostMapping("/login")
@@ -112,7 +96,7 @@ public class MemberController {
             }
         }
 
-        MemberDto targetMemberDto = memberService.findMemberDtoByEmail(loginDto.getEmail());
+        RequestMemberDto targetMemberDto = memberService.findMemberDtoByEmail(loginDto.getEmail());
 
         if (targetMemberDto == null) {
             status = HttpStatus.NO_CONTENT.value();
@@ -121,7 +105,7 @@ public class MemberController {
             status = HttpStatus.UNAUTHORIZED.value();
             responseData.put("msg", "잘못된 비밀번호입니다.");
         } else {
-            MemberDto memberDto = memberService.findMemberDtoByEmail(loginDto.getEmail());
+            RequestMemberDto memberDto = memberService.findMemberDtoByEmail(loginDto.getEmail());
             String jwtToken = JwtTokenUtil.getToken(memberDto.getEmail());
 
             status = status = HttpStatus.OK.value();
@@ -142,7 +126,7 @@ public class MemberController {
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
-        
+
         String regx = "^[0-9a-zA-Z]+([.-]?[0-9a-zA-Z]+)*@[0-9a-zA-Z]+([.-]+[0-9a-zA-Z]+)*(\\.[0-9a-zA-Z]{2,3})+$";
         Pattern pattern = Pattern.compile(regx);
 
