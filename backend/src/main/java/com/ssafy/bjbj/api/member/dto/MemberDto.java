@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 
 @ToString(of = {"email", "password", "name", "nickname"})
 @NoArgsConstructor
@@ -32,9 +33,9 @@ public class MemberDto {
     private String name;
 
     /**
-     * 정규 표현식 -> ?
+     * 정규 표현식 -> 한글만 2글자 이상 8글자 이하 또는 영어만 3글자 이상 12글자 이하
      */
-    @Length(min = 3, max = 8, message = "닉네임은 3자 이상 8자 이하로 입력해주세요.")
+    @Pattern(regexp = "^[가-힣]{2,8}|[a-z]{3,12}$", message = "닉네임 형식에 맞지 않습니다.")
     private String nickname;
 
     @QueryProjection
