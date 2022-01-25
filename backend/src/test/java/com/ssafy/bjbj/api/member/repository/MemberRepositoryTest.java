@@ -1,19 +1,15 @@
 package com.ssafy.bjbj.api.member.repository;
 
-import com.ssafy.bjbj.api.member.dto.MemberDto;
+import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -41,6 +37,7 @@ class MemberRepositoryTest {
                 .password("test1234")
                 .name("홍길동")
                 .nickname("hong")
+                .phoneNumber("010-1234-5678")
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
@@ -67,6 +64,7 @@ class MemberRepositoryTest {
                 .password("test1234")
                 .name("홍길동")
                 .nickname(nickname)
+                .phoneNumber("010-1234-5678")
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
@@ -88,6 +86,7 @@ class MemberRepositoryTest {
                 .password("test1234")
                 .name("홍길동")
                 .nickname("hong")
+                .phoneNumber("010-1234-5678")
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
@@ -107,6 +106,7 @@ class MemberRepositoryTest {
         assertThat(member.getPassword()).isEqualTo(savedMember.getPassword());
         assertThat(member.getName()).isEqualTo(savedMember.getName());
         assertThat(member.getNickname()).isEqualTo(savedMember.getNickname());
+        assertThat(member.getPhoneNumber()).isEqualTo(savedMember.getPhoneNumber());
         assertThat(member.getExp()).isEqualTo(savedMember.getExp());
         assertThat(member.getPoint()).isEqualTo(savedMember.getPoint());
         assertThat(member.getRole()).isEqualTo(savedMember.getRole());
@@ -116,7 +116,7 @@ class MemberRepositoryTest {
     public void findMemberDtoByEmail() {
         // 회원 가입 전
         String email1 = "test@test.com";
-        MemberDto result1 = memberRepository.findMemberDtoByEmail(email1);
+        RequestMemberDto result1 = memberRepository.findMemberDtoByEmail(email1);
         assertThat(result1).isNull();
 
         // 회원 가입
@@ -125,13 +125,14 @@ class MemberRepositoryTest {
                 .password("test1234")
                 .name("홍길동")
                 .nickname("hong")
+                .phoneNumber("010-1234-5789")
                 .role(Role.MEMBER)
                 .exp(0)
                 .point(100)
                 .build());
 
         // 회원 가입 후
-        MemberDto result2 = memberRepository.findMemberDtoByEmail(email1);
+        RequestMemberDto result2 = memberRepository.findMemberDtoByEmail(email1);
         assertThat(result2).isNotNull();
     }
 

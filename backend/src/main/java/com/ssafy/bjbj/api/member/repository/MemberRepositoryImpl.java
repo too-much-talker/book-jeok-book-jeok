@@ -1,9 +1,8 @@
 package com.ssafy.bjbj.api.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.member.dto.MemberDto;
-import com.ssafy.bjbj.api.member.dto.QMemberDto;
-import com.ssafy.bjbj.api.member.entity.QMember;
+import com.ssafy.bjbj.api.member.dto.request.QRequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 
 import javax.persistence.EntityManager;
 
@@ -18,16 +17,18 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public MemberDto findMemberDtoByEmail(String email) {
+    public RequestMemberDto findMemberDtoByEmail(String email) {
 
         return queryFactory
-                .select(new QMemberDto(
+                .select(new QRequestMemberDto(
                         member.email,
                         member.password,
                         member.name,
-                        member.nickname))
+                        member.nickname,
+                        member.phoneNumber))
                 .from(member)
                 .where(member.email.eq(email))
                 .fetchOne();
     }
+
 }

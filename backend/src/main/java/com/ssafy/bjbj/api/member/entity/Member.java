@@ -43,6 +43,9 @@ public class Member extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;

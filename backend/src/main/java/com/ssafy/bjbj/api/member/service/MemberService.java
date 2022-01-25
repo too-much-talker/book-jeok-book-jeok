@@ -1,7 +1,6 @@
 package com.ssafy.bjbj.api.member.service;
 
-import com.ssafy.bjbj.api.member.dto.LoginDto;
-import com.ssafy.bjbj.api.member.dto.MemberDto;
+import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 
 public interface MemberService {
@@ -10,10 +9,10 @@ public interface MemberService {
 
     boolean hasNickname(String nickname);
 
-    boolean saveMember(MemberDto memberDto);
+    boolean saveMember(RequestMemberDto memberDto);
 
     Member findMemberByEmail(String email);
 
-    MemberDto findMemberDtoByEmail(String email);
+    RequestMemberDto findMemberDtoByEmail(String email);
 
 }
