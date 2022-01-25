@@ -1,7 +1,6 @@
 package com.ssafy.bjbj.api.member.service;
 
-import com.ssafy.bjbj.api.member.dto.LoginDto;
-import com.ssafy.bjbj.api.member.dto.MemberDto;
+import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
@@ -33,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public boolean saveMember(MemberDto memberDto) {
+    public boolean saveMember(RequestMemberDto memberDto) {
         String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
         log.debug("패스워드 암호화 " + encryptedPassword);
 
@@ -42,6 +41,7 @@ public class MemberServiceImpl implements MemberService {
                 .password(encryptedPassword)
                 .name(memberDto.getName())
                 .nickname(memberDto.getNickname())
+                .phoneNumber(memberDto.getPhoneNumber())
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
@@ -61,7 +61,8 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public MemberDto findMemberDtoByEmail(String email) {
+    public RequestMemberDto findMemberDtoByEmail(String email) {
         return memberRepository.findMemberDtoByEmail(email);
     }
+
 }
