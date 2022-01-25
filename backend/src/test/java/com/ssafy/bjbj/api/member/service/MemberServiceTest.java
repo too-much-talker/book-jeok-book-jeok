@@ -1,9 +1,6 @@
 package com.ssafy.bjbj.api.member.service;
 
-import com.ssafy.bjbj.api.member.dto.MemberDto;
-import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.api.member.entity.Role;
-import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,11 +25,11 @@ public class MemberServiceTest {
     public void findMemberDtoByEmail() {
         // 회원 가입 전
         String email1 = "test@test.com";
-        MemberDto result1 = memberService.findMemberDtoByEmail(email1);
+        RequestMemberDto result1 = memberService.findMemberDtoByEmail(email1);
         assertThat(result1).isNull();
 
         // 회원 가입
-        memberService.saveMember(MemberDto.builder()
+        memberService.saveMember(RequestMemberDto.builder()
                         .email(email1)
                         .password("test1234")
                         .name("홍길동")
@@ -40,7 +37,7 @@ public class MemberServiceTest {
                         .build());
 
         // 회원 가입 후
-        MemberDto result2 = memberService.findMemberDtoByEmail(email1);
+        RequestMemberDto result2 = memberService.findMemberDtoByEmail(email1);
         assertThat(result2).isNotNull();
     }
 
