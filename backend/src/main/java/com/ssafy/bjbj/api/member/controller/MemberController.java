@@ -87,6 +87,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public BaseResponseDto login(@Valid @RequestBody LoginDto loginDto, Errors errors) {
+        log.debug("MemberController.login() 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
