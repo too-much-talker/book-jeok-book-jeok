@@ -1,9 +1,9 @@
 package com.ssafy.bjbj.api.member.repository;
 
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 
 public interface MemberRepositoryCustom {
 
-    RequestMemberDto findMemberDtoByEmail(String email);
+    ResponseMemberDto findResponseMemberDtoByEmail(String email);
     
 }

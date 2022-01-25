@@ -1,12 +1,12 @@
 package com.ssafy.bjbj.api.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.member.dto.request.QRequestMemberDto;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.QResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 
 import javax.persistence.EntityManager;
 
-import static com.ssafy.bjbj.api.member.entity.QMember.*;
+import static com.ssafy.bjbj.api.member.entity.QMember.member;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
@@ -17,10 +17,10 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public RequestMemberDto findMemberDtoByEmail(String email) {
-
+    public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
         return queryFactory
-                .select(new QRequestMemberDto(
+                .select(new QResponseMemberDto(
+                        member.id,
                         member.email,
                         member.password,
                         member.name,

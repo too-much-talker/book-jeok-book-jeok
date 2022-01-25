@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.member.repository;
 
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import org.junit.jupiter.api.DisplayName;
@@ -112,16 +113,17 @@ class MemberRepositoryTest {
         assertThat(member.getRole()).isEqualTo(savedMember.getRole());
     }
 
+    @DisplayName("응답용 회원 Dto 조회 레파지토리 테스트")
     @Test
-    public void findMemberDtoByEmail() {
+    public void findResponseMemberDtoByEmail() {
         // 회원 가입 전
-        String email1 = "test@test.com";
-        RequestMemberDto result1 = memberRepository.findMemberDtoByEmail(email1);
-        assertThat(result1).isNull();
+        String email = "test@test.com";
+        ResponseMemberDto responseMemberDto1 = memberRepository.findResponseMemberDtoByEmail(email);
+        assertThat(responseMemberDto1).isNull();
 
         // 회원 가입
         memberRepository.save(Member.builder()
-                .email(email1)
+                .email(email)
                 .password("test1234")
                 .name("홍길동")
                 .nickname("hong")
@@ -132,8 +134,8 @@ class MemberRepositoryTest {
                 .build());
 
         // 회원 가입 후
-        RequestMemberDto result2 = memberRepository.findMemberDtoByEmail(email1);
-        assertThat(result2).isNotNull();
+        ResponseMemberDto responseMemberDto2 = memberRepository.findResponseMemberDtoByEmail(email);
+        assertThat(responseMemberDto2).isNotNull();
     }
 
 }
