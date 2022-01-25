@@ -46,6 +46,21 @@ public class MemberController {
                 // global error
                 responseData.put("msg", "global error");
             }
+        } else if (password.contains(memberDto.getEmail().split("@")[0])) {
+            // 패스워드에 이메일이 포함된 경우
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("field", "email into password");
+            responseData.put("msg", "패스워드에 이메일이 포함될 수 없습니다.");
+        } else if (password.contains(memberDto.getName())) {
+            // 패스워드에 이름이 포함된 경우
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("field", "name into password");
+            responseData.put("msg", "패스워드에 이름이 포함될 수 없습니다.");
+        } else if (password.contains(memberDto.getNickname())) {
+            // 패스워드에 닉네임이 포함된 경우
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("field", "nickname into password");
+            responseData.put("msg", "패스워드에 닉네임이 포함될 수 없습니다.");
         } else if (memberService.hasEmail(memberDto.getEmail())) {
             // 이메일 중복
             status = HttpStatus.CONFLICT.value();
