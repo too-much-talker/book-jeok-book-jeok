@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.member.service;
 
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
@@ -59,10 +60,9 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findMemberByEmail(email);
     }
 
-
     @Override
-    public RequestMemberDto findMemberDtoByEmail(String email) {
-        return memberRepository.findMemberDtoByEmail(email);
+    public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
+        return memberRepository.findResponseMemberDtoByEmail(email);
     }
 
 }

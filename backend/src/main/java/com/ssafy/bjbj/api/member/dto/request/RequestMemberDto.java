@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 @ToString(of = {"email", "password", "name", "nickname", "phoneNumber"})
 @NoArgsConstructor
 @Getter
+@AllArgsConstructor
 @Builder
 public class RequestMemberDto {
 
@@ -44,14 +45,5 @@ public class RequestMemberDto {
      */
     @Pattern(regexp = "^[0-9]{3}-[0-9]{3,4}-[0-9]{3,4}$", message = "핸드폰 번호 형식에 맞지 않습니다.")
     private String phoneNumber;
-
-    @QueryProjection
-    public RequestMemberDto(String email, String password, String name, String nickname, String phoneNumber) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.nickname = nickname;
-        this.phoneNumber = phoneNumber;
-    }
 
 }
