@@ -1,14 +1,12 @@
 package com.ssafy.bjbj.api.member.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-//@ToString(of = {"id", "username", "age"})
+@ToString(of = {"id", "activityType", "time", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_activity")
 @Entity
@@ -31,5 +29,14 @@ public class Activity {
     @JoinColumn(name = "member_id")
     @ManyToOne
     private Member member;
+
+    @Builder
+    public Activity(Long id, ActivityType activityType, LocalDateTime time, boolean isDeleted, Member member) {
+        this.id = id;
+        this.activityType = activityType;
+        this.time = time;
+        this.isDeleted = isDeleted;
+        this.member = member;
+    }
 
 }
