@@ -2,6 +2,8 @@ package com.ssafy.bjbj.api.member.controller;
 
 import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.entity.Subscribe;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.auth.SsafyUserDetails;
@@ -179,6 +181,56 @@ public class MemberController {
         } else {
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("msg", "닉네임 형식에 맞지 않습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PostMapping("/subscribe/{toMemberId}")
+    public BaseResponseDto subscribe(@PathVariable Long toMemberId, Authentication authentication) {
+        log.debug("팔로우 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        boolean canSubscribe = memberService.subscribeMember(details.getUser().getId(), toMemberId);
+
+        if (canSubscribe) {
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "구독에 성공했습니다.");
+        } else  {
+            status = HttpStatus.ACCEPTED.value();
+            responseData.put("msg", "이미 구독중인 유저입니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PostMapping("/unsubscribe/{toMemberId}")
+    public BaseResponseDto unsubscribe(@PathVariable long toMemberId, Authentication authentication) {
+        log.debug("언팔로우 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        boolean canUnsubscribeMember = memberService.unsubscribeMember(details.getUser().getId(), toMemberId);
+
+        if (canUnsubscribeMember) {
+
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "구독에 취소에 성공했습니다.");
+        } else {
+
+            status = HttpStatus.ACCEPTED.value();
+            responseData.put("msg", "이미 구독중이지 않은 유저입니다.");
         }
 
         return BaseResponseDto.builder()

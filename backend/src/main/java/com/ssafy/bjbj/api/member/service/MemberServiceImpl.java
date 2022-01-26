@@ -5,14 +5,18 @@ import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
+import com.ssafy.bjbj.api.member.entity.Subscribe;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -24,6 +28,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final SubscribeRepository subscribeRepository;
+
     @Override
     public boolean hasEmail(String email) {
         return memberRepository.existsByEmail(email);
@@ -32,6 +38,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean hasNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    public Member findMemberById(Long id) {
+        return memberRepository.findMemberById(id);
     }
 
     @Override
@@ -83,4 +94,47 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAllActivityCountDtoById(id);
     }
 
+    @Transactional
+    @Override
+    public boolean subscribeMember(Long fromMemberId, Long toMemberId) {
+
+        Member fromMember = memberRepository.findMemberById(fromMemberId);
+        List<Subscribe> toMembers = fromMember.getToMembers();
+        System.out.println("toMembers = " + toMembers);
+
+        if (toMembers != null) {
+            for (Subscribe subscribe : toMembers) {
+                if (subscribe.getToMember().getId().equals(toMemberId)) {
+                    return false;
+                }
+            }
+        }
+
+        Member toMember = memberRepository.findMemberById(toMemberId);
+        Subscribe subscribe = Subscribe.builder()
+                .fromMember(fromMember)
+                .toMember(toMember)
+                .build();
+        subscribeRepository.save(subscribe);
+
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public boolean unsubscribeMember(Long fromMemberId, Long toMemberId) {
+
+        Member fromMember = memberRepository.findMemberById(fromMemberId);
+        List<Subscribe> toMembers = fromMember.getToMembers();
+
+        for (Subscribe subscribe : toMembers) {
+            if (subscribe.getToMember().getId().equals(toMemberId)) {
+                subscribeRepository.delete(subscribe);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
 }
