@@ -10,19 +10,18 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 
 @Getter
-//@ToString(of = {"id", "username", "age"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(ChallengeMemberId.class)
+@IdClass(ChallengeMemberSeq.class)
 @Table(name = "tb_challenge_member")
 @Entity
 public class ChallengeMember {
 
-    @JoinColumn(name = "challenge_id")
+    @JoinColumn(name = "challenge_seq", columnDefinition = "BIGINT UNSIGNED")
     @ManyToOne(fetch = LAZY)
     @Id
     private Challenge challenge;
 
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_seq", columnDefinition = "BIGINT UNSIGNED")
     @ManyToOne(fetch = LAZY)
     @Id
     private Member member;

@@ -3,7 +3,7 @@ package com.ssafy.bjbj.api.readinggroup.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ReadingGroupMemberId implements Serializable {
+public class ReadingGroupMemberSeq implements Serializable {
 
     private Long readingGroup;
     private Long member;
@@ -12,7 +12,7 @@ public class ReadingGroupMemberId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReadingGroupMemberId that = (ReadingGroupMemberId) o;
+        ReadingGroupMemberSeq that = (ReadingGroupMemberSeq) o;
         return Objects.equals(readingGroup, that.readingGroup) && Objects.equals(member, that.member);
     }
 

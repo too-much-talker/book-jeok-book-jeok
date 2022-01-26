@@ -5,6 +5,7 @@ import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,16 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-//@ToString(of = {"id", "username", "age"})
+@ToString(of = {"seq", "title", "vol", "seriesTitle", "seriesNo", "author", "eaIsbn", "eaAddCode", "setIsbn", "setAddCode", "setExpression", "publisher", "page", "publishDate", "subject", "titleUrl", "bookIntroductionUrl", "bookSummaryUrl", "inputDate", "updateDate", "starRating", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_book_info")
 @Entity
 public class BookInfo extends BaseLastModifiedEntity {
 
-    @Column(name = "book_info_id")
+    @Column(name = "book_info_seq", columnDefinition = "BIGINT UNSIGNED")
     @GeneratedValue
     @Id
-    private Long id;
+    private Long seq;
 
     @Column(nullable = false)
     private String title;
@@ -32,7 +33,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String seriesTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer seriesNo;
 
     @Column(nullable = false)
@@ -56,7 +57,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String publisher;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer page;
 
     @Column(nullable = false)
@@ -80,7 +81,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private LocalDateTime updateDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "DOUBLE UNSIGNED")
     private Double starRating;
 
     @Column(nullable = false)
@@ -90,7 +91,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     private List<Booklog> booklogs = new ArrayList<>();
 
     // 나에 대해 리뷰를 쓴 멤버들
-    @JoinColumn(name = "book_info_id")
+    @JoinColumn(name = "book_info_seq")
     @OneToMany
     private List<BookReview> bookReviews = new ArrayList<>();
 

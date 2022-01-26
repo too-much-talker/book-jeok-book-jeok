@@ -6,6 +6,7 @@ import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,16 +16,16 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
-//@ToString(of = {"id", "username", "age"})
+@ToString(of = {"seq", "title", "content", "views", "deadline", "startDate", "endDate", "requiredAuth", "maxMember", "reward", "status", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_challenge")
 @Entity
 public class Challenge extends BaseLastModifiedEntity {
 
-    @Column(name = "challenge_id")
+    @Column(name = "challenge_seq", columnDefinition = "BIGINT UNSIGNED")
     @GeneratedValue
     @Id
-    private Long id;
+    private Long seq;
 
     @Column(nullable = false)
     private String title;
@@ -32,8 +33,8 @@ public class Challenge extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private Integer views = 0;
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    private Integer views;
 
     @Column(nullable = false)
     private LocalDateTime deadline;
@@ -44,32 +45,32 @@ public class Challenge extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer requiredAuth;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer maxMember;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer reward;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status = Status.PRE;
+    private Status status;
 
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_seq", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @JoinColumn(name = "challenge_id")
+    @JoinColumn(name = "challenge_seq")
     @OneToMany
     private List<ChallengeAuth> challengeAuths = new ArrayList<>();
 
     // 챌린지에 참여한 사람들
-    @JoinColumn(name = "challenge_id")
+    @JoinColumn(name = "challenge_seq")
     @OneToMany
     private List<ChallengeMember> challengeMembers = new ArrayList<>();
 

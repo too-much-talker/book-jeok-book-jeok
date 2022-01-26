@@ -2,7 +2,7 @@ package com.ssafy.bjbj.config;
 
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.auth.JwtAuthenticationFilter;
-import com.ssafy.bjbj.common.auth.SsafyUserDetailService;
+import com.ssafy.bjbj.common.auth.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired @Lazy
-    private SsafyUserDetailService ssafyUserDetailService;
+    private CustomUserDetailService customUserDetailService;
 
     @Autowired @Lazy
     private MemberService memberService;
@@ -35,17 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    // DAO 기반으로 Authentication Provider를 생성
+    // Authentication Provider를 생성
     // BCrypt Password Encoder와 UserDetailService 구현체를 설정
     @Bean
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(this.ssafyUserDetailService);
+        daoAuthenticationProvider.setUserDetailsService(this.customUserDetailService);
         return daoAuthenticationProvider;
     }
 
-    // DAO 기반의 Authentication Provider가 적용되도록 설정
+    // Authentication Provider가 적용되도록 설정
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
@@ -61,9 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), memberService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/members/login").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/v1/members/*").permitAll()
-                .antMatchers("/api/v1/members/*").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
+                .antMatchers("/api/v1/members/*").authenticated() //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                 .anyRequest().permitAll()
                 .and().cors();
     }
+
 }

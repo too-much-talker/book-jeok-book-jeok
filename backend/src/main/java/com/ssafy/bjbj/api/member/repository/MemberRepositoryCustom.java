@@ -9,6 +9,6 @@ public interface MemberRepositoryCustom {
 
     ResponseMemberDto findResponseMemberDtoByEmail(String email);
 
-    List<ActivityCountDto> findAllActivityCountDtoById(Long id);
+    List<ActivityCountDto> findAllActivityCountDtoBySeq(Long seq);
     
 }

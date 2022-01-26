@@ -6,6 +6,7 @@ import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,16 +16,16 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
-//@ToString(of = {"id", "username", "age"})
+@ToString(of = {"seq", "title", "content", "views", "limitPoint", "maxMember", "deadline", "status", "startDate", "endDate", "readingGroupType", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_reading_group")
 @Entity
 public class ReadingGroup extends BaseLastModifiedEntity {
 
-    @Column(name = "reading_group_id")
+    @Column(name = "reading_group_seq", columnDefinition = "BIGINT UNSIGNED")
     @GeneratedValue
     @Id
-    private Long id;
+    private Long seq;
 
     @Column(nullable = false)
     private String title;
@@ -32,13 +33,13 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer views;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer limitPoint;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer maxMember;
 
     @Column(nullable = false)
@@ -46,7 +47,7 @@ public class ReadingGroup extends BaseLastModifiedEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status = Status.PRE;
+    private Status status;
 
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -61,20 +62,20 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_seq")
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @JoinColumn(name = "reading_group_id")
+    @JoinColumn(name = "reading_group_seq")
     @OneToMany
     private List<ReadingGroupBoard> readingGroupBoards = new ArrayList<>();
 
-    @JoinColumn(name = "reading_group_id")
+    @JoinColumn(name = "reading_group_seq")
     @OneToMany
     private List<ReadingGroupDate> readingGroupDates = new ArrayList<>();
 
     // 독서모임에 속한 멤버들
-    @JoinColumn(name = "reading_group_id")
+    @JoinColumn(name = "reading_group_seq")
     @OneToMany
     private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
 

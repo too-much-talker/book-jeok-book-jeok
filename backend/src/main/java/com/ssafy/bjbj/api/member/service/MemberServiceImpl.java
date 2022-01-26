@@ -14,9 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -41,8 +39,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findMemberById(Long id) {
-        return memberRepository.findMemberById(id);
+    public Member findMemberBySeq(Long seq) {
+        return memberRepository.findMemberBySeq(seq);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
                 .role(Role.MEMBER)
                 .build());
 
-        return savedMember.getId() != null;
+        return savedMember.getSeq() != null;
     }
 
     /**
@@ -84,46 +82,46 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findMemberByNickname(nickname);
     }
 
-    public Integer getPointById(Long id) {
-        return memberRepository.findPointById(id);
+    public Integer getPointBySeq(Long seq) {
+        return memberRepository.findPointBySeq(seq);
     }
 
     @Override
-    public Integer getExpById(Long id) {
-        return memberRepository.findExpById(id);
+    public Integer getExpBySeq(Long seq) {
+        return memberRepository.findExpBySeq(seq);
     }
 
     @Override
-    public List<ActivityCountDto> getAllActivityCounts(Long id) {
-        return memberRepository.findAllActivityCountDtoById(id);
+    public List<ActivityCountDto> getAllActivityCounts(Long seq) {
+        return memberRepository.findAllActivityCountDtoBySeq(seq);
     }
 
     @Transactional
     @Override
-    public boolean updateMember(RequestMemberDto memberDto, Long id) {
+    public boolean updateMember(RequestMemberDto memberDto, Long seq) {
 
         String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
-        Member member = memberRepository.findMemberById(id);
+        Member member = memberRepository.findMemberBySeq(seq);
         member.changeMember(encryptedPassword, memberDto.getName(), memberDto.getNickname(), memberDto.getPhoneNumber());
     
         return true;
     }
 
-    public boolean subscribeMember(Long fromMemberId, Long toMemberId) {
+    public boolean subscribeMember(Long fromMemberSeq, Long toMemberSeq) {
 
-        Member fromMember = memberRepository.findMemberById(fromMemberId);
+        Member fromMember = memberRepository.findMemberBySeq(fromMemberSeq);
         List<Subscribe> toMembers = fromMember.getToMembers();
         System.out.println("toMembers = " + toMembers);
 
         if (toMembers != null) {
             for (Subscribe subscribe : toMembers) {
-                if (subscribe.getToMember().getId().equals(toMemberId)) {
+                if (subscribe.getToMember().getSeq().equals(toMemberSeq)) {
                     return false;
                 }
             }
         }
 
-        Member toMember = memberRepository.findMemberById(toMemberId);
+        Member toMember = memberRepository.findMemberBySeq(toMemberSeq);
         Subscribe subscribe = Subscribe.builder()
                 .fromMember(fromMember)
                 .toMember(toMember)
@@ -135,13 +133,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public boolean unsubscribeMember(Long fromMemberId, Long toMemberId) {
+    public boolean unsubscribeMember(Long fromMemberSeq, Long toMemberSeq) {
 
-        Member fromMember = memberRepository.findMemberById(fromMemberId);
+        Member fromMember = memberRepository.findMemberBySeq(fromMemberSeq);
         List<Subscribe> toMembers = fromMember.getToMembers();
 
         for (Subscribe subscribe : toMembers) {
-            if (subscribe.getToMember().getId().equals(toMemberId)) {
+            if (subscribe.getToMember().getSeq().equals(toMemberSeq)) {
                 subscribeRepository.delete(subscribe);
                 return true;
             }
