@@ -2,11 +2,9 @@ package com.ssafy.bjbj.api.member.controller;
 
 import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
-import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.api.member.entity.Subscribe;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
-import com.ssafy.bjbj.common.auth.SsafyUserDetails;
+import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -189,15 +187,15 @@ public class MemberController {
                 .build();
     }
 
-    @PostMapping("/subscribe/{toMemberId}")
-    public BaseResponseDto subscribe(@PathVariable Long toMemberId, Authentication authentication) {
+    @PostMapping("/subscribe/{toMemberSeq}")
+    public BaseResponseDto subscribe(@PathVariable Long toMemberSeq, Authentication authentication) {
         log.debug("팔로우 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
-        boolean canSubscribe = memberService.subscribeMember(details.getUser().getId(), toMemberId);
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        boolean canSubscribe = memberService.subscribeMember(details.getMember().getSeq(), toMemberSeq);
 
         if (canSubscribe) {
             status = HttpStatus.CREATED.value();
@@ -213,15 +211,15 @@ public class MemberController {
                 .build();
     }
 
-    @PostMapping("/unsubscribe/{toMemberId}")
-    public BaseResponseDto unsubscribe(@PathVariable long toMemberId, Authentication authentication) {
+    @PostMapping("/unsubscribe/{toMemberSeq}")
+    public BaseResponseDto unsubscribe(@PathVariable long toMemberSeq, Authentication authentication) {
         log.debug("언팔로우 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
-        boolean canUnsubscribeMember = memberService.unsubscribeMember(details.getUser().getId(), toMemberId);
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        boolean canUnsubscribeMember = memberService.unsubscribeMember(details.getMember().getSeq(), toMemberSeq);
 
         if (canUnsubscribeMember) {
 
@@ -240,18 +238,18 @@ public class MemberController {
     }
 
     @GetMapping("/me")
-    public BaseResponseDto myInfo(Authentication authentication) {
+    public BaseResponseDto me(Authentication authentication) {
         log.debug("MemberController.myInfo() 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
-        Long id = details.getUser().getId();
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        Long seq = details.getMember().getSeq();
 
-        responseData.put("point", memberService.getPointById(id));
-        responseData.put("exp", memberService.getExpById(id));
-        responseData.put("activityCountByDate", memberService.getAllActivityCounts(id));
+        responseData.put("point", memberService.getPointBySeq(seq));
+        responseData.put("exp", memberService.getExpBySeq(seq));
+        responseData.put("activityCountByDate", memberService.getAllActivityCounts(seq));
 
         status = HttpStatus.OK.value();
 
@@ -265,11 +263,14 @@ public class MemberController {
     public BaseResponseDto update(Authentication authentication, @Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
         log.debug("회원정보 수정");
 
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
         String password = memberDto.getPassword();
 
         // 사용자가 api 요청시 값을 조작했는지 확인
-        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
-        Long id = details.getUser().getId();
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        Long seq = details.getMember().getSeq();
 
         if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
@@ -284,11 +285,11 @@ public class MemberController {
         } else if ((responseData = checkPassword(password, memberDto)).size() != 0) {
             // 비밀번호가 형식에 맞지 않는 경우
             status = HttpStatus.BAD_REQUEST.value();
-        } else if (memberService.hasNickname(memberDto.getNickname()) && memberService.findMemberByNickname(memberDto.getNickname()).getId() != id) {
+        } else if (memberService.hasNickname(memberDto.getNickname()) && memberService.findMemberByNickname(memberDto.getNickname()).getSeq() != seq) {
             // 기존에 존재하는 닉네임이 내 닉네임이 아닐 경우 == 새로 변경한 닉네임이 이미 사용중인 경우(다른 사람의 닉네임)
             status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 닉네임입니다.");
-        } else if (!memberService.updateMember(memberDto, id)) {
+        } else if (!memberService.updateMember(memberDto, seq)) {
             // 정보 수정 실패
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
             responseData.put("msg", "정보 수정 실패");

@@ -7,7 +7,6 @@ import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.QActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.response.QResponseMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
-import com.ssafy.bjbj.api.member.entity.QActivity;
 
 import javax.persistence.EntityManager;
 
@@ -28,7 +27,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
         return queryFactory
                 .select(new QResponseMemberDto(
-                        member.id,
+                        member.seq,
                         member.email,
                         member.password,
                         member.name,
@@ -40,7 +39,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public List<ActivityCountDto> findAllActivityCountDtoById(Long id) {
+    public List<ActivityCountDto> findAllActivityCountDtoBySeq(Long seq) {
         StringTemplate formattedDate = Expressions.stringTemplate(
                 "DATE_FORMAT({0}, {1})",
                 activity.time,
@@ -53,7 +52,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         ))
                 .from(activity)
                 .join(activity.member, member)
-                .where(activity.member.id.eq(id))
+                .where(activity.member.seq.eq(seq))
                 .groupBy(formattedDate)
                 .orderBy(formattedDate.desc())
                 .fetch();

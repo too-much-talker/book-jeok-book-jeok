@@ -3,7 +3,7 @@ package com.ssafy.bjbj.api.challenge.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ChallengeMemberId implements Serializable {
+public class ChallengeMemberSeq implements Serializable {
 
     private Long challenge;
     private Long member;
@@ -12,7 +12,7 @@ public class ChallengeMemberId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChallengeMemberId that = (ChallengeMemberId) o;
+        ChallengeMemberSeq that = (ChallengeMemberSeq) o;
         return Objects.equals(challenge, that.challenge) && Objects.equals(member, that.member);
     }
 

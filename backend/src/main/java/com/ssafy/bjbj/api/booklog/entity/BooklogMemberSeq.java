@@ -3,7 +3,7 @@ package com.ssafy.bjbj.api.booklog.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class BooklogMemberId implements Serializable {
+public class BooklogMemberSeq implements Serializable {
 
     private Long booklog;
     private Long member;
@@ -12,7 +12,7 @@ public class BooklogMemberId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BooklogMemberId that = (BooklogMemberId) o;
+        BooklogMemberSeq that = (BooklogMemberSeq) o;
         return Objects.equals(booklog, that.booklog) && Objects.equals(member, that.member);
     }
 

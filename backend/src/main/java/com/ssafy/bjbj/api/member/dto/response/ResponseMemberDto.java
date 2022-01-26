@@ -4,11 +4,11 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString(of = {"id", "email", "password", "name", "nickname", "phoneNumber"})
+@ToString(of = {"seq", "email", "password", "name", "nickname", "phoneNumber"})
 @Getter
 public class ResponseMemberDto {
 
-    private Long id;
+    private Long seq;
 
     private String email;
 
@@ -21,8 +21,8 @@ public class ResponseMemberDto {
     private String phoneNumber;
 
     @QueryProjection
-    public ResponseMemberDto(Long id, String email, String password, String name, String nickname, String phoneNumber) {
-        this.id = id;
+    public ResponseMemberDto(Long seq, String email, String password, String name, String nickname, String phoneNumber) {
+        this.seq = seq;
         this.password = password;
         this.email = email;
         this.name = name;

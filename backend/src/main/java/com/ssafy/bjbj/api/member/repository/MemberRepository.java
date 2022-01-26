@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
+    @Query("SELECT m FROM Member m WHERE m.seq = :seq")
+    Member findBySeq(@Param("seq") Long seq);
+
     boolean existsByEmail(String email);
 
     boolean existsByNickname(String nickname);
@@ -15,11 +18,12 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     Member findMemberByNickname(String nickname);
 
-    Member findMemberById(Long id);
+    Member findMemberBySeq(Long seq);
 
-    @Query("SELECT m.point FROM Member m WHERE m.id = :id")
-    Integer findPointById(@Param("id") Long id);
+    @Query("SELECT m.point FROM Member m WHERE m.seq = :seq")
+    Integer findPointBySeq(@Param("seq") Long seq);
 
-    @Query("SELECT m.exp FROM Member m WHERE m.id = :id")
-    Integer findExpById(@Param("id") Long id);
+    @Query("SELECT m.exp FROM Member m WHERE m.seq = :seq")
+    Integer findExpBySeq(@Param("seq") Long seq);
+
 }

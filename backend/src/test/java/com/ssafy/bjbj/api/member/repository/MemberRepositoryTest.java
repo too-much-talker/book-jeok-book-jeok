@@ -105,9 +105,9 @@ class MemberRepositoryTest {
         em.clear();
 
         // db에서 가져온 회원
-        Member savedMember = memberRepository.findById(member.getId()).get();
+        Member savedMember = memberRepository.findBySeq(member.getSeq());
 
-        assertThat(member.getId()).isEqualTo(savedMember.getId());
+        assertThat(member.getSeq()).isEqualTo(savedMember.getSeq());
         assertThat(member.getEmail()).isEqualTo(savedMember.getEmail());
         assertThat(member.getPassword()).isEqualTo(savedMember.getPassword());
         assertThat(member.getName()).isEqualTo(savedMember.getName());
@@ -145,7 +145,7 @@ class MemberRepositoryTest {
 
     @DisplayName("ID로 Point Select 테스트")
     @Test
-    public void findPointById() {
+    public void findPointBySeq() {
         // 회원가입
         Integer point = 500;
         Member member = Member.builder()
@@ -164,7 +164,7 @@ class MemberRepositoryTest {
         em.clear();
 
         // 경험치 select
-        Integer savedPoint = memberRepository.findPointById(member.getId());
+        Integer savedPoint = memberRepository.findPointBySeq(member.getSeq());
 
         // 검증
         assertThat(point).isEqualTo(savedPoint);
@@ -172,7 +172,7 @@ class MemberRepositoryTest {
 
     @DisplayName("ID로 Exp Select 테스트")
     @Test
-    public void findExpById() {
+    public void findExpBySeq() {
         // 회원가입
         Integer exp = 1000;
         Member member = Member.builder()
@@ -191,7 +191,7 @@ class MemberRepositoryTest {
         em.clear();
 
         // exp select
-        Integer savedExp = memberRepository.findExpById(member.getId());
+        Integer savedExp = memberRepository.findExpBySeq(member.getSeq());
 
         // 검증
         assertThat(exp).isEqualTo(savedExp);
@@ -199,7 +199,7 @@ class MemberRepositoryTest {
 
     @DisplayName("ID로 활동량 카운트 Select 테스트")
     @Test
-    public void findAllActivityCountById() {
+    public void findAllActivityCountBySeq() {
         // 회원 가입
         Member member = Member.builder()
                 .email("bjbj@bjbj.com")
@@ -214,11 +214,11 @@ class MemberRepositoryTest {
         em.persist(member);
 
         // long -> Long 자동 형변환
-        for (long id = 105L; id > 100L; id--) {
+        for (long seq = 105L; seq > 100L; seq--) {
             // "2022-01-01 ~ 2022-01-05 날짜별 활동 1개
-            LocalDateTime parseDateTime = LocalDateTime.parse("2022-01-0" + String.valueOf(id - 100L) + "T12:30:00");
+            LocalDateTime parseDateTime = LocalDateTime.parse("2022-01-0" + String.valueOf(seq - 100L) + "T12:30:00");
             em.persist(Activity.builder()
-                    .id(id)
+                    .seq(seq)
                     .activityType(ActivityType.BOOKLOG_CREATE)
                     .time(parseDateTime)
                     .member(member)
@@ -226,9 +226,9 @@ class MemberRepositoryTest {
         }
 
         // 2021-12-20 3개 활동
-        for (long id = 100L; id >= 98L; id--) {
+        for (long seq = 100L; seq >= 98L; seq--) {
             em.persist(Activity.builder()
-                    .id(id)
+                    .seq(seq)
                     .activityType(ActivityType.CHALLENGE_AUTH)
                     .time(LocalDateTime.parse("2021-12-20T09:00:00"))
                     .member(member)
@@ -240,13 +240,13 @@ class MemberRepositoryTest {
          * 2021-12-20 3개 -> 1개
          * 총 6개
          */
-        List<ActivityCountDto> activityCountDtos = memberRepository.findAllActivityCountDtoById(member.getId());
+        List<ActivityCountDto> activityCountDtos = memberRepository.findAllActivityCountDtoBySeq(member.getSeq());
         assertThat(activityCountDtos.size()).isEqualTo(6);
 
         int index = 0;
-        for (long id = 105L; id > 100L; id--) {
+        for (long seq = 105L; seq > 100L; seq--) {
             ActivityCountDto activityCountDto = activityCountDtos.get(index);
-            assertThat(activityCountDto.getDate()).isEqualTo("2022-01-0" + String.valueOf(id - 100L));
+            assertThat(activityCountDto.getDate()).isEqualTo("2022-01-0" + String.valueOf(seq - 100L));
             assertThat(activityCountDto.getCount()).isEqualTo(1);
             ++index;
         }
