@@ -20,8 +20,6 @@ import java.util.List;
 @Getter
 @ToString(of = {"id", "email", "password", "name", "nickname", "exp", "point", "role", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Table(name = "tb_member")
 @Entity
 public class Member extends BaseLastModifiedEntity {
@@ -131,5 +129,17 @@ public class Member extends BaseLastModifiedEntity {
     @JoinColumn(name = "member_id", nullable = false)
     @OneToMany
     private List<PointHistory> pointHistories = new ArrayList<>();
+
+    @Builder
+    public Member(String email, String password, String name, String nickname, String phoneNumber, Role role, Integer point, Integer exp) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.point = point;
+        this.exp = exp;
+    }
 
 }
