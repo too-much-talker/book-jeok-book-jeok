@@ -16,4 +16,5 @@ public interface MemberService {
 
     ResponseMemberDto findResponseMemberDtoByEmail(String email);
 
+    Member findMemberByNickname(String nickname);
 }
