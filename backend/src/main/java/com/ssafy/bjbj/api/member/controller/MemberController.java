@@ -4,11 +4,13 @@ import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
+import com.ssafy.bjbj.common.auth.SsafyUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -184,4 +186,51 @@ public class MemberController {
                 .data(responseData)
                 .build();
     }
+
+    @PutMapping
+    public BaseResponseDto update(Authentication authentication, @Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
+        log.debug("회원정보 수정");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        String password = memberDto.getPassword();
+
+        // 사용자가 api 요청시 값을 조작했는지 확인
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        Long id = details.getUser().getId();
+
+        if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+            }
+        } else if ((responseData = checkPassword(password, memberDto)).size() != 0) {
+            // 비밀번호가 형식에 맞지 않는 경우
+            status = HttpStatus.BAD_REQUEST.value();
+        } else if (memberService.hasNickname(memberDto.getNickname()) && memberService.findMemberByNickname(memberDto.getNickname()).getId() != id) {
+            // 기존에 존재하는 닉네임이 내 닉네임이 아닐 경우 == 새로 변경한 닉네임이 이미 사용중인 경우(다른 사람의 닉네임)
+            status = HttpStatus.CONFLICT.value();
+            responseData.put("msg", "이미 존재하는 닉네임입니다.");
+        } else if (!memberService.updateMember(memberDto, id)) {
+            // 정보 수정 실패
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "정보 수정 실패");
+        } else {
+            // 정보 수정 성공
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "정보 수정 성공");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }
