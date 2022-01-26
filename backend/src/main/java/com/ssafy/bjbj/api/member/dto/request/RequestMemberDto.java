@@ -33,8 +33,7 @@ public class RequestMemberDto {
     /**
      * 정규 표현식 -> 한글(2~8자) 또는 영어(3~12자)
      */
-    @Pattern(regexp = "^[가-힣]{2,8}|[a-z]{3,12}$", message = "이름은 한글(2자 이상 8자 이하) 또는 영어(3자 이상 20자 이하)만 입력해주세요.")
-    @Length(min = 3, max = 8, message = "닉네임 한글(2자 이상 8자 이하) 또는 영어(3자 이상 12자 이하)만 입력해주세요.")
+    @Pattern(regexp = "^[가-힣]{2,8}|[a-z]{3,12}$", message = "닉네임은 한글(2자 이상 8자 이하) 또는 영어(3자 이상 20자 이하)만 입력해주세요.")
     private String nickname;
 
     /**
