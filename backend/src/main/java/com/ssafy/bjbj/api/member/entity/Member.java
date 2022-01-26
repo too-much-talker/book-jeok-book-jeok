@@ -83,8 +83,7 @@ public class Member extends BaseLastModifiedEntity {
     @OneToMany
     private List<Subscribe> toMembers = new ArrayList<>();
 
-    @JoinColumn(name = "member_id", nullable = false)
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<Activity> activities = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
