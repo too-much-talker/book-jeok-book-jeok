@@ -1,6 +1,5 @@
 package com.ssafy.bjbj.api.member.dto.request;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,8 +9,6 @@ import javax.validation.constraints.Pattern;
 @ToString(of = {"email", "password", "name", "nickname", "phoneNumber"})
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
-@Builder
 public class RequestMemberDto {
 
     /**
