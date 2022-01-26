@@ -18,4 +18,6 @@ public interface MemberService {
 
     Integer getPointById(Long id);
 
+    Integer getExpById(Long id);
+
 }

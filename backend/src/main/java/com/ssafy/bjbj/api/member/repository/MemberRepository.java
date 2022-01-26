@@ -16,4 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Query("SELECT m.point FROM Member m WHERE m.id = :id")
     Integer findPointById(@Param("id") Long id);
 
+    @Query("SELECT m.exp FROM Member m WHERE m.id = :id")
+    Integer findExpById(@Param("id") Long id);
+
 }

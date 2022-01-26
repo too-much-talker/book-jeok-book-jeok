@@ -70,4 +70,9 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findPointById(id);
     }
 
+    @Override
+    public Integer getExpById(Long id) {
+        return memberRepository.findExpById(id);
+    }
+
 }
