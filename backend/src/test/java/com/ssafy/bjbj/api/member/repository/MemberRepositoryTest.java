@@ -197,4 +197,63 @@ class MemberRepositoryTest {
         assertThat(exp).isEqualTo(savedExp);
     }
 
+    @DisplayName("ID로 활동량 카운트 Select 테스트")
+    @Test
+    public void findAllActivityCountById() {
+        // 회원 가입
+        Member member = Member.builder()
+                .email("bjbj@bjbj.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .phoneNumber("010-1234-5789")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(100)
+                .build();
+        em.persist(member);
+
+        // long -> Long 자동 형변환
+        for (long id = 105L; id > 100L; id--) {
+            // "2022-01-01 ~ 2022-01-05 날짜별 활동 1개
+            LocalDateTime parseDateTime = LocalDateTime.parse("2022-01-0" + String.valueOf(id - 100L) + "T12:30:00");
+            em.persist(Activity.builder()
+                    .id(id)
+                    .activityType(ActivityType.BOOKLOG_CREATE)
+                    .time(parseDateTime)
+                    .member(member)
+                    .build());
+        }
+
+        // 2021-12-20 3개 활동
+        for (long id = 100L; id >= 98L; id--) {
+            em.persist(Activity.builder()
+                    .id(id)
+                    .activityType(ActivityType.CHALLENGE_AUTH)
+                    .time(LocalDateTime.parse("2021-12-20T09:00:00"))
+                    .member(member)
+                    .build());
+        }
+
+        /**
+         * 2022-01-01 ~ 2022-01-05 1개씩 총 5개
+         * 2021-12-20 3개 -> 1개
+         * 총 6개
+         */
+        List<ActivityCountDto> activityCountDtos = memberRepository.findAllActivityCountDtoById(member.getId());
+        assertThat(activityCountDtos.size()).isEqualTo(6);
+
+        int index = 0;
+        for (long id = 105L; id > 100L; id--) {
+            ActivityCountDto activityCountDto = activityCountDtos.get(index);
+            assertThat(activityCountDto.getDate()).isEqualTo("2022-01-0" + String.valueOf(id - 100L));
+            assertThat(activityCountDto.getCount()).isEqualTo(1);
+            ++index;
+        }
+
+        ActivityCountDto activityCountDto = activityCountDtos.get(index);
+        assertThat(activityCountDto.getDate()).isEqualTo("2021-12-20");
+        assertThat(activityCountDto.getCount()).isEqualTo(3);
+    }
+
 }
