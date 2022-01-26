@@ -1,12 +1,20 @@
 package com.ssafy.bjbj.api.member.repository;
 
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.member.dto.request.QRequestMemberDto;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
+import com.ssafy.bjbj.api.member.dto.QActivityCountDto;
+import com.ssafy.bjbj.api.member.dto.response.QResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.entity.QActivity;
 
 import javax.persistence.EntityManager;
 
-import static com.ssafy.bjbj.api.member.entity.QMember.*;
+import java.util.List;
+
+import static com.ssafy.bjbj.api.member.entity.QActivity.*;
+import static com.ssafy.bjbj.api.member.entity.QMember.member;
 
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
@@ -17,10 +25,10 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public RequestMemberDto findMemberDtoByEmail(String email) {
-
+    public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
         return queryFactory
-                .select(new QRequestMemberDto(
+                .select(new QResponseMemberDto(
+                        member.id,
                         member.email,
                         member.password,
                         member.name,
@@ -29,6 +37,26 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .from(member)
                 .where(member.email.eq(email))
                 .fetchOne();
+    }
+
+    @Override
+    public List<ActivityCountDto> findAllActivityCountDtoById(Long id) {
+        StringTemplate formattedDate = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})",
+                activity.time,
+                "%Y-%m-%d");
+
+        return queryFactory
+                .select(new QActivityCountDto(
+                        formattedDate.as("date"),
+                        formattedDate.count().intValue().as("count")
+                        ))
+                .from(activity)
+                .join(activity.member, member)
+                .where(activity.member.id.eq(id))
+                .groupBy(formattedDate)
+                .orderBy(formattedDate.desc())
+                .fetch();
     }
 
 }

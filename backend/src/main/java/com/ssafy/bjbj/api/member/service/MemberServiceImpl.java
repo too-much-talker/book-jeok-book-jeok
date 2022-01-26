@@ -1,6 +1,8 @@
 package com.ssafy.bjbj.api.member.service;
 
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.entity.Subscribe;
@@ -72,10 +74,24 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findMemberByEmail(email);
     }
 
+    @Override
+    public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
+        return memberRepository.findResponseMemberDtoByEmail(email);
+    }
 
     @Override
-    public RequestMemberDto findMemberDtoByEmail(String email) {
-        return memberRepository.findMemberDtoByEmail(email);
+    public Integer getPointById(Long id) {
+        return memberRepository.findPointById(id);
+    }
+
+    @Override
+    public Integer getExpById(Long id) {
+        return memberRepository.findExpById(id);
+    }
+
+    @Override
+    public List<ActivityCountDto> getAllActivityCounts(Long id) {
+        return memberRepository.findAllActivityCountDtoById(id);
     }
 
     @Transactional
@@ -99,7 +115,6 @@ public class MemberServiceImpl implements MemberService {
                 .fromMember(fromMember)
                 .toMember(toMember)
                 .build();
-//        fromMember.getToMembers().add(subscribe);
         subscribeRepository.save(subscribe);
 
         return true;
@@ -121,4 +136,5 @@ public class MemberServiceImpl implements MemberService {
 
         return false;
     }
+    
 }

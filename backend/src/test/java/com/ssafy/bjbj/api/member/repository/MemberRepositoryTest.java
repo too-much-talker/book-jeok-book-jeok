@@ -1,6 +1,9 @@
 package com.ssafy.bjbj.api.member.repository;
 
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
+import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.entity.Activity;
+import com.ssafy.bjbj.api.member.entity.ActivityType;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -76,7 +82,7 @@ class MemberRepositoryTest {
         boolean result2 = memberRepository.existsByNickname(nickname);
         assertThat(result2).isTrue();
     }
-    
+
     @DisplayName("회원가입 테스트")
     @Test
     public void save() {
@@ -97,7 +103,7 @@ class MemberRepositoryTest {
 
         em.flush();
         em.clear();
-        
+
         // db에서 가져온 회원
         Member savedMember = memberRepository.findById(member.getId()).get();
 
@@ -112,16 +118,17 @@ class MemberRepositoryTest {
         assertThat(member.getRole()).isEqualTo(savedMember.getRole());
     }
 
+    @DisplayName("응답용 회원 Dto 조회 레파지토리 테스트")
     @Test
-    public void findMemberDtoByEmail() {
+    public void findResponseMemberDtoByEmail() {
         // 회원 가입 전
-        String email1 = "test@test.com";
-        RequestMemberDto result1 = memberRepository.findMemberDtoByEmail(email1);
-        assertThat(result1).isNull();
+        String email = "test@test.com";
+        ResponseMemberDto responseMemberDto1 = memberRepository.findResponseMemberDtoByEmail(email);
+        assertThat(responseMemberDto1).isNull();
 
         // 회원 가입
         memberRepository.save(Member.builder()
-                .email(email1)
+                .email(email)
                 .password("test1234")
                 .name("홍길동")
                 .nickname("hong")
@@ -132,8 +139,121 @@ class MemberRepositoryTest {
                 .build());
 
         // 회원 가입 후
-        RequestMemberDto result2 = memberRepository.findMemberDtoByEmail(email1);
-        assertThat(result2).isNotNull();
+        ResponseMemberDto responseMemberDto2 = memberRepository.findResponseMemberDtoByEmail(email);
+        assertThat(responseMemberDto2).isNotNull();
+    }
+
+    @DisplayName("ID로 Point Select 테스트")
+    @Test
+    public void findPointById() {
+        // 회원가입
+        Integer point = 500;
+        Member member = Member.builder()
+                .email("bjbj@bjbj.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .phoneNumber("010-1234-5789")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(point)
+                .build();
+
+        em.persist(member);
+        em.flush();
+        em.clear();
+
+        // 경험치 select
+        Integer savedPoint = memberRepository.findPointById(member.getId());
+
+        // 검증
+        assertThat(point).isEqualTo(savedPoint);
+    }
+
+    @DisplayName("ID로 Exp Select 테스트")
+    @Test
+    public void findExpById() {
+        // 회원가입
+        Integer exp = 1000;
+        Member member = Member.builder()
+                .email("bjbj@bjbj.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .phoneNumber("010-1234-5789")
+                .role(Role.MEMBER)
+                .exp(exp)
+                .point(100)
+                .build();
+
+        em.persist(member);
+        em.flush();
+        em.clear();
+
+        // exp select
+        Integer savedExp = memberRepository.findExpById(member.getId());
+
+        // 검증
+        assertThat(exp).isEqualTo(savedExp);
+    }
+
+    @DisplayName("ID로 활동량 카운트 Select 테스트")
+    @Test
+    public void findAllActivityCountById() {
+        // 회원 가입
+        Member member = Member.builder()
+                .email("bjbj@bjbj.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .phoneNumber("010-1234-5789")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(100)
+                .build();
+        em.persist(member);
+
+        // long -> Long 자동 형변환
+        for (long id = 105L; id > 100L; id--) {
+            // "2022-01-01 ~ 2022-01-05 날짜별 활동 1개
+            LocalDateTime parseDateTime = LocalDateTime.parse("2022-01-0" + String.valueOf(id - 100L) + "T12:30:00");
+            em.persist(Activity.builder()
+                    .id(id)
+                    .activityType(ActivityType.BOOKLOG_CREATE)
+                    .time(parseDateTime)
+                    .member(member)
+                    .build());
+        }
+
+        // 2021-12-20 3개 활동
+        for (long id = 100L; id >= 98L; id--) {
+            em.persist(Activity.builder()
+                    .id(id)
+                    .activityType(ActivityType.CHALLENGE_AUTH)
+                    .time(LocalDateTime.parse("2021-12-20T09:00:00"))
+                    .member(member)
+                    .build());
+        }
+
+        /**
+         * 2022-01-01 ~ 2022-01-05 1개씩 총 5개
+         * 2021-12-20 3개 -> 1개
+         * 총 6개
+         */
+        List<ActivityCountDto> activityCountDtos = memberRepository.findAllActivityCountDtoById(member.getId());
+        assertThat(activityCountDtos.size()).isEqualTo(6);
+
+        int index = 0;
+        for (long id = 105L; id > 100L; id--) {
+            ActivityCountDto activityCountDto = activityCountDtos.get(index);
+            assertThat(activityCountDto.getDate()).isEqualTo("2022-01-0" + String.valueOf(id - 100L));
+            assertThat(activityCountDto.getCount()).isEqualTo(1);
+            ++index;
+        }
+
+        ActivityCountDto activityCountDto = activityCountDtos.get(index);
+        assertThat(activityCountDto.getDate()).isEqualTo("2021-12-20");
+        assertThat(activityCountDto.getCount()).isEqualTo(3);
     }
 
 }
