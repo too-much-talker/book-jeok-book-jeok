@@ -69,4 +69,17 @@ public class MemberServiceImpl implements MemberService {
     public Member findMemberByNickname(String nickname) {
         return memberRepository.findMemberByNickname(nickname);
     }
+
+    @Transactional
+    @Override
+    public boolean updateMember(RequestMemberDto memberDto, Long id) {
+
+        String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
+        Member member = memberRepository.findMemberById(id);
+        member.changeMember(encryptedPassword, memberDto.getName(), memberDto.getNickname(), memberDto.getPhoneNumber());
+
+        return true;
+    }
+
+
 }
