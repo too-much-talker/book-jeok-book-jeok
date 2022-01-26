@@ -80,6 +80,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findMemberByNickname(String nickname) {
+        return memberRepository.findMemberByNickname(nickname);
+    }
+
     public Integer getPointById(Long id) {
         return memberRepository.findPointById(id);
     }
@@ -96,6 +100,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
+    public boolean updateMember(RequestMemberDto memberDto, Long id) {
+
+        String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
+        Member member = memberRepository.findMemberById(id);
+        member.changeMember(encryptedPassword, memberDto.getName(), memberDto.getNickname(), memberDto.getPhoneNumber());
+    
+        return true;
+    }
+
     public boolean subscribeMember(Long fromMemberId, Long toMemberId) {
 
         Member fromMember = memberRepository.findMemberById(fromMemberId);

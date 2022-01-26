@@ -13,6 +13,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     Member findMemberByEmail(String email);
 
+    Member findMemberByNickname(String nickname);
+
     Member findMemberById(Long id);
 
     @Query("SELECT m.point FROM Member m WHERE m.id = :id")
@@ -20,5 +22,4 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     @Query("SELECT m.exp FROM Member m WHERE m.id = :id")
     Integer findExpById(@Param("id") Long id);
-
 }

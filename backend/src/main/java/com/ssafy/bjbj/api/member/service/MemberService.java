@@ -20,6 +20,10 @@ public interface MemberService {
 
     ResponseMemberDto findResponseMemberDtoByEmail(String email);
 
+    Member findMemberByNickname(String nickname);
+
+    boolean updateMember(RequestMemberDto memberDto, Long id);
+
     Integer getPointById(Long id);
 
     Integer getExpById(Long id);

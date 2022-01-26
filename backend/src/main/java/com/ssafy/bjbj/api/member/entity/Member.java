@@ -130,6 +130,13 @@ public class Member extends BaseLastModifiedEntity {
     @OneToMany
     private List<PointHistory> pointHistories = new ArrayList<>();
 
+    public void changeMember(String password, String name, String nickname, String phoneNumber) {
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
+
     @Builder
     public Member(String email, String password, String name, String nickname, String phoneNumber, Role role, Integer point, Integer exp) {
         this.email = email;
