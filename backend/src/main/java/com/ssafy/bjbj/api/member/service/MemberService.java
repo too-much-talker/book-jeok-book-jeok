@@ -16,4 +16,6 @@ public interface MemberService {
 
     ResponseMemberDto findResponseMemberDtoByEmail(String email);
 
+    Integer getPointById(Long id);
+
 }

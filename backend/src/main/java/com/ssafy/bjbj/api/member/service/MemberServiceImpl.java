@@ -65,4 +65,9 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findResponseMemberDtoByEmail(email);
     }
 
+    @Override
+    public Integer getPointById(Long id) {
+        return memberRepository.findPointById(id);
+    }
+
 }
