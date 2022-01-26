@@ -4,11 +4,13 @@ import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
+import com.ssafy.bjbj.common.auth.SsafyUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -108,7 +110,7 @@ public class MemberController {
         ResponseMemberDto responseMemberDto = memberService.findResponseMemberDtoByEmail(loginDto.getEmail());
         if (responseMemberDto == null) {
             status = HttpStatus.NO_CONTENT.value();
-            responseData.put("msg", "존재하지 않은 회원입니다.");
+            responseData.put("msg", "존재하지 않는 회원입니다.");
         } else if (!passwordEncoder.matches(loginDto.getPassword(), responseMemberDto.getPassword())) {
             status = HttpStatus.UNAUTHORIZED.value();
             responseData.put("msg", "잘못된 비밀번호입니다.");
