@@ -1,8 +1,11 @@
 package com.ssafy.bjbj.api.member.service;
 
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
+
+import java.util.List;
 
 public interface MemberService {
 
@@ -19,5 +22,7 @@ public interface MemberService {
     Integer getPointById(Long id);
 
     Integer getExpById(Long id);
+
+    List<ActivityCountDto> getAllActivityCounts(Long id);
 
 }
