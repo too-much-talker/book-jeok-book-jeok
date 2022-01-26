@@ -28,4 +28,8 @@ public class Activity {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    @JoinColumn(name = "member_id")
+    @ManyToOne
+    private Member member;
+
 }
