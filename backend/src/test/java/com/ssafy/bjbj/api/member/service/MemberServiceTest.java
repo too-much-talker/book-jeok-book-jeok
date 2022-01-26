@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -18,6 +19,9 @@ public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @DisplayName("응답용 회원 Dto 조회 서비스 메서드 테스트")
     @Test
