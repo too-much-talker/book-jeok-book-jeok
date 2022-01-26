@@ -186,4 +186,27 @@ public class MemberController {
                 .data(responseData)
                 .build();
     }
+
+    @GetMapping("/me")
+    public BaseResponseDto myInfo(Authentication authentication) {
+        log.debug("MemberController.myInfo() 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        Long id = details.getUser().getId();
+
+        responseData.put("point", memberService.getPointById(id));
+        responseData.put("exp", memberService.getExpById(id));
+        responseData.put("activityCountByDate", memberService.getAllActivityCounts(id));
+
+        status = HttpStatus.OK.value();
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }
