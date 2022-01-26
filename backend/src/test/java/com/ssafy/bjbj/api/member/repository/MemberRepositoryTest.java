@@ -82,7 +82,7 @@ class MemberRepositoryTest {
         boolean result2 = memberRepository.existsByNickname(nickname);
         assertThat(result2).isTrue();
     }
-    
+
     @DisplayName("회원가입 테스트")
     @Test
     public void save() {
@@ -103,7 +103,7 @@ class MemberRepositoryTest {
 
         em.flush();
         em.clear();
-        
+
         // db에서 가져온 회원
         Member savedMember = memberRepository.findById(member.getId()).get();
 
