@@ -1,6 +1,5 @@
 package com.ssafy.bjbj.api.member.dto.request;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,8 +9,6 @@ import javax.validation.constraints.Pattern;
 @ToString(of = {"email", "password", "name", "nickname", "phoneNumber"})
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
-@Builder
 public class RequestMemberDto {
 
     /**
@@ -36,8 +33,7 @@ public class RequestMemberDto {
     /**
      * 정규 표현식 -> 한글(2~8자) 또는 영어(3~12자)
      */
-    @Pattern(regexp = "^[가-힣]{2,8}|[a-z]{3,12}$", message = "이름은 한글(2자 이상 8자 이하) 또는 영어(3자 이상 20자 이하)만 입력해주세요.")
-    @Length(min = 3, max = 8, message = "닉네임 한글(2자 이상 8자 이하) 또는 영어(3자 이상 12자 이하)만 입력해주세요.")
+    @Pattern(regexp = "^[가-힣]{2,8}|[a-z]{3,12}$", message = "닉네임은 한글(2자 이상 8자 이하) 또는 영어(3자 이상 20자 이하)만 입력해주세요.")
     private String nickname;
 
     /**
@@ -45,5 +41,14 @@ public class RequestMemberDto {
      */
     @Pattern(regexp = "^[0-9]{3}-[0-9]{3,4}-[0-9]{3,4}$", message = "핸드폰 번호 형식에 맞지 않습니다.")
     private String phoneNumber;
+
+    @Builder
+    public RequestMemberDto(String email, String password, String name, String nickname, String phoneNumber) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.member.service;
 
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -63,6 +66,21 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
         return memberRepository.findResponseMemberDtoByEmail(email);
+    }
+
+    @Override
+    public Integer getPointById(Long id) {
+        return memberRepository.findPointById(id);
+    }
+
+    @Override
+    public Integer getExpById(Long id) {
+        return memberRepository.findExpById(id);
+    }
+
+    @Override
+    public List<ActivityCountDto> getAllActivityCounts(Long id) {
+        return memberRepository.findAllActivityCountDtoById(id);
     }
 
 }
