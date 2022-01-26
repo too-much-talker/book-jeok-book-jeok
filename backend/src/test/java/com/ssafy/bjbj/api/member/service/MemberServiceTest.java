@@ -40,5 +40,11 @@ public class MemberServiceTest {
         ResponseMemberDto responseMemberDto2 = memberService.findResponseMemberDtoByEmail(email);
         assertThat(responseMemberDto2).isNotNull();
     }
+    
+    @DisplayName("ID로 활동량 카운트 get 테스트")
+    @Test
+    public void getAllActivityCountsTest() {
+        // 추후에 북로그, 챌린지 관련 API 개발 후에 이 메서드 테스트 로직 추가 필요
+    }
 
 }
