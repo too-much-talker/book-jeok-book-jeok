@@ -1,7 +1,9 @@
 package com.ssafy.bjbj.api.member.repository;
 
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.entity.Activity;
+import com.ssafy.bjbj.api.member.entity.ActivityType;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -136,6 +141,33 @@ class MemberRepositoryTest {
         // 회원 가입 후
         ResponseMemberDto responseMemberDto2 = memberRepository.findResponseMemberDtoByEmail(email);
         assertThat(responseMemberDto2).isNotNull();
+    }
+
+    @DisplayName("ID로 Point Select 테스트")
+    @Test
+    public void findPointById() {
+        // 회원가입
+        Integer point = 500;
+        Member member = Member.builder()
+                .email("bjbj@bjbj.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .phoneNumber("010-1234-5789")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(point)
+                .build();
+
+        em.persist(member);
+        em.flush();
+        em.clear();
+
+        // 경험치 select
+        Integer savedPoint = memberRepository.findPointById(member.getId());
+
+        // 검증
+        assertThat(point).isEqualTo(savedPoint);
     }
 
 }
