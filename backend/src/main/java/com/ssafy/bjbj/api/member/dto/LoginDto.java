@@ -7,10 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
 @ToString(of = {"email", "password"})
-@NoArgsConstructor
 @Getter
-@AllArgsConstructor
-@Builder
 public class LoginDto {
 
     /**

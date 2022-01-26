@@ -2,6 +2,8 @@ package com.ssafy.bjbj.api.member.controller;
 
 import com.ssafy.bjbj.api.member.dto.LoginDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.entity.Subscribe;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.auth.SsafyUserDetails;
@@ -110,7 +112,7 @@ public class MemberController {
         ResponseMemberDto responseMemberDto = memberService.findResponseMemberDtoByEmail(loginDto.getEmail());
         if (responseMemberDto == null) {
             status = HttpStatus.NO_CONTENT.value();
-            responseData.put("msg", "존재하지 않은 회원입니다.");
+            responseData.put("msg", "존재하지 않는 회원입니다.");
         } else if (!passwordEncoder.matches(loginDto.getPassword(), responseMemberDto.getPassword())) {
             status = HttpStatus.UNAUTHORIZED.value();
             responseData.put("msg", "잘못된 비밀번호입니다.");
@@ -187,12 +189,81 @@ public class MemberController {
                 .build();
     }
 
-    @PutMapping
-    public BaseResponseDto update(Authentication authentication, @Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
-        log.debug("회원정보 수정");
+    @PostMapping("/subscribe/{toMemberId}")
+    public BaseResponseDto subscribe(@PathVariable Long toMemberId, Authentication authentication) {
+        log.debug("팔로우 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
+
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        boolean canSubscribe = memberService.subscribeMember(details.getUser().getId(), toMemberId);
+
+        if (canSubscribe) {
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "구독에 성공했습니다.");
+        } else  {
+            status = HttpStatus.ACCEPTED.value();
+            responseData.put("msg", "이미 구독중인 유저입니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PostMapping("/unsubscribe/{toMemberId}")
+    public BaseResponseDto unsubscribe(@PathVariable long toMemberId, Authentication authentication) {
+        log.debug("언팔로우 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        boolean canUnsubscribeMember = memberService.unsubscribeMember(details.getUser().getId(), toMemberId);
+
+        if (canUnsubscribeMember) {
+
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "구독에 취소에 성공했습니다.");
+        } else {
+
+            status = HttpStatus.ACCEPTED.value();
+            responseData.put("msg", "이미 구독중이지 않은 유저입니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/me")
+    public BaseResponseDto myInfo(Authentication authentication) {
+        log.debug("MemberController.myInfo() 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        SsafyUserDetails details = (SsafyUserDetails) authentication.getDetails();
+        Long id = details.getUser().getId();
+
+        responseData.put("point", memberService.getPointById(id));
+        responseData.put("exp", memberService.getExpById(id));
+        responseData.put("activityCountByDate", memberService.getAllActivityCounts(id));
+
+        status = HttpStatus.OK.value();
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PutMapping
+    public BaseResponseDto update(Authentication authentication, @Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
+        log.debug("회원정보 수정");
 
         String password = memberDto.getPassword();
 
@@ -226,13 +297,12 @@ public class MemberController {
             status = HttpStatus.CREATED.value();
             responseData.put("msg", "정보 수정 성공");
         }
-
         return BaseResponseDto.builder()
                 .status(status)
                 .data(responseData)
                 .build();
     }
-
+    
     private Map<String, Object> checkPassword(String password, RequestMemberDto memberDto) {
 
         Map<String, Object> responseData = new HashMap<>();

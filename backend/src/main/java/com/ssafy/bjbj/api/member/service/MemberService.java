@@ -1,8 +1,12 @@
 package com.ssafy.bjbj.api.member.service;
 
+import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.entity.Subscribe;
+
+import java.util.List;
 
 public interface MemberService {
 
@@ -19,4 +23,17 @@ public interface MemberService {
     Member findMemberByNickname(String nickname);
 
     boolean updateMember(RequestMemberDto memberDto, Long id);
+
+    Integer getPointById(Long id);
+
+    Integer getExpById(Long id);
+
+    List<ActivityCountDto> getAllActivityCounts(Long id);
+
+    Member findMemberById(Long id);
+
+    boolean subscribeMember(Long fromMemberId, Long toMemberId);
+
+    boolean unsubscribeMember(Long fromMemberId, Long toMemberId);
+
 }
