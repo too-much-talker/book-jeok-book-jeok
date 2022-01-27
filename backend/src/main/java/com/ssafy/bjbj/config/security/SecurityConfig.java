@@ -1,4 +1,4 @@
-package com.ssafy.bjbj.config;
+package com.ssafy.bjbj.config.security;
 
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.auth.JwtAuthenticationFilter;
@@ -17,11 +17,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private CorsFilter corsFilter;
 
     @Autowired @Lazy
     private CustomUserDetailService customUserDetailService;
@@ -57,13 +61,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
+
                 .and()
+                .addFilter(corsFilter)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), memberService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/members/login").permitAll()
                 .antMatchers("/api/v1/members/*").authenticated() //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-                .anyRequest().permitAll()
-                .and().cors();
+                .anyRequest().permitAll();
+
     }
 
 }
