@@ -1,28 +1,20 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Login from "./views/user/login/LoginPresenter";
-import Signup from "./views/user/signup/SignupPresenter";
-import MyPage from "./views/user/myPage/index";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./views/main/Home";
+import React from "react";
+import Header from "./views/main/Header";
+import Mypage from "./views/user/myPage";
 
-function App() {
-  return (
-    <Router>
+function App(){
+  return(
+    <BrowserRouter>
+      <Header/>
       <Switch>
-        <Route path="/signup">
-          <Signup />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/mypage">
-          <MyPage />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
+        <Route exact path='/' component={Home}/>
+        <Route path='/mypage' component={Mypage}/>
       </Switch>
-    </Router>
+    </BrowserRouter>
   );
 }
+
 
 export default App;
