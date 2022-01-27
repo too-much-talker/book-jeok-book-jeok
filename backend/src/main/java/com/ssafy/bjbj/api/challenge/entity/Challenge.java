@@ -23,7 +23,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Challenge extends BaseLastModifiedEntity {
 
     @Column(name = "challenge_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 

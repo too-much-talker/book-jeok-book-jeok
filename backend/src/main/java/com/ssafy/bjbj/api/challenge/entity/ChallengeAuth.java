@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 public class ChallengeAuth extends BaseLastModifiedEntity {
 
     @Column(name = "challenge_auth_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 

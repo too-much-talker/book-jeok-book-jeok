@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.*;
 public class NoticeComment extends BaseLastModifiedEntity {
 
     @Column(name = "notice_comment_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 

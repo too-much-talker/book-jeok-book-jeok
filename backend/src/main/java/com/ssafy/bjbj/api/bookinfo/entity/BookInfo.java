@@ -13,73 +13,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@ToString(of = {"seq", "title", "vol", "seriesTitle", "seriesNo", "author", "eaIsbn", "eaAddCode", "setIsbn", "setAddCode", "setExpression", "publisher", "page", "publishDate", "subject", "titleUrl", "bookIntroductionUrl", "bookSummaryUrl", "inputDate", "updateDate", "starRating", "isDeleted"})
+@ToString(of = {"seq", "isbn", "title", "author", "description", "price", "smallImgUrl", "largeImgUrl", "categoryId", "categoryName", "publisher", "publicationDate", "starRating", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_book_info")
 @Entity
 public class BookInfo extends BaseLastModifiedEntity {
 
     @Column(name = "book_info_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
+
+    @Column(nullable = false)
+    private String isbn;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private Integer vol;
-
-    @Column(nullable = false)
-    private String seriesTitle;
-
-    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
-    private Integer seriesNo;
-
-    @Column(nullable = false)
     private String author;
 
     @Column(nullable = false)
-    private String eaIsbn;
+    private String description;
+
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    private Integer price;
 
     @Column(nullable = false)
-    private String eaAddCode;
+    private String smallImgUrl;
 
     @Column(nullable = false)
-    private String setIsbn;
+    private String largeImgUrl;
+
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    private Integer categoryId;
 
     @Column(nullable = false)
-    private String setAddCode;
-
-    @Column(nullable = false)
-    private boolean setExpression;
+    private String categoryName;
 
     @Column(nullable = false)
     private String publisher;
 
-    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
-    private Integer page;
-
     @Column(nullable = false)
-    private LocalDateTime publishDate;
-
-    @Column(nullable = false)
-    private String subject;
-
-    @Column(nullable = false)
-    private String titleUrl;
-
-    @Column(nullable = false)
-    private String bookIntroductionUrl;
-
-    @Column(nullable = false)
-    private String bookSummaryUrl;
-
-    @Column(nullable = false)
-    private LocalDateTime inputDate;
-
-    @Column(nullable = false)
-    private LocalDateTime updateDate;
+    private LocalDateTime publicationDate;
 
     @Column(nullable = false, columnDefinition = "DOUBLE UNSIGNED")
     private Double starRating;

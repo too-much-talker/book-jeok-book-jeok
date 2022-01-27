@@ -23,7 +23,7 @@ import static javax.persistence.FetchType.LAZY;
 public class ReadingGroup extends BaseLastModifiedEntity {
 
     @Column(name = "reading_group_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 

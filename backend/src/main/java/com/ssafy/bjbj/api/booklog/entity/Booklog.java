@@ -23,7 +23,7 @@ import static javax.persistence.FetchType.*;
 public class Booklog extends BaseLastModifiedEntity {
 
     @Column(name = "booklog_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 

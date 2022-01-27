@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 public class ReadingGroupBoardComment extends BaseLastModifiedEntity {
 
     @Column(name = "reading_group_board_comment_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 
