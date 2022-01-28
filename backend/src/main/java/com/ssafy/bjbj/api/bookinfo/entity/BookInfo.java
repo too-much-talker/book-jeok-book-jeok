@@ -24,7 +24,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Id
     private Long seq;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String isbn;
 
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
