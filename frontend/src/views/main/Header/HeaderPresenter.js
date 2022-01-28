@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import NaviContainer from './NaviContainer';
+import NaviContainer from '../Navi/NaviContainer';
 const HeaderBlock = styled.div`
 width:100vw;
 height: 143px;

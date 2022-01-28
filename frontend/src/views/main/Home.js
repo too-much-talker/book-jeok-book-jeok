@@ -1,5 +1,5 @@
-import HeaderPresenter from "./HeaderPresenter";
-import SearchContainer from "./SearchContainer";
+import HeaderPresenter from "./Header/HeaderPresenter";
+import SearchContainer from "./Search/SearchContainer";
 import styled from 'styled-components';
 import ContentPresenter from "./ContentPresenter";
 const HomeBlock= styled.div`

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link  } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from "../../res/img/logo2.PNG";
+import logo from "../../../res/img/logo2.PNG";
 
 const NaviBlock= styled.div`
 height:70px;
