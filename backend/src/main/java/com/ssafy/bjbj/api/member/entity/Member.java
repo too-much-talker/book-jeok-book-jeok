@@ -19,7 +19,14 @@ import java.util.List;
 @Getter
 @ToString(of = {"seq", "email", "password", "name", "nickname", "exp", "point", "role", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "tb_member")
+@Table(
+        name = "tb_member",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email"),
+                @UniqueConstraint(columnNames = "nickname"),
+                @UniqueConstraint(columnNames = "phoneNumber")
+        }
+)
 @Entity
 public class Member extends BaseLastModifiedEntity {
 

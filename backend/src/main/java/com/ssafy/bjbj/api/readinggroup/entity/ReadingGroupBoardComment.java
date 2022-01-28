@@ -23,7 +23,7 @@ public class ReadingGroupBoardComment extends BaseLastModifiedEntity {
     @Id
     private Long seq;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)

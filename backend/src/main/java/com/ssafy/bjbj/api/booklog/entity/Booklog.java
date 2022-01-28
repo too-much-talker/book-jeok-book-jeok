@@ -30,6 +30,7 @@ public class Booklog extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String summary;
