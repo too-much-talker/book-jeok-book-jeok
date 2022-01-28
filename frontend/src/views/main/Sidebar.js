@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { UserExpPoint } from "../user/myPage/userInfo/UserInfoContainer";
+import { UserExpPoint } from "../user/myPage/userInfo/UserInfoPresenter";
 import React, { useState } from "react";
 import userList from "../user/myPage/userInfo/asset/data";
 

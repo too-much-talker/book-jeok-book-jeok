@@ -1,4 +1,4 @@
-import UserInfoPresenter from "./userInfo/UserInfoPresenter";
+import UserInfoContainer from "./userInfo/UserInfoContainer";
 import UserBooklogPresenter from "./userBooklog/UserBooklogPresenter";
 import UserBookclubPresenter from "./userBookclub/UserBookclubPresenter";
 import UserChallengePresenter from "./userChallenge/UserChallengePresenter";
@@ -18,7 +18,7 @@ function Mypage(){
         <Center>
           <Sidebar/>
           <Switch>
-            <Route exact path="/mypage" component={UserInfoPresenter}/>
+            <Route exact path="/mypage" component={UserInfoContainer}/>
             <Route path="/mybooklog" component={UserBooklogPresenter} />
             <Route path="/mybookclub" component={UserBookclubPresenter} />
             <Route path="/mychallenge" component={UserChallengePresenter} />
