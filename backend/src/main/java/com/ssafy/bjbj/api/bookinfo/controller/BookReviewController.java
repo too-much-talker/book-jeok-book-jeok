@@ -1,11 +1,14 @@
 package com.ssafy.bjbj.api.bookinfo.controller;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.ResponseBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.service.BookReviewService;
+import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,19 +18,20 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/bookinfos/{bookinfo_seq}/reviews")
+@RequestMapping("/api/v1/bookreviews")
 @RestController
 public class BookReviewController {
 
     private final BookReviewService bookReviewService;
 
-    @PostMapping("")
-    public BaseResponseDto reviewRegister(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, @PathVariable Long bookinfo_seq) {
+    @PostMapping
+    public BaseResponseDto reviewBookRegister(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        boolean canReview = bookReviewService.registerReview(requestBookReviewDto);
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        boolean isAuthenticatedMember = details.getMember().getSeq().equals(requestBookReviewDto.getMemberSeq());
 
         if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
@@ -39,14 +43,19 @@ public class BookReviewController {
                 // global error
                 responseData.put("msg", "global error");
             }
-        } else if (!canReview){
-            // 이미 동일한 유저가 리뷰를 더 작성하려 했을 경우
-            status = HttpStatus.CONFLICT.value();
-            responseData.put("msg", "이미 작성하신 리뷰가 있어 새로운 리뷰로 대체했습니다.");
+        } else if (!isAuthenticatedMember) {
+            // 작성한 멤버의 정보가 요청한 멤버의 정보가 일치하지 않은 경우
+            status = HttpStatus.UNAUTHORIZED.value();
+            responseData.put("msg", "인증되지 않은 회원입니다");
+
         } else {
-            // 패스워드에 이메일이 포함된 경우
+
+            // 북리뷰를 작성
+            ResponseBookReviewDto responseBookReviewDto = bookReviewService.registerBookReview(requestBookReviewDto);
+
             status = HttpStatus.CREATED.value();
             responseData.put("msg", "새로운 리뷰를 작성했습니다.");
+            responseData.put("reviewInfo", responseBookReviewDto);
         }
 
         return BaseResponseDto.builder()
@@ -56,3 +65,4 @@ public class BookReviewController {
 
     }
 }
+
