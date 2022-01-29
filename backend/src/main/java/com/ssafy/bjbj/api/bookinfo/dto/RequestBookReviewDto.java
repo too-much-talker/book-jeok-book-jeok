@@ -9,4 +9,13 @@ import lombok.*;
 @Getter
 public class RequestBookReviewDto {
 
+    private Long bookInfoSeq;
+
+    private Long memberSeq;
+
+    private Integer starRating;
+
+    private String summary;
+
+    private boolean isDeleted;
 }
