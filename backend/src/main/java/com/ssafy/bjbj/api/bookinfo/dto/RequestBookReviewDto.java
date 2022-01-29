@@ -1,10 +1,8 @@
 package com.ssafy.bjbj.api.bookinfo.dto;
 
-import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
-import com.ssafy.bjbj.api.member.entity.Member;
 import lombok.*;
 
-@ToString(of = {"bookInfo", "member", "startRating", "summary", "isDeleted"})
+@ToString(of = {"bookInfo", "member", "startRating", "summary"})
 @NoArgsConstructor
 @Getter
 public class RequestBookReviewDto {
@@ -17,5 +15,13 @@ public class RequestBookReviewDto {
 
     private String summary;
 
-    private boolean isDeleted;
+    @Builder
+    public RequestBookReviewDto(Long bookInfoSeq, Long memberSeq, Integer starRating, String summary) {
+        this.bookInfoSeq = bookInfoSeq;
+        this.memberSeq = memberSeq;
+        this.starRating = starRating;
+        this.summary = summary;
+    }
+
+
 }
