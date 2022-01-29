@@ -9,7 +9,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @ToString(of = {"startRating", "summary", "createdDate"})
-@Builder
 @NoArgsConstructor
 @Getter
 public class ResponseBookReviewDto {
@@ -24,6 +23,7 @@ public class ResponseBookReviewDto {
     private LocalDateTime createdDate;
 
     @QueryProjection
+    @Builder
     public ResponseBookReviewDto(Long seq, Integer starRating, String summary, LocalDateTime createdDate) {
         this.seq = seq;
         this.starRating = starRating;
