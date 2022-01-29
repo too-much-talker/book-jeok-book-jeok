@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface BookInfoRepository extends JpaRepository<BookInfo, Long> {
 
-    @Query("SELECT m FROM BookInfo m WHERE m.seq = :seq")
+    @Query("SELECT b FROM BookInfo b WHERE b.seq = :seq")
     BookInfo findBySeq(@Param("seq") Long seq);
 
 }
