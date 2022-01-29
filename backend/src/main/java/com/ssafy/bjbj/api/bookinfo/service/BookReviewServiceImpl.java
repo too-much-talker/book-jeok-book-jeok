@@ -25,6 +25,24 @@ public class BookReviewServiceImpl implements BookReviewService {
 
     private final MemberRepository memberRepository;
 
+    @Override
+    public BookReview findBookReviewBySeq(Long bookReviewSeq) {
+        return bookReviewRepository.findBySeq(bookReviewSeq);
+    }
+
+    @Transactional
+    @Override
+    public boolean deleteBookReview(Long bookReviewSeq) {
+
+        BookReview bookReview = bookReviewRepository.findBySeq(bookReviewSeq);
+
+        if (!bookReview.isDeleted()) {
+            bookReview.changeBookReviewDeleted(true);
+            return true;
+        }
+        return false;
+    }
+
     @Transactional
     @Override
     public ResponseBookReviewDto registerBookReview(RequestBookReviewDto bookReviewDto) {
@@ -45,6 +63,7 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .isDeleted(false)
                 .build());
 
+        System.out.println("savedBookReview.getSeq() = " + savedBookReview.getSeq());
         return ResponseBookReviewDto.builder()
                 .seq(savedBookReview.getSeq())
                 .starRating(savedBookReview.getStarRating())
