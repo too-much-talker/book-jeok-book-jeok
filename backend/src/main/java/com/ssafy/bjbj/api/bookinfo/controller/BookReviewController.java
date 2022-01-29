@@ -61,5 +61,34 @@ public class BookReviewController {
                 .data(responseData)
                 .build();
     }
+
+    @DeleteMapping("/{bookReviewSeq}")
+    public BaseResponseDto delete(@PathVariable Long bookReviewSeq, Authentication authentication) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        boolean isAuthenticatedMember = details.getMember().getSeq()
+                .equals(bookReviewService.findBookReviewBySeq(bookReviewSeq).getMember().getSeq());
+
+        if (!isAuthenticatedMember) {
+            status = HttpStatus.UNAUTHORIZED.value();
+            responseData.put("msg", "인증되지 않은 회원입니다");
+        } else if (!bookReviewService.deleteBookReview(bookReviewSeq)){
+            // 삭제할 북리뷰가 없는경우
+            status = HttpStatus.NOT_FOUND.value();
+            responseData.put("msg", "삭제 가능한 북리뷰가 없습니다.");
+        } else {
+            // 북리뷰 삭제 성공
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "리뷰를 삭제했습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
 }
 
