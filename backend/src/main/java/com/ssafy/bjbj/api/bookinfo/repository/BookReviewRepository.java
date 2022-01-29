@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface BookReviewRepository extends JpaRepository<BookReview, Long>, BookReviewRepositoryCustom {
 
-    @Query("SELECT m FROM BookReview m WHERE m.seq = :seq")
+    @Query("SELECT br FROM BookReview br WHERE br.seq = :seq")
     BookReview findBySeq(@Param("seq") Long seq);
 
 }
