@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.bookinfo.entity;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.*;
@@ -36,11 +37,11 @@ public class BookReview extends BaseLastModifiedEntity {
     private boolean isDeleted;
 
     public void changeBookReviewDeleted(boolean isDeleted) {
-
         this.isDeleted = isDeleted;
     }
 
     @Builder
+    @QueryProjection
     public BookReview(Long seq, BookInfo bookInfo, Member member, Integer starRating, String summary, boolean isDeleted) {
         this.seq = seq;
         this.bookInfo = bookInfo;
