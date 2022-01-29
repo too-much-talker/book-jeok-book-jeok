@@ -29,19 +29,14 @@ public class BookReviewServiceImpl implements BookReviewService {
     @Override
     public ResponseBookReviewDto registerBookReview(RequestBookReviewDto bookReviewDto) {
 
-
         BookInfo bookInfo = bookInfoRepository.findBySeq(bookReviewDto.getBookInfoSeq());
-
         Member member = memberRepository.findMemberBySeq(bookReviewDto.getMemberSeq());
 
-        ResponseBookReviewDto latestBookReviewDto = bookReviewRepository.findLatestBookReviewDtoByBookInfoAndMember(bookInfo.getSeq(), member.getSeq());
+        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookInfo.getSeq(), member.getSeq());
 
-        if (latestBookReviewDto != null) {
-            BookReview bookReview = bookReviewRepository.findBySeq(latestBookReviewDto.getSeq());
-            bookReview.changeBookReviewDeleted(true);
-
+        if (latestBookReview != null) {
+            latestBookReview.changeBookReviewDeleted(true);
         }
-
         BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
                 .bookInfo(bookInfo)
                 .member(member)
