@@ -25,7 +25,7 @@ public class BookReviewController {
     private final BookReviewService bookReviewService;
 
     @PostMapping
-    public BaseResponseDto reviewBookRegister(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
+    public BaseResponseDto register(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
