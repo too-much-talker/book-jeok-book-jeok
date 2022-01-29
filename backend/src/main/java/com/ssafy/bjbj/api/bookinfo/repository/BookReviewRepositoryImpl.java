@@ -19,13 +19,12 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
     public ResponseBookReviewDto findLatestBookReviewDtoByBookInfoAndMember(Long bookInfoSeq, Long memberSeq) {
         return queryFactory.select(new QResponseBookReviewDto(
                         bookReview.seq,
-                        bookReview.bookInfo,
-                        bookReview.member,
                         bookReview.starRating,
                         bookReview.summary,
-                        bookReview.isDeleted))
+                        bookReview.createdDate
+                ))
                 .from(bookReview)
-                .where(bookReview.bookInfo.seq.eq(bookInfoSeq).and(bookReview.member.seq.eq(memberSeq)))
+                .where(bookReview.bookInfo.seq.eq(bookInfoSeq).and(bookReview.member.seq.eq(memberSeq)).and(bookReview.isDeleted.eq(false)))
                 .orderBy(bookReview.createdDate.desc())
                 .fetchFirst();
     }
