@@ -14,14 +14,4 @@ public class RequestBookReviewDto {
     private Integer starRating;
 
     private String summary;
-
-    @Builder
-    public RequestBookReviewDto(Long bookInfoSeq, Long memberSeq, Integer starRating, String summary) {
-        this.bookInfoSeq = bookInfoSeq;
-        this.memberSeq = memberSeq;
-        this.starRating = starRating;
-        this.summary = summary;
-    }
-
-
 }
