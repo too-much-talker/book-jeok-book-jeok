@@ -33,7 +33,11 @@ public class BookReviewController {
         CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
         boolean isAuthenticatedMember = details.getMember().getSeq().equals(requestBookReviewDto.getMemberSeq());
 
-        if (errors.hasErrors()) {
+        if (!isAuthenticatedMember) {
+            // 작성한 멤버의 정보가 요청한 멤버의 정보가 일치하지 않은 경우
+            status = HttpStatus.UNAUTHORIZED.value();
+            responseData.put("msg", "인증되지 않은 회원입니다");
+        } else if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
             if (errors.hasFieldErrors()) {
                 // field error
@@ -43,13 +47,7 @@ public class BookReviewController {
                 // global error
                 responseData.put("msg", "global error");
             }
-        } else if (!isAuthenticatedMember) {
-            // 작성한 멤버의 정보가 요청한 멤버의 정보가 일치하지 않은 경우
-            status = HttpStatus.UNAUTHORIZED.value();
-            responseData.put("msg", "인증되지 않은 회원입니다");
-
         } else {
-
             // 북리뷰를 작성
             ResponseBookReviewDto responseBookReviewDto = bookReviewService.registerBookReview(requestBookReviewDto);
 
@@ -62,7 +60,6 @@ public class BookReviewController {
                 .status(status)
                 .data(responseData)
                 .build();
-
     }
 }
 
