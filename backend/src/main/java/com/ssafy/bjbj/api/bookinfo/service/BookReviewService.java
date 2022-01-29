@@ -6,5 +6,4 @@ import com.ssafy.bjbj.api.bookinfo.dto.ResponseBookReviewDto;
 public interface BookReviewService {
 
     ResponseBookReviewDto registerBookReview(RequestBookReviewDto requestBookReviewDto);
-
 }
