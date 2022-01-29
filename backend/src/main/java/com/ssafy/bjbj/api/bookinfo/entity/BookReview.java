@@ -8,8 +8,6 @@ import javax.persistence.*;
 
 @Getter
 @ToString(of = {"seq", "starRating", "summary", "isDeleted"})
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_book_review")
 @Entity
@@ -21,11 +19,11 @@ public class BookReview extends BaseLastModifiedEntity {
     private Long seq;
 
     @JoinColumn(name = "book_info_seq", columnDefinition = "BIGINT UNSIGNED")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private BookInfo bookInfo;
 
     @JoinColumn(name = "member_seq", columnDefinition = "BIGINT UNSIGNED")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
@@ -42,4 +40,13 @@ public class BookReview extends BaseLastModifiedEntity {
         this.isDeleted = isDeleted;
     }
 
+    @Builder
+    public BookReview(Long seq, BookInfo bookInfo, Member member, Integer starRating, String summary, boolean isDeleted) {
+        this.seq = seq;
+        this.bookInfo = bookInfo;
+        this.member = member;
+        this.starRating = starRating;
+        this.summary = summary;
+        this.isDeleted = isDeleted;
+    }
 }
