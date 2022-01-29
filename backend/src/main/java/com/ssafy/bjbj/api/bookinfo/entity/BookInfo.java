@@ -64,8 +64,7 @@ public class BookInfo extends BaseLastModifiedEntity {
     private List<Booklog> booklogs = new ArrayList<>();
 
     // 나에 대해 리뷰를 쓴 멤버들
-    @JoinColumn(name = "book_info_seq")
-    @OneToMany
+    @OneToMany(mappedBy = "bookInfo")
     private List<BookReview> bookReviews = new ArrayList<>();
 
     @Builder
