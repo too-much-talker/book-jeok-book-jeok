@@ -13,5 +13,4 @@ public interface BookReviewRepository extends JpaRepository<BookReview, Long>, B
 
     @Query("SELECT br FROM BookReview br WHERE br.seq = :seq")
     BookReview findBySeq(@Param("seq") Long seq);
-
 }
