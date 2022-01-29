@@ -8,5 +8,25 @@ import javax.persistence.EntityManager;
 import static com.ssafy.bjbj.api.bookinfo.entity.QBookReview.bookReview;
 
 public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
-    
+
+    private final JPAQueryFactory queryFactory;
+
+    public BookReviewRepositoryImpl(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public ResponseBookReviewDto findLatestBookReviewDtoByBookInfoAndMember(Long bookInfoSeq, Long memberSeq) {
+        return queryFactory.select(new QResponseBookReviewDto(
+                        bookReview.seq,
+                        bookReview.bookInfo,
+                        bookReview.member,
+                        bookReview.starRating,
+                        bookReview.summary,
+                        bookReview.isDeleted))
+                .from(bookReview)
+                .where(bookReview.bookInfo.seq.eq(bookInfoSeq).and(bookReview.member.seq.eq(memberSeq)))
+                .orderBy(bookReview.createdDate.desc())
+                .fetchFirst();
+    }
 }
