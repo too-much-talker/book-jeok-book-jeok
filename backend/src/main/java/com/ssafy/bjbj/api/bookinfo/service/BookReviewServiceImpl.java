@@ -27,7 +27,7 @@ public class BookReviewServiceImpl implements BookReviewService {
 
     @Transactional
     @Override
-    public boolean registerReview(RequestBookReviewDto bookReviewDto) {
+    public ResponseBookReviewDto registerBookReview(RequestBookReviewDto bookReviewDto) {
 
 
         BookInfo bookInfo = bookInfoRepository.findBySeq(bookReviewDto.getBookInfoSeq());
@@ -36,27 +36,13 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         ResponseBookReviewDto latestBookReviewDto = bookReviewRepository.findLatestBookReviewDtoByBookInfoAndMember(bookInfo.getSeq(), member.getSeq());
 
-        System.out.println("bookReviewRepository.findAll() = " + bookReviewRepository.findAll());
-        
         if (latestBookReviewDto != null) {
-            if (!latestBookReviewDto.isDeleted()) {
-                BookReview bookReview = bookReviewRepository.findBySeq(latestBookReviewDto.getSeq());
-                bookReview.changeBookReviewDeleted(true);
-            }
+            BookReview bookReview = bookReviewRepository.findBySeq(latestBookReviewDto.getSeq());
+            bookReview.changeBookReviewDeleted(true);
 
-            bookReviewRepository.save(BookReview.builder()
-                    .bookInfo(bookInfo)
-                    .member(member)
-                    .starRating(bookReviewDto.getStarRating())
-                    .summary(bookReviewDto.getSummary())
-                    .isDeleted(false)
-                    .build());
-            System.out.println("bookReviewRepository = " + bookReviewRepository);
-
-            return false;
         }
 
-        bookReviewRepository.save(BookReview.builder()
+        BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
                 .bookInfo(bookInfo)
                 .member(member)
                 .starRating(bookReviewDto.getStarRating())
@@ -64,6 +50,12 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .isDeleted(false)
                 .build());
 
-        return true;
+        return ResponseBookReviewDto.builder()
+                .seq(savedBookReview.getSeq())
+                .starRating(savedBookReview.getStarRating())
+                .summary(savedBookReview.getSummary())
+                .createdDate(savedBookReview.getCreatedDate())
+                .build();
     }
+
 }
