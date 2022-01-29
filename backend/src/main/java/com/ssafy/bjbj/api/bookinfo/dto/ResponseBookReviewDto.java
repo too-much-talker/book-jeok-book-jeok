@@ -1,38 +1,33 @@
 package com.ssafy.bjbj.api.bookinfo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.member.entity.Member;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@ToString(of = {"bookInfo", "member", "startRating", "summary", "isDeleted"})
+import java.time.LocalDateTime;
+
+@ToString(of = {"startRating", "summary", "createdDate"})
+@Builder
 @NoArgsConstructor
 @Getter
-@Builder
 public class ResponseBookReviewDto {
 
+    @JsonIgnore
     private Long seq;
-
-    private BookInfo bookInfo;
-
-    private Member member;
 
     private Integer starRating;
 
     private String summary;
 
-    private boolean isDeleted;
+    private LocalDateTime createdDate;
 
     @QueryProjection
-    public ResponseBookReviewDto(Long seq, BookInfo bookInfo, Member member, Integer starRating, String summary, boolean isDeleted) {
+    public ResponseBookReviewDto(Long seq, Integer starRating, String summary, LocalDateTime createdDate) {
         this.seq = seq;
-        this.bookInfo = bookInfo;
-        this.member = member;
         this.starRating = starRating;
         this.summary = summary;
-        this.isDeleted = isDeleted;
+        this.createdDate = createdDate;
     }
 }
