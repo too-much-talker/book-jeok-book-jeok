@@ -11,20 +11,20 @@ const Side = styled.div`
   align-items: center;
   justify-content: center;
   width: 20%;
-`
+`;
 const Menu = styled.div`
   margin-top: 30px;
   width: 200px;
   display: flex;
   flex-direction: column;
-  `
+`;
 function Sidebar() {
   const [users] = useState(userList);
   const menus = [
     { name: "나의 정보수정", path: "/mypage" },
-    { name: "나의 북로그", path: "/mybooklog" },
-    { name: "나의 독서모임", path: "/mybookclub" },
-    { name: "나의 챌린지", path: "/mychallenge" }
+    { name: "나의 북로그", path: "/mypage/mybooklog" },
+    { name: "나의 독서모임", path: "/mypage/mybookclub" },
+    { name: "나의 챌린지", path: "/mypage/mychallenge" },
   ];
 
   return (
@@ -33,11 +33,10 @@ function Sidebar() {
         {menus.map((menu, index) => {
           return (
             <NavLink
-              exact
-              style={{color: "gray", textDecoration: "none"}}
+              style={{ color: "gray", textDecoration: "none" }}
               to={menu.path}
               key={index}
-              activeStyle={{color: "black"}}
+              // activeStyle={{ color: "black" }}
             >
               <div className="sidebar-item">
                 <p>{menu.name}</p>
@@ -46,10 +45,7 @@ function Sidebar() {
           );
         })}
       </Menu>
-      <UserExpPoint 
-        users={users}
-      />
-
+      <UserExpPoint users={users} />
     </Side>
   );
 }
