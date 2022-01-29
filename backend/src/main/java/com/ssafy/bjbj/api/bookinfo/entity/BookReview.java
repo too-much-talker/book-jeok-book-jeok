@@ -2,29 +2,30 @@ package com.ssafy.bjbj.api.bookinfo.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
-@ToString(of = {"starRating", "summary", "isDeleted"})
+@ToString(of = {"seq", "starRating", "summary", "isDeleted"})
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(BookInfoMemberSeq.class)
 @Table(name = "tb_book_review")
 @Entity
 public class BookReview extends BaseLastModifiedEntity {
 
+    @Column(name = "bookreview_seq", columnDefinition = "BIGINT UNSIGNED")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Long seq;
+
     @JoinColumn(name = "book_info_seq", columnDefinition = "BIGINT UNSIGNED")
     @ManyToOne
-    @Id
     private BookInfo bookInfo;
 
     @JoinColumn(name = "member_seq", columnDefinition = "BIGINT UNSIGNED")
     @ManyToOne
-    @Id
     private Member member;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
@@ -35,5 +36,10 @@ public class BookReview extends BaseLastModifiedEntity {
 
     @Column(nullable = false)
     private boolean isDeleted;
+
+    public void changeBookReviewDeleted(boolean isDeleted) {
+
+        this.isDeleted = isDeleted;
+    }
 
 }
