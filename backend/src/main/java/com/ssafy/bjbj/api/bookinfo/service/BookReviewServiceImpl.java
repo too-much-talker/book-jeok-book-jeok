@@ -26,7 +26,7 @@ public class BookReviewServiceImpl implements BookReviewService {
     private final MemberRepository memberRepository;
 
     @Override
-    public BookReview findBookReviewBySeq(Long bookReviewSeq) {
+    public BookReview findBookReviewByBookSeq(Long bookReviewSeq) {
         return bookReviewRepository.findBySeq(bookReviewSeq);
     }
 
