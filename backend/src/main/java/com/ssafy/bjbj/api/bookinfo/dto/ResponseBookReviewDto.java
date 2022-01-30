@@ -16,6 +16,10 @@ public class ResponseBookReviewDto {
     @JsonIgnore
     private Long seq;
 
+    private Long bookInfoSeq;
+
+    private Long memberSeq;
+
     private Integer starRating;
 
     private String summary;
@@ -24,8 +28,10 @@ public class ResponseBookReviewDto {
 
     @QueryProjection
     @Builder
-    public ResponseBookReviewDto(Long seq, Integer starRating, String summary, LocalDateTime createdDate) {
+    public ResponseBookReviewDto(Long seq, Long bookInfoSeq, Long memberSeq, Integer starRating, String summary, LocalDateTime createdDate) {
         this.seq = seq;
+        this.bookInfoSeq = bookInfoSeq;
+        this.memberSeq = memberSeq;
         this.starRating = starRating;
         this.summary = summary;
         this.createdDate = createdDate;
