@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
@@ -28,6 +30,11 @@ public class BookReviewServiceImpl implements BookReviewService {
     @Override
     public BookReview findBookReviewByBookSeq(Long bookReviewSeq) {
         return bookReviewRepository.findBySeq(bookReviewSeq);
+    }
+
+    @Override
+    public List<ResponseBookReviewDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
+        return bookReviewRepository.findAllBookReviewDtoByMemberSeq(memberSeq);
     }
 
     @Transactional
