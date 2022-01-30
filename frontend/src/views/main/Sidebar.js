@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { UserExpPoint } from "../user/myPage/userInfo/UserInfoPresenter";
 import React, { useState } from "react";
 import userList from "../user/myPage/userInfo/asset/data";
+import Weeds from "../user/myPage/userInfo/weeds/Weeds";
+import DUMMY_DATA from "../user/myPage/userInfo/weeds/dummydata";
 
 const Side = styled.div`
   display: flex;
@@ -46,6 +48,7 @@ function Sidebar() {
         })}
       </Menu>
       <UserExpPoint users={users} />
+      <Weeds datas={DUMMY_DATA}/>
     </Side>
   );
 }

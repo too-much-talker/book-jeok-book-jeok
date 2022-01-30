@@ -20,17 +20,20 @@ const EditUserForm = (props) => {
     return (
         <form>
             <label>이름</label>
-            <input className="u-full-width" type="text" value={user.name} name="name" onChange={handleChange} onBlur={props.checkNameLength}/>
+            <input className="u-full-width" type="text" value={user.name} name="name" onChange={handleChange}/>
+            {/* <input className="u-full-width" type="text" value={user.name} name="name" onChange={handleChange} onBlur={props.checkNameLength}/> */}
             <label>비밀번호</label>
             <input className="u-full-width" type="text" value={user.password} name="password" onChange={handleChange} />
             <label>이메일</label>
-            <input className="u-full-width" type="text" value={user.email} name="email" onChange={handleChange} onBlur={props.checkEmail}/>
+            <input className="u-full-width" type="text" value={user.email} name="email" onChange={handleChange}/>
+            {/* <input className="u-full-width" type="text" value={user.email} name="email" onChange={handleChange} onBlur={props.checkEmail}/> */}
             <button onClick={props.checkId}>중복확인</button>
             <label>닉네임</label>
             <input className="u-full-width" type="text" value={user.nickname} name="nickname" onChange={handleChange} />
             <button type="submit" onClick={props.checkNickname}>중복확인</button>
             <label>핸드폰번호</label>
-            <input className="u-full-width" type="text" value={user.phoneNumber} name="phoneNumber" onChange={handleChange} onBlur={props.checkPhoneNumber}/>
+            <input className="u-full-width" type="text" value={user.phoneNumber} name="phoneNumber" onChange={handleChange}/>
+            {/* <input className="u-full-width" type="text" value={user.phoneNumber} name="phoneNumber" onChange={handleChange} onBlur={props.checkPhoneNumber}/> */}
             <button className="button-primary" type="submit" onClick={handleSubmit} >수정하기</button>
             <button type="submit" onClick={() => props.setEditing(false)} >취소하기</button>
         </form>
