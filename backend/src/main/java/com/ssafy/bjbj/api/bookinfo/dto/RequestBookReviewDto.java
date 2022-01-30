@@ -4,6 +4,8 @@ import lombok.*;
 
 @ToString(of = {"bookInfo", "member", "startRating", "summary"})
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 public class RequestBookReviewDto {
 
