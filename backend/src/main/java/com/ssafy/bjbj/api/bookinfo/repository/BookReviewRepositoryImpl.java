@@ -28,6 +28,8 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
     public List<ResponseBookReviewDto> findAllBookReviewDtoByMemberSeq(Long memberSeq) {
         return queryFactory.select(new QResponseBookReviewDto(
                         bookReview.seq,
+                        bookReview.bookInfo.seq,
+                        bookReview.member.seq,
                         bookReview.starRating,
                         bookReview.summary,
                         bookReview.createdDate
