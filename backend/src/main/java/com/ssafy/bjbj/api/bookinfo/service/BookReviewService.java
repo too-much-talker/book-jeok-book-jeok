@@ -6,7 +6,7 @@ import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 
 public interface BookReviewService {
 
-    BookReview findBookReviewBySeq(Long bookReviewSeq);
+    BookReview findBookReviewByBookSeq(Long bookReviewSeq);
 
     ResponseBookReviewDto registerBookReview(RequestBookReviewDto requestBookReviewDto);
 
