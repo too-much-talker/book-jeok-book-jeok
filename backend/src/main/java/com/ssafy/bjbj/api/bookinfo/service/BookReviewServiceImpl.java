@@ -63,7 +63,6 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .isDeleted(false)
                 .build());
 
-        System.out.println("savedBookReview.getSeq() = " + savedBookReview.getSeq());
         return ResponseBookReviewDto.builder()
                 .seq(savedBookReview.getSeq())
                 .starRating(savedBookReview.getStarRating())
