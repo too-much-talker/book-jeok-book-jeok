@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.booklog.entity;
 
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
+import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.*;
@@ -71,6 +72,18 @@ public class Booklog extends BaseLastModifiedEntity {
         this.views = views;
         this.member = member;
         this.bookInfo = bookInfo;
+    }
+
+    public void changeBooklog(RequestBooklogDto reqBooklogDto) {
+        LocalDateTime readDate = reqBooklogDto.getReadDate() == null ?
+                null : LocalDateTime.parse(reqBooklogDto.getReadDate() + "T00:00:00");
+
+        this.title = reqBooklogDto.getTitle();
+        this.content = reqBooklogDto.getContent();
+        this.summary = reqBooklogDto.getSummary();
+        this.starRating = reqBooklogDto.getStarRating();
+        this.readDate = readDate;
+        this.isOpen = reqBooklogDto.getIsOpen();
     }
 
 }
