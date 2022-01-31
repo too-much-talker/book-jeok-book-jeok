@@ -37,12 +37,15 @@ public class BooklogServiceImpl implements BooklogService {
 
         Member member = memberRepository.findBySeq(reqBooklogDto.getMemberSeq());
 
+        LocalDateTime readDate = reqBooklogDto.getReadDate() == null ?
+                null : LocalDateTime.parse(reqBooklogDto.getReadDate() + "T00:00:00");
+
         Booklog booklog = Booklog.builder()
                 .title(reqBooklogDto.getTitle())
                 .content(reqBooklogDto.getContent())
                 .summary(reqBooklogDto.getSummary())
                 .starRating(reqBooklogDto.getStarRating())
-                .readDate(LocalDateTime.parse(reqBooklogDto.getReadDate() + "T00:00:00"))
+                .readDate(readDate)
                 .isOpen(reqBooklogDto.getIsOpen())
                 .views(0)
                 .member(member)
