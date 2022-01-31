@@ -86,4 +86,8 @@ public class Booklog extends BaseLastModifiedEntity {
         this.isOpen = reqBooklogDto.getIsOpen();
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
 }
