@@ -25,6 +25,24 @@ public class BookReviewServiceImpl implements BookReviewService {
 
     private final MemberRepository memberRepository;
 
+    @Override
+    public BookReview findBookReviewByBookSeq(Long bookReviewSeq) {
+        return bookReviewRepository.findBySeq(bookReviewSeq);
+    }
+
+    @Transactional
+    @Override
+    public boolean deleteBookReview(Long bookReviewSeq) {
+
+        BookReview bookReview = bookReviewRepository.findBySeq(bookReviewSeq);
+
+        if (!bookReview.isDeleted()) {
+            bookReview.changeBookReviewDeleted(true);
+            return true;
+        }
+        return false;
+    }
+
     @Transactional
     @Override
     public ResponseBookReviewDto registerBookReview(RequestBookReviewDto bookReviewDto) {

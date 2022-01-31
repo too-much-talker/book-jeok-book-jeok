@@ -69,14 +69,21 @@ class BooklogRepositoryTest {
                 .bookInfo(savedBookInfo)
                 .build();
 
-        System.out.println("booklog.getCreatedDate() = " + booklog.getCreatedDate());
-        System.out.println("booklog.getCreatedBy() = " + booklog.getCreatedBy());
-        Booklog savedBooklog = booklogRepository.save(booklog);
+        booklogRepository.save(booklog);
         em.flush();
         em.clear();
 
         // 작성된 북로그 검증
-        assertThat(booklog).isEqualTo(savedBooklog);
+        Booklog savedBooklog = booklogRepository.findBySeq(booklog.getSeq());
+        assertThat(booklog.getMember().getSeq()).isEqualTo(savedBooklog.getMember().getSeq());
+        assertThat(booklog.getBookInfo().getSeq()).isEqualTo(savedBooklog.getBookInfo().getSeq());
+        assertThat(booklog.getTitle()).isEqualTo(savedBooklog.getTitle());
+        assertThat(booklog.getContent()).isEqualTo(savedBooklog.getContent());
+        assertThat(booklog.getSummary()).isEqualTo(savedBooklog.getSummary());
+        assertThat(booklog.getStarRating()).isEqualTo(savedBooklog.getStarRating());
+        assertThat(booklog.getReadDate()).isEqualTo(savedBooklog.getReadDate());
+        assertThat(booklog.isOpen()).isEqualTo(savedBooklog.isOpen());
+        assertThat(booklog.getViews()).isEqualTo(savedBooklog.getViews());
     }
 
     @DisplayName("북로그 엔티티 수정 테스트")
@@ -134,7 +141,7 @@ class BooklogRepositoryTest {
         em.flush();
         em.clear();
 
-        // 작성된 북로그 검증
+        // 수정된 북로그 검증
         Booklog savedBooklog = booklogRepository.findBySeq(findBooklog.getSeq());
         assertThat(findBooklog.getMember().getSeq()).isEqualTo(savedBooklog.getMember().getSeq());
         assertThat(findBooklog.getBookInfo().getSeq()).isEqualTo(savedBooklog.getBookInfo().getSeq());

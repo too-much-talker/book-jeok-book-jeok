@@ -53,7 +53,7 @@ public class BooklogServiceImpl implements BooklogService {
                 .build();
 
         Booklog savedBooklog = booklogRepository.save(booklog);
-
+        
         return savedBooklog.getSeq();
     }
 

@@ -25,7 +25,7 @@ public class BookReviewController {
     private final BookReviewService bookReviewService;
 
     @PostMapping
-    public BaseResponseDto reviewBookRegister(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
+    public BaseResponseDto register(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -54,6 +54,28 @@ public class BookReviewController {
             status = HttpStatus.CREATED.value();
             responseData.put("msg", "새로운 리뷰를 작성했습니다.");
             responseData.put("reviewInfo", responseBookReviewDto);
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @DeleteMapping("/{bookReviewSeq}")
+    public BaseResponseDto delete(@PathVariable Long bookReviewSeq) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        if (!bookReviewService.deleteBookReview(bookReviewSeq)){
+            // 삭제할 북리뷰가 없는경우
+            status = HttpStatus.NOT_FOUND.value();
+            responseData.put("msg", "삭제 가능한 북리뷰가 없습니다.");
+        } else {
+            // 북리뷰 삭제 성공
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "리뷰를 삭제했습니다.");
         }
 
         return BaseResponseDto.builder()

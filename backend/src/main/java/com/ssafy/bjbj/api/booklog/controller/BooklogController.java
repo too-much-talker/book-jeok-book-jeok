@@ -121,5 +121,5 @@ public class BooklogController {
                 .data(responseData)
                 .build();
     }
-    
+
 }
