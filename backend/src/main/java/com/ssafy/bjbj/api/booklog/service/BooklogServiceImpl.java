@@ -57,4 +57,15 @@ public class BooklogServiceImpl implements BooklogService {
         return savedBooklog.getSeq();
     }
 
+    @Transactional
+    @Override
+    public Long update(Long booklogSeq, RequestBooklogDto reqBooklogDto) {
+        Booklog savedBooklog = booklogRepository.findBySeq(booklogSeq);
+        if (!savedBooklog.getBookInfo().getSeq().equals(reqBooklogDto.getBookInfoSeq())) {
+            throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
+        }
+
+        savedBooklog.changeBooklog(reqBooklogDto);
+        return savedBooklog.getSeq();
+    }
 }

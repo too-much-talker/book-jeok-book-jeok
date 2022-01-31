@@ -6,4 +6,6 @@ public interface BooklogService {
 
     Long register(RequestBooklogDto requestBooklogDto);
 
+    Long update(Long booklogSeq, RequestBooklogDto requestBooklogDto);
+
 }
