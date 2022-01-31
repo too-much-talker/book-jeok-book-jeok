@@ -3,10 +3,7 @@ package com.ssafy.bjbj.api.booklog.entity;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +35,7 @@ public class Booklog extends BaseLastModifiedEntity {
     @Column(columnDefinition = "INT UNSIGNED")
     private Integer starRating;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime readDate;
 
     @Column(nullable = false)
