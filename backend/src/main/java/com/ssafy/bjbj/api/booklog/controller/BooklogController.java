@@ -35,7 +35,7 @@ public class BooklogController {
         if (!memberSeq.equals(requestBooklogDto.getMemberSeq())) {
             // 다른 계정의 seq를 보냈을 때
             status = HttpStatus.BAD_REQUEST.value();
-            responseData.put("msg", "올바르지 않은 요청입니다.!");
+            responseData.put("msg", "올바르지 않은 요청입니다.");
         } else if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
             if (errors.hasFieldErrors()) {
