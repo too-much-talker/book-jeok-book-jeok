@@ -4,10 +4,12 @@ import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
-import com.ssafy.bjbj.api.booklog.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,7 @@ public class BooklogServiceImpl implements BooklogService {
                 .build();
 
         Booklog savedBooklog = booklogRepository.save(booklog);
-        
+
         return savedBooklog.getSeq();
     }
 
@@ -68,4 +70,19 @@ public class BooklogServiceImpl implements BooklogService {
         savedBooklog.changeBooklog(reqBooklogDto);
         return savedBooklog.getSeq();
     }
+
+    @Transactional
+    @Override
+    public void remove(Long booklogSeq, Long memberSeq) {
+        Booklog findBooklog = booklogRepository.findBySeq(booklogSeq);
+
+        if (findBooklog == null) {
+            throw new NotFoundBooklogException("올바르지 않은 요청입니다.");
+        } else if (!findBooklog.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        } else {
+            findBooklog.delete();
+        }
+    }
+
 }

@@ -130,4 +130,43 @@ class BooklogServiceTest {
         assertThat(reqBooklogDto2.getIsOpen()).isEqualTo(savedBooklog.isOpen());
     }
 
+    @DisplayName("북로그 삭제 테스트")
+    @Test
+    public void booklog_remove_test() {
+        // 회원가입
+        String email = "email@bjbj.com";
+        memberService.saveMember(RequestMemberDto.builder()
+                .email(email)
+                .password("password")
+                .name("name")
+                .nickname("nickname")
+                .phoneNumber("010-1234-5678")
+                .build());
+        Member savedMember = memberService.findMemberByEmail(email);
+
+        // 책 정보 저장
+        /*
+        책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
+         */
+
+        // 북로그 작성
+        RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
+                .memberSeq(savedMember.getSeq())
+                .bookInfoSeq(775L)
+                .title("북로그 제목")
+                .content(null)
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(false)
+                .build();
+        Long savedBooklogSeq = booklogService.register(reqBooklogDto);
+        
+        booklogService.remove(savedBooklogSeq, savedMember.getSeq());
+        
+        // 삭제 검증
+        Booklog deletedBooklog = booklogRepository.findBySeq(savedBooklogSeq);
+        assertThat(deletedBooklog.isDeleted()).isTrue();
+    }
+
 }

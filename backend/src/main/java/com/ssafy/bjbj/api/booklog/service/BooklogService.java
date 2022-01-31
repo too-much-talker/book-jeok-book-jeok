@@ -8,4 +8,6 @@ public interface BooklogService {
 
     Long update(Long booklogSeq, RequestBooklogDto requestBooklogDto);
 
+    void remove(Long booklogSeq, Long memberSeq);
+
 }

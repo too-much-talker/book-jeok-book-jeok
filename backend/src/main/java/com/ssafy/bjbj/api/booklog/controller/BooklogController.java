@@ -1,10 +1,12 @@
 package com.ssafy.bjbj.api.booklog.controller;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
-import com.ssafy.bjbj.api.booklog.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.service.BooklogService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -114,6 +116,42 @@ public class BooklogController {
                 status = HttpStatus.INTERNAL_SERVER_ERROR.value();
                 responseData.put("msg", "요청을 수행할 수 없습니다.");
             }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @DeleteMapping("/{booklogSeq}")
+    public BaseResponseDto remove(@PathVariable Long booklogSeq, Authentication authentication) {
+        log.debug("BooklogController.remove() 북로그 삭제 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            booklogService.remove(booklogSeq, memberSeq);
+
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "북로그를 삭제하였습니다.");
+        } catch (NotFoundBooklogException | NotEqualMemberException e) {
+            /**
+             * 1. db에 없는 북로그 seq를 보냈을 때
+             * 2. 북로그의 주인 member와 요청한 member가 다를 때
+             */
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
 
         return BaseResponseDto.builder()

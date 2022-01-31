@@ -1,4 +1,4 @@
-package com.ssafy.bjbj.api.booklog.exception;
+package com.ssafy.bjbj.api.bookinfo.exception;
 
 public class NotFoundBookInfoException extends RuntimeException {
 
