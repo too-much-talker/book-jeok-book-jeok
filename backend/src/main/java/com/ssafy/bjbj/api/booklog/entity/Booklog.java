@@ -60,4 +60,17 @@ public class Booklog extends BaseLastModifiedEntity {
     @OneToMany
     private List<Like> likes = new ArrayList<>();
 
+    @Builder
+    public Booklog(String title, String content, String summary, Integer starRating, LocalDateTime readDate, boolean isOpen, Integer views, Member member, BookInfo bookInfo) {
+        this.title = title;
+        this.content = content;
+        this.summary = summary;
+        this.starRating = starRating;
+        this.readDate = readDate;
+        this.isOpen = isOpen;
+        this.views = views;
+        this.member = member;
+        this.bookInfo = bookInfo;
+    }
+
 }
