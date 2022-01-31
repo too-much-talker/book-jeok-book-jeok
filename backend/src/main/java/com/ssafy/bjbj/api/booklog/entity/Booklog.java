@@ -3,10 +3,7 @@ package com.ssafy.bjbj.api.booklog.entity;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +35,7 @@ public class Booklog extends BaseLastModifiedEntity {
     @Column(columnDefinition = "INT UNSIGNED")
     private Integer starRating;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime readDate;
 
     @Column(nullable = false)
@@ -61,5 +59,18 @@ public class Booklog extends BaseLastModifiedEntity {
     @JoinColumn(name = "booklog_seq")
     @OneToMany
     private List<Like> likes = new ArrayList<>();
+
+    @Builder
+    public Booklog(String title, String content, String summary, Integer starRating, LocalDateTime readDate, boolean isOpen, Integer views, Member member, BookInfo bookInfo) {
+        this.title = title;
+        this.content = content;
+        this.summary = summary;
+        this.starRating = starRating;
+        this.readDate = readDate;
+        this.isOpen = isOpen;
+        this.views = views;
+        this.member = member;
+        this.bookInfo = bookInfo;
+    }
 
 }
