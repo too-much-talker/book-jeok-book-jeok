@@ -55,7 +55,7 @@ class BooklogRepositoryTest {
                 .role(Role.MEMBER)
                 .build());
 
-        setUpBookInfo = bookInfoRepository.findBySeq(776L);
+        setUpBookInfo = bookInfoRepository.findBySeq(2L);
 
         // 북로그 작성
         setUpBooklog = booklogRepository.save(Booklog.builder()
@@ -91,7 +91,7 @@ class BooklogRepositoryTest {
         /*
         책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
          */
-        BookInfo savedBookInfo = bookInfoRepository.findBySeq(775L);
+        BookInfo savedBookInfo = bookInfoRepository.findBySeq(1L);
 
         // 북로그 작성
         Booklog booklog = Booklog.builder()
@@ -143,7 +143,7 @@ class BooklogRepositoryTest {
         /*
         책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
          */
-        BookInfo savedBookInfo = bookInfoRepository.findBySeq(775L);
+        BookInfo savedBookInfo = bookInfoRepository.findBySeq(1L);
 
         // 북로그 작성
         Booklog booklog = Booklog.builder()
@@ -166,7 +166,7 @@ class BooklogRepositoryTest {
         Booklog findBooklog = booklogRepository.findBySeq(booklog.getSeq());
         RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
-                .bookInfoSeq(775L)
+                .bookInfoSeq(1L)
                 .title("북로그 제목2")
                 .content("북로그 내용2")
                 .summary("북로그 한줄평2")

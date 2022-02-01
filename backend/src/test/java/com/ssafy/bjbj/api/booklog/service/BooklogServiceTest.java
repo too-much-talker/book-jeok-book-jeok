@@ -66,7 +66,7 @@ class BooklogServiceTest {
         // 북로그 작성
         RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
-                .bookInfoSeq(775L)
+                .bookInfoSeq(1L)
                 .title("북로그 제목")
                 .content("북로그 내용")
                 .summary("북로그 한줄평")
@@ -111,7 +111,7 @@ class BooklogServiceTest {
         // 북로그 작성
         RequestBooklogDto reqBooklogDto1 = RequestBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
-                .bookInfoSeq(775L)
+                .bookInfoSeq(1L)
                 .title("북로그 제목")
                 .content(null)
                 .summary(null)
@@ -124,7 +124,7 @@ class BooklogServiceTest {
         // 북로그 수정
         RequestBooklogDto reqBooklogDto2 = RequestBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
-                .bookInfoSeq(775L)
+                .bookInfoSeq(1L)
                 .title("북로그 제목2")
                 .content("북로그 내용2")
                 .summary("북로그 한줄평2")
@@ -168,7 +168,7 @@ class BooklogServiceTest {
         // 북로그 작성
         RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
-                .bookInfoSeq(775L)
+                .bookInfoSeq(1L)
                 .title("북로그 제목")
                 .content(null)
                 .summary(null)
@@ -191,7 +191,7 @@ class BooklogServiceTest {
         // 북로그 작성
         RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
                 .memberSeq(setUpMember.getSeq())
-                .bookInfoSeq(775L)
+                .bookInfoSeq(1L)
                 .title("북로그 제목")
                 .content("북로그 내용")
                 .summary("북로그 한줄평")
