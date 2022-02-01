@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.ResponseBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
@@ -33,7 +33,7 @@ public class BookReviewServiceImpl implements BookReviewService {
     }
 
     @Override
-    public List<ResponseBookReviewDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
+    public List<ResponseBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
         return bookReviewRepository.findAllBookReviewDtoByMemberSeq(memberSeq);
     }
 
@@ -45,8 +45,6 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         if (!bookReview.isDeleted()) {
             bookReview.changeBookReviewDeleted(true);
-            BookInfo bookInfo = bookInfoRepository.findBySeq(bookReview.getBookInfo().getSeq());
-            bookInfo.changeBookInfo(bookInfo.getStarRating() - bookReview.getStarRating(), bookInfo.getBookReviewMemberCount() - 1);
             return true;
         }
         return false;
@@ -54,7 +52,7 @@ public class BookReviewServiceImpl implements BookReviewService {
 
     @Transactional
     @Override
-    public ResponseBookReviewDto registerBookReview(RequestBookReviewDto bookReviewDto) {
+    public ResponseBookReviewByMemberDto registerBookReview(RequestBookReviewDto bookReviewDto) {
 
         BookInfo bookInfo = bookInfoRepository.findBySeq(bookReviewDto.getBookInfoSeq());
         Member member = memberRepository.findMemberBySeq(bookReviewDto.getMemberSeq());
@@ -63,33 +61,27 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         if (latestBookReview != null) {
             latestBookReview.changeBookReviewDeleted(true);
-            bookInfo.changeBookInfo(bookInfo.getStarRating()- latestBookReview.getStarRating() + bookReviewDto.getStarRating(),
-                    bookInfo.getBookReviewMemberCount());
-        } else {
-            bookInfo.changeBookInfo(bookInfo.getStarRating() + bookReviewDto.getStarRating(),
-                    bookInfo.getBookReviewMemberCount() + 1);
         }
 
+            BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
+                    .bookInfo(bookInfo)
+                    .member(member)
+                    .starRating(bookReviewDto.getStarRating())
+                    .summary(bookReviewDto.getSummary())
+                    .isDeleted(false)
+                    .build());
 
-        BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
-                .bookInfo(bookInfo)
-                .member(member)
-                .starRating(bookReviewDto.getStarRating())
-                .summary(bookReviewDto.getSummary())
-                .isDeleted(false)
-                .build());
-
-        return ResponseBookReviewDto.builder()
-                .seq(savedBookReview.getSeq())
-                .bookInfoSeq(savedBookReview.getSeq())
-                .memberSeq(savedBookReview.getSeq())
-                .bookTitle(savedBookReview.getBookInfo().getTitle())
-                .bookAuthor(savedBookReview.getBookInfo().getAuthor())
-                .memberNickname(savedBookReview.getMember().getNickname())
-                .starRating(savedBookReview.getStarRating())
-                .summary(savedBookReview.getSummary())
-                .createdDate(savedBookReview.getCreatedDate())
-                .build();
+            return ResponseBookReviewByMemberDto.builder()
+                    .seq(savedBookReview.getSeq())
+                    .bookInfoSeq(savedBookReview.getSeq())
+                    .memberSeq(savedBookReview.getSeq())
+                    .bookTitle(savedBookReview.getBookInfo().getTitle())
+                    .bookAuthor(savedBookReview.getBookInfo().getAuthor())
+                    .memberNickname(savedBookReview.getMember().getNickname())
+                    .starRating(savedBookReview.getStarRating())
+                    .summary(savedBookReview.getSummary())
+                    .createdDate(savedBookReview.getCreatedDate())
+                    .build();
     }
-
 }
+
