@@ -57,7 +57,7 @@ public class BookReviewServiceImpl implements BookReviewService {
         BookInfo bookInfo = bookInfoRepository.findBySeq(bookReviewDto.getBookInfoSeq());
         Member member = memberRepository.findMemberBySeq(bookReviewDto.getMemberSeq());
 
-        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookInfo.getSeq(), member.getSeq());
+        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookReviewDto.getBookInfoSeq(), bookReviewDto.getMemberSeq());
 
         if (latestBookReview != null) {
             latestBookReview.changeBookReviewDeleted(true);
@@ -72,6 +72,11 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         return ResponseBookReviewDto.builder()
                 .seq(savedBookReview.getSeq())
+                .bookInfoSeq(savedBookReview.getSeq())
+                .memberSeq(savedBookReview.getSeq())
+                .bookTitle(savedBookReview.getBookInfo().getTitle())
+                .bookAuthor(savedBookReview.getBookInfo().getAuthor())
+                .memberNickname(savedBookReview.getMember().getNickname())
                 .starRating(savedBookReview.getStarRating())
                 .summary(savedBookReview.getSummary())
                 .createdDate(savedBookReview.getCreatedDate())
