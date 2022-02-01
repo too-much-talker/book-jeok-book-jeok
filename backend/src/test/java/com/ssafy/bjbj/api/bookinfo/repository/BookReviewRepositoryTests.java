@@ -87,6 +87,7 @@ public class BookReviewRepositoryTests {
         em.flush();
         em.clear();
         //북리뷰 작성 후
-        assertThat(bookReviewRepository.findAllBookReviewDtoByMemberSeq(member.getSeq())).isNotEmpty();
+        assertThat(bookReviewRepository.findAllBookReviewDtoByMemberSeq(member.getSeq()).stream().count()).isEqualTo(2);
+
     }
 }
