@@ -1,9 +1,6 @@
 package com.ssafy.bjbj.api.bookinfo.sevice;
 
-import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.ResponseBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.service.BookReviewService;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
