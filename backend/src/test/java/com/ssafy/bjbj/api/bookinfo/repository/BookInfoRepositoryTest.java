@@ -40,7 +40,6 @@ public class BookInfoRepositoryTest {
         String categoryName = "categoryName";
         String publisher = "publisher";
         LocalDateTime publicationDate = LocalDateTime.parse(date);
-        Double starRating = 4.0;
 
         BookInfo bookInfo = BookInfo.builder()
                 .isbn(isbn)
@@ -54,7 +53,6 @@ public class BookInfoRepositoryTest {
                 .categoryName(categoryName)
                 .publisher(publisher)
                 .publicationDate(publicationDate)
-                .starRating(starRating)
                 .build();
 
         em.persist(bookInfo);
@@ -75,6 +73,5 @@ public class BookInfoRepositoryTest {
         assertThat(bookInfo.getCategoryName()).isEqualTo(savedBookInfo.getCategoryName());
         assertThat(bookInfo.getPublisher()).isEqualTo(savedBookInfo.getPublisher());
         assertThat(bookInfo.getPublicationDate()).isEqualTo(savedBookInfo.getPublicationDate());
-        assertThat(bookInfo.getStarRating()).isEqualTo(savedBookInfo.getStarRating());
     }
 }
