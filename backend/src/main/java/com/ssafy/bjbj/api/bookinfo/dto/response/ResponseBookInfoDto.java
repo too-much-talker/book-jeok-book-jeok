@@ -37,7 +37,7 @@ public class ResponseBookInfoDto {
     private Double starRating;
 
     @QueryProjection
-    public ResponseBookInfoDto(Long seq, String isbn, String title, String author, String description, Integer price, String smallImgUrl, String largeImgUrl, Integer categoryId, String categoryName, String publisher, LocalDateTime publicationDate, Double starRating) {
+    public ResponseBookInfoDto(Long seq, String isbn, String title, String author, String description, Integer price, String smallImgUrl, String largeImgUrl, Integer categoryId, String categoryName, String publisher, LocalDateTime publicationDate) {
         this.seq = seq;
         this.isbn = isbn;
         this.title = title;
@@ -50,6 +50,5 @@ public class ResponseBookInfoDto {
         this.categoryName = categoryName;
         this.publisher = publisher;
         this.publicationDate = publicationDate;
-        this.starRating = starRating;
     }
 }
