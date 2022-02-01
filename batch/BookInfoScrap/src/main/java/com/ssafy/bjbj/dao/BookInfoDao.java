@@ -20,13 +20,13 @@ public class BookInfoDao {
                     .append("INSERT INTO tb_book_info").append(" ")
                     .append("(")
                     .append("isbn, title, author, description, price, small_img_url, large_img_url, category_id, category_name, publisher, publication_date").append(", ")
-                    .append("star_rating, is_deleted").append(", ")
+                    .append("is_deleted").append(", ")
                     .append("created_date, created_by, last_modified_date, last_modified_by")
                     .append(")").append(" ")
                     .append("values").append(" ")
                     .append("(")
                     .append("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?").append(", ")
-                    .append("0, false").append(", ")
+                    .append("false").append(", ")
                     .append("now(), ?, now(), ?")
                     .append(")");
 
