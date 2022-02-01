@@ -58,6 +58,9 @@ public class BookInfo extends BaseLastModifiedEntity {
     private Double starRating;
 
     @Column(nullable = false)
+    private Integer bookReviewMemberCount;
+
+    @Column(nullable = false)
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "bookInfo")
@@ -66,6 +69,11 @@ public class BookInfo extends BaseLastModifiedEntity {
     // 나에 대해 리뷰를 쓴 멤버들
     @OneToMany(mappedBy = "bookInfo")
     private List<BookReview> bookReviews = new ArrayList<>();
+
+    public void changeBookInfo(Double starRating, Integer bookReviewMemberCount) {
+        this.starRating = starRating;
+        this.bookReviewMemberCount = bookReviewMemberCount;
+    }
 
     @Builder
     public BookInfo(Long seq, String isbn, String title, String author, String description, Integer price, String smallImgUrl, String largeImgUrl, Integer categoryId, String categoryName, String publisher, LocalDateTime publicationDate, Double starRating) {
