@@ -45,6 +45,8 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         if (!bookReview.isDeleted()) {
             bookReview.changeBookReviewDeleted(true);
+            BookInfo bookInfo = bookInfoRepository.findBySeq(bookReview.getBookInfo().getSeq());
+            bookInfo.changeBookInfo(bookInfo.getStarRating() - bookReview.getStarRating(), bookInfo.getBookReviewMemberCount() - 1);
             return true;
         }
         return false;
@@ -61,7 +63,14 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         if (latestBookReview != null) {
             latestBookReview.changeBookReviewDeleted(true);
+            bookInfo.changeBookInfo(bookInfo.getStarRating()- latestBookReview.getStarRating() + bookReviewDto.getStarRating(),
+                    bookInfo.getBookReviewMemberCount());
+        } else {
+            bookInfo.changeBookInfo(bookInfo.getStarRating() + bookReviewDto.getStarRating(),
+                    bookInfo.getBookReviewMemberCount() + 1);
         }
+
+
         BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
                 .bookInfo(bookInfo)
                 .member(member)
