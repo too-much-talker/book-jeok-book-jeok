@@ -13,7 +13,7 @@ public class RequestBookReviewDto {
 
     private Long memberSeq;
 
-    private Integer starRating;
+    private Double starRating;
 
     private String summary;
 }
