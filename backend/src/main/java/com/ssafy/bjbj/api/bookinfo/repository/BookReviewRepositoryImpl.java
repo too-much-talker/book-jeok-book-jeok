@@ -30,12 +30,15 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
                         bookReview.seq,
                         bookReview.bookInfo.seq,
                         bookReview.member.seq,
+                        bookReview.bookInfo.title,
+                        bookReview.bookInfo.author,
+                        bookReview.member.nickname,
                         bookReview.starRating,
                         bookReview.summary,
                         bookReview.createdDate
                 ))
                 .from(bookReview)
-                .where(bookReview.member.seq.eq(memberSeq))
+                .where(bookReview.member.seq.eq(memberSeq).and(bookReview.isDeleted.eq(false)))
                 .orderBy(bookReview.createdDate.desc())
                 .fetch();
     }
