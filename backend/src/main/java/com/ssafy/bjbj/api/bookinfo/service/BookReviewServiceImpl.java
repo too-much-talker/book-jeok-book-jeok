@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.ResponseBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -30,6 +32,11 @@ public class BookReviewServiceImpl implements BookReviewService {
         return bookReviewRepository.findBySeq(bookReviewSeq);
     }
 
+    @Override
+    public List<ResponseBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
+        return bookReviewRepository.findAllBookReviewDtoByMemberSeq(memberSeq);
+    }
+
     @Transactional
     @Override
     public boolean deleteBookReview(Long bookReviewSeq) {
@@ -45,30 +52,36 @@ public class BookReviewServiceImpl implements BookReviewService {
 
     @Transactional
     @Override
-    public ResponseBookReviewDto registerBookReview(RequestBookReviewDto bookReviewDto) {
+    public ResponseBookReviewByMemberDto registerBookReview(RequestBookReviewDto bookReviewDto) {
 
         BookInfo bookInfo = bookInfoRepository.findBySeq(bookReviewDto.getBookInfoSeq());
         Member member = memberRepository.findMemberBySeq(bookReviewDto.getMemberSeq());
 
-        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookInfo.getSeq(), member.getSeq());
+        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookReviewDto.getBookInfoSeq(), bookReviewDto.getMemberSeq());
 
         if (latestBookReview != null) {
             latestBookReview.changeBookReviewDeleted(true);
         }
-        BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
-                .bookInfo(bookInfo)
-                .member(member)
-                .starRating(bookReviewDto.getStarRating())
-                .summary(bookReviewDto.getSummary())
-                .isDeleted(false)
-                .build());
 
-        return ResponseBookReviewDto.builder()
-                .seq(savedBookReview.getSeq())
-                .starRating(savedBookReview.getStarRating())
-                .summary(savedBookReview.getSummary())
-                .createdDate(savedBookReview.getCreatedDate())
-                .build();
+            BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
+                    .bookInfo(bookInfo)
+                    .member(member)
+                    .starRating(bookReviewDto.getStarRating())
+                    .summary(bookReviewDto.getSummary())
+                    .isDeleted(false)
+                    .build());
+
+            return ResponseBookReviewByMemberDto.builder()
+                    .seq(savedBookReview.getSeq())
+                    .bookInfoSeq(savedBookReview.getSeq())
+                    .memberSeq(savedBookReview.getSeq())
+                    .bookTitle(savedBookReview.getBookInfo().getTitle())
+                    .bookAuthor(savedBookReview.getBookInfo().getAuthor())
+                    .memberNickname(savedBookReview.getMember().getNickname())
+                    .starRating(savedBookReview.getStarRating())
+                    .summary(savedBookReview.getSummary())
+                    .createdDate(savedBookReview.getCreatedDate())
+                    .build();
     }
-
 }
+

@@ -32,8 +32,8 @@ public class BookInfoRepositoryImpl implements BookInfoRepositoryCustom {
                         bookInfo.categoryId,
                         bookInfo.categoryName,
                         bookInfo.publisher,
-                        bookInfo.publicationDate,
-                        bookInfo.starRating))
+                        bookInfo.publicationDate
+                ))
                 .from(bookInfo)
                 .where(bookInfo.seq.eq(seq))
                 .fetchOne();
