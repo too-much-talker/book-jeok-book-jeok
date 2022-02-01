@@ -26,7 +26,7 @@ public class ResponseBookReviewDto {
 
     private String memberNickname;
 
-    private Integer starRating;
+    private Double starRating;
 
     private String summary;
 
@@ -34,7 +34,7 @@ public class ResponseBookReviewDto {
 
     @QueryProjection
     @Builder
-    public ResponseBookReviewDto(Long seq, Long bookInfoSeq, Long memberSeq, String bookTitle, String bookAuthor, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
+    public ResponseBookReviewDto(Long seq, Long bookInfoSeq, Long memberSeq, String bookTitle, String bookAuthor, String memberNickname, Double starRating, String summary, LocalDateTime createdDate) {
         this.seq = seq;
         this.bookInfoSeq = bookInfoSeq;
         this.memberSeq = memberSeq;
