@@ -27,8 +27,8 @@ public class BookReview extends BaseLastModifiedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column(nullable = false, columnDefinition = "DOUBLE UNSIGNED")
-    private Double starRating;
+    @Column(nullable = false)
+    private Integer starRating;
 
     @Column(nullable = false)
     private String summary;
@@ -42,7 +42,7 @@ public class BookReview extends BaseLastModifiedEntity {
 
     @Builder
     @QueryProjection
-    public BookReview(Long seq, BookInfo bookInfo, Member member, Double starRating, String summary, boolean isDeleted) {
+    public BookReview(Long seq, BookInfo bookInfo, Member member, Integer starRating, String summary, boolean isDeleted) {
         this.seq = seq;
         this.bookInfo = bookInfo;
         this.member = member;
