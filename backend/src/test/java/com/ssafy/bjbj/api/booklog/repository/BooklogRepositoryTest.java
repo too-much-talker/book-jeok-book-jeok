@@ -7,6 +7,7 @@ import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,42 @@ class BooklogRepositoryTest {
 
     @Autowired
     private EntityManager em;
+
+    private Member setUpMember = null;
+
+    private Booklog setUpBooklog = null;
+
+    private BookInfo setUpBookInfo = null;
+
+    @BeforeEach
+    public void setUp() {
+        String email = "setupEmail@bjbj.com";
+        setUpMember = memberRepository.save(Member.builder()
+                .email(email)
+                .password("password")
+                .name("name")
+                .nickname("setupNickname")
+                .phoneNumber("010-1111-2222")
+                .exp(0)
+                .point(100)
+                .role(Role.MEMBER)
+                .build());
+
+        setUpBookInfo = bookInfoRepository.findBySeq(776L);
+
+        // 북로그 작성
+        setUpBooklog = booklogRepository.save(Booklog.builder()
+                .title("북로그 제목")
+                .content(null)
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(false)
+                .views(0)
+                .member(setUpMember)
+                .bookInfo(setUpBookInfo)
+                .build());
+    }
 
     @DisplayName("북로그 엔티티 등록 테스트")
     @Test
@@ -152,6 +189,19 @@ class BooklogRepositoryTest {
         assertThat(findBooklog.getReadDate()).isEqualTo(savedBooklog.getReadDate());
         assertThat(findBooklog.isOpen()).isEqualTo(savedBooklog.isOpen());
         assertThat(findBooklog.getViews()).isEqualTo(savedBooklog.getViews());
+    }
+
+    @DisplayName("북로그 엔티티 공개여부 수정 테스트")
+    @Test
+    public void booklogEntityIsOpenChangeTest() {
+        // 수정
+        setUpBooklog.changeIsOpen(true);
+        em.flush();
+        em.clear();
+
+        // 검증
+        Booklog changedBooklog = booklogRepository.findBySeq(setUpBooklog.getSeq());
+        assertThat(changedBooklog.isOpen()).isTrue();
     }
 
 }

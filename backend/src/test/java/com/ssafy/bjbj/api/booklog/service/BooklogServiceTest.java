@@ -6,6 +6,7 @@ import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,21 @@ class BooklogServiceTest {
 
     @Autowired
     private BooklogRepository booklogRepository;
+
+    private Member setUpMember = null;
+
+    @BeforeEach
+    public void setUp() {
+        String email = "setupEmail@bjbj.com";
+        memberService.saveMember(RequestMemberDto.builder()
+                .email(email)
+                .password("password")
+                .name("name")
+                .nickname("setupNickanme")
+                .phoneNumber("010-1111-2222")
+                .build());
+        setUpMember = memberService.findMemberByEmail(email);
+    }
 
     @DisplayName("북로그 작성 테스트")
     @Test
@@ -167,6 +183,34 @@ class BooklogServiceTest {
         // 삭제 검증
         Booklog deletedBooklog = booklogRepository.findBySeq(savedBooklogSeq);
         assertThat(deletedBooklog.isDeleted()).isTrue();
+    }
+
+    @DisplayName("북로그 공개여부 수정 테스트")
+    @Test
+    public void booklogIsOpenChangeTest() {
+        // 북로그 작성
+        RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
+                .memberSeq(setUpMember.getSeq())
+                .bookInfoSeq(775L)
+                .title("북로그 제목")
+                .content("북로그 내용")
+                .summary("북로그 한줄평")
+                .starRating(4)
+                .readDate("2021-12-21")
+                .isOpen(true)
+                .build();
+        Long savedBooklogSeq = booklogService.register(reqBooklogDto);
+
+        // 저장된 북로그 공개여부 확인
+        Booklog savedBooklog = booklogService.findBySeq(savedBooklogSeq);
+        assertThat(savedBooklog.isOpen()).isTrue();
+        
+        // 공개여부 수정
+        booklogService.changeIsOpen(savedBooklogSeq, setUpMember.getSeq(), false);
+
+        // 수정된 공개여부 검증
+        Booklog changedBooklog = booklogService.findBySeq(savedBooklogSeq);
+        assertThat(changedBooklog.isOpen()).isFalse();
     }
 
 }

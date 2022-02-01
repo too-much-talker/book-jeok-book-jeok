@@ -90,4 +90,8 @@ public class Booklog extends BaseLastModifiedEntity {
         this.isDeleted = true;
     }
 
+    public void changeIsOpen(boolean isOpen) {
+        this.isOpen = isOpen;
+    }
+
 }
