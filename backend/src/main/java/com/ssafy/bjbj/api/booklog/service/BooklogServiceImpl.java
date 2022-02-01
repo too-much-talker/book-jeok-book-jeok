@@ -85,4 +85,23 @@ public class BooklogServiceImpl implements BooklogService {
         }
     }
 
+    @Transactional
+    @Override
+    public void changeIsOpen(Long booklogSeq, Long memberSeq, boolean isOpen) {
+        Booklog findBooklog = booklogRepository.findBySeq(booklogSeq);
+
+        if (findBooklog == null) {
+            throw new NotFoundBooklogException("올바르지 않은 요청입니다.");
+        } else if (!findBooklog.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        } else {
+            findBooklog.changeIsOpen(isOpen);
+        }
+    }
+
+    @Override
+    public Booklog findBySeq(Long seq) {
+        return booklogRepository.findBySeq(seq);
+    }
+
 }

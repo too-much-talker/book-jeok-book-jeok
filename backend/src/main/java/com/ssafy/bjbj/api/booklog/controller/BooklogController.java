@@ -23,7 +23,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/booklogs")
 @RestController
 public class BooklogController {
-    
+
     private final BooklogService booklogService;
 
     @PostMapping
@@ -74,7 +74,7 @@ public class BooklogController {
                 .data(responseData)
                 .build();
     }
-    
+
     @PutMapping("/{booklogSeq}")
     public BaseResponseDto update(@PathVariable Long booklogSeq, @Valid @RequestBody RequestBooklogDto requestBooklogDto, Errors errors, Authentication authentication) {
         log.debug("BooklogController.modify() 북로그 수정 API 호출");
@@ -137,6 +137,42 @@ public class BooklogController {
 
             status = HttpStatus.NO_CONTENT.value();
             responseData.put("msg", "북로그를 삭제하였습니다.");
+        } catch (NotFoundBooklogException | NotEqualMemberException e) {
+            /**
+             * 1. db에 없는 북로그 seq를 보냈을 때
+             * 2. 북로그의 주인 member와 요청한 member가 다를 때
+             */
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PatchMapping("/{booklogSeq}")
+    public BaseResponseDto changeIsOpen(@PathVariable Long booklogSeq, @RequestBody Boolean open, Authentication authentication) {
+        log.debug("BooklogController.changeIsOpen() 북로그 공개여부 변경 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            booklogService.changeIsOpen(booklogSeq, memberSeq, open);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "북로그의 공개여부를 수정였습니다.");
         } catch (NotFoundBooklogException | NotEqualMemberException e) {
             /**
              * 1. db에 없는 북로그 seq를 보냈을 때
