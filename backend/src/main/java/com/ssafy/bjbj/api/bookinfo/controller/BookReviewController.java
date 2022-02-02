@@ -79,7 +79,7 @@ public class BookReviewController {
         } else {
             List<ResponseBookReviewByMemberDto> reviewsByMemberSeq = bookReviewService.findAllBookReviewsByMemberSeq(memberSeq);
 
-            if (reviewsByMemberSeq.stream().count() == 0) {
+            if (reviewsByMemberSeq.size() == 0) {
                 // 북리뷰가 하나도 없을경우
                 status = HttpStatus.NO_CONTENT.value();
                 responseData.put("msg", "작성한 북리뷰가 하나도 없습니다");
@@ -98,14 +98,14 @@ public class BookReviewController {
     }
 
     @GetMapping("/bookinfos/{bookInfoSeq}")
-    public BaseResponseDto getTargetBookBookReviews(@PathVariable Long bookInfoSeq) {
+    public BaseResponseDto getBookInfoBookReviews(@PathVariable Long bookInfoSeq) {
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
         List<ResponseBookReviewByBookInfoDto> reviewsByMemberSeq = bookReviewService.findAllBookReviewsByBookInfoSeq(bookInfoSeq);
 
-        if (reviewsByMemberSeq.stream().count() == 0) {
+        if (reviewsByMemberSeq.size() == 0) {
             // 북리뷰가 하나도 없을경우
             status = HttpStatus.NO_CONTENT.value();
             responseData.put("msg", "작성된 북리뷰가 하나도 없습니다");
