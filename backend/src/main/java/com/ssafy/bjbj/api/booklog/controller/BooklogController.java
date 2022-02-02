@@ -2,8 +2,11 @@ package com.ssafy.bjbj.api.booklog.controller;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.booklog.exception.DuplicateLikeException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
+import com.ssafy.bjbj.api.booklog.exception.NotFoundLikeException;
 import com.ssafy.bjbj.api.booklog.service.BooklogService;
+import com.ssafy.bjbj.api.booklog.service.LikeService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
@@ -25,6 +28,8 @@ import java.util.Map;
 public class BooklogController {
 
     private final BooklogService booklogService;
+
+    private final LikeService likeService;
 
     @PostMapping
     public BaseResponseDto register(@Valid @RequestBody RequestBooklogDto requestBooklogDto, Errors errors, Authentication authentication) {
@@ -177,6 +182,78 @@ public class BooklogController {
             /**
              * 1. db에 없는 북로그 seq를 보냈을 때
              * 2. 북로그의 주인 member와 요청한 member가 다를 때
+             */
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PostMapping("/{booklogSeq}/like")
+    public BaseResponseDto like(@PathVariable Long booklogSeq, Authentication authentication) {
+        log.debug("BooklogController.like() 북로그 좋아요(하트) API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            likeService.like(booklogSeq, memberSeq);
+
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "좋아요를 눌렀습니다.");
+        } catch (NotFoundBooklogException | DuplicateLikeException e) {
+            /**
+             * 1. db에 없는 북로그 seq를 보냈을 때
+             * 2. 이미 좋아요를 눌렀을 때
+             */
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+    
+    @DeleteMapping("/{booklogSeq}/like")
+    public BaseResponseDto unLike(@PathVariable Long booklogSeq, Authentication authentication) {
+        log.debug("BooklogController.unLike() 북로그 좋아요(하트) 취소 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            likeService.unLike(booklogSeq, memberSeq);
+
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "좋아요를 취소했습니다.");
+        } catch (NotFoundLikeException | NotEqualMemberException e) {
+            /**
+             * 1. db에 like가 없을 때
+             * 2. like의 주인이 아닐 때
              */
 
             status = HttpStatus.BAD_REQUEST.value();
