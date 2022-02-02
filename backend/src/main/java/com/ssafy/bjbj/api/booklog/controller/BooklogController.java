@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.booklog.controller;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
 import com.ssafy.bjbj.api.booklog.exception.DuplicateLikeException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundLikeException;
@@ -254,6 +255,43 @@ public class BooklogController {
             /**
              * 1. db에 like가 없을 때
              * 2. like의 주인이 아닐 때
+             */
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/{booklogSeq}")
+    public BaseResponseDto get(@PathVariable Long booklogSeq, Authentication authentication) {
+        log.debug("BooklogController.getBooklog() 북로그 조회 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            ResBooklogDto resBooklogDto = booklogService.getResBooklogDtoBooklog(booklogSeq, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "북로그 조회 성공");
+            responseData.put("booklog", resBooklogDto);
+        } catch (NotFoundBooklogException | IllegalArgumentException e) {
+            /**
+             * 1. DB에 없는 북로그를 요청했을 때
+             * 2. 다른 사람이 작성한 비공개 북로그를 요청했을 때
              */
 
             status = HttpStatus.BAD_REQUEST.value();

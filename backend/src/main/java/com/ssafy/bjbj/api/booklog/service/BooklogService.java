@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.booklog.service;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 
 public interface BooklogService {
@@ -14,5 +15,7 @@ public interface BooklogService {
     void changeIsOpen(Long booklogSeq, Long memberSeq, boolean isOpen);
 
     Booklog findBySeq(Long seq);
+
+    ResBooklogDto getResBooklogDtoBooklog(Long booklogSeq, Long memberSeq);
 
 }
