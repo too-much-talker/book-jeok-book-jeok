@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -11,6 +10,8 @@ import Login from "./views/user/login/LoginContainer";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import Signup from "./views/user/signup/SignupContainer";
+import Booklogs from "./views/booklogs";
+import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContainer";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -30,6 +31,10 @@ render(
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/booklogs/*" element={<Booklogs />}>
+            <Route index element={<BooklogListContainer />} />
+            {/* <Route path="detail"/> */}
+          </Route>
         </Routes>
       </BrowserRouter>
     </PersistGate>
