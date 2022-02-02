@@ -103,9 +103,9 @@ public class BookReviewController {
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        List<ResponseBookReviewByBookInfoDto> reviewsByMemberSeq = bookReviewService.findAllBookReviewsByBookInfoSeq(bookInfoSeq);
+        List<ResponseBookReviewByBookInfoDto> reviewsByBookInfoSeq = bookReviewService.findAllBookReviewsByBookInfoSeq(bookInfoSeq);
 
-        if (reviewsByMemberSeq.size() == 0) {
+        if (reviewsByBookInfoSeq.size() == 0) {
             // 북리뷰가 하나도 없을경우
             status = HttpStatus.NO_CONTENT.value();
             responseData.put("msg", "작성된 북리뷰가 하나도 없습니다");
@@ -113,7 +113,7 @@ public class BookReviewController {
             // 북리뷰 조회 성공
             status = HttpStatus.OK.value();
             responseData.put("msg", "작성된 리뷰들이 있습니다");
-            responseData.put("myBookReviews",reviewsByMemberSeq);
+            responseData.put("myBookReviews",reviewsByBookInfoSeq);
         }
 
         return BaseResponseDto.builder()
