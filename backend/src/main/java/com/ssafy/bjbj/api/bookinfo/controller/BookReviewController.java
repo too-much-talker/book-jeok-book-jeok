@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.controller;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.service.BookReviewService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
@@ -88,6 +89,31 @@ public class BookReviewController {
             responseData.put("msg", "작성한 리뷰들이 있습니다");
             responseData.put("myBookReviews",reviewsByMemberSeq);
             }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/bookinfos/{bookInfoSeq}")
+    public BaseResponseDto getTargetBookBookReviews(@PathVariable Long bookInfoSeq) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        List<ResponseBookReviewByBookInfoDto> reviewsByMemberSeq = bookReviewService.findAllBookReviewsByBookInfoSeq(bookInfoSeq);
+
+        if (reviewsByMemberSeq.stream().count() == 0) {
+            // 북리뷰가 하나도 없을경우
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "작성된 북리뷰가 하나도 없습니다");
+        } else {
+            // 북리뷰 조회 성공
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "작성된 리뷰들이 있습니다");
+            responseData.put("myBookReviews",reviewsByMemberSeq);
         }
 
         return BaseResponseDto.builder()
