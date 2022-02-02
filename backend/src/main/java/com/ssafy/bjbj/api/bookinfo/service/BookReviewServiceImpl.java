@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
@@ -35,6 +36,11 @@ public class BookReviewServiceImpl implements BookReviewService {
     @Override
     public List<ResponseBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
         return bookReviewRepository.findAllBookReviewDtoByMemberSeq(memberSeq);
+    }
+
+    @Override
+    public List<ResponseBookReviewByBookInfoDto> findAllBookReviewsByBookInfoSeq(Long bookInfoSeq) {
+        return bookReviewRepository.findAllBookReviewDtoByBookInfoSeq(bookInfoSeq);
     }
 
     @Transactional
