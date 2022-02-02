@@ -1,5 +1,6 @@
 import { useState } from "react";
 import style from "./Grass.module.css";
+import styled from "styled-components";
 
 const Grass = (props) => {
   const [isEntered, setIsEntered] = useState(false);
@@ -9,6 +10,7 @@ const Grass = (props) => {
   const mouseLeaveHandler = () => {
     setIsEntered(false);
   };
+
   let color;
   const description = <div>{`${props.count} contributions on ${props.date}`}</div>;
   if(props.count===0){

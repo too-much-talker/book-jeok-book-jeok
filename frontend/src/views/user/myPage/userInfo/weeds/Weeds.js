@@ -1,6 +1,12 @@
 import Grass from "./Grass";
 import react, { useState } from "react";
-import style from './Weeds.module.css';
+import styled from "styled-components";
+
+const StyledWeeds = styled.div `
+  margin: 3rem;
+  width: 8rem;
+  height: 12rem;
+`;
 
 const Weeds = (props) => {
   let weed =[];
@@ -45,8 +51,8 @@ const Weeds = (props) => {
     return <Grass count={data.count} date={data.date}/>
   })
 
-  return <div className={style.weeds}>
+  return <StyledWeeds>
     {context}
-  </div>
+  </StyledWeeds>
 };
 export default Weeds;
