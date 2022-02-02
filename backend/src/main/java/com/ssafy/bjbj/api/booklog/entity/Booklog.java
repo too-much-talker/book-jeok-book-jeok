@@ -94,4 +94,8 @@ public class Booklog extends BaseLastModifiedEntity {
         this.isOpen = isOpen;
     }
 
+    public void incrementViews() {
+        this.views++;
+    }
+
 }
