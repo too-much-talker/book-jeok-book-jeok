@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class ResponseBookReviewByBookInfoDto {
-    @JsonIgnore
-    private Long seq;
 
     private Long bookInfoSeq;
 
@@ -30,8 +28,7 @@ public class ResponseBookReviewByBookInfoDto {
 
     @QueryProjection
     @Builder
-    public ResponseBookReviewByBookInfoDto(Long seq, Long bookInfoSeq, Long memberSeq, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
-        this.seq = seq;
+    public ResponseBookReviewByBookInfoDto(Long bookInfoSeq, Long memberSeq, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
         this.bookInfoSeq = bookInfoSeq;
         this.memberSeq = memberSeq;
         this.memberNickname = memberNickname;
