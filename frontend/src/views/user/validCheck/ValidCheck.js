@@ -68,13 +68,9 @@ function checkNickname(nickname, url) {
   }
 }
 
-function checkPassword(password, passwordConfirm, email, nickname, name) {
+function checkPassword(password, email, nickname, name) {
   const id = email.split("@")[0];
-  if (password !== passwordConfirm) {
-    //비밀번호 비밀번호 확인
-    alert("비번다름");
-    return false;
-  }
+  
   if (!/^[a-zA-Z0-9!@#$%\^&*()]{8,12}$/.test(password)) {
     //숫자,영문자,특수문자 조합으로 8~12자리를 사용하는지 확인
     alert("숫자,영문자,특수문자(!@#$%^&*()) 조합으로 8~12자리");
@@ -110,7 +106,15 @@ function checkPassword(password, passwordConfirm, email, nickname, name) {
   return true;
 }
 
+function checkPasswordConfim(password, passwordConfirm){
+  if (password !== passwordConfirm) {
+    return false;
+  }
+  return true;
+}
+
 function checkNameLength(name) {
+  console.log(name);
   let koreanTotalByte = 0;
   let englishTotalByte = 0;
   for (let i = 0; i < name.length; i++) {
@@ -151,4 +155,5 @@ export {
   checkPassword,
   checkNameLength,
   checkPhoneNumber,
+  checkPasswordConfim,
 };

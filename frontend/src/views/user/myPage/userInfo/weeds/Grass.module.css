@@ -1,0 +1,53 @@
+.grass:empty{
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 3px;
+  margin: 1px;
+  font-size: small;
+}
+.wrapper{
+  display: inline-block;
+  position: relative;
+}
+.wrapper .floater{
+  display: inline-block;
+  position: absolute;
+  background-color: #24292f;
+  text-align: center;
+  color: white;
+  font-size: .8rem;
+  z-index: 5;
+  width: 12rem;
+  border-radius: 5px;
+  top: -2.5rem;
+  padding: .5rem;
+}
+
+.wrapper .floater.able{
+  display: inline-block;
+}
+.wrapper .floater.disable{
+  display: none;
+}
+.zero {
+  background-color: #D5D5D5;
+  color: #D5D5D5;
+}
+
+.one {
+  background-color: #86E57F;
+  color: #86E57F;
+}
+.two {
+  background-color: #47C83E;
+  color: #47C83E;
+}
+.three {
+  background-color: #008000;
+  color: #008000;
+}
+.four {
+  background-color: #004A00;
+  color: #004A00;
+}
