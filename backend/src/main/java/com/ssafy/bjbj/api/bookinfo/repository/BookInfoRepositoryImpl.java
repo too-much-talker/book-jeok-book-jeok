@@ -56,7 +56,7 @@ public class BookInfoRepositoryImpl implements BookInfoRepositoryCustom {
                         bookInfo.seq,
                         bookInfo.title,
                         bookInfo.author,
-                        bookInfo.smallImgUrl,
+                        bookInfo.largeImgUrl,
                         bookInfo.publisher,
                         bookInfo.publicationDate,
                         round(bookReview.starRating.avg(), 2).coalesce(0.0).as("star"),

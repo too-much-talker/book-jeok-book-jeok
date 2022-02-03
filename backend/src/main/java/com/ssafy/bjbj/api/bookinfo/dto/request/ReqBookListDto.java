@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@ToString
+@ToString(of = {"page", "limit", "searchCategory", "searchKeyword", "orderCategory"})
 @NoArgsConstructor
 @Getter
 public class ReqBookListDto {
