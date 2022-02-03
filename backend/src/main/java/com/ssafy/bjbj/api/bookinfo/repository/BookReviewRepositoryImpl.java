@@ -48,6 +48,7 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
     @Override
     public List<ResponseBookReviewByBookInfoDto> findAllBookReviewDtoByBookInfoSeq(Long bookInfoSeq) {
         return queryFactory.select(new QResponseBookReviewByBookInfoDto(
+                bookReview.seq,
                 bookReview.bookInfo.seq,
                 bookReview.member.seq,
                 bookReview.member.nickname,
