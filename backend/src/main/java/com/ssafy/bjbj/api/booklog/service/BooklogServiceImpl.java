@@ -3,7 +3,9 @@ package com.ssafy.bjbj.api.booklog.service;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
@@ -13,10 +15,12 @@ import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -135,6 +139,20 @@ public class BooklogServiceImpl implements BooklogService {
                 .isOpen(booklog.isOpen())
                 .views(booklog.getViews())
                 .createdDate(booklog.getCreatedDate().toLocalDate())
+                .build();
+    }
+
+    @Override
+    public ResOpenBooklogPageDto getResOpenBooklogListDto(Pageable pageable) {
+        Integer totalCnt = booklogRepository.countByOpenBooklogAndRecentOneWeek();
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<OpenBooklogDto> openBooklogDtos = booklogRepository.findOpenBooklogDtos(pageable);
+
+        return ResOpenBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .currentPage(pageable.getPageNumber())
+                .totalPage(totalPage)
+                .openBooklogDtos(openBooklogDtos)
                 .build();
     }
 

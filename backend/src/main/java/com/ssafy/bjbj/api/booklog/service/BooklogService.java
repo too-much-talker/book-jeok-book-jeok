@@ -2,7 +2,9 @@ package com.ssafy.bjbj.api.booklog.service;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
+import org.springframework.data.domain.Pageable;
 
 public interface BooklogService {
 
@@ -17,5 +19,7 @@ public interface BooklogService {
     Booklog findBySeq(Long seq);
 
     ResBooklogDto getResBooklogDtoBooklog(Long booklogSeq, Long memberSeq);
+
+    ResOpenBooklogPageDto getResOpenBooklogListDto(Pageable pageable);
 
 }
