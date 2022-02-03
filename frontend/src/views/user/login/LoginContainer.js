@@ -17,18 +17,18 @@ function LoginContainer() {
       password: pw,
     };
 
-    console.log(userInfo);
-
     // login 요청 성공시
     login(
       userInfo,
       (response) => {
-        // console.log(response.data.data);
+        // console.log(userInfo);
+        // console.log(response);
         if (response.data.status === 200) {
           let token = response.data.data["jwtToken"];
           sessionStorage.setItem("access-token", JSON.stringify(token));
-          dispatch(setUserInfo(response.data.data.memberInfo));
-          navigate(-1);
+          dispatch(setUserInfo(response.data.data));
+          console.log("로그인 성공");
+          navigate("/");
         }
       },
       () => {
