@@ -61,7 +61,7 @@ public class BookInfoRepositoryTest {
                 .point(100)
                 .build();
 
-        String date = "2021-12-20T12:30:00";
+        String date = "2022-12-20T12:30:00";
 
         String isbn = "isbn";
         String title = "title";
@@ -100,7 +100,7 @@ public class BookInfoRepositoryTest {
                 .categoryId(categoryId)
                 .categoryName(categoryName + "2")
                 .publisher(publisher + "2")
-                .publicationDate(LocalDateTime.parse("2022-02-20T12:30:00"))
+                .publicationDate(LocalDateTime.parse("2023-02-20T12:30:00"))
                 .build();
 
 
