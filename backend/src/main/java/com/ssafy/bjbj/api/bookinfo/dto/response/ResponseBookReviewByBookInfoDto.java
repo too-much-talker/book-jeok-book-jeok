@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @Getter
 public class ResponseBookReviewByBookInfoDto {
 
+    private Long bookReviewSeq;
+
     private Long bookInfoSeq;
 
     private Long memberSeq;
@@ -28,7 +30,8 @@ public class ResponseBookReviewByBookInfoDto {
 
     @QueryProjection
     @Builder
-    public ResponseBookReviewByBookInfoDto(Long bookInfoSeq, Long memberSeq, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
+    public ResponseBookReviewByBookInfoDto(Long bookReviewSeq, Long bookInfoSeq, Long memberSeq, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
+        this.bookReviewSeq = bookReviewSeq;
         this.bookInfoSeq = bookInfoSeq;
         this.memberSeq = memberSeq;
         this.memberNickname = memberNickname;
