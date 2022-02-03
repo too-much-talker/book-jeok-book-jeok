@@ -40,6 +40,11 @@ public class BookReview extends BaseLastModifiedEntity {
         this.isDeleted = true;
     }
 
+    public void changeBookReview(Integer starRating, String summary) {
+        this.starRating = starRating;
+        this.summary = summary;
+    }
+
     @Builder
     @QueryProjection
     public BookReview(Long seq, BookInfo bookInfo, Member member, Integer starRating, String summary, boolean isDeleted) {
