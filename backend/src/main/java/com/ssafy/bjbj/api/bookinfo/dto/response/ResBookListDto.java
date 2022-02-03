@@ -1,13 +1,12 @@
 package com.ssafy.bjbj.api.bookinfo.dto.response;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
 
-@ToString(of = {"seq", "title", "author", "smallImgUrl", "publisher", "publicationDate", "starRating", "bookReviewCount"})
+@ToString(of = {"totalCnt", "currentPage", "totalPage", "resBookInfoSmallDtos"})
 @Getter
 public class ResBookListDto {
 

@@ -6,7 +6,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@ToString(of = {"seq", "title", "author", "smallImgUrl", "publisher", "publicationDate", "starRating", "bookReviewCount"})
+@ToString(of = {"seq", "title", "author", "largeImgUrl", "publisher", "publicationDate", "starRating", "bookReviewCount"})
 @Getter
 public class ResBookInfoSmallDto {
 
@@ -16,7 +16,7 @@ public class ResBookInfoSmallDto {
 
     private String author;
 
-    private String smallImgUrl;
+    private String largeImgUrl;
 
     private String publisher;
 
@@ -27,11 +27,11 @@ public class ResBookInfoSmallDto {
     private Long bookReviewCount;
 
     @QueryProjection
-    public ResBookInfoSmallDto(Long seq, String title, String author, String smallImgUrl, String publisher, LocalDateTime publicationDate, Double starRating, Long bookReviewCount) {
+    public ResBookInfoSmallDto(Long seq, String title, String author, String largeImgUrl, String publisher, LocalDateTime publicationDate, Double starRating, Long bookReviewCount) {
         this.seq = seq;
         this.title = title;
         this.author = author;
-        this.smallImgUrl = smallImgUrl;
+        this.largeImgUrl = largeImgUrl;
         this.publisher = publisher;
         this.publicationDate = publicationDate;
         this.starRating = starRating;
