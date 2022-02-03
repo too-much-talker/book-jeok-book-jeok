@@ -78,6 +78,7 @@ public class BookReviewServiceImpl implements BookReviewService {
                     .build());
 
             return ResponseBookReviewByMemberDto.builder()
+                    .bookReviewSeq(savedBookReview.getSeq())
                     .bookInfoSeq(savedBookReview.getBookInfo().getSeq())
                     .memberSeq(savedBookReview.getMember().getSeq())
                     .bookTitle(savedBookReview.getBookInfo().getTitle())
