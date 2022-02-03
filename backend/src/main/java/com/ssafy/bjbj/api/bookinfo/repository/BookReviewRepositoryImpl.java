@@ -3,7 +3,9 @@ package com.ssafy.bjbj.api.bookinfo.repository;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bjbj.api.bookinfo.dto.response.QResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.QResponseBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.bookinfo.entity.QBookReview;
@@ -39,6 +41,22 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
                 ))
                 .from(bookReview)
                 .where(bookReview.member.seq.eq(memberSeq).and(bookReview.isDeleted.eq(false)))
+                .orderBy(bookReview.createdDate.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<ResponseBookReviewByBookInfoDto> findAllBookReviewDtoByBookInfoSeq(Long bookInfoSeq) {
+        return queryFactory.select(new QResponseBookReviewByBookInfoDto(
+                bookReview.bookInfo.seq,
+                bookReview.member.seq,
+                bookReview.member.nickname,
+                bookReview.starRating,
+                bookReview.summary,
+                bookReview.createdDate
+                ))
+                .from(bookReview)
+                .where(bookReview.bookInfo.seq.eq(bookInfoSeq).and(bookReview.isDeleted.eq(false)))
                 .orderBy(bookReview.createdDate.desc())
                 .fetch();
     }
