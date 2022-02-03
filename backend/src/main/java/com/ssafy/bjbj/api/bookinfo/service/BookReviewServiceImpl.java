@@ -50,7 +50,7 @@ public class BookReviewServiceImpl implements BookReviewService {
         BookReview bookReview = bookReviewRepository.findBySeq(bookReviewSeq);
 
         if (!bookReview.isDeleted()) {
-            bookReview.changeBookReviewDeleted(true);
+            bookReview.delete();
             return true;
         }
         return false;
@@ -66,7 +66,7 @@ public class BookReviewServiceImpl implements BookReviewService {
         BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookReviewDto.getBookInfoSeq(), bookReviewDto.getMemberSeq());
 
         if (latestBookReview != null) {
-            latestBookReview.changeBookReviewDeleted(true);
+            latestBookReview.delete();
         }
 
             BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
