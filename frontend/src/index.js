@@ -15,6 +15,7 @@ import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContai
 import MyPage from "./views/user/myPage/index";
 import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 import styled from "styled-components";
+import Header from "./views/main/Header/Header";
 import "./common/css/index.css";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
@@ -51,6 +52,7 @@ render(
     <PersistGate persistor={persistor}>
       <BrowserRouter>
         <Body>
+          <Header />
           <Wrapper>
             <Routes>
               <Route path="/" element={<App />} />
