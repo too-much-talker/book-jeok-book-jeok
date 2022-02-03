@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.booklog.controller;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.exception.DuplicateLikeException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundLikeException;
@@ -13,6 +14,8 @@ import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
@@ -296,6 +299,37 @@ public class BooklogController {
 
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping
+    public BaseResponseDto list(Pageable pageable) {
+        log.debug("BooklogController.list() 공개 북로그 목록 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResOpenBooklogPageDto resOpenBooklogListDto = booklogService.getResOpenBooklogListDto(pageable);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "북로그 조회 성공");
+            responseData.put("totalCnt", resOpenBooklogListDto.getTotalCnt());
+            responseData.put("currentPage", resOpenBooklogListDto.getCurrentPage());
+            responseData.put("totalPage", resOpenBooklogListDto.getTotalPage());
+            responseData.put("booklogs", resOpenBooklogListDto.getOpenBooklogDtos());
         } catch (Exception e) {
             // Server error : Database Connection Fail, etc..
             log.debug("[Error] Exception error");

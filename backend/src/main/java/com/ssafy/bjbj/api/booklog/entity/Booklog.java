@@ -57,8 +57,7 @@ public class Booklog extends BaseLastModifiedEntity {
     private BookInfo bookInfo;
 
     // 나를 like한 멤버들
-    @JoinColumn(name = "booklog_seq")
-    @OneToMany
+    @OneToMany(mappedBy = "booklog", cascade = CascadeType.ALL)
     private List<Like> likes = new ArrayList<>();
 
     @Builder

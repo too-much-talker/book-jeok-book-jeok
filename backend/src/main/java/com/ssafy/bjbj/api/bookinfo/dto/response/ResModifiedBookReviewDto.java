@@ -8,7 +8,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@ToString(of = {"memberNickname", "startRating", "summary", "createdDate", "modifiedDate"})
+@ToString(of = {"bookReviewSeq", "bookInfoSeq", "memberSeq", "memberNickname", "starRating", "summary", "createdDate", "modifiedDate"})
 @NoArgsConstructor
 @Getter
 public class ResModifiedBookReviewDto {
