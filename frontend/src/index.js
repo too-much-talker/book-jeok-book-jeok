@@ -12,6 +12,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import Signup from "./views/user/signup/SignupContainer";
 import Booklogs from "./views/booklogs";
 import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContainer";
+import MyPage from "./views/user/myPage/index";
+import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -34,6 +36,12 @@ render(
           <Route path="/booklogs/*" element={<Booklogs />}>
             <Route index element={<BooklogListContainer />} />
             {/* <Route path="detail"/> */}
+          </Route>
+          <Route path="/mypage" element={<MyPage />}>
+            <Route index element={<UserInfoContainer />} />
+            <Route path="mybooklog" />
+            <Route path="mybookclub" />
+            <Route path="mychallenge" />
           </Route>
         </Routes>
       </BrowserRouter>

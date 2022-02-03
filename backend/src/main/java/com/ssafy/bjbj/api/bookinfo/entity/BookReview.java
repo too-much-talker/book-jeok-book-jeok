@@ -27,7 +27,7 @@ public class BookReview extends BaseLastModifiedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    @Column(nullable = false)
     private Integer starRating;
 
     @Column(nullable = false)
@@ -36,8 +36,8 @@ public class BookReview extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    public void changeBookReviewDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void delete() {
+        this.isDeleted = true;
     }
 
     @Builder

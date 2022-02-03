@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.booklog.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,11 @@ public class Like {
     @ManyToOne(fetch = LAZY)
     @Id
     private Member member;
+
+    @Builder
+    public Like(Booklog booklog, Member member) {
+        this.booklog = booklog;
+        this.member = member;
+    }
 
 }
