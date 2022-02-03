@@ -1,4 +1,4 @@
-import Home from "./views/home/Home";
+import Home from "./views/main/Home";
 import React from "react";
 
 function App() {
