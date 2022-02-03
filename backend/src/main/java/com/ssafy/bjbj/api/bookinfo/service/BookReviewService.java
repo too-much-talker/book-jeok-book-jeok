@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
@@ -16,6 +17,8 @@ public interface BookReviewService {
     List<ResponseBookReviewByBookInfoDto> findAllBookReviewsByBookInfoSeq(Long bookInfoSeq);
 
     ResponseBookReviewByMemberDto registerBookReview(RequestBookReviewDto requestBookReviewDto);
+
+    ResModifiedBookReviewDto updateBookReview(RequestBookReviewDto requestBookReviewDto);
 
     boolean deleteBookReview(Long bookReviewSeq);
 }
