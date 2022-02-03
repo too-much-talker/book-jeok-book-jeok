@@ -14,6 +14,8 @@ import Booklogs from "./views/booklogs";
 import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContainer";
 import MyPage from "./views/user/myPage/index";
 import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
+import styled from "styled-components";
+import "./common/css/index.css";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -24,26 +26,49 @@ const unsubscribe = store.subscribe(listener);
 
 const persistor = persistStore(store);
 
+const Body = styled.body`
+  // background: skyblue;
+  text-align: center; // 수평 가운데 정렬
+  width: 100vw;
+  height: 100%;
+  // margin: 0 auto;
+`;
+
+// box 2개를 감싸는 Wrapper를 하나 더 만듦.
+const Wrapper = styled.div`
+  // overflow: auto; // 크기를 줄이면 스크롤 생김.(텍스트나 박스 크기는 그대로 유지)
+  border: solid red;
+  width: 1080px;
+  height: 100vh;
+  // display: inline-block; // Body-ScrollWrapper 수평 가운데 정렬
+  // margin-top: 10vh;
+  margin: 0 auto;
+`;
+
 const rootElement = document.getElementById("root");
 render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/booklogs/*" element={<Booklogs />}>
-            <Route index element={<BooklogListContainer />} />
-            {/* <Route path="detail"/> */}
-          </Route>
-          <Route path="/mypage" element={<MyPage />}>
-            <Route index element={<UserInfoContainer />} />
-            <Route path="mybooklog" />
-            <Route path="mybookclub" />
-            <Route path="mychallenge" />
-          </Route>
-        </Routes>
+        <Body>
+          <Wrapper>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/booklogs/*" element={<Booklogs />}>
+                <Route index element={<BooklogListContainer />} />
+                {/* <Route path="detail"/> */}
+              </Route>
+              <Route path="/mypage" element={<MyPage />}>
+                <Route index element={<UserInfoContainer />} />
+                <Route path="mybooklog" />
+                <Route path="mybookclub" />
+                <Route path="mychallenge" />
+              </Route>
+            </Routes>
+          </Wrapper>
+        </Body>
       </BrowserRouter>
     </PersistGate>
   </Provider>,
