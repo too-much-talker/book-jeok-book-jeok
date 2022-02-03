@@ -1,6 +1,6 @@
-import { apiInstance } from "./index";
+import { mockInstance } from "./index";
 
-const api = apiInstance();
+const api = mockInstance();
 
 async function booklogList(info, success, fail) {
   await api

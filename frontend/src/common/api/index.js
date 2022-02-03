@@ -1,5 +1,5 @@
 import axios from "axios";
-import { URL } from "../config";
+import { MOCK_URL, URL } from "../config";
 
 function apiInstance() {
   const instance = axios.create({
@@ -12,4 +12,15 @@ function apiInstance() {
   return instance;
 }
 
-export { apiInstance };
+function mockInstance() {
+  const instance = axios.create({
+    baseURL: MOCK_URL,
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
+
+  return instance;
+}
+
+export { apiInstance, mockInstance };
