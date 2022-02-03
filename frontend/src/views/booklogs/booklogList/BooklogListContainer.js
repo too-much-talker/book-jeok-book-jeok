@@ -28,10 +28,6 @@ function BooklogListContainer() {
         order: order,
       },
       (response) => {
-        console.log(response);
-        console.log(order);
-        console.log(page);
-
         setTotalPage(response.data.data.totalPage);
         setData(response.data.data.booklogList);
       },
