@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.controller;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.service.BookReviewService;
@@ -114,6 +115,47 @@ public class BookReviewController {
             status = HttpStatus.OK.value();
             responseData.put("msg", "작성된 리뷰들이 있습니다");
             responseData.put("myBookReviews",reviewsByBookInfoSeq);
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PutMapping("/{bookReviewSeq}")
+    public BaseResponseDto update(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, @PathVariable Long bookReviewSeq, Authentication authentication) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
+        boolean isAuthenticatedMember = details.getMember().getSeq().equals(requestBookReviewDto.getMemberSeq());
+
+        if (!isAuthenticatedMember) {
+            status = HttpStatus.UNAUTHORIZED.value();
+            responseData.put("msg", "인증되지 않은 회원입니다");
+        } else if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+            }
+        } else {
+            ResModifiedBookReviewDto modifiedBookReviewDto = bookReviewService.updateBookReview(requestBookReviewDto);
+
+            if (modifiedBookReviewDto == null) {
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", "요청한 북리뷰가 없습니다");
+            } else {
+                status = HttpStatus.OK.value();
+                responseData.put("msg", "수정되었습니다");
+                responseData.put("modifiedBookReview", modifiedBookReviewDto);
+            }
         }
 
         return BaseResponseDto.builder()
