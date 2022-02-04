@@ -19,17 +19,19 @@ function BooklogListContainer() {
   };
 
   const [totalPage, setTotalPage] = useState(1);
-  const perPageItem = 10;
+  const size = 15;
 
   useEffect(() => {
     booklogList(
       {
         page: page,
-        order: order,
+        size: size,
+        sort: order,
       },
       (response) => {
+        console.log(response);
         setTotalPage(response.data.data.totalPage);
-        setData(response.data.data.booklogList);
+        setData(response.data.data.booklogs);
       },
       (error) => {
         console.log(error);
@@ -43,11 +45,11 @@ function BooklogListContainer() {
 
   return (
     <>
-      <BooklogListPresenter data={data} isPopular={order === "popular"} />
+      <BooklogListPresenter data={data} isPopular={order === "like"} />
       <Pagination
         activePage={page}
-        itemsCountPerPage={perPageItem}
-        totalItemsCount={totalPage * perPageItem}
+        itemsCountPerPage={size}
+        totalItemsCount={totalPage * size}
         pageRangeDisplayed={5}
         prevPageText={"‹"}
         nextPageText={"›"}

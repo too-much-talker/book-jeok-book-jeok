@@ -38,7 +38,7 @@ const StyledLink = styled(Link)`
 `;
 
 const menus = ["북로그", "독서모임", "챌린지", "공지"];
-const links = ["/booklogs/list/popular", "/", "/", "/"];
+const links = ["/booklogs/list/like", "/", "/", "/"];
 
 function Navigation() {
   return (

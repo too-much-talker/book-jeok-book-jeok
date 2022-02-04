@@ -168,4 +168,18 @@ public class BooklogServiceImpl implements BooklogService {
                 .build();
     }
 
+    @Override
+    public ResSearchBooklogPageDto getResSearchBooklogPageDto(Pageable pageable, String keyword, String writer) {
+        Integer totalCnt = booklogRepository.countSearchBooklogByKeyword(keyword, writer);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<SearchBooklogDto> searchBooklogDtos = booklogRepository.findSearchBooklog(pageable, keyword, writer);
+
+        return ResSearchBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .searchBooklogDtos(searchBooklogDtos)
+                .build();
+    }
+
 }

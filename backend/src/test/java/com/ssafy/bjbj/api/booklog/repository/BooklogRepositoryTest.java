@@ -5,6 +5,7 @@ import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.MyBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.SearchBooklogDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.entity.Like;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -471,6 +472,141 @@ class BooklogRepositoryTest {
         assertThat(find3.size()).isEqualTo(2);
         assertThat(find3.get(0).getBooklogSeq()).isEqualTo(savedBooklog2.getSeq());
         assertThat(find3.get(1).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
+    }
+
+    @DisplayName("검색된 북로그 개수 조회 테스트")
+    @Test
+    public void searchBooklogCountTest() throws InterruptedException {
+        booklogRepository.deleteAll();
+
+        String keyword = "북로그";
+        String writer = "member1";
+
+        Integer count = booklogRepository.countSearchBooklogByKeyword(keyword, writer);
+        assertThat(count).isEqualTo(0);
+
+        booklogRepository.save(Booklog.builder()
+                .title("ㅇㅇㅇㅇ북로그ㅇㅇ 제목1")
+                .content(null)
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(false) // 비공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        em.flush();
+        em.clear();
+        Thread.sleep(1000);
+
+        // 비공개 북로그 1개 등록한 후 공개 북로그 조회 -> 0개
+        count = booklogRepository.countSearchBooklogByKeyword(keyword, writer);
+        assertThat(count).isEqualTo(0);
+        em.flush();
+        em.clear();
+
+        booklogRepository.save(Booklog.builder()
+                .title("제목2")
+                .content("ㅋㅋㅋㅋ북로그ㅋㅋㅋㅋ")
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(true) // 공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        em.flush();
+        em.clear();
+        Thread.sleep(1000);
+
+        // 공개 북로그 1개 추가 등록 후 공개 북로그 조회 -> 1개
+        count = booklogRepository.countSearchBooklogByKeyword(keyword, null);
+        assertThat(count).isEqualTo(1);
+    }
+
+    @DisplayName("검색된 북로그 목록 조회 테스트")
+    @Test
+    public void searchBooklogListTest() throws InterruptedException {
+        booklogRepository.deleteAll();
+
+        Pageable pageable = PageRequest.of(1, 10);
+        String keyword = "북로그";
+        String writer = "member1";
+        List<SearchBooklogDto> find1 = booklogRepository.findSearchBooklog(pageable, keyword, writer);
+        assertThat(find1).isEmpty();
+
+        Booklog savedBooklog1ByMember1 = booklogRepository.save(Booklog.builder()
+                .title("ㅇㅇㅇ북로그 제목1")
+                .content(null)
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(true) // 공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        Thread.sleep(1000);
+
+        Booklog savedBooklog2ByMember1 = booklogRepository.save(Booklog.builder()
+                .title("제목2")
+                .content("본문에 ㅁㅁㅁ")
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(true) // 공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        Thread.sleep(1000);
+
+        Booklog savedBooklog3ByMember1 = booklogRepository.save(Booklog.builder()
+                .title("북로그 제목3")
+                .content("본문에 북로그 ㅋㅋㅋ")
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(false) // 비공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        Thread.sleep(1000);
+
+        Booklog savedBooklog4ByMember2 = booklogRepository.save(Booklog.builder()
+                .title("북로그 제목4")
+                .content("본문에 북로그 ㅋㅋㅋ")
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(true) // 공개
+                .views(0)
+                .member(member2)
+                .bookInfo(bookInfo1)
+                .build());
+        Thread.sleep(1000);
+        em.flush();
+        em.clear();
+
+        // keyword = "북로그" and writer = null
+        List<SearchBooklogDto> find2 = booklogRepository.findSearchBooklog(pageable, keyword, null);
+        assertThat(find2.size()).isEqualTo(2);
+        assertThat(find2.get(0).getBooklogSeq()).isEqualTo(savedBooklog4ByMember2.getSeq());
+        assertThat(find2.get(1).getBooklogSeq()).isEqualTo(savedBooklog1ByMember1.getSeq());
+
+        // keyword = "북로그" and writer = "member1"
+        List<SearchBooklogDto> find3 = booklogRepository.findSearchBooklog(pageable, keyword, writer);
+        assertThat(find3.size()).isEqualTo(1);
+        assertThat(find3.get(0).getBooklogSeq()).isEqualTo(savedBooklog1ByMember1.getSeq());
+
+        // keyword = null and writer = "member1"
+        List<SearchBooklogDto> find4 = booklogRepository.findSearchBooklog(pageable, null, writer);
+        assertThat(find4.size()).isEqualTo(2);
+        assertThat(find4.get(0).getBooklogSeq()).isEqualTo(savedBooklog2ByMember1.getSeq());
+        assertThat(find4.get(1).getBooklogSeq()).isEqualTo(savedBooklog1ByMember1.getSeq());
     }
 
 }
