@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function UserBooklogPresenter() {
   const { path } = useParams();
@@ -8,8 +8,17 @@ function UserBooklogPresenter() {
     <div>
       <div className="title">
         <h2>나의 북로그</h2>
-        <h3>북로그 제목</h3>
       </div>
+      <div>
+        <Link to="/detail" state={{ logSeq: 1,
+        infoSeq:1 }}>
+          <div>북로그1</div>
+        </Link>
+        <Link to="/booklogregister">
+          <button style={{ position: "absolute", right: 0, marginRight: "50px" }}>작성</button>
+        </Link>
+      </div>
+      <div>{/* <BoardList /> */}</div>
     </div>
   );
 }
