@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import heart from "../../../res/img/heart_black.png";
 
 const Card = styled.div`
-  width: 20rem;
-  height: 12rem;
+  width: 30rem;
+  height: 18rem;
   // border: 1px solid black;
   // float: left;
   margin: 0.5rem;
@@ -12,6 +12,7 @@ const Card = styled.div`
   border-radius: 5%;
   box-shadow: 4px 5px 7px 2px lightgrey;
   display: inline-block;
+  font-size: 1.2rem;
 `;
 
 const InnerGrid = styled.div`
@@ -37,11 +38,13 @@ const Img = styled.img`
 const ContentLink = styled(Link)`
   text-decoration: none;
   color: black;
-  font-size: 0.9rem;
 `;
 
-const Date = styled.span`
+const Date = styled.div`
+  width: 100%;
   font-size: 0.8rem;
+  text-align: left;
+  border-top: solid 1px;
 `;
 
 const Like = styled.span`
@@ -50,7 +53,7 @@ const Like = styled.span`
 `;
 
 const Heart = styled.img`
-  width: 0.7rem;
+  width: 1rem;
   text-align: left;
 `;
 
@@ -65,13 +68,15 @@ const Wrapper = styled.div`
   margin-top: 0.5rem;
 `;
 
-const Title = styled.h4`
+const Title = styled.h6`
   margin: 0.2rem;
   margin-top: 0.6rem;
 `;
 
 const Content = styled.div`
-  height: 40%;
+  height: 48%;
+  text-align: left;
+  font-size: 1.3rem;
 `;
 
 function BooklogCard({ booklog }) {
@@ -87,20 +92,16 @@ function BooklogCard({ booklog }) {
         <Img src={booklog.imgUrl} alt="book img"></Img>
       </ImgGrid>
       <InnerGrid>
-        <Title>{booklog.title}</Title>
-        <Content>
-          <ContentLink to="/">{content}...</ContentLink>
-        </Content>
-
-        <hr />
-
-        <Date>{booklog.createDate}</Date>
+        <ContentLink to="/">
+          <Title>{booklog.title}</Title>
+          <Content>{content}...</Content>
+        </ContentLink>
+        <Date>{booklog.createdDate}</Date>
         <Wrapper>
           <Like>
-            <Heart src={heart} />
-            {booklog.like}
+            <Heart src={heart} /> {booklog.likes}
           </Like>
-          <Author>{booklog.author}</Author>
+          <Author>{booklog.nickname}</Author>
         </Wrapper>
       </InnerGrid>
     </Card>

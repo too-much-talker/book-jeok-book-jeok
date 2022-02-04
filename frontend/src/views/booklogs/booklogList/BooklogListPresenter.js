@@ -19,7 +19,7 @@ function BooklogListPresenter({ data, isPopular }) {
   return (
     <div>
       <div>
-        <h2>BbooklogList</h2>
+        <h2>BooklogList</h2>
         <BooklogNavi isPopular={isPopular} />
         <div>
           {data.map((data, index) => (
