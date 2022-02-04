@@ -4,6 +4,8 @@ import styled from "styled-components";
 const TabWrapper = styled.div`
   margin: 1rem;
   margin-top: 2rem;
+  text-align: left;
+  margin-left: 8rem;
 `;
 
 const Tab = styled.span`
@@ -14,19 +16,19 @@ const Tab = styled.span`
   &:hover {
     cursor: pointer;
   }
-  background: ${(props) => (props.active ? "darkgrey" : "white")};
+  background: ${(props) => (props.active ? "white" : "black")};
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: ${(props) => (props.active ? "white" : "black")};
+  color: ${(props) => (props.active ? "black" : "white")};
 `;
 
 function BooklogNavi({ isPopular }) {
   return (
     <TabWrapper>
       <Tab active={isPopular}>
-        <StyledLink to="/booklogs/list/popular" active={isPopular}>
+        <StyledLink to="/booklogs/list/like" active={isPopular}>
           #인기순
         </StyledLink>
       </Tab>

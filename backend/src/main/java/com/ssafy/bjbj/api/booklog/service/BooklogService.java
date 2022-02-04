@@ -4,6 +4,7 @@ import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResMyBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResSearchBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import org.springframework.data.domain.Pageable;
 
@@ -24,5 +25,7 @@ public interface BooklogService {
     ResOpenBooklogPageDto getResOpenBooklogListDto(Pageable pageable);
 
     ResMyBooklogPageDto getResMyBooklogPageDto(boolean isAll, Pageable pageable, Long memberSeq);
+
+    ResSearchBooklogPageDto getResSearchBooklogPageDto(Pageable pageable, String keyword, String writer);
 
 }
