@@ -65,7 +65,7 @@ render(
               <Route path="/signup" element={<Signup />} />
 
               <Route path="/searchMain" element={<SearchMainContainer />} />
-              <Route path="/search" element={<SearchMainContainer />} />
+              <Route path="/search/" element={<SearchMainContainer />} />
               <Route path="/search/:category/:keyword" element={<SearchResultContainer/>} />
               <Route path="/detail/:seq" element={<BookDetailContainer/>} />
 
