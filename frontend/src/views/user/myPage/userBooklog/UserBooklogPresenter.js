@@ -15,7 +15,7 @@ function UserBooklogPresenter() {
           <div>북로그1</div>
         </Link>
         <Link to="/booklogregister">
-          <button style={{ position: "absolute", right: 0, marginRight: "50px" }}>작성</button>
+          <button style={{ position: "absolute", right: 0, marginRight: "150px" }}>작성</button>
         </Link>
       </div>
       <div>{/* <BoardList /> */}</div>

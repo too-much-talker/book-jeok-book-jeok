@@ -51,7 +51,7 @@ function BooklogRegisterContainer() {
         TitleValue === "" ||
         ContentValue === "" 
       ) {
-        alert("입력하지 않은 정보가 있습니다. 확인해주세요.");
+        alert("제목과 내용을 입력해주세요.");
       } else {axios
         .post(url + `/api/v1/booklogs`, {
           memberSeq: 1,
