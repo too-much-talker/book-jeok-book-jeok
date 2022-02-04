@@ -45,7 +45,7 @@ function BooklogListContainer() {
 
   return (
     <>
-      <BooklogListPresenter data={data} isPopular={order === "popular"} />
+      <BooklogListPresenter data={data} isPopular={order === "like"} />
       <Pagination
         activePage={page}
         itemsCountPerPage={size}

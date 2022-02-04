@@ -5,14 +5,13 @@ import heart from "../../../res/img/heart_black.png";
 const Card = styled.div`
   width: 30rem;
   height: 18rem;
-  // border: 1px solid black;
-  // float: left;
+  float: left;
   margin: 0.5rem;
   padding: 0.7rem;
   border-radius: 5%;
   box-shadow: 4px 5px 7px 2px lightgrey;
-  display: inline-block;
   font-size: 1.2rem;
+  // display: inline-block;
 `;
 
 const InnerGrid = styled.div`
@@ -82,7 +81,7 @@ const Content = styled.div`
 function BooklogCard({ booklog }) {
   let content = booklog.content;
 
-  if (content.length > 40) {
+  if (content !== null && content.length > 40) {
     content = content.substr(0, 39);
   }
 
@@ -94,7 +93,7 @@ function BooklogCard({ booklog }) {
       <InnerGrid>
         <ContentLink to="/">
           <Title>{booklog.title}</Title>
-          <Content>{content}...</Content>
+          <Content>{booklog.content}...</Content>
         </ContentLink>
         <Date>{booklog.createdDate}</Date>
         <Wrapper>
