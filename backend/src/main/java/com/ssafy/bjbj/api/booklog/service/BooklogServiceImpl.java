@@ -3,9 +3,7 @@ package com.ssafy.bjbj.api.booklog.service;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
+import com.ssafy.bjbj.api.booklog.dto.response.*;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
@@ -153,6 +151,20 @@ public class BooklogServiceImpl implements BooklogService {
                 .currentPage(pageable.getPageNumber())
                 .totalPage(totalPage)
                 .openBooklogDtos(openBooklogDtos)
+                .build();
+    }
+
+    @Override
+    public ResMyBooklogPageDto getResMyBooklogPageDto(boolean isAll, Pageable pageable, Long memberSeq) {
+        Integer totalCnt = booklogRepository.countMyBooklogByMemberSeq(isAll, memberSeq);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<MyBooklogDto> myBooklogDtos = booklogRepository.findMyBooklogDtos(isAll, pageable, memberSeq);
+
+        return ResMyBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .myBooklogDtos(myBooklogDtos)
                 .build();
     }
 

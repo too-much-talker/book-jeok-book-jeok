@@ -47,26 +47,33 @@ function BooklogRegisterContainer() {
       private: !toggle,
       date: new Date(),
     };
-    axios
-      .post(url + `/api/v1/booklogs`, {
-        memberSeq: 1,
-        bookInfoSeq: selectedBook.seq,
-        title: TitleValue,
-        isOpen: !toggle,
-        content: ContentValue,
-        summary: oneSentence,
-        starRating: rating,
-        readDate: new Date(),
-      })
-      .then(function (response) {
-          console.log(response.status);
-        if (response.status === 201) {
-          alert(response.data.data.msg);
-          document.location.href = "/mypage/mybooklog";
-        } else {
-          alert(response.data.data.msg);
-        }
-      });
+    if (
+        TitleValue === "" ||
+        ContentValue === "" 
+      ) {
+        alert("입력하지 않은 정보가 있습니다. 확인해주세요.");
+      } else {axios
+        .post(url + `/api/v1/booklogs`, {
+          memberSeq: 1,
+          bookInfoSeq: selectedBook.seq,
+          title: TitleValue,
+          isOpen: !toggle,
+          content: ContentValue,
+          summary: oneSentence,
+          starRating: rating,
+          readDate: new Date(),
+        })
+        .then(function (response) {
+            console.log(response.status);
+          if (response.status === 201) {
+            alert(response.data.data.msg);
+            document.location.href = "/mypage/mybooklog";
+          } else {
+            alert(response.data.data.msg);
+          }
+        });
+    }
+    
   };
 
   const onSubmitChangeBook = (event) => {
