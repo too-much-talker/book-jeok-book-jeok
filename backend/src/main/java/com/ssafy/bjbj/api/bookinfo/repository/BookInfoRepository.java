@@ -9,4 +9,13 @@ public interface BookInfoRepository extends JpaRepository<BookInfo, Long>, BookI
 
     @Query("SELECT b FROM BookInfo b WHERE b.seq = :seq")
     BookInfo findBySeq(@Param("seq") Long seq);
+
+    Integer countByTitleLike(String title);
+
+    Integer countByAuthorLike(String author);
+
+    Integer countByPublisherLike(String publisher);
+
+    Integer countByTitleLikeOrAuthorLikeOrPublisherLike(String title, String author, String publisher);
+
 }

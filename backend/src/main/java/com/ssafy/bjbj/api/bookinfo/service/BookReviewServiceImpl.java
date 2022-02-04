@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
 import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
@@ -11,9 +12,12 @@ import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -88,6 +92,33 @@ public class BookReviewServiceImpl implements BookReviewService {
                     .summary(savedBookReview.getSummary())
                     .createdDate(savedBookReview.getCreatedDate())
                     .build();
+    }
+
+    @Transactional
+    @Override
+    public ResModifiedBookReviewDto updateBookReview(RequestBookReviewDto requestBookReviewDto) {
+
+        Long bookInfoSeq = requestBookReviewDto.getBookInfoSeq();
+        Long memberSeq = requestBookReviewDto.getMemberSeq();
+
+        BookReview bookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookInfoSeq, memberSeq);
+
+        if (bookReview == null) {
+            return null;
+        }
+
+        bookReview.changeBookReview(requestBookReviewDto.getStarRating(), requestBookReviewDto.getSummary());
+
+        return ResModifiedBookReviewDto.builder()
+                .bookReviewSeq(bookReview.getSeq())
+                .bookInfoSeq(bookReview.getBookInfo().getSeq())
+                .memberSeq(bookReview.getMember().getSeq())
+                .memberNickname(bookReview.getMember().getNickname())
+                .starRating(bookReview.getStarRating())
+                .summary(bookReview.getSummary())
+                .createdDate(bookReview.getCreatedDate())
+                .modifiedDate(LocalDateTime.now())
+                .build();
     }
 }
 

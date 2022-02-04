@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.booklog.service;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
@@ -12,9 +13,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,21 +33,35 @@ class BooklogServiceTest {
     @Autowired
     private BooklogRepository booklogRepository;
 
+    @Autowired
+    private LikeService likeService;
+
     private Member member1;
+    private Member member2;
 
     private Booklog booklog1;
 
     @BeforeEach
     public void setUp() {
-        String email = "setupEmail@bjbj.com";
+        String email1 = "member1@bjbj.com";
         memberService.saveMember(RequestMemberDto.builder()
-                .email(email)
+                .email(email1)
                 .password("password")
                 .name("name")
-                .nickname("setupNickanme")
-                .phoneNumber("010-1111-2222")
+                .nickname("member1")
+                .phoneNumber("010-9999-1111")
                 .build());
-        member1 = memberService.findMemberByEmail(email);
+        member1 = memberService.findMemberByEmail(email1);
+
+        String email2 = "member2@bjbj.com";
+        memberService.saveMember(RequestMemberDto.builder()
+                .email(email2)
+                .password("password")
+                .name("name")
+                .nickname("member2")
+                .phoneNumber("010-9999-2222")
+                .build());
+        member2 = memberService.findMemberByEmail(email2);
 
         Long booklogSeq = booklogService.register(RequestBooklogDto.builder()
                 .memberSeq(member1.getSeq())
@@ -251,6 +267,86 @@ class BooklogServiceTest {
             ResBooklogDto resBooklogDto2 = booklogService.getResBooklogDtoBooklog(booklog1.getSeq(), member1.getSeq() + 1);
             assertThat(resBooklogDto2.getViews()).isEqualTo(i);
         }
+    }
+
+    @DisplayName("최근 일주일 공개 북로그 페이지 조회 테스트")
+    @Test
+    public void recentOpenBooklogPageTest() throws InterruptedException {
+        booklogRepository.deleteAll();
+
+        Pageable pageableRecent = PageRequest.of(1, 2, Sort.Direction.ASC, "recent");
+        Pageable pageableLike = PageRequest.of(1, 2, Sort.Direction.ASC, "like");
+        ResOpenBooklogPageDto find1 = booklogService.getResOpenBooklogListDto(pageableRecent);
+        assertThat(find1.getTotalCnt()).isEqualTo(0);
+        assertThat(find1.getTotalPage()).isEqualTo(0);
+        assertThat(find1.getOpenBooklogDtos()).isEmpty();
+
+        Long savedBooklogSeq1 = booklogService.register(RequestBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(booklog1.getSeq())
+                .title("북로그 제목1")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true)
+                .build());
+        Booklog savedBooklog1 = booklogService.findBySeq(savedBooklogSeq1);
+        Thread.sleep(1000);
+
+        Long savedBooklogSeq2 = booklogService.register(RequestBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(booklog1.getSeq())
+                .title("북로그 제목2")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true)
+                .build());
+        Booklog savedBooklog2 = booklogService.findBySeq(savedBooklogSeq2);
+        Thread.sleep(1000);
+
+        Long savedBooklogSeq3 = booklogService.register(RequestBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(booklog1.getSeq())
+                .title("북로그 제목3")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true)
+                .build());
+        Booklog savedBooklog3 = booklogService.findBySeq(savedBooklogSeq3);
+        Thread.sleep(1000);
+
+        // booklog1 좋아요 2개
+        likeService.like(savedBooklogSeq1, member1.getSeq());
+        likeService.like(savedBooklogSeq1, member2.getSeq());
+
+        // booklog2 좋아요 1개
+        likeService.like(savedBooklogSeq2, member1.getSeq());
+
+
+        /**
+         * 총 3개의 데이터를 등록하고 2개씩 가져온다.
+         */
+
+        // 최신순 : 3 -> 2 -> 1
+        ResOpenBooklogPageDto find2 = booklogService.getResOpenBooklogListDto(pageableRecent);
+        assertThat(find2.getTotalPage()).isEqualTo(2);
+        assertThat(find2.getTotalCnt()).isEqualTo(3);
+        assertThat(find2.getOpenBooklogDtos().size()).isEqualTo(2);
+        assertThat(find2.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq3);
+        assertThat(find2.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+
+        // 좋아요순 : 1 -> 2 -> 3
+        ResOpenBooklogPageDto find3 = booklogService.getResOpenBooklogListDto(pageableLike);
+        assertThat(find3.getTotalPage()).isEqualTo(2);
+        assertThat(find3.getTotalCnt()).isEqualTo(3);
+        assertThat(find3.getOpenBooklogDtos().size()).isEqualTo(2);
+        assertThat(find3.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq1);
+        assertThat(find3.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
     }
 
 }
