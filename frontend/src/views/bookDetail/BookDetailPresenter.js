@@ -1,6 +1,10 @@
-import styled from "styled-components";
 
+import styled from "styled-components";
+import ReviewItem from "./ReviewItem";
+import Pagination from "react-js-pagination";
+import '../bookInfo/bookSearch/Paging.css';
 const Block= styled.div`
+position:absolute;
 display:flex;
 `;
 const BookInfoBlock= styled.div`
@@ -9,7 +13,6 @@ width:50%;
 height:100vh;
 margin:20px;
 `;
-
 const ReviewBookLog= styled.div`
 width:50%;
 height:100vh;
@@ -27,19 +30,27 @@ margin-left:13%;
 width:600px;
 `;
 const BookInfoDetail= styled.div`
-
 `;
+
+
 const BookReview= styled.div`
 height:50%;
 background:red;
 `;
+
+
+const ReviewHeader = styled.div``;//책리뷰
+const ReviewContents= styled.div``;
+
 const BookLog= styled.div`
 background:blue;
 height:50%;
 
 `;
 
-function BookDetailPresenter({reviews,image,title, author,publisher, publicationDate, starRating}){
+function BookDetailPresenter({
+    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
+    image,title, author,publisher, publicationDate}){
     return(
         <Block>
         <BookInfoBlock> 
@@ -51,12 +62,33 @@ function BookDetailPresenter({reviews,image,title, author,publisher, publication
                 <BookInfoDetail>작가:{author} </BookInfoDetail>
                 <BookInfoDetail>출판사:{publisher} </BookInfoDetail>
                 <BookInfoDetail>출판일:{publicationDate}</BookInfoDetail>
-                <BookInfoDetail>평점:{starRating}</BookInfoDetail>
             </BookInfo>
         </BookInfoBlock>
         <ReviewBookLog>
-            <BookReview>리뷰</BookReview>
-            <BookLog>북로그</BookLog> 
+            <BookReview>
+                <ReviewHeader>책리뷰</ReviewHeader>
+                <ReviewContents>
+                    {/* {reviews.map(review=>(
+                        <ReviewItem
+                            summary={review.summary}
+                            reviewStarRating={review.starRating}
+                            reviewDate={review.createdDate}
+                        >
+                        </ReviewItem>
+                    ))} */}
+                </ReviewContents>
+                <Pagination activePage={reviewPage} 
+                    itemsCountPerPage={5} 
+                    totalItemsCount={reviewTotalCnt} 
+                    pageRangeDisplayed={5} 
+                    prevPageText={"‹"} 
+                    nextPageText={"›"} 
+                    onChange={reviewPageHandler} />
+            </BookReview>
+
+            <BookLog>
+                
+            </BookLog> 
         </ReviewBookLog>
         </Block>
     );

@@ -10,13 +10,14 @@ function BookDetailContainer(bookInfoSeq){
         const [image, setImage]= useState();
         const [publisher, setPublisher]= useState();
         const [publicationDate, setPublicationDate]= useState();
-        const [starRating, setStarRating]= useState();
         const [reviews, setReviews]= useState();
 
         const [reviewPage, setReviewPage]= useState(1);
-        const [reviewOrder, setReviewOrder]= useState("recent");
+        const [reviewTotalCnt, setReviewTotalCnt]= useState();
+
         const [booklogPage, setBooklogPage]= useState(1);
         const [booklogOrder, setBooklogOrder]= useState("recent");
+        const [booklogTotalCnt, setBooklogTotalCnt]= useState();
         /////로그인한 사용자 정보 땡겨오는거부터 하자!!!!!!!
 
         
@@ -40,7 +41,6 @@ function BookDetailContainer(bookInfoSeq){
                 setAuthor(response.data.data.bookInfo.author);
                 setPublisher(response.data.data.bookInfo.publisher);
                 setPublicationDate(response.data.data.bookInfo.publicationDate);
-                setStarRating(response.data.data.bookInfo.starRating);
             })
             .catch(function (error) {
                 console.log(error);
@@ -50,10 +50,12 @@ function BookDetailContainer(bookInfoSeq){
         
         function getBookReview(){
             //책 리뷰 가져오기
-            axios.get(url+`/api/v1/bookreviews/bookInfos/${useParam.seq}`)
+            axios.get(url+`/api/v1/bookreviews/bookinfos/${useParam.seq}`)
             .then(function (response){
-                console.log(response.data.data.myBookReviews);
+                console.log(response.data.data);
+                console.log(response.data.data.msg);
                 setReviews(response.data.data.myBookReviews);
+                setReviewTotalCnt(response.data.data.myBookReviews)
             })
             .catch(function (error) {
                 console.log(error);
@@ -97,9 +99,6 @@ function BookDetailContainer(bookInfoSeq){
             setBooklogPage(event);
         }
         
-        function reviewOrderHandler(event){
-            setReviewOrder(event);
-        }
         
         function booklogOrderHandler(event){
             setBooklogOrder(event);
@@ -108,9 +107,9 @@ function BookDetailContainer(bookInfoSeq){
         function getBookLog(){
             //북로그 가져오기
             axios.get(url+`/api/v1/booklogs`,{
-                page:reviewPage,
+                page:booklogPage,
                 size:5,
-                sort:reviewOrder,
+                sort:booklogOrder,
             })
             .then(function (response){
                 console.log(response);
@@ -122,7 +121,8 @@ function BookDetailContainer(bookInfoSeq){
         }
 
     return(
-        <BookDetailPresenter booklogOrderHandler={booklogOrderHandler} reviewOrderHandler={reviewOrderHandler} reviewPageHandler={reviewPageHandler} booklogPageHandler={booklogPageHandler} reviews={reviews}image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate} starRating={starRating}></BookDetailPresenter>
+        <BookDetailPresenter 
+        reviewPage={reviewPage}reviews={reviews} reviewPageHandler={reviewPageHandler} booklogPageHandler={booklogPageHandler} reviews={reviews}image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}></BookDetailPresenter>
     );
 }
 export default BookDetailContainer;
