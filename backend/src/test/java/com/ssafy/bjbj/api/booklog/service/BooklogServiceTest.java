@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.booklog.service;
 
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResMyBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
@@ -347,6 +348,73 @@ class BooklogServiceTest {
         assertThat(find3.getOpenBooklogDtos().size()).isEqualTo(2);
         assertThat(find3.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq1);
         assertThat(find3.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+    }
+
+    @DisplayName("나의 북로그 페이지 조회 테스트")
+    @Test
+    public void myBooklogPageTest() throws InterruptedException {
+        booklogRepository.deleteAll();
+
+        Pageable pageable = PageRequest.of(1, 2);
+        ResMyBooklogPageDto find1 = booklogService.getResMyBooklogPageDto(true, pageable, member1.getSeq());
+        assertThat(find1.getTotalCnt()).isEqualTo(0);
+        assertThat(find1.getTotalPage()).isEqualTo(0);
+        assertThat(find1.getMyBooklogDtos()).isEmpty();
+
+        Long savedBooklogSeq1 = booklogService.register(RequestBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(booklog1.getSeq())
+                .title("북로그 제목1")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true)
+                .build());
+        Booklog savedBooklog1 = booklogService.findBySeq(savedBooklogSeq1);
+        Thread.sleep(1000);
+
+        Long savedBooklogSeq2 = booklogService.register(RequestBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(booklog1.getSeq())
+                .title("북로그 제목2")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true)
+                .build());
+        Booklog savedBooklog2 = booklogService.findBySeq(savedBooklogSeq2);
+        Thread.sleep(1000);
+
+        Long savedBooklogSeq3 = booklogService.register(RequestBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(booklog1.getSeq())
+                .title("북로그 제목3")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(false)
+                .build());
+        Booklog savedBooklog3 = booklogService.findBySeq(savedBooklogSeq3);
+        Thread.sleep(1000);
+        
+        // 모든 북로그 조회 -> 총 3개
+        ResMyBooklogPageDto find2 = booklogService.getResMyBooklogPageDto(true, pageable, member1.getSeq());
+        assertThat(find2.getTotalPage()).isEqualTo(2);
+        assertThat(find2.getTotalCnt()).isEqualTo(3);
+        assertThat(find2.getMyBooklogDtos().size()).isEqualTo(2);
+        assertThat(find2.getMyBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq3);
+        assertThat(find2.getMyBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+
+        // 공개 북로그 조회 -> 총 2개
+        ResMyBooklogPageDto find3 = booklogService.getResMyBooklogPageDto(false, pageable, member1.getSeq());
+        assertThat(find3.getTotalPage()).isEqualTo(1);
+        assertThat(find3.getTotalCnt()).isEqualTo(2);
+        assertThat(find3.getMyBooklogDtos().size()).isEqualTo(2);
+        assertThat(find3.getMyBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+        assertThat(find3.getMyBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq1);
     }
 
 }
