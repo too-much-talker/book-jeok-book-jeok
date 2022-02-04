@@ -5,7 +5,9 @@
   }
   
   .wrapper2 {
-    padding-left: 400px;
+    position: absolute;
+    text-align: left;
+    left: 200px;
   }
   
   .modal{

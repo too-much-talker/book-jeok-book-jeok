@@ -22,12 +22,14 @@ function DetailForm({
 })
 {
     const Desc = styled.div`
-    padding-left: 50px;
+    position: absolute;
+    top: 145px;
+    left: 400px;
     `;
     const IsOpenCircle = styled.div`
     position: absolute;
-    top: 30px;
-    left: 100px;
+    top: 150px;
+    left: 360px;
     width: 22px;
     height: 22px;
     border-radius: 50%;
@@ -54,7 +56,7 @@ function DetailForm({
                   style={{
                     position: "absolute",
                     right: 0,
-                    marginRight: "150px",
+                    marginRight: "240px",
                   }}
                 >
                   저장
@@ -67,7 +69,7 @@ function DetailForm({
                   style={{
                     position: "absolute",
                     right: 0,
-                    marginRight: "150px",
+                    marginRight: "240px",
                   }}
                 >
                   수정
@@ -78,7 +80,7 @@ function DetailForm({
                   style={{
                     position: "absolute",
                     right: 0,
-                    marginRight: "50px",
+                    marginRight: "140px",
                   }}
                 >
                   삭제
@@ -135,7 +137,7 @@ function DetailForm({
               <div>
                 {isEditing ? (
                   <input
-                    size="112"
+                    size="107"
                     onChange={titleHandler}
                     value={enteredTitle}
                     type="text"
