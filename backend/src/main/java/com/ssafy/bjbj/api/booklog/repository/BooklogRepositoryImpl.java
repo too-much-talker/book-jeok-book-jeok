@@ -2,7 +2,9 @@ package com.ssafy.bjbj.api.booklog.repository;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bjbj.api.booklog.dto.response.MyBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.QMyBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.QOpenBooklogDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -68,6 +70,46 @@ public class BooklogRepositoryImpl implements BooklogRepositoryCustom {
 
         List<OpenBooklogDto> openBooklogDtos = query.fetch();
         return openBooklogDtos;
+    }
+
+    @Override
+    public Integer countMyBooklogByMemberSeq(boolean isAll, Long memberSeq) {
+        JPAQuery<Integer> query = queryFactory
+                .select(booklog.count().intValue())
+                .from(booklog)
+                .where(booklog.member.seq.eq(memberSeq)
+                        .and(booklog.isDeleted.isFalse()));
+
+        if (!isAll) {
+            query.where(booklog.isOpen.isTrue());
+        }
+
+        return query.fetchOne();
+    }
+
+    @Override
+    public List<MyBooklogDto> findMyBooklogDtos(boolean isAll, Pageable pageable, Long memberSeq) {
+        JPAQuery<MyBooklogDto> query = queryFactory
+                .select(new QMyBooklogDto(
+                        booklog.seq,
+                        booklog.title,
+                        booklog.createdDate,
+                        booklog.isOpen,
+                        bookInfo.largeImgUrl.as("imgUrl")))
+                .from(booklog)
+                .join(booklog.bookInfo, bookInfo)
+                .where(booklog.member.seq.eq(memberSeq)
+                        .and(booklog.isDeleted.isFalse()))
+                .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .orderBy(booklog.createdDate.desc());
+
+        if (!isAll) {
+            query.where(booklog.isOpen.isTrue());
+        }
+
+        List<MyBooklogDto> myBooklogDtos = query.fetch();
+        return myBooklogDtos;
     }
 
 }

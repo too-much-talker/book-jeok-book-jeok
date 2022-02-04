@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.booklog.controller;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResMyBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
 import com.ssafy.bjbj.api.booklog.exception.DuplicateLikeException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
@@ -330,6 +331,38 @@ public class BooklogController {
             responseData.put("currentPage", resOpenBooklogListDto.getCurrentPage());
             responseData.put("totalPage", resOpenBooklogListDto.getTotalPage());
             responseData.put("booklogs", resOpenBooklogListDto.getOpenBooklogDtos());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/me")
+    public BaseResponseDto myBooklogList(@RequestBody boolean isAll, Pageable pageable, Authentication authentication) {
+        log.debug("BooklogController.myBooklogList() 나의 북로그 목록 조회 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            ResMyBooklogPageDto resMyBooklogPageDto = booklogService.getResMyBooklogPageDto(isAll, pageable, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "나의 북로그 조회 성공");
+            responseData.put("totalCnt", resMyBooklogPageDto.getTotalCnt());
+            responseData.put("currentPage", resMyBooklogPageDto.getCurrentPage());
+            responseData.put("totalPage", resMyBooklogPageDto.getTotalPage());
+            responseData.put("booklogs", resMyBooklogPageDto.getMyBooklogDtos());
         } catch (Exception e) {
             // Server error : Database Connection Fail, etc..
             log.debug("[Error] Exception error");
