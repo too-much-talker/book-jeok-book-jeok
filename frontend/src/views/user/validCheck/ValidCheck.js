@@ -4,7 +4,6 @@ function checkId(email, url) {
   axios
     .get(url + `/api/v1/members/email/${email}/exist`)
     .then(function (response) {
-      console.log(response);
       if (response.data.status === 204) {
         alert("사용 가능한 이메일입니다.");
         return true;
@@ -53,6 +52,7 @@ function checkNickname(nickname, url) {
     axios
       .get(url + `/api/v1/members/nickname/${nickname}/exist`)
       .then(function (response) {
+        console.log(response);
         if (response.data.status === 200) {
           alert("이미 존재하는 닉네임입니다.");
           return false;
@@ -70,6 +70,7 @@ function checkNickname(nickname, url) {
 
 function checkPassword(password, passwordConfirm, email, nickname, name) {
   const id = email.split("@")[0];
+  console.log("id:",id);
   if (password !== passwordConfirm) {
     //비밀번호 비밀번호 확인
     alert("비번다름");
@@ -141,7 +142,25 @@ function checkPhoneNumber(phoneNumber) {
     alert("휴대폰 번호를 다시 확인해주세요");
     return false;
   }
+
   return true;
+}
+
+function checkPhoneDuplicate(phoneNumber,url){
+  axios
+  .get()
+  .then(function (response) {
+    if (response.data.status === 204) {
+      alert("사용 가능한 휴대폰 번호입니다.");
+      return true;
+    } else if (response.data.status === 200) {
+      alert("이미 존재하는 휴대폰 번호입니다.");
+      return false;
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 export {
@@ -151,4 +170,5 @@ export {
   checkPassword,
   checkNameLength,
   checkPhoneNumber,
+  checkPhoneDuplicate
 };

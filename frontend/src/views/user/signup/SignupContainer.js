@@ -8,6 +8,7 @@ import {
   checkPassword,
   checkNameLength,
   checkPhoneNumber,
+  checkPhoneDuplicate
 } from "../validCheck/ValidCheck";
 
 function SignupContainer() {
@@ -17,7 +18,7 @@ function SignupContainer() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const url = "https://afe77119-17c2-43a1-baa3-fe7e904eaec2.mock.pstmn.io";
+  const url = "http://i6a305.p.ssafy.io:8080";
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -60,6 +61,10 @@ function SignupContainer() {
     checkPhoneNumber(phoneNumber);
   }
 
+  function CheckPhoneDuplicate(){
+    checkPhoneDuplicate(phoneNumber,url);
+  }
+  
   const onCreate = () => {
     if (
       email === "" ||
@@ -74,16 +79,19 @@ function SignupContainer() {
       if (
         checkPassword(password, passwordConfirm, email, nickname, name) === true
       ) {
+        console.log(email, password, name, nickname, phoneNumber);
         axios
-          .post(url + `/api/v1/members`, {
+          .post(url + `/api/v1/members`, 
+          {
             email: email,
             password: password,
             name: name,
             nickname: nickname,
-            phoneNumber: phoneNumber,
+            phoneNumber: phoneNumber
           })
           .then(function (response) {
-            if (response.status === 201) {
+            console.log(response);
+            if (response.data.status === 201) {
               alert(response.data.data.msg);
               setEmail("");
               setPassword("");
@@ -103,7 +111,7 @@ function SignupContainer() {
     }
   };
 
-  return (
+  return ( 
     <>
       <Signup
         onEmailHandler={onEmailHandler}
@@ -119,6 +127,7 @@ function SignupContainer() {
         checkPassword={CheckPassword}
         checkEmail={CheckEmail}
         checkPhoneNumber={CheckPhoneNumber}
+        checkPhoneDuplicate={CheckPhoneDuplicate}
         onCreate={onCreate}
       ></Signup>
     </>
