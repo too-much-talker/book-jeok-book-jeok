@@ -3,7 +3,6 @@ import SearchNavContainer from "./SearchNavContainer";
 import BookItem from "./BookItem";
 import Pagination from "react-js-pagination";
 import './Paging.css';
-import {useEffect, useState } from "react";
 const ResultBlock = styled.div`
 position:absolute;
 display:flex;
@@ -51,12 +50,12 @@ margin-top:150px;
 width:1200px;
 `;
 
+const Book = styled.div`
+width:280px;
+margin:10px;
+`;
 
-//onSearchHandler,onSearch,onSearchCategoryHandler,books,booksPerPage, totalBooks, paginat
-
-
-
-function SearchResultPresenter ({page, handlePageChange,url,totalCnt,orderHandler,useParam,books }){
+function SearchResultPresenter ({goDetail,page, handlePageChange,url,totalCnt,orderHandler,useParam,books }){
 
   return(
       <>
@@ -76,11 +75,8 @@ function SearchResultPresenter ({page, handlePageChange,url,totalCnt,orderHandle
       </ResultBlock>
       <BookListBlock> 
           
-        {/* resultcontainer가 레더링 되자마자 얘도 실행이 되는데 그 때 얘는 빈 공간이어서 error가 뜨는데 
-        books 데이터가 들어오기 전에 이걸 어떻게 처리해야할까요 ㅜㅜ */}
-        {/* 질문!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
           {books&&books.map(book=>(
-            <div>
+            <Book onClick={()=>goDetail(book.seq)} >
               <BookItem 
                 url={url}
                 key={book.seq}
@@ -92,7 +88,7 @@ function SearchResultPresenter ({page, handlePageChange,url,totalCnt,orderHandle
                 publicationDate= {book.publicationDate}
                 starRating={book.starRating}
               ></BookItem>
-            </div>
+            </Book>
           ))
           }
       </BookListBlock>

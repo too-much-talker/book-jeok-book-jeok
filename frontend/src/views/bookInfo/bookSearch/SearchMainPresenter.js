@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import icon from  "../../../res/img/search.png";
-// import Pagination from "react-js-pagination";
 import { Link } from "react-router-dom";
 import BookItem from "./BookItem";
 import SearchNavContainer from "./SearchNavContainer";
@@ -40,7 +39,12 @@ width:1200px;
 margin:auto;
 margin-top:150px;
 `;
-function SearchMainPresenter ({goDetail, bestSellers}){
+
+const Book = styled.div`
+width:280px;
+margin:10px;
+`;
+function SearchMainPresenter ({goDetail,bestSellers}){
         return( 
         <>
         <SearchNavContainer keyword={""}></SearchNavContainer>
@@ -48,13 +52,12 @@ function SearchMainPresenter ({goDetail, bestSellers}){
             <ResultText>현재 베스트셀러는?</ResultText>
         </ResultBlock>
         <BestSellerBlock>
-            {/* 나중에 tempBestSeller를 BestSeller로 바꿔야함 */}
             {bestSellers.map(bestSeller=>(
                 // <div onClick={goDetail(bestSeller.seq)}>
-                <div>
+                <Book onClick={()=>goDetail(bestSeller.seq)} >
                 <BookItem 
-                key={bestSeller.seq}
-                //key 수정해야함 
+                bookInfoSeq={bestSeller.seq}
+                key={bestSeller.seq} 
                 title={bestSeller.title} 
                 author={bestSeller.author}
                 largeImgUrl={bestSeller.largeImgUrl}
@@ -62,7 +65,7 @@ function SearchMainPresenter ({goDetail, bestSellers}){
                 publicationDate= {bestSeller.publicationDate}
                 starRating={bestSeller.starRating}
                 ></BookItem>
-                </div>
+                </Book>
             ))
             }
         </BestSellerBlock>

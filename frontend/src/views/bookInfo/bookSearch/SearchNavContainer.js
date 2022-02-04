@@ -1,6 +1,5 @@
 import SearchNavPresenter from "./SearchNavPresenter";
 import React, { useState,useEffect } from 'react'
-import { useParams } from "react-router-dom";
 function SearchNavContainer({keyword}){
     const [searchKeyword , setSearchKeyword ] = useState("");
     const [searchCategory, setSearchCategory]= useState("total"); 
@@ -18,7 +17,6 @@ function SearchNavContainer({keyword}){
         setSearchCategory(event.target.value);
     }
     const onSearchHandler = (event)=>{
-        //setSearchKeyword (event.currentTarget.value);
         setTemp(event.currentTarget.value);
         setKEYWORD(event.currentTarget.value);
     };
@@ -32,12 +30,17 @@ function SearchNavContainer({keyword}){
     const onSubmit=(event)=>{
         
         if(event.key === 'Enter'){
-            //console.log(searchKeyword);
-            let url= `/search/${searchCategory}/${searchKeyword}`;
-            document.location.href = url;
+            console.log(searchKeyword);
+            if(searchKeyword!=="" && searchKeyword!==undefined){
+                let url= `/search/${searchCategory}/${searchKeyword}`;
+                document.location.href = url;
+            }
+            else{
+                alert("검색어를 입력해주세요.")
+            }
+
         }
         
-        // history.push(`/search/${searchKeyword}/${searchCategory}`); 
     }
     return(
         <SearchNavPresenter
