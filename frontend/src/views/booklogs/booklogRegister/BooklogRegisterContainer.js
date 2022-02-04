@@ -4,7 +4,7 @@ import Modal from "react-modal";
 import Toggle from "./Toggle";
 import StarRating from "./StarRating";
 // import { BOOKINFO } from "../dummydata";
-import "./RegisterPage.css";
+import "./RegisterPage.css"
 import axios from "axios";
 import RegisterForm from "./BooklogRegisterPresenter";
 
