@@ -23,13 +23,13 @@ function RegisterForm({
             <Toggle toggle={toggleHandler} />
             <button
               onClick={onSubmitChangeBook}
-              style={{ position: "absolute", right: 0, marginRight: "150px" }}
+              style={{ position: "absolute", right: 0, marginRight: "240px" }}
             >
               책 변경
             </button>
             <button
               onClick={onSubmitArticle}
-              style={{ position: "absolute", right: 0, marginRight: "50px" }}
+              style={{ position: "absolute", right: 0, marginRight: "140px" }}
             >
               저장
             </button>

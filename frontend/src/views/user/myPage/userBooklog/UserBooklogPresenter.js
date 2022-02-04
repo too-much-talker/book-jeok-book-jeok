@@ -10,10 +10,10 @@ function UserBooklogPresenter() {
         <h2>나의 북로그</h2>
       </div>
       <div>
-        <Link to="/booklogdetail" state={{ logSeq: 1,
+        {/* <Link to="/booklogdetail" state={{ logSeq: 1,
         infoSeq:1 }}>
           <div>북로그1</div>
-        </Link>
+        </Link> */}
         <Link to="/booklogregister">
           <button style={{ position: "absolute", right: 0, marginRight: "150px" }}>작성</button>
         </Link>

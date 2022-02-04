@@ -15,10 +15,9 @@ import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContai
 import MyPage from "./views/user/myPage/index";
 import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 import styled from "styled-components";
-import Header from "./views/main/Header/Header";
+import Header from "./views/main/header/Header";
 import "./common/css/index.css";
 import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRegisterContainer";
-import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetailContainer";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -71,7 +70,6 @@ render(
                 <Route path="mychallenge" />
               </Route>
               <Route path="/booklogregister" element={<BooklogRegisterContainer/>} />
-              <Route path="/booklogdetail" element={<BooklogDetailContainer/>} />
             </Routes>
           </Wrapper>
         </Body>
