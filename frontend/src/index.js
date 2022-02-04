@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -15,6 +14,11 @@ import {SearchMainContainer} from "./views/bookInfo/bookSearch/SearchMainContain
 import SearchResultContainer from "./views/bookInfo/bookSearch/SearchResultContainer";
 import SearchNavContainer from "./views/bookInfo/bookSearch/SearchNavContainer";
 import BookDetailContainer from "./views/bookDetail/BookDetailContainer";
+import Booklogs from "./views/booklogs";
+import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContainer";
+import MyPage from "./views/user/myPage/index";
+import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
+
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
   const state = store.getState();
@@ -33,10 +37,23 @@ render(
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+
           <Route path="/searchMain" element={<SearchMainContainer />} />
           <Route path="/search" element={<SearchMainContainer />} />
           <Route path="/search/:category/:keyword" element={<SearchResultContainer/>} />
           <Route path="/detail/:seq" element={<BookDetailContainer/>} />
+
+          <Route path="/booklogs/*" element={<Booklogs />}>
+            <Route index element={<BooklogListContainer />} />
+            {/* <Route path="detail"/> */}
+          </Route>
+          <Route path="/mypage" element={<MyPage />}>
+            <Route index element={<UserInfoContainer />} />
+            <Route path="mybooklog" />
+            <Route path="mybookclub" />
+            <Route path="mychallenge" />
+          </Route>
+
         </Routes>
       </BrowserRouter>
     </PersistGate>

@@ -2,10 +2,7 @@ package com.ssafy.bjbj.api.bookinfo.entity;
 
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -57,9 +54,6 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private LocalDateTime publicationDate;
 
-    @Column(nullable = false, columnDefinition = "DOUBLE UNSIGNED")
-    private Double starRating;
-
     @Column(nullable = false)
     private boolean isDeleted;
 
@@ -67,8 +61,22 @@ public class BookInfo extends BaseLastModifiedEntity {
     private List<Booklog> booklogs = new ArrayList<>();
 
     // 나에 대해 리뷰를 쓴 멤버들
-    @JoinColumn(name = "book_info_seq")
-    @OneToMany
+    @OneToMany(mappedBy = "bookInfo")
     private List<BookReview> bookReviews = new ArrayList<>();
 
+    @Builder
+    public BookInfo(Long seq, String isbn, String title, String author, String description, Integer price, String smallImgUrl, String largeImgUrl, Integer categoryId, String categoryName, String publisher, LocalDateTime publicationDate) {
+        this.seq = seq;
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.price = price;
+        this.smallImgUrl = smallImgUrl;
+        this.largeImgUrl = largeImgUrl;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.publisher = publisher;
+        this.publicationDate = publicationDate;
+    }
 }
