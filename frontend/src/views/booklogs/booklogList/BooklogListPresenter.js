@@ -13,19 +13,26 @@ const BooklogListBody = styled.div`
   text-align: center; // card 요소 가운데 정렬 -> 단, 그리드 이상해짐.
 `;
 
+const CardBox = styled.div`
+  width: 100rem;
+  height: 100%;
+  background: green;
+  margin: 0 auto;
+`;
+
 function BooklogListPresenter({ data, isPopular }) {
   // console.log(data);
 
   return (
     <div>
       <div>
-        <h2>BbooklogList</h2>
+        <h2>BooklogList</h2>
         <BooklogNavi isPopular={isPopular} />
-        <div>
+        <CardBox>
           {data.map((data, index) => (
             <BooklogCard booklog={data} key={index} />
           ))}
-        </div>
+        </CardBox>
       </div>
     </div>
   );
