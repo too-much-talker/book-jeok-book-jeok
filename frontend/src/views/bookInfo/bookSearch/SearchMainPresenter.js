@@ -20,26 +20,25 @@ background:white;
 width:1250px;
 height:60px;
 border-top: 2px solid black;
-
+margin-top:20px;
 `;
 
 const ResultText = styled.div`
-margin-left:40px;
+position:absolute;
+margin-left:20px;
 margin-top:20px;
 font-size:30px;
 `;
 
 const BestSellerBlock= styled.div`
-position:relative;
 display: flex;
 // justify-content: space-between;
 align-items: flex-start;
 flex-wrap: wrap;
 text-align:center;
-width: 80%;
-left:7%;
+width:1200px;
 margin:auto;
-margin-top:300px;
+margin-top:150px;
 `;
 function SearchMainPresenter ({goDetail, bestSellers}){
         return( 

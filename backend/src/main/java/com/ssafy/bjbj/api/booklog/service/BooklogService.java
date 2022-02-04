@@ -1,7 +1,31 @@
 package com.ssafy.bjbj.api.booklog.service;
 
+import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResMyBooklogPageDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResOpenBooklogPageDto;
+import com.ssafy.bjbj.api.booklog.dto.response.ResSearchBooklogPageDto;
+import com.ssafy.bjbj.api.booklog.entity.Booklog;
+import org.springframework.data.domain.Pageable;
+
 public interface BooklogService {
 
+    Long register(RequestBooklogDto requestBooklogDto);
 
+    Long update(Long booklogSeq, RequestBooklogDto requestBooklogDto);
+
+    void remove(Long booklogSeq, Long memberSeq);
+
+    void changeIsOpen(Long booklogSeq, Long memberSeq, boolean isOpen);
+
+    Booklog findBySeq(Long seq);
+
+    ResBooklogDto getResBooklogDtoBooklog(Long booklogSeq, Long memberSeq);
+
+    ResOpenBooklogPageDto getResOpenBooklogListDto(Pageable pageable);
+
+    ResMyBooklogPageDto getResMyBooklogPageDto(boolean isAll, Pageable pageable, Long memberSeq);
+
+    ResSearchBooklogPageDto getResSearchBooklogPageDto(Pageable pageable, String keyword, String writer);
 
 }

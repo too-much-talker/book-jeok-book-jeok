@@ -43,8 +43,8 @@ function SearchResultContainer(){
             page:page,
             limit:12,
             searchCategory : useParam.category, 
-            // searchKeyword : useParam.keyword,  
-            searchKeyword : "", //이건 테스트 하기 위한거
+            searchKeyword : useParam.keyword,  
+            // searchKeyword : "", //이건 테스트 하기 위한거
             orderCategory: orderCategory
           })
         .then(function (response){

@@ -1,6 +1,6 @@
-import { authInstance } from "./index";
+import { apiInstance } from "./index";
 
-const api = authInstance();
+const api = apiInstance();
 
 async function login(user, success, fail) {
   await api

@@ -4,7 +4,7 @@ import icon from  "../../../res/img/search.png";
 const SearchBlock = styled.div`
 position:absolute;
 left:50%;
-top:18%;
+top:20%;
 width:1200px;
 height:60px;
 text-align:center;

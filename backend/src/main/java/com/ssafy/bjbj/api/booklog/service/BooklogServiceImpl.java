@@ -1,9 +1,24 @@
 package com.ssafy.bjbj.api.booklog.service;
 
+import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
+import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
+import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.*;
+import com.ssafy.bjbj.api.booklog.entity.Booklog;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
+import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
+import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -11,6 +26,160 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BooklogServiceImpl implements BooklogService {
 
+    private final BooklogRepository booklogRepository;
 
+    private final BookInfoRepository bookInfoRepository;
+
+    private final MemberRepository memberRepository;
+
+    @Transactional
+    @Override
+    public Long register(RequestBooklogDto reqBooklogDto) {
+        BookInfo bookInfo = bookInfoRepository.findBySeq(reqBooklogDto.getBookInfoSeq());
+        if (bookInfo == null) {
+            throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
+        }
+
+        Member member = memberRepository.findBySeq(reqBooklogDto.getMemberSeq());
+
+        LocalDateTime readDate = reqBooklogDto.getReadDate() == null ?
+                null : LocalDateTime.parse(reqBooklogDto.getReadDate() + "T00:00:00");
+
+        Booklog booklog = Booklog.builder()
+                .title(reqBooklogDto.getTitle())
+                .content(reqBooklogDto.getContent())
+                .summary(reqBooklogDto.getSummary())
+                .starRating(reqBooklogDto.getStarRating())
+                .readDate(readDate)
+                .isOpen(reqBooklogDto.getIsOpen())
+                .views(0)
+                .member(member)
+                .bookInfo(bookInfo)
+                .build();
+
+        Booklog savedBooklog = booklogRepository.save(booklog);
+
+        return savedBooklog.getSeq();
+    }
+
+    @Transactional
+    @Override
+    public Long update(Long booklogSeq, RequestBooklogDto reqBooklogDto) {
+        Booklog savedBooklog = booklogRepository.findBySeq(booklogSeq);
+        if (!savedBooklog.getBookInfo().getSeq().equals(reqBooklogDto.getBookInfoSeq())) {
+            throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
+        }
+
+        savedBooklog.changeBooklog(reqBooklogDto);
+        return savedBooklog.getSeq();
+    }
+
+    @Transactional
+    @Override
+    public void remove(Long booklogSeq, Long memberSeq) {
+        Booklog findBooklog = booklogRepository.findBySeq(booklogSeq);
+
+        if (findBooklog == null) {
+            throw new NotFoundBooklogException("올바르지 않은 요청입니다.");
+        } else if (!findBooklog.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        } else {
+            findBooklog.delete();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void changeIsOpen(Long booklogSeq, Long memberSeq, boolean isOpen) {
+        Booklog findBooklog = booklogRepository.findBySeq(booklogSeq);
+
+        if (findBooklog == null) {
+            throw new NotFoundBooklogException("올바르지 않은 요청입니다.");
+        } else if (!findBooklog.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        } else {
+            findBooklog.changeIsOpen(isOpen);
+        }
+    }
+
+    @Override
+    public Booklog findBySeq(Long seq) {
+        return booklogRepository.findBySeq(seq);
+    }
+
+    @Transactional
+    @Override
+    public ResBooklogDto getResBooklogDtoBooklog(Long booklogSeq, Long memberSeq) {
+        Booklog booklog = booklogRepository.findBySeq(booklogSeq);
+        if (booklog == null) {
+            log.debug("Booklog is null");
+            throw new NotFoundBooklogException("올바르지 않은 요청입니다.");
+        }
+
+        if (!booklog.getMember().getSeq().equals(memberSeq)) {
+            if (booklog.isOpen()) {
+                // 다른 회원의 북로그를 조회할 경우 조회수 증가
+                booklog.incrementViews();
+            } else {
+                log.debug("다른 회원의 비공개 북로그 조회 시도");
+                throw new IllegalArgumentException("올바르지 않은 요청입니다.");
+            }
+        }
+
+        return ResBooklogDto.builder()
+                .booklogSeq(booklog.getSeq())
+                .memberSeq(booklog.getMember().getSeq())
+                .title(booklog.getTitle())
+                .content(booklog.getContent())
+                .summary(booklog.getSummary())
+                .starRating(booklog.getStarRating())
+                .readDate(booklog.getReadDate() == null ? null : booklog.getReadDate().toLocalDate())
+                .isOpen(booklog.isOpen())
+                .views(booklog.getViews())
+                .createdDate(booklog.getCreatedDate().toLocalDate())
+                .build();
+    }
+
+    @Override
+    public ResOpenBooklogPageDto getResOpenBooklogListDto(Pageable pageable) {
+        Integer totalCnt = booklogRepository.countByOpenBooklogAndRecentOneWeek();
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<OpenBooklogDto> openBooklogDtos = booklogRepository.findOpenBooklogDtos(pageable);
+
+        return ResOpenBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .currentPage(pageable.getPageNumber())
+                .totalPage(totalPage)
+                .openBooklogDtos(openBooklogDtos)
+                .build();
+    }
+
+    @Override
+    public ResMyBooklogPageDto getResMyBooklogPageDto(boolean isAll, Pageable pageable, Long memberSeq) {
+        Integer totalCnt = booklogRepository.countMyBooklogByMemberSeq(isAll, memberSeq);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<MyBooklogDto> myBooklogDtos = booklogRepository.findMyBooklogDtos(isAll, pageable, memberSeq);
+
+        return ResMyBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .myBooklogDtos(myBooklogDtos)
+                .build();
+    }
+
+    @Override
+    public ResSearchBooklogPageDto getResSearchBooklogPageDto(Pageable pageable, String keyword, String writer) {
+        Integer totalCnt = booklogRepository.countSearchBooklogByKeyword(keyword, writer);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<SearchBooklogDto> searchBooklogDtos = booklogRepository.findSearchBooklog(pageable, keyword, writer);
+
+        return ResSearchBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .searchBooklogDtos(searchBooklogDtos)
+                .build();
+    }
 
 }

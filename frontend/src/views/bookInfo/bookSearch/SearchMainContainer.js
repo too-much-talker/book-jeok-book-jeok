@@ -19,18 +19,15 @@ function SearchMainContainer(){
         document.location.href = url;
       }
 
-      function go(){
-        
-      }
     function getBestSellers(){ ///처음 시작할때
         axios.post(url+`/api/v1/bookinfos/` ,
         {
             page:1,
             limit:12,
-            searchCategory : "title", 
+            searchCategory : "total", 
             searchKeyword :"",  
             // searchKeyword : "", //이건 테스트 하기 위한거
-            orderCategory: "latest"
+            orderCategory: "star"
           })
         .then(function (response){
           console.log(response.data.data.bookList);
