@@ -30,14 +30,15 @@ font-size:30px;
 `;
 
 const BestSellerBlock= styled.div`
+position:relative;
 display: flex;
-// justify-content: space-between;
 align-items: flex-start;
 flex-wrap: wrap;
-text-align:center;
-width:1200px;
-margin:auto;
+// text-align:center;
 margin-top:150px;
+margin-left:-80px;
+// background:red;
+width:1200px;
 `;
 
 const Book = styled.div`
