@@ -80,7 +80,7 @@ function RegisterForm({
           <form className="wrapper">
             <div>
               <input
-                size="112"
+                size="116"
                 onChange={onTitleChange}
                 value={TitleValue}
                 type="text"
@@ -89,7 +89,7 @@ function RegisterForm({
               />
               <br></br>
               <textarea
-                style={{ resize: "none", height: "200px", width: "800px" }}
+                style={{ resize: "none", height: "200px", width: "865px" }}
                 onChange={onContentChange}
                 value={ContentValue}
                 name="content"
