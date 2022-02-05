@@ -120,5 +120,15 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .modifiedDate(LocalDateTime.now())
                 .build();
     }
+
+    @Override
+    public Integer countBookReviewsByMemberSeq(Long memberSeq) {
+        return bookReviewRepository.countBookReviewsByMemberSeq(memberSeq);
+    }
+
+    @Override
+    public Integer countBookReviewsByBookInfoSeq(Long bookInfoSeq) {
+        return bookReviewRepository.countBookReviewsByBookInfoSeq(bookInfoSeq);
+    }
 }
 

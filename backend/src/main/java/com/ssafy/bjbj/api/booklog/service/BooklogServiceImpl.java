@@ -8,6 +8,7 @@ import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
+import com.ssafy.bjbj.api.booklog.repository.LikeRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
@@ -31,6 +32,8 @@ public class BooklogServiceImpl implements BooklogService {
     private final BookInfoRepository bookInfoRepository;
 
     private final MemberRepository memberRepository;
+
+    private final LikeRepository likeRepository;
 
     @Transactional
     @Override
@@ -179,6 +182,20 @@ public class BooklogServiceImpl implements BooklogService {
                 .totalPage(totalPage)
                 .currentPage(pageable.getPageNumber())
                 .searchBooklogDtos(searchBooklogDtos)
+                .build();
+    }
+
+    @Override
+    public ResLikeBooklogPageDto getResLikeBooklogPageDto(Pageable pageable, Long memberSeq) {
+        Integer totalCnt = likeRepository.countByMemberSeq(memberSeq);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<LikeBooklogDto> likeBooklogDtos = booklogRepository.findLikeBooklogDtos(pageable, memberSeq);
+
+        return ResLikeBooklogPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .likeBooklogDtos(likeBooklogDtos)
                 .build();
     }
 
