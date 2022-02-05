@@ -23,13 +23,13 @@ function RegisterForm({
             <Toggle toggle={toggleHandler} />
             <button
               onClick={onSubmitChangeBook}
-              style={{ position: "absolute", right: 0, marginRight: "240px" }}
+              style={{ position: "absolute", right: 0, marginRight: "450px" }}
             >
               책 변경
             </button>
             <button
               onClick={onSubmitArticle}
-              style={{ position: "absolute", right: 0, marginRight: "140px" }}
+              style={{ position: "absolute", right: 0, marginRight: "350px" }}
             >
               저장
             </button>
@@ -68,7 +68,7 @@ function RegisterForm({
                         type="text"
                         onChange={onSentenceChange}
                         value={oneSentence}
-                        size="70"
+                        size="40"
                       ></input>
                     </td>
                   </tr>
@@ -89,7 +89,7 @@ function RegisterForm({
               />
               <br></br>
               <textarea
-                style={{ resize: "none", height: "200px", width: "865px" }}
+                style={{ resize: "none", height: "300px", width: "865px"}}
                 onChange={onContentChange}
                 value={ContentValue}
                 name="content"

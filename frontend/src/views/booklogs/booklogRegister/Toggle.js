@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const ToggleContainer = styled.div`
   position: absolute;
   display: inline-block;
-  left: 15%;
+  left: 25%;
   cursor: pointer;
 
   > .toggle-container {
@@ -45,6 +45,7 @@ const ToggleContainer = styled.div`
 // 설명 부분의 CSS를 구현
 const Desc = styled.div`
   text-align: left;
+  font-size: 1.5rem;
 `;
 
 // State를 바꿔줄 이벤트 함수 구현
