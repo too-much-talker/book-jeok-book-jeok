@@ -89,6 +89,7 @@ text-align:left;
 font-size:23px;
 margin-top:10px;
 margin-left:10px;
+margin-bottom:5px;
 `;
 const Blank=styled.div`
 width:50%;
@@ -118,13 +119,14 @@ text-align:left;
 font-size:23px;
 margin-top:10px;
 margin-left:10px;
+margin-bottom:5px;
 width:35%;
 `;
 
 
 const Blank2=styled.div`
 width:50%;
-height:8%;
+height:5%;
 `;
 
 const BooklogContents= styled.div`
@@ -160,7 +162,6 @@ function BookDetailPresenter({
         <Contents>
             <BookInfoBlock> 
                 <BookTitle>{title}</BookTitle>
-                <BookStarRating>평점 : ★</BookStarRating>
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
                 </BookImage>
@@ -208,8 +209,9 @@ function BookDetailPresenter({
                             {booklogs && booklogs.map(booklog=>(
                                 <BooklogItem
                                     title={booklog.title}
-                                    // content={booklog.content}
-                                    content="세이더네임세븐틴 안녕하세요 세븐틴입니다. 최승철 윤정한 홍지수 문준휘 권순영 전원우 이지훈 서명호 김민규 이석민 부승관 최한솔 이찬"
+                                    content={booklog.content}
+                                    //test용
+                                    //content="세이더네임세븐틴 안녕하세요 세븐틴입니다. 최승철 윤정한 홍지수 문준휘 권순영 전원우 이지훈 서명호 김민규 이석민 부승관 최한솔 이찬"
                                     createdDate={booklog.createdDate}
                                 >
                                 </BooklogItem>
