@@ -22,7 +22,7 @@ import static javax.persistence.FetchType.*;
 public class Notice extends BaseLastModifiedEntity {
 
     @Column(name = "notice_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 
