@@ -3,10 +3,7 @@ package com.ssafy.bjbj.api.readinggroup.entity;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.Status;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 public class ReadingGroup extends BaseLastModifiedEntity {
 
     @Column(name = "reading_group_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 
@@ -79,4 +76,19 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     @OneToMany
     private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
 
+    @Builder
+    public ReadingGroup(String title, String content, Integer views, Integer limitPoint, Integer maxMember, LocalDateTime deadline, Status status, LocalDateTime startDate, LocalDateTime endDate, ReadingGroupType readingGroupType, boolean isDeleted, Member member) {
+        this.title = title;
+        this.content = content;
+        this.views = views;
+        this.limitPoint = limitPoint;
+        this.maxMember = maxMember;
+        this.deadline = deadline;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.readingGroupType = readingGroupType;
+        this.isDeleted = isDeleted;
+        this.member = member;
+    }
 }
