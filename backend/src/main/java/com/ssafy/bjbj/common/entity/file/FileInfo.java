@@ -1,21 +1,21 @@
 package com.ssafy.bjbj.common.entity.file;
 
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @ToString(of = {"seq", "originFileName", "encodedFileName", "savedPath", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Table(name = "tb_file_info")
 @Entity
 public class FileInfo extends BaseLastModifiedEntity {
 
     @Column(name = "file_info_seq", columnDefinition = "BIGINT UNSIGNED")
+    @GeneratedValue
     @Id
     private Long seq;
 
