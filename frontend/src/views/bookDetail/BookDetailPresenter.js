@@ -189,7 +189,7 @@ function BookDetailPresenter({
                     <Page>
                         <Pagination activePage={reviewPage} 
                             itemsCountPerPage={5} 
-                            totalItemsCount={10} 
+                            totalItemsCount={reviewTotalCnt} 
                             pageRangeDisplayed={5} 
                             prevPageText={"‹"} 
                             nextPageText={"›"} 
@@ -208,7 +208,8 @@ function BookDetailPresenter({
                             {booklogs && booklogs.map(booklog=>(
                                 <BooklogItem
                                     title={booklog.title}
-                                    content={booklog.content}
+                                    // content={booklog.content}
+                                    content="세이더네임세븐틴 안녕하세요 세븐틴입니다. 최승철 윤정한 홍지수 문준휘 권순영 전원우 이지훈 서명호 김민규 이석민 부승관 최한솔 이찬"
                                     createdDate={booklog.createdDate}
                                 >
                                 </BooklogItem>

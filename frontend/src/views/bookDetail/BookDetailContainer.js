@@ -123,10 +123,9 @@ function BookDetailContainer(bookInfoSeq){
         
         function getBookLog(){
             //북로그 가져오기
-            
             axios.get(url+`/api/v1/booklogs?page=${booklogPage}&size=5&sort=${booklogOrder}`)
             .then(function (response){
-                console.log(response.data.data);
+                console.log(response.data.data.booklogs.content);
                 setBooklogs(response.data.data.booklogs);
                 setBooklogTotalCnt(response.data.data.totalCnt);
             })  

@@ -21,6 +21,7 @@ import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 import styled from "styled-components";
 import Header from "./views/main/Header/Header";
 import "./common/css/index.css";
+import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRegisterContainer";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -77,6 +78,7 @@ render(
                 <Route path="mybookclub" />
                 <Route path="mychallenge" />
               </Route>
+              <Route path="/booklogregister" element={<BooklogRegisterContainer/>} />
             </Routes>
           </Wrapper>
         </Body>
