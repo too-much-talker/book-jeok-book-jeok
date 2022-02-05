@@ -20,5 +20,9 @@ public interface BookReviewService {
 
     ResModifiedBookReviewDto updateBookReview(RequestBookReviewDto requestBookReviewDto);
 
+    Integer countBookReviewsByMemberSeq(Long memberSeq);
+
+    Integer countBookReviewsByBookInfoSeq(Long bookInfoSeq);
+
     boolean deleteBookReview(Long bookReviewSeq);
 }
