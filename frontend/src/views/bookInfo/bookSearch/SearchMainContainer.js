@@ -19,9 +19,6 @@ function SearchMainContainer(){
         document.location.href = url;
       }
 
-      function go(){
-        
-      }
     function getBestSellers(){ ///처음 시작할때
         axios.post(url+`/api/v1/bookinfos/` ,
         {
