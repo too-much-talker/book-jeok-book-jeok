@@ -1,6 +1,7 @@
 
 import styled from "styled-components";
 import ReviewItem from "./ReviewItem";
+import BooklogItem from "./BooklogItem";
 import Pagination from "react-js-pagination";
 import '../bookInfo/bookSearch/Paging.css';
 const Block= styled.div`
@@ -72,31 +73,26 @@ width:300px;
 text-align:left;
 height:30%;
 font-size:18px;
-// padding-left:10px;
 `;
 const BookInfoDetail= styled.div`
 `;
 
-
+////책리뷰
 const BookReview= styled.div`
 position:relative;
 width:100vh;
 height:50%;
 `;
-
 const ReviewHeader = styled.div`
 position:relative;
 text-align:left;
 font-size:23px;
 margin-top:10px;
 margin-left:10px;
-`;//책리뷰
-
+`;
 const Blank=styled.div`
 width:50%;
 height:8%;
-// background:blue;
-
 `;
 const ReviewButton = styled.button`
 position:relative;
@@ -109,23 +105,61 @@ box-shadow: 4px 5px 7px 2px lightgrey;
 margin-bottom:-55px;
 `;
 
+///북로그
 const BookLog= styled.div`
 position:relative;
-background:blue;
 height:80%;
 width:100vh;
+`;
 
+const BooklogHeader = styled.div`
+position:relative;
+text-align:left;
+font-size:23px;
+margin-top:10px;
+margin-left:10px;
+width:35%;
+`;
+
+
+const Blank2=styled.div`
+width:50%;
+height:8%;
+`;
+
+const BooklogContents= styled.div`
+position:relative;
+height:80%;
+border-radius:20px;
+box-shadow: 4px 5px 7px 2px lightgrey;
+margin-bottom:-55px;
+//background:red;
+
+`;
+
+const SelectBox = styled.select`
+top:0%;
+left:35%;
+position :absolute;
+width:14%;
+height:6%;
+`;
+
+const Page= styled.div`
+position:absolute;
+left:36%;
 `;
 
 function BookDetailPresenter({
     reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
+    booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate}){
     return(
         <Block>
         <Line></Line>
         <Contents>
             <BookInfoBlock> 
-                <BookTitle>이도겸 사랑해</BookTitle>
+                <BookTitle>{title}</BookTitle>
                 <BookStarRating>평점 : ★</BookStarRating>
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
@@ -137,6 +171,8 @@ function BookDetailPresenter({
                 </BookInfo>
             </BookInfoBlock>
             <ReviewBookLog>
+
+
                 <BookReview>
                     <ReviewHeader>이 책의 책리뷰</ReviewHeader>
                     <ReviewContents>
@@ -150,18 +186,49 @@ function BookDetailPresenter({
                             </ReviewItem>
                         ))}
                     </ReviewContents>
-                    <Pagination activePage={reviewPage} 
-                        itemsCountPerPage={5} 
-                        totalItemsCount={reviewTotalCnt} 
-                        pageRangeDisplayed={5} 
-                        prevPageText={"‹"} 
-                        nextPageText={"›"} 
-                        onChange={reviewPageHandler} />
+                    <Page>
+                        <Pagination activePage={reviewPage} 
+                            itemsCountPerPage={5} 
+                            totalItemsCount={10} 
+                            pageRangeDisplayed={5} 
+                            prevPageText={"‹"} 
+                            nextPageText={"›"} 
+                            onChange={reviewPageHandler} />
+                    </Page>
                 </BookReview>
 
                 <BookLog>
-                    
+                    <BooklogHeader>이 책을 주제로 쓴 북로그</BooklogHeader>
+                        <SelectBox defaultValue="recent" onClick={booklogOrderHandler}>
+                            <option value="recent" >최신순</option>
+                            <option value="like">좋아요순</option>
+                        </SelectBox>
+                    <BooklogContents>
+                        <Blank2></Blank2>
+                            {booklogs && booklogs.map(booklog=>(
+                                <BooklogItem
+                                    title={booklog.title}
+                                    content={booklog.content}
+                                    createdDate={booklog.createdDate}
+                                >
+                                </BooklogItem>
+                            ))}  
+                    </BooklogContents>
+                    <Page>
+                        <Pagination
+                        activePage={booklogPage} 
+                                itemsCountPerPage={5} 
+                                totalItemsCount={booklogTotalCnt} 
+                                pageRangeDisplayed={5} 
+                                prevPageText={"‹"} 
+                                nextPageText={"›"} 
+                                onChange={booklogPageHandler} />
+                    </Page>
+
                 </BookLog> 
+
+
+
             </ReviewBookLog>
         </Contents>
         </Block>
