@@ -12,5 +12,9 @@ public interface BookReviewRepositoryCustom {
 
     List<ResponseBookReviewByBookInfoDto> findAllBookReviewDtoByBookInfoSeq(Long bookInfoSeq);
 
+    Integer countBookReviewsByMemberSeq(Long memberSeq);
+
+    Integer countBookReviewsByBookInfoSeq(Long bookInfoSeq);
+
     BookReview findLatestBookReviewByBookInfoAndMember(Long bookInfoSeq, Long memberSeq);
 }
