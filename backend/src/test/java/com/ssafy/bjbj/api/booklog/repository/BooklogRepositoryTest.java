@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.booklog.repository;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.LikeBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.MyBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.SearchBooklogDto;
@@ -50,11 +51,12 @@ class BooklogRepositoryTest {
     private Member member2 = null;
 
     private Booklog booklog1 = null;
+    private Booklog booklog2 = null;
 
     private BookInfo bookInfo1 = null;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         String email1 = "member1@bjbj.com";
         member1 = memberRepository.save(Member.builder()
                 .email(email1)
@@ -79,16 +81,41 @@ class BooklogRepositoryTest {
                 .role(Role.MEMBER)
                 .build());
 
-        bookInfo1 = bookInfoRepository.findBySeq(2L);
+        bookInfo1 = bookInfoRepository.save(BookInfo.builder()
+                .isbn("isbn")
+                .title("제목")
+                .author("저자")
+                .description("설명")
+                .price(10000)
+                .smallImgUrl("smallImgUrl")
+                .largeImgUrl("largeImgUrl")
+                .categoryId(100)
+                .categoryName("카테고리 이름")
+                .publisher("출판사")
+                .publicationDate(LocalDateTime.now())
+                .build());
 
         // 북로그 작성
         booklog1 = booklogRepository.save(Booklog.builder()
-                .title("북로그 제목")
+                .title("북로그 제목1")
                 .content(null)
                 .summary(null)
                 .starRating(null)
                 .readDate(null)
-                .isOpen(false)
+                .isOpen(true)
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        Thread.sleep(1000);
+
+        booklog2 = booklogRepository.save(Booklog.builder()
+                .title("북로그 제목2")
+                .content(null)
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(true)
                 .views(0)
                 .member(member1)
                 .bookInfo(bookInfo1)
@@ -608,5 +635,39 @@ class BooklogRepositoryTest {
         assertThat(find4.get(0).getBooklogSeq()).isEqualTo(savedBooklog2ByMember1.getSeq());
         assertThat(find4.get(1).getBooklogSeq()).isEqualTo(savedBooklog1ByMember1.getSeq());
     }
+
+    @DisplayName("좋아요한 북로그 목록 반환 테스트")
+    @Test
+    public void likeBooklogListTest() {
+        Pageable pageable = PageRequest.of(1, 10);
+
+        // 북로그 2개 좋아요
+        Like like1 = Like.builder()
+                .booklog(booklog1)
+                .member(member1)
+                .build();
+        likeRepository.save(like1);
+        em.flush();
+        em.clear();
+        Like like2 = Like.builder()
+                .booklog(booklog2)
+                .member(member1)
+                .build();
+        likeRepository.save(like2);
+        em.flush();
+        em.clear();
+
+        List<LikeBooklogDto> find1 = booklogRepository.findLikeBooklogDtos(pageable, member1.getSeq());
+        assertThat(find1.size()).isEqualTo(2);
+        assertThat(find1.get(0).getBooklogSeq()).isEqualTo(booklog2.getSeq());
+        assertThat(find1.get(1).getBooklogSeq()).isEqualTo(booklog1.getSeq());
+
+        booklog1.changeIsOpen(false);
+        em.merge(booklog1);
+        List<LikeBooklogDto> find2 = booklogRepository.findLikeBooklogDtos(pageable, member1.getSeq());
+        assertThat(find2.size()).isEqualTo(1);
+        assertThat(find2.get(0).getBooklogSeq()).isEqualTo(booklog2.getSeq());
+    }
+
 
 }

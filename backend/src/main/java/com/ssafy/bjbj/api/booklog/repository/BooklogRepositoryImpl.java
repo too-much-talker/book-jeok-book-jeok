@@ -161,4 +161,25 @@ public class BooklogRepositoryImpl implements BooklogRepositoryCustom {
         List<SearchBooklogDto> searchBooklogDtos = query.fetch();
         return searchBooklogDtos;
     }
+
+    @Override
+    public List<LikeBooklogDto> findLikeBooklogDtos(Pageable pageable, Long memberSeq) {
+        return queryFactory
+                .select(new QLikeBooklogDto(
+                        booklog.seq,
+                        booklog.title,
+                        booklog.createdDate,
+                        booklog.isOpen,
+                        bookInfo.largeImgUrl.as("imgUrl")))
+                .from(booklog)
+                .join(booklog.bookInfo, bookInfo)
+                .join(booklog.likes, like).on(like.member.seq.eq(memberSeq))
+                .where(booklog.isOpen.isTrue()
+                        .and(booklog.isDeleted.isFalse()))
+                .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .orderBy(booklog.createdDate.desc())
+                .fetch();
+    }
+
 }
