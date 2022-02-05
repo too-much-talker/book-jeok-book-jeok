@@ -5,7 +5,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @ToString(of = {"memberSeq","readingGroupSeq", "title", "content", "nickname", "createDate"})
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
