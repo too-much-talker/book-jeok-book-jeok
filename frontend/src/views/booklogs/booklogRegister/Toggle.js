@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 // 클래스를 설정하며 .toggle--checked 클래스가 활성화 되었을 경우의 CSS도 구현
 const ToggleContainer = styled.div`
-  position: relative;
+  position: absolute;
   display: inline-block;
-  left: 10%;
+  left: 25%;
   cursor: pointer;
 
   > .toggle-container {
@@ -45,6 +45,7 @@ const ToggleContainer = styled.div`
 // 설명 부분의 CSS를 구현
 const Desc = styled.div`
   text-align: left;
+  font-size: 1.5rem;
 `;
 
 // State를 바꿔줄 이벤트 함수 구현

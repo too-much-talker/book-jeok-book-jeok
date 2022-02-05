@@ -4,164 +4,170 @@ import Toggle from "../booklogRegister/Toggle";
 import StarRating from "../booklogRegister/StarRating";
 
 function DetailForm({
-    isEditing,
-    isOpen,
-    toggleHandler,
-    saveArticle,
-    editButtonHandler,
-    onDeleteArticle,
-    selectedBookInfo,
-    enteredRating,
-    ratingHandler,
-    summaryHandler,
-    enteredSummary,
-    titleHandler,
-    enteredTitle,
-    contentHandler,
-    enteredContent
-})
-{
-    const Desc = styled.div`
+  isEditing,
+  isOpen,
+  toggleHandler,
+  saveArticle,
+  editButtonHandler,
+  onDeleteArticle,
+  selectedBookInfo,
+  enteredRating,
+  ratingHandler,
+  summaryHandler,
+  enteredSummary,
+  titleHandler,
+  enteredTitle,
+  contentHandler,
+  enteredContent,
+}) {
+  const Wrapper = styled.div`
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+  `;
+
+  const Wrapper2 = styled.div`
     position: absolute;
-    top: 145px;
-    left: 400px;
-    `;
-    const IsOpenCircle = styled.div`
+    text-align: left;
+    left: 500px;
+  `;
+
+  const Info = styled.div`
+    display: inline-block;
+    padding-left: 7rem;
+  `;
+
+  const Table = styled.div`
+    align: center;
+  `;
+
+  const Desc = styled.div`
     position: absolute;
     top: 150px;
-    left: 360px;
+    left: 320px;
+  `;
+
+  const IsOpenCircle = styled.div`
+    position: absolute;
+    top: 150px;
+    left: 350px;
     width: 22px;
     height: 22px;
     border-radius: 50%;
     background-color: black;
   `;
-    return(
-        <div>
+  return (
+    <div>
+      <div>
+        <br />
+        {!isEditing ? (
+          <>
+            <Desc> {isOpen ? "공개" : "비공개"} </Desc>
+            <IsOpenCircle
+              style={isOpen ? { background: "blue" } : { background: "red" }}
+            ></IsOpenCircle>
+          </>
+        ) : (
+          <Toggle toggle={toggleHandler} />
+        )}
+        {isEditing ? (
           <div>
-            <br />
-            {!isEditing ? (
-              <>
-              <Desc> {isOpen ? "공개" : "비공개"} </Desc>
-              <IsOpenCircle
-                style={isOpen ? { background: "blue" } : { background: "red" }}
-              ></IsOpenCircle>
-              </>
-            ):(
-              <Toggle toggle={toggleHandler} />
-            )}
-            {isEditing ? (
-              <div>
-                <button
-                  onClick={saveArticle}
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    marginRight: "240px",
-                  }}
-                >
-                  저장
-                </button>
-              </div>
-            ) : (
-              <div>
-                <button
-                  onClick={editButtonHandler}
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    marginRight: "240px",
-                  }}
-                >
-                  수정
-                </button>
-
-                <button
-                  onClick={onDeleteArticle}
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    marginRight: "140px",
-                  }}
-                >
-                  삭제
-                </button>
-              </div>
-            )}
+            <button onClick={saveArticle} style={{ position: "absolute", right: 0, marginRight: "170px"}}>저장
+            </button>
           </div>
-          <div className="wrapper">
-            <img className="img" src={selectedBookInfo.largeImgUrl}></img>
-            <div className="info">
-              <table style={{ align: "center" }}>
-                <tbody>
-                  <tr>
-                    <th> 제목 </th>
-                    <td>{selectedBookInfo.title}</td>
-                  </tr>
-                  <tr>
-                    <th> 작가 </th>
-                    <td>{selectedBookInfo.author}</td>
-                  </tr>
-                  <tr>
-                    <th> 출판사 </th>
-                    <td>{selectedBookInfo.publisher}</td>
-                  </tr>
-                  <tr>
-                    <th> 출판일 </th>
-                    <td>{selectedBookInfo.publicationDate}</td>
-                  </tr>
-                  <tr>
-                    <th> 별점 </th>
-                    {!isEditing ? (
-                      <td>{enteredRating}점</td>
-                      ) : (
-                      <td><StarRating rate={ratingHandler} /></td>
-                    )}
-                  </tr>
-                  <tr>
-                    <th> 한줄평 </th>
-                    {isEditing ? (
-                      <input onChange={summaryHandler} type="text" value={enteredSummary}/>
-                    ) : (
-                      <td>{enteredSummary}</td>
-                    )}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        ) : (
+          <div>
+            <button onClick={editButtonHandler} style={{ position: "absolute", right: 0, marginRight: "280px"}}>
+              수정
+            </button>
+            <button onClick={onDeleteArticle} style={{ position: "absolute", right: 0, marginRight: "170px"}}>
+              삭제
+            </button>
           </div>
-          <hr></hr>
-          <form className="wrapper2">
-            <br />
-            <div>
-              <h5>제목</h5>
-              <div>
+        )}
+      </div>
+      <Wrapper>
+        <img src={selectedBookInfo.largeImgUrl}></img>
+        <Info>
+          <Table>
+            <tbody>
+              <tr>
+                <th> 제목 </th>
+                <td>{selectedBookInfo.title}</td>
+              </tr>
+              <tr>
+                <th> 작가 </th>
+                <td>{selectedBookInfo.author}</td>
+              </tr>
+              <tr>
+                <th> 출판사 </th>
+                <td>{selectedBookInfo.publisher}</td>
+              </tr>
+              <tr>
+                <th> 출판일 </th>
+                <td>{selectedBookInfo.publicationDate}</td>
+              </tr>
+              <tr>
+                <th> 별점 </th>
+                {!isEditing ? (
+                  <td>{enteredRating}점</td>
+                ) : (
+                  <td>
+                    <StarRating rate={ratingHandler} />
+                  </td>
+                )}
+              </tr>
+              <tr>
+                <th> 한줄평 </th>
                 {isEditing ? (
                   <input
-                    size="107"
-                    onChange={titleHandler}
-                    value={enteredTitle}
+                    onChange={summaryHandler}
                     type="text"
-                    name="title"
+                    value={enteredSummary}
                   />
                 ) : (
-                  <p>{enteredTitle}</p>
+                  <td>{enteredSummary}</td>
                 )}
-              </div>
-              <h5>내용</h5>
-              {isEditing ? (
-                <textarea
-                  onChange={contentHandler}
-                  value={enteredContent}
-                  type="text"
-                  name="title"
-                  style={{ resize: "none", height: "200px", width: "800px" }}
-                />
-              ) : (
-                <p>{enteredContent}</p>
-              )}
-            </div>
-          </form>
+              </tr>
+            </tbody>
+          </Table>
+        </Info>
+      </Wrapper>
+      <hr></hr>
+      <Wrapper2>
+        <div>
+          <h5>제목</h5>
+          <div>
+            {isEditing ? (
+              <input
+                size="107"
+                onChange={titleHandler}
+                value={enteredTitle}
+                type="text"
+                name="title"
+              />
+            ) : (
+              <p>{enteredTitle}</p>
+            )}
+          </div>
+          <br>
+          </br>
+          <h5>내용</h5>
+          {isEditing ? (
+            <textarea
+              onChange={contentHandler}
+              value={enteredContent}
+              type="text"
+              name="title"
+              style={{ resize: "none", height: "200px", width: "800px" }}
+            />
+          ) : (
+            <p>{enteredContent}</p>
+          )}
         </div>
-    );
-} 
+      </Wrapper2>
+    </div>
+  );
+}
 export default DetailForm;

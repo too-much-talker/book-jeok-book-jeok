@@ -17,7 +17,7 @@ import java.util.List;
 public class BookInfo extends BaseLastModifiedEntity {
 
     @Column(name = "book_info_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 

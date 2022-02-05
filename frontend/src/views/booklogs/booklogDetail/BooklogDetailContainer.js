@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Toggle from "../booklogRegister/Toggle";
-import StarRating from "../booklogRegister/StarRating";
-import "./DetailPage.css";
 import axios from "axios";
-import styled from "styled-components";
-// import Spinner from "./Spinner";
 import { useLocation } from "react-router-dom";
 import DetailForm from "./BooklogDetailPresenter";
 
@@ -84,18 +79,6 @@ function BooklogDetailContainer (props) {
   const contentHandler = (event) => {
     setEnteredContent(event.target.value);
   }
-//   const IsOpenCircle = styled.div`
-//     position: absolute;
-//     top: 30px;
-//     left: 100px;
-//     width: 22px;
-//     height: 22px;
-//     border-radius: 50%;
-//     background-color: black;
-//   `;
-//   const Desc = styled.div`
-//     padding-left: 50px;
-//   `;
   const toggleHandler = (tog) => {
     setEnteredToggle(tog);
   };

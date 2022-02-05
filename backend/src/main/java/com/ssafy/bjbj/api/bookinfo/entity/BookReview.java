@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class BookReview extends BaseLastModifiedEntity {
 
     @Column(name = "bookreview_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 
