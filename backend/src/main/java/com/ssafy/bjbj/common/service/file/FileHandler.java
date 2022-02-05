@@ -34,21 +34,21 @@ public class FileHandler {
 
             if (!multipartFile.isEmpty()) {
 
-                int indexOf = multipartFile.getOriginalFilename().lastIndexOf(".");
-
-                String newFileName = UUID.randomUUID() + multipartFile.getOriginalFilename().substring(indexOf);
+                String originalFilename = multipartFile.getOriginalFilename();
+                int indexOf = originalFilename.lastIndexOf(".");
+                String encodedFileName = UUID.randomUUID() + originalFilename.substring(indexOf);
 
                 FileInfo fileInfo = FileInfo.builder()
-                        .originFileName(multipartFile.getOriginalFilename())
-                        .encodedFileName(newFileName)
-                        .savedPath(path + File.separator + newFileName)
+                        .originFileName(originalFilename)
+                        .encodedFileName(encodedFileName)
+                        .savedPath(path)
                         .isDeleted(false)
                         .build();
 
                 fileInfos.add(fileInfo);
 
                 file = new File(absolutePath + path);
-                multipartFile.transferTo(new File(file, newFileName));
+                multipartFile.transferTo(new File(file, encodedFileName));
 
             }
         }
