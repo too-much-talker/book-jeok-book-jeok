@@ -55,7 +55,7 @@ function BookDetailContainer(bookInfoSeq){
                 console.log(response.data.data);
                 console.log(response.data.data.msg);
                 setReviews(response.data.data.myBookReviews);
-                setReviewTotalCnt(response.data.data.myBookReviews)
+                setReviewTotalCnt(response.data.data.myBookReviews.totalCnt)
             })
             .catch(function (error) {
                 console.log(error);
@@ -122,7 +122,9 @@ function BookDetailContainer(bookInfoSeq){
 
     return(
         <BookDetailPresenter 
-        reviewPage={reviewPage}reviews={reviews} reviewPageHandler={reviewPageHandler} booklogPageHandler={booklogPageHandler} reviews={reviews}image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}></BookDetailPresenter>
+        reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
+        booklogPageHandler={booklogPageHandler} 
+        image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}></BookDetailPresenter>
     );
 }
 export default BookDetailContainer;
