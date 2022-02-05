@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 public class PointHistory extends BaseCreatedEntity {
 
     @Column(name = "point_history_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 
