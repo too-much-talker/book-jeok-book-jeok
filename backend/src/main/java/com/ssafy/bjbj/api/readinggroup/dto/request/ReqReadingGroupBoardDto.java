@@ -3,7 +3,6 @@ package com.ssafy.bjbj.api.readinggroup.dto.request;
 import lombok.*;
 
 @ToString(of = {"memberSeq","readingGroupSeq", "title", "content"})
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
