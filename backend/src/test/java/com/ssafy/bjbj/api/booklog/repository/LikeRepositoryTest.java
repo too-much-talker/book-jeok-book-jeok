@@ -44,6 +44,7 @@ public class LikeRepositoryTest {
     private BookInfo bookInfo1;
 
     private Booklog booklog1;
+    private Booklog booklog2;
 
     @BeforeEach
     public void setUp() {
@@ -74,10 +75,22 @@ public class LikeRepositoryTest {
                 .build());
 
         booklog1 = booklogRepository.save(Booklog.builder()
-                .title("제목")
-                .content("내용")
-                .summary("한줄평")
+                .title("제목1")
+                .content("내용1")
+                .summary("한줄평1")
                 .starRating(4)
+                .readDate(LocalDateTime.now())
+                .isOpen(true)
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+
+        booklog2 = booklogRepository.save(Booklog.builder()
+                .title("제목2")
+                .content("내용2")
+                .summary("한줄평2")
+                .starRating(3)
                 .readDate(LocalDateTime.now())
                 .isOpen(true)
                 .views(0)
@@ -105,6 +118,36 @@ public class LikeRepositoryTest {
         assertThat(savedLike).isNotNull();
         assertThat(savedLike.getBooklog().getSeq()).isEqualTo(booklog1.getSeq());
         assertThat(savedLike.getMember().getSeq()).isEqualTo(member1.getSeq());
+    }
+
+    @DisplayName("내가 좋아요한 북로그 개수 테스트")
+    @Test
+    public void likeBooklogCountTest() {
+        // 북로그 2개 좋아요
+        Like like1 = Like.builder()
+                .booklog(booklog1)
+                .member(member1)
+                .build();
+        likeRepository.save(like1);
+        em.flush();
+        em.clear();
+        Like like2 = Like.builder()
+                .booklog(booklog2)
+                .member(member1)
+                .build();
+        likeRepository.save(like2);
+        em.flush();
+        em.clear();
+
+        // 좋아요 개수 확인 -> 2개
+        Integer count1 = likeRepository.countByMemberSeq(member1.getSeq());
+        assertThat(count1).isEqualTo(2);
+
+        // 북로그 1개를 비공개 처리 후 개수 확인 -> 1개
+        booklog2.changeIsOpen(false);
+        em.merge(booklog2); // 준영속 상태?
+        Integer count2 = likeRepository.countByMemberSeq(member1.getSeq());
+        assertThat(count2).isEqualTo(1);
     }
 
 }

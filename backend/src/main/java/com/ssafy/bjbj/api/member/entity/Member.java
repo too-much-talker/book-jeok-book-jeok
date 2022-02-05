@@ -31,7 +31,7 @@ import java.util.List;
 public class Member extends BaseLastModifiedEntity {
 
     @Column(name = "member_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 

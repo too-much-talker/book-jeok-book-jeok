@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 public class ExpHistory extends BaseCreatedEntity {
 
     @Column(name = "exp_history_seq", columnDefinition = "BIGINT UNSIGNED")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long seq;
 
