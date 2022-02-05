@@ -50,7 +50,7 @@ height:100vh;
 const BookTitle= styled.div`
 margin-left:15%;
 position:relative;
-width:24vw;
+width:330px;
 text-align:left;
 font-size:30px;
 font-weight:bold;
@@ -125,7 +125,7 @@ function BookDetailPresenter({
         <Line></Line>
         <Contents>
             <BookInfoBlock> 
-                <BookTitle>이도겸 사랑해</BookTitle>
+                <BookTitle>{title}</BookTitle>
                 <BookStarRating>평점 : ★</BookStarRating>
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
