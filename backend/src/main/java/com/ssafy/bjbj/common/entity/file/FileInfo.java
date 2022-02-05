@@ -6,10 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@ToString(of = {"seq", "originFileName", "encodedFileName", "savedPath", "isDeleted"})
+@ToString(of = {"originFileName", "encodedFileName", "savedPath", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Table(name = "tb_file_info")
 @Entity
 public class FileInfo extends BaseLastModifiedEntity {
@@ -31,4 +29,11 @@ public class FileInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    @Builder
+    public FileInfo(String originFileName, String encodedFileName, String savedPath, boolean isDeleted) {
+        this.originFileName = originFileName;
+        this.encodedFileName = encodedFileName;
+        this.savedPath = savedPath;
+        this.isDeleted = isDeleted;
+    }
 }
