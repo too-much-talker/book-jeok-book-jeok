@@ -2,10 +2,7 @@ package com.ssafy.bjbj.api.booklog.repository;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.booklog.dto.response.MyBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.QMyBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.QOpenBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -110,6 +107,79 @@ public class BooklogRepositoryImpl implements BooklogRepositoryCustom {
 
         List<MyBooklogDto> myBooklogDtos = query.fetch();
         return myBooklogDtos;
+    }
+
+    @Override
+    public Integer countSearchBooklogByKeyword(String keyword, String writer) {
+        JPAQuery<Integer> query = queryFactory
+                .select(booklog.count().intValue())
+                .from(booklog)
+                .join(booklog.member, member)
+                .where(booklog.isOpen.isTrue()
+                        .and(booklog.isDeleted.isFalse()));
+
+        if (keyword != null) {
+            query.where(booklog.title.contains(keyword).or(booklog.content.contains(keyword)));
+        }
+
+        if (writer != null) {
+            query.where(booklog.member.nickname.eq(writer));
+        }
+
+        return query.fetchOne();
+    }
+
+    @Override
+    public List<SearchBooklogDto> findSearchBooklog(Pageable pageable, String keyword, String writer) {
+        JPAQuery<SearchBooklogDto> query = queryFactory
+                .select(new QSearchBooklogDto(
+                        booklog.seq,
+                        member.nickname,
+                        booklog.title,
+                        booklog.content.substring(0, 50),
+                        booklog.likes.size().as("likes"),
+                        booklog.createdDate,
+                        bookInfo.largeImgUrl.as("imgUrl")))
+                .from(booklog)
+                .join(booklog.member, member)
+                .leftJoin(booklog.likes, like).on(like.booklog.eq(booklog)).groupBy(booklog)
+                .join(booklog.bookInfo, bookInfo)
+                .where(booklog.isOpen.isTrue()
+                        .and(booklog.isDeleted.isFalse()))
+                .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .orderBy(booklog.createdDate.desc());
+
+        if (keyword != null) {
+            query.where(booklog.title.contains(keyword).or(booklog.content.contains(keyword)));
+        }
+
+        if (writer != null) {
+            query.where(booklog.member.nickname.eq(writer));
+        }
+
+        List<SearchBooklogDto> searchBooklogDtos = query.fetch();
+        return searchBooklogDtos;
+    }
+
+    @Override
+    public List<LikeBooklogDto> findLikeBooklogDtos(Pageable pageable, Long memberSeq) {
+        return queryFactory
+                .select(new QLikeBooklogDto(
+                        booklog.seq,
+                        booklog.title,
+                        booklog.createdDate,
+                        booklog.isOpen,
+                        bookInfo.largeImgUrl.as("imgUrl")))
+                .from(booklog)
+                .join(booklog.bookInfo, bookInfo)
+                .join(booklog.likes, like).on(like.member.seq.eq(memberSeq))
+                .where(booklog.isOpen.isTrue()
+                        .and(booklog.isDeleted.isFalse()))
+                .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .orderBy(booklog.createdDate.desc())
+                .fetch();
     }
 
 }
