@@ -60,6 +60,7 @@ render(
               <Route path="/signup" element={<Signup />} />
               <Route path="/booklogs/*" element={<Booklogs />}>
                 <Route index element={<BooklogListContainer />} />
+                <Route path="search" />
                 {/* <Route path="detail"/> */}
               </Route>
               <Route path="/mypage" element={<MyPage />}>
