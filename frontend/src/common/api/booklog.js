@@ -6,4 +6,11 @@ async function booklogList(info, success, fail) {
   await api.get(`/api/v1/booklogs`, { params: info }).then(success).catch(fail);
 }
 
-export { booklogList };
+async function findBooklog(info, success, fail) {
+  await api
+    .get(`/api/v1/booklogs/search`, { params: info })
+    .then(success)
+    .catch(fail);
+}
+
+export { booklogList, findBooklog };

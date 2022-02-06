@@ -11,7 +11,7 @@ import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import Signup from "./views/user/signup/SignupContainer";
 
-import {SearchMainContainer} from "./views/bookInfo/bookSearch/SearchMainContainer";
+import { SearchMainContainer } from "./views/bookInfo/bookSearch/SearchMainContainer";
 import SearchResultContainer from "./views/bookInfo/bookSearch/SearchResultContainer";
 import BookDetailContainer from "./views/bookDetail/BookDetailContainer";
 
@@ -67,8 +67,11 @@ render(
               <Route path="/signup" element={<Signup />} />
               <Route path="/searchMain" element={<SearchMainContainer />} />
               <Route path="/search/" element={<SearchMainContainer />} />
-              <Route path="/search/:category/:keyword" element={<SearchResultContainer/>} />
-              <Route path="/detail/:seq" element={<BookDetailContainer/>} />
+              <Route
+                path="/search/:category/:keyword"
+                element={<SearchResultContainer />}
+              />
+              <Route path="/detail/:seq" element={<BookDetailContainer />} />
 
               <Route path="/booklogs/*" element={<Booklogs />}>
                 <Route index element={<BooklogListContainer />} />
@@ -80,8 +83,14 @@ render(
                 <Route path="mybookclub" />
                 <Route path="mychallenge" />
               </Route>
-              <Route path="/booklogregister" element={<BooklogRegisterContainer/>} />
-              <Route path="/booklogdetail" element={<BooklogDetailContainer/>} />
+              <Route
+                path="/booklogregister"
+                element={<BooklogRegisterContainer />}
+              />
+              <Route
+                path="/booklogdetail"
+                element={<BooklogDetailContainer />}
+              />
             </Routes>
           </Wrapper>
         </Body>

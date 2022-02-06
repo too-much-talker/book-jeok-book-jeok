@@ -20,14 +20,18 @@ const CardBox = styled.div`
   margin: 0 auto;
 `;
 
-function BooklogListPresenter({ data, isPopular }) {
+function BooklogListPresenter({ order, data, isPopular, totalCnt }) {
   // console.log(data);
 
   return (
     <div>
       <div>
-        <h2>BooklogList</h2>
-        <BooklogNavi isPopular={isPopular} />
+        {/* <h2>BooklogList</h2> */}
+        {order !== "search" ? (
+          <BooklogNavi isPopular={isPopular} />
+        ) : (
+          <div>총 {totalCnt}건의 검색 결과가 있습니다.</div>
+        )}
         <CardBox>
           {data.map((data, index) => (
             <BooklogCard booklog={data} key={index} />
