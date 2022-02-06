@@ -7,6 +7,7 @@ import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class ReadingGroupBoardController {
 
     private final ReadingGroupBoardService readingGroupBoardService;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
     public BaseResponseDto register(
             @Valid @RequestPart(value = "reqReadingGroupBoard") ReqReadingGroupBoardDto reqReadingGroupBoardDto,

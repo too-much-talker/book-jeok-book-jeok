@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 /**
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
@@ -75,6 +76,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 if(member != null) {
                         // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
                 		CustomUserDetails customUserDetails = new CustomUserDetails(member);
+                        customUserDetails.setAuthorities(Collections.singletonList(member.getRole()));
                 		UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(email,
                 				null, customUserDetails.getAuthorities());
                 		jwtAuthentication.setDetails(customUserDetails);
