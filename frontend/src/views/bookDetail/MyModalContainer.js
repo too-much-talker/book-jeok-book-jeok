@@ -5,15 +5,15 @@ import axios from "axios";
 
 function MyModalContainer({ isOpen, onCancel,userReview }){
     const url = "http://i6a305.p.ssafy.io:8080";
-    console.log(userReview);
+    console.log("이거다",userReview);
     const handleClose = () => {
         onCancel();
       };
     
-    const [starRating, setStarRating]= useState();
-    const [summary, setSummary]= useState();
-    const [createdDate, setCreatedDate]= useState();
-    const [bookReviewSeq, setBookReviewSeq]= useState();
+    const [starRating, setStarRating]= useState(userReview.starRating);
+    const [summary, setSummary]= useState(userReview.summary);
+    const [createdDate, setCreatedDate]= useState(userReview.createdDate);
+    const [bookReviewSeq, setBookReviewSeq]= useState(userReview.bookReviewSeq);
 
     // const [starRating, setStarRating]= useState(userReview.starRating);
     // const [summary, setSummary]= useState(userReview.summary);
@@ -43,7 +43,19 @@ function MyModalContainer({ isOpen, onCancel,userReview }){
     }
 
     function deleteReview(){
+        console.log("삭제");
+        axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`)
+        .then(function (response){
+          console.log(response);
+          handleClose();
+          })
+        .catch(function (error) {
+            console.log(error);
+            alert("삭제 중 문제가 발생하였습니다.")
+          }); 
+
     }
+
 
 
     return(
