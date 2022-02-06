@@ -6,11 +6,11 @@ const Card = styled.div`
   width: 30rem;
   height: 18rem;
   float: left;
-  margin: 0.5rem;
+  margin: 0.8rem;
   padding: 0.7rem;
   border-radius: 5%;
   box-shadow: 4px 5px 7px 2px lightgrey;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   // display: inline-block;
 `;
 
@@ -41,7 +41,6 @@ const ContentLink = styled(Link)`
 
 const Date = styled.div`
   width: 100%;
-  font-size: 0.8rem;
   text-align: left;
   border-top: solid 1px;
 `;
@@ -70,13 +69,25 @@ const Wrapper = styled.div`
 const Title = styled.h6`
   margin: 0.2rem;
   margin-top: 0.6rem;
+  font-weight: bold;
 `;
 
 const Content = styled.div`
   height: 48%;
   text-align: left;
-  font-size: 1.3rem;
 `;
+
+function cutTitle(title) {
+  if (title !== null && title.length > 10) {
+    return title.substr(0, 10) + "...";
+  } else return title;
+}
+
+function cutContent(content) {
+  if (content !== null && content.length > 40) {
+    return content.substr(0, 39);
+  } else return content;
+}
 
 function BooklogCard({ booklog }) {
   let content = booklog.content;
@@ -92,8 +103,8 @@ function BooklogCard({ booklog }) {
       </ImgGrid>
       <InnerGrid>
         <ContentLink to="/">
-          <Title>{booklog.title}</Title>
-          <Content>{booklog.content}...</Content>
+          <Title>{cutTitle(booklog.title)}</Title>
+          <Content>{cutContent(booklog.content)}...</Content>
         </ContentLink>
         <Date>{booklog.createdDate}</Date>
         <Wrapper>
