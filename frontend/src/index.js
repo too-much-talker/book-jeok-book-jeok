@@ -10,10 +10,11 @@ import Login from "./views/user/login/LoginContainer";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import Signup from "./views/user/signup/SignupContainer";
+
 import {SearchMainContainer} from "./views/bookInfo/bookSearch/SearchMainContainer";
 import SearchResultContainer from "./views/bookInfo/bookSearch/SearchResultContainer";
-import SearchNavContainer from "./views/bookInfo/bookSearch/SearchNavContainer";
 import BookDetailContainer from "./views/bookDetail/BookDetailContainer";
+
 import Booklogs from "./views/booklogs";
 import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContainer";
 import MyPage from "./views/user/myPage/index";
@@ -63,8 +64,9 @@ render(
               <Route path="/" element={<App />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+
               <Route path="/searchMain" element={<SearchMainContainer />} />
-              <Route path="/search" element={<SearchMainContainer />} />
+              <Route path="/search/" element={<SearchMainContainer />} />
               <Route path="/search/:category/:keyword" element={<SearchResultContainer/>} />
               <Route path="/detail/:seq" element={<BookDetailContainer/>} />
 
@@ -82,7 +84,6 @@ render(
             </Routes>
           </Wrapper>
         </Body>
-
       </BrowserRouter>
     </PersistGate>
   </Provider>,

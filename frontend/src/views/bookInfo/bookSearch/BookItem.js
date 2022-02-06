@@ -14,9 +14,6 @@ margin:auto;
 text-align:left;
 `;
 
-
-
-
 function BookItem({url,bookInfoSeq,title, author,largeImgUrl,publisher,publicationDate,starRating}){
 
     return (
