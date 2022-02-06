@@ -43,7 +43,13 @@ function BooklogDetailContainer(props) {
   }, []);
 
   const saveArticle = async (event) => {
+    if (enteredContent === "" || enteredTitle === "") {
+      alert("제목과 내용을 입력해주세요.");
+    }
+    else{
+
     event.preventDefault();
+    
     const response = await axios.put(url + `/api/v1/booklogs/${bookLogSeq}`, {
       memberSeq: 1,
       booklogSeq: bookInfoSeq,
@@ -57,6 +63,7 @@ function BooklogDetailContainer(props) {
     });
     setIsEditing(!isEditing);
     alert(response.data.data.msg);
+  }
   };
 
   const onDeleteArticle = async (event) => {
