@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import RegisterForm from "./BooklogRegisterPresenter";
 
-const url = "https://77e1dca6-cd01-4930-ae25-870e7444cc55.mock.pstmn.io";
+const url = "http://i6a305.p.ssafy.io:8080";
 // const { title, author, publisher, publicationDate, largeImgUrl, seq } =
 //   BOOKINFO;
 
@@ -18,15 +18,17 @@ function BooklogRegisterContainer() {
   const [toggle, setToggle] = useState(false);
   const [oneSentence, setOneSentence] = useState("");
   const [selectedBook, setSelectedBook] = useState({});
-  let tmpUrl;
-  if (isSearched) {
-    tmpUrl = selectedBook.smallImgUrl.substring(
-      0,
-      selectedBook.smallImgUrl.length - 5
-    );
-    tmpUrl = tmpUrl + "s.jpg";
-    console.log(tmpUrl);
-  }
+
+  // let tmpUrl;
+  // if (isSearched) {
+  //   tmpUrl = selectedBook.smallImgUrl.substring(
+  //     0,
+  //     selectedBook.smallImgUrl.length - 5
+  //   );
+  //   tmpUrl = tmpUrl + "s.jpg";
+  //   console.log(tmpUrl);
+  // }
+
   const onSentenceChange = (event) => {
     setOneSentence(event.target.value);
   };
@@ -47,7 +49,7 @@ function BooklogRegisterContainer() {
       rating: rating,
       sentence: oneSentence,
       private: !toggle,
-      date: new Date(),
+      date: new Date()
     };
     if (TitleValue === "" || ContentValue === "") {
       alert("제목과 내용을 입력해주세요.");
@@ -61,7 +63,7 @@ function BooklogRegisterContainer() {
           content: ContentValue,
           summary: oneSentence,
           starRating: rating,
-          readDate: new Date(),
+          readDate: new Date()
         })
         .then(function (response) {
           console.log(response.status);
@@ -104,7 +106,7 @@ function BooklogRegisterContainer() {
           toggleHandler={toggleHandler}
           onSubmitChangeBook={onSubmitChangeBook}
           onSubmitArticle={onSubmitArticle}
-          tmpUrl={tmpUrl}
+          bookImg={selectedBook.largeImgUrl}
           selectedBook={selectedBook}
           ratingHandler={ratingHandler}
           onSentenceChange={onSentenceChange}
@@ -113,10 +115,9 @@ function BooklogRegisterContainer() {
           TitleValue={TitleValue}
           onContentChange={onContentChange}
           ContentValue={ContentValue}
-          ></RegisterForm>
-        )
-      }
-      </div>
+        ></RegisterForm>
+      )}
+    </div>
   );
 }
 
