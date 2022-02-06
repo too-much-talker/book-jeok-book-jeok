@@ -10,6 +10,7 @@ import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
@@ -187,6 +188,7 @@ public class MemberController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping("/subscribe/{toMemberSeq}")
     public BaseResponseDto subscribe(@PathVariable Long toMemberSeq, Authentication authentication) {
         log.debug("팔로우 API 호출");
@@ -211,6 +213,7 @@ public class MemberController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping("/unsubscribe/{toMemberSeq}")
     public BaseResponseDto unsubscribe(@PathVariable long toMemberSeq, Authentication authentication) {
         log.debug("언팔로우 API 호출");
@@ -237,6 +240,7 @@ public class MemberController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/me")
     public BaseResponseDto me(Authentication authentication) {
         log.debug("MemberController.myInfo() 호출");
@@ -259,6 +263,7 @@ public class MemberController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping
     public BaseResponseDto update(Authentication authentication, @Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
         log.debug("회원정보 수정");
