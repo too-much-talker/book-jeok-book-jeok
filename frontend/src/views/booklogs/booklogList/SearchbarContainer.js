@@ -32,27 +32,20 @@ function SearchNavContainer() {
     ) {
       alert("검색어와 옵션을 선택해주세요");
     } else {
-      navigate(`/booklogs/search?option=${option}&keyword=${input}`);
+      navigate(`/booklogs/list/search?${option}=${input}`);
     }
   };
 
-  //   const onSubmit = (event) => {
-  //     if (event.key === "Enter") {
-  //       console.log(searchKeyword);
-  //       if (searchKeyword !== "" && searchKeyword !== undefined) {
-  //         let url = `/search/${searchCategory}/${searchKeyword}`;
-  //         document.location.href = url;
-  //       } else {
-  //         alert("검색어를 입력해주세요.");
-  //       }
-  //     }
-  //     };
+  const onEnter = (e) => {
+    if (e.key == "Enter") onClickBtn();
+  };
 
   return (
     <SearchbarPresenter
       onChangeHandler={onChangeHandler}
       onInputChange={onInputChange}
       onClickBtn={onClickBtn}
+      onEnter={onEnter}
       Options={Options}
     ></SearchbarPresenter>
   );

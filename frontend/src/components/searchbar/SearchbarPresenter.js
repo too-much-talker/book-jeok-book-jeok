@@ -51,6 +51,7 @@ function SearchNavPresenter({
   onChangeHandler,
   onInputChange,
   onClickBtn,
+  onEnter,
   Options,
 }) {
   return (
@@ -63,7 +64,10 @@ function SearchNavPresenter({
             </option>
           ))}
         </SelectBox>
-        <SearchInput onChange={onInputChange}></SearchInput>
+        <SearchInput
+          onChange={onInputChange}
+          onKeyPress={onEnter}
+        ></SearchInput>
         <SearchIcon onClick={onClickBtn}></SearchIcon>
       </SearchWapper>
     </SearchBlock>
