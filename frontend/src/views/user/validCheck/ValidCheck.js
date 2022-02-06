@@ -173,5 +173,9 @@ export {
   checkNameLength,
   checkPhoneNumber,
   checkPhoneDuplicate,
+<<<<<<< HEAD
   checkPasswordConfim,
+=======
+  checkPasswordConfim
+>>>>>>> e974f70de52160f169b8fcf377c06cb90df6d7c8
 };

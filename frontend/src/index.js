@@ -10,10 +10,11 @@ import Login from "./views/user/login/LoginContainer";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import Signup from "./views/user/signup/SignupContainer";
+
 import {SearchMainContainer} from "./views/bookInfo/bookSearch/SearchMainContainer";
 import SearchResultContainer from "./views/bookInfo/bookSearch/SearchResultContainer";
-import SearchNavContainer from "./views/bookInfo/bookSearch/SearchNavContainer";
 import BookDetailContainer from "./views/bookDetail/BookDetailContainer";
+
 import Booklogs from "./views/booklogs";
 import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContainer";
 import MyPage from "./views/user/myPage/index";
@@ -21,6 +22,7 @@ import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 import styled from "styled-components";
 import Header from "./views/main/header/Header";
 import "./common/css/index.css";
+import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRegisterContainer";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -63,7 +65,7 @@ render(
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/searchMain" element={<SearchMainContainer />} />
-              <Route path="/search" element={<SearchMainContainer />} />
+              <Route path="/search/" element={<SearchMainContainer />} />
               <Route path="/search/:category/:keyword" element={<SearchResultContainer/>} />
               <Route path="/detail/:seq" element={<BookDetailContainer/>} />
 
@@ -77,10 +79,10 @@ render(
                 <Route path="mybookclub" />
                 <Route path="mychallenge" />
               </Route>
+              <Route path="/booklogregister" element={<BooklogRegisterContainer/>} />
             </Routes>
           </Wrapper>
         </Body>
-
       </BrowserRouter>
     </PersistGate>
   </Provider>,

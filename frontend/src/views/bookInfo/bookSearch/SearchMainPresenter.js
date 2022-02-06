@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import icon from  "../../../res/img/search.png";
-// import Pagination from "react-js-pagination";
 import { Link } from "react-router-dom";
 import BookItem from "./BookItem";
 import SearchNavContainer from "./SearchNavContainer";
@@ -20,11 +19,12 @@ background:white;
 width:1250px;
 height:60px;
 border-top: 2px solid black;
-
+margin-top:20px;
 `;
 
 const ResultText = styled.div`
-margin-left:40px;
+position:absolute;
+margin-left:20px;
 margin-top:20px;
 font-size:30px;
 `;
@@ -32,16 +32,20 @@ font-size:30px;
 const BestSellerBlock= styled.div`
 position:relative;
 display: flex;
-// justify-content: space-between;
 align-items: flex-start;
 flex-wrap: wrap;
-text-align:center;
-width: 80%;
-left:7%;
-margin:auto;
-margin-top:300px;
+// text-align:center;
+margin-top:150px;
+margin-left:-80px;
+// background:red;
+width:1200px;
 `;
-function SearchMainPresenter ({goDetail, bestSellers}){
+
+const Book = styled.div`
+width:280px;
+margin:10px;
+`;
+function SearchMainPresenter ({goDetail,bestSellers}){
         return( 
         <>
         <SearchNavContainer keyword={""}></SearchNavContainer>
@@ -49,13 +53,12 @@ function SearchMainPresenter ({goDetail, bestSellers}){
             <ResultText>현재 베스트셀러는?</ResultText>
         </ResultBlock>
         <BestSellerBlock>
-            {/* 나중에 tempBestSeller를 BestSeller로 바꿔야함 */}
             {bestSellers.map(bestSeller=>(
                 // <div onClick={goDetail(bestSeller.seq)}>
-                <div>
+                <Book onClick={()=>goDetail(bestSeller.seq)} >
                 <BookItem 
-                key={bestSeller.seq}
-                //key 수정해야함 
+                bookInfoSeq={bestSeller.seq}
+                key={bestSeller.seq} 
                 title={bestSeller.title} 
                 author={bestSeller.author}
                 largeImgUrl={bestSeller.largeImgUrl}
@@ -63,7 +66,7 @@ function SearchMainPresenter ({goDetail, bestSellers}){
                 publicationDate= {bestSeller.publicationDate}
                 starRating={bestSeller.starRating}
                 ></BookItem>
-                </div>
+                </Book>
             ))
             }
         </BestSellerBlock>

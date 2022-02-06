@@ -6,7 +6,6 @@ import axios from "axios";
 
 function SearchResultContainer(){
     const [page, setPage]= useState(1);
-    // const [limit, setLimit]= useState();
     let useParam = useParams(); //여기 안에 keyword, category 존재함
     const [orderCategory, setOrderCategory]= useState("latest");
     const [books, setBooks] = useState();
@@ -29,6 +28,10 @@ function SearchResultContainer(){
       getBooks();
     }, [page]);
 
+    function goDetail(seq){
+      document.location.href = `/detail/${seq}`;
+    }
+
     function orderHandler(event){
       setOrderCategory(event.target.value);
     }
@@ -37,14 +40,13 @@ function SearchResultContainer(){
       setPage(event);
     }
 
-    function getBooks(){ ///처음 시작할때
+    function getBooks(){
         axios.post(url+`/api/v1/bookinfos/` ,
         {
             page:page,
             limit:12,
             searchCategory : useParam.category, 
-            // searchKeyword : useParam.keyword,  
-            searchKeyword : "", //이건 테스트 하기 위한거
+            searchKeyword : useParam.keyword,  
             orderCategory: orderCategory
           })
         .then(function (response){
@@ -57,10 +59,9 @@ function SearchResultContainer(){
           }); 
     }
 
-    // getBooks();
     return(
         <> 
-       <SearchResultPresenter totalCnt={totalCnt} page={page} handlePageChange={handlePageChange}url={url} totalCnt={totalCnt} orderHandler={orderHandler} useParam={useParam} books={books}></SearchResultPresenter>
+       <SearchResultPresenter goDetail={goDetail} totalCnt={totalCnt} page={page} handlePageChange={handlePageChange}url={url} totalCnt={totalCnt} orderHandler={orderHandler} useParam={useParam} books={books}></SearchResultPresenter>
        </> 
     );
     }
