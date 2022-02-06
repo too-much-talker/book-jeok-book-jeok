@@ -5,10 +5,10 @@ import DetailForm from "./BooklogDetailPresenter";
 
 const url = "https://77e1dca6-cd01-4930-ae25-870e7444cc55.mock.pstmn.io";
 
-function BooklogDetailContainer (props) {
+function BooklogDetailContainer(props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedBookLog, setSelectedBookLog] = useState({});
+  // const [selectedBookLog, setSelectedBookLog] = useState({});
   const [selectedBookInfo, setSelectedBookInfo] = useState({});
   const [enteredSummary, setEnteredSummary] = useState("");
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -32,20 +32,19 @@ function BooklogDetailContainer (props) {
     setEnteredSummary(bookLogData.summary);
     setEnteredTitle(bookLogData.title);
     setEnteredRating(bookLogData.starRating);
-    setSelectedBookLog(bookLogData);
+    // setSelectedBookLog(bookLogData);
     setSelectedBookInfo(bookInfoData);
-    // setEnteredToggle(bookLogData.isOpen);
+    setEnteredToggle(bookLogData.isOpen);
     setIsLoading(false);
   };
-  const { title, content, summary, starRating, isOpen, createdDate } =
-    selectedBookLog;
+
   useEffect(() => {
     getBookLog();
   }, []);
 
   const saveArticle = async (event) => {
     event.preventDefault();
-    const response = await axios.put(url + `/api/v1/booklogs/${bookLogSeq}`,{
+    const response = await axios.put(url + `/api/v1/booklogs/${bookLogSeq}`, {
       memberSeq: 1,
       booklogSeq: bookInfoSeq,
       bookInfoSeq: bookInfoSeq,
@@ -54,13 +53,12 @@ function BooklogDetailContainer (props) {
       content: enteredContent,
       summary: enteredSummary,
       starRating: enteredRating,
-      readDate: new Date(),
+      readDate: new Date()
     });
-    console.log(isOpen);
     setIsEditing(!isEditing);
     alert(response.data.data.msg);
   };
-  
+
   const onDeleteArticle = async (event) => {
     event.preventDefault();
     const response = await axios.delete(url + `/api/v1/booklogs/${bookLogSeq}`);
@@ -78,7 +76,7 @@ function BooklogDetailContainer (props) {
   };
   const contentHandler = (event) => {
     setEnteredContent(event.target.value);
-  }
+  };
   const toggleHandler = (tog) => {
     setEnteredToggle(tog);
   };
@@ -90,26 +88,26 @@ function BooklogDetailContainer (props) {
       {isLoading ? (
         <p>로딩중..</p>
       ) : (
-          <DetailForm
-            isEditing={isEditing}
-            isOpen={isOpen}
-            toggleHandler={toggleHandler}
-            saveArticle={saveArticle}
-            editButtonHandler={editButtonHandler}
-            onDeleteArticle={onDeleteArticle}
-            selectedBookInfo={selectedBookInfo}
-            enteredRating={enteredRating}
-            ratingHandler={ratingHandler}
-            summaryHandler={summaryHandler}
-            enteredSummary={enteredSummary}
-            titleHandler={titleHandler}
-            enteredTitle={enteredTitle}
-            contentHandler={contentHandler}
-            enteredContent={enteredContent}>
-            </DetailForm>
-        )}
+        <DetailForm
+          isEditing={isEditing}
+          isOpen={enteredToggle}
+          toggleHandler={toggleHandler}
+          saveArticle={saveArticle}
+          editButtonHandler={editButtonHandler}
+          onDeleteArticle={onDeleteArticle}
+          selectedBookInfo={selectedBookInfo}
+          enteredRating={enteredRating}
+          ratingHandler={ratingHandler}
+          summaryHandler={summaryHandler}
+          enteredSummary={enteredSummary}
+          titleHandler={titleHandler}
+          enteredTitle={enteredTitle}
+          contentHandler={contentHandler}
+          enteredContent={enteredContent}
+        ></DetailForm>
+      )}
     </div>
-    );
+  );
 }
 
 export default BooklogDetailContainer;
