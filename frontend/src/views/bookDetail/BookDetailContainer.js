@@ -18,6 +18,8 @@ function BookDetailContainer(bookInfoSeq){
         const [image, setImage]= useState();
         const [publisher, setPublisher]= useState();
         const [publicationDate, setPublicationDate]= useState();
+        const [seq, setSeq]= useState();
+        
         const [reviews, setReviews]= useState();
         const [reviewPage, setReviewPage]= useState(1);
         const [reviewTotalCnt, setReviewTotalCnt]= useState();
@@ -65,7 +67,7 @@ function BookDetailContainer(bookInfoSeq){
             //책정보 데려오기
             axios.get(url+`/api/v1/bookinfos/${useParam.seq}`)
             .then(function (response){
-               // console.log(response.data.data.bookInfo);
+                setSeq(response.data.data.bookInfo.seq);
                 setImage(response.data.data.bookInfo.largeImgUrl);
                 setTitle(response.data.data.bookInfo.title);
                 setAuthor(response.data.data.bookInfo.author);
@@ -170,7 +172,7 @@ function BookDetailContainer(bookInfoSeq){
             //북로그 가져오기
             axios.get(url+`/api/v1/booklogs?page=${booklogPage}&size=5&sort=${booklogOrder}`)
             .then(function (response){
-                console.log(response.data.data.booklogs.content);
+                //console.log(response.data.data.booklogs.content);
                 setBooklogs(response.data.data.booklogs);
                 setBooklogTotalCnt(response.data.data.totalCnt);
             })  
@@ -200,8 +202,10 @@ function BookDetailContainer(bookInfoSeq){
         handleMyModalClose={handleMyModalClose} handleWriteModalClose={handleWriteModalClose}
         setMyModalOpen={setMyModalOpen} setWriteModalOpen={setWriteModalOpen}
         handleMyModalOpen={handleMyModalOpen} handleWriteModalOpen={handleWriteModalOpen}
-        MyModalOpen={MyModalOpen}
+        MyModalOpen={MyModalOpen} WriteModalOpen={WriteModalOpen}
         userReview={userReview}
+        user={user}
+        seq={seq}
         ></BookDetailPresenter>
         );
 }
