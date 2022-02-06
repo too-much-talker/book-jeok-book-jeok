@@ -5,7 +5,7 @@ import styled from "styled-components";
 const NaviBlock = styled.nav`
   height: 70px;
   // background: yellow;
-  font-size: 1.6rem; // 메뉴 크기
+  font-size: 1.8rem; // 메뉴 크기
 `;
 
 const LoginButton = styled.button`
@@ -38,7 +38,7 @@ const StyledLink = styled(Link)`
 `;
 
 const menus = ["북로그", "독서모임", "책정보", "챌린지", "공지"];
-const links = ["/booklogs/list/like","/", "/search", "/", "/"];
+const links = ["/booklogs/list/like", "/", "/search", "/", "/"];
 
 function Navigation() {
   return (
