@@ -2,6 +2,7 @@ import Navigation from "./Navigation";
 import styled from "styled-components";
 import logo from "../../../res/img/logo.png";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const HeaderWrapper = styled.div`
   width: 1170px;
@@ -26,13 +27,22 @@ const HeaderRoot = styled.header`
 `;
 
 function Header() {
+  const { jwtToken, memberInfo } = useSelector((state) => state.authReducer);
+  console.log(jwtToken, memberInfo);
+
   return (
     <HeaderRoot>
       <HeaderWrapper>
         <Link to="/">
           <Logo />
         </Link>
-        <Navigation />
+        <Navigation
+          isLogin={
+            jwtToken === null || jwtToken === undefined || jwtToken === ""
+              ? false
+              : true
+          }
+        />
       </HeaderWrapper>
     </HeaderRoot>
   );

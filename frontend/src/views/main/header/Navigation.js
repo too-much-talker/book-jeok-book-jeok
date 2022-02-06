@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../../common/reducers/modules/auth";
+import { useNavigate } from "react-router-dom";
 
 const NaviBlock = styled.nav`
   height: 70px;
@@ -40,7 +43,28 @@ const StyledLink = styled(Link)`
 const menus = ["북로그", "독서모임", "책정보", "챌린지", "공지"];
 const links = ["/booklogs/list/like", "/", "/search", "/", "/"];
 
-function Navigation() {
+function Navigation({ isLogin }) {
+  console.log(isLogin);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    dispatch(
+      setUserInfo({
+        memberInfo: {
+          seq: "",
+          email: "",
+          password: "",
+          name: "",
+          nickname: "",
+        },
+        jwtToken: "",
+      })
+    );
+    navigate("/");
+  };
+
   return (
     <NaviBlock>
       <UL>
@@ -50,9 +74,13 @@ function Navigation() {
           </LI>
         ))}
         <LI>
-          <Link to="/login">
-            <LoginButton>로그인</LoginButton>
-          </Link>
+          {isLogin ? (
+            <LoginButton onClick={logout}>로그아웃</LoginButton>
+          ) : (
+            <Link to="/login">
+              <LoginButton>로그인</LoginButton>
+            </Link>
+          )}
         </LI>
       </UL>
     </NaviBlock>
