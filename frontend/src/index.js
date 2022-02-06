@@ -20,7 +20,7 @@ import BooklogListContainer from "./views/booklogs/booklogList/BooklogListContai
 import MyPage from "./views/user/myPage/index";
 import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 import styled from "styled-components";
-import Header from "./views/main/Header/Header";
+import Header from "./views/main/header/Header";
 import "./common/css/index.css";
 import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRegisterContainer";
 
