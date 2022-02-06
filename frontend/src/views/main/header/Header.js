@@ -12,8 +12,8 @@ const Logo = styled.img.attrs({
   src: logo,
 })`
   float: left;
-  width: 200px;
-  height: 80px;
+  width: 240px;
+  height: 100px;
   // background: red;
   line-height: 80px;
 `;
