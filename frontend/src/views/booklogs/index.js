@@ -1,4 +1,5 @@
 import BooklogListContainer from "./booklogList/BooklogListContainer";
+import BooklogSearchContainer from "./booklogSearch/BooklogSearchContainer";
 import { Route, Routes } from "react-router-dom";
 
 function Booklogs() {
