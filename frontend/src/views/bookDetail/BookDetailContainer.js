@@ -2,7 +2,15 @@ import BookDetailPresenter from "./BookDetailPresenter";
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
 function BookDetailContainer(bookInfoSeq){
+        const user=useSelector(state => state.authReducer);
+        console.log(user);
+        if(user.jwtToken!==""){
+  
+        }  
+
         let useParam=useParams();
         const url = "http://i6a305.p.ssafy.io:8080";
         const [title, setTitle]= useState();
@@ -52,6 +60,7 @@ function BookDetailContainer(bookInfoSeq){
           }, [booklogOrder]);
         
         function getBookInfo(){
+
             //책정보 데려오기
             axios.get(url+`/api/v1/bookinfos/${useParam.seq}`)
             .then(function (response){
