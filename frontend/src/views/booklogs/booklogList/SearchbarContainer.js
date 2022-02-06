@@ -1,4 +1,4 @@
-import SearchNavPresenter from "./SearchBarPresenter";
+import SearchbarPresenter from "../../../components/searchbar/SearchbarPresenter";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -49,12 +49,12 @@ function SearchNavContainer() {
   //     };
 
   return (
-    <SearchNavPresenter
+    <SearchbarPresenter
       onChangeHandler={onChangeHandler}
       onInputChange={onInputChange}
       onClickBtn={onClickBtn}
       Options={Options}
-    ></SearchNavPresenter>
+    ></SearchbarPresenter>
   );
 }
 export default SearchNavContainer;

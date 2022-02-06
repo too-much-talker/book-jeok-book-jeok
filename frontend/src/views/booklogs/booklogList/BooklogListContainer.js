@@ -4,7 +4,7 @@ import { booklogList } from "../../../common/api/booklog";
 import "./Paging.css";
 import Pagination from "react-js-pagination";
 import { useParams } from "react-router-dom";
-import SearchBarContainer from "../searchBar/SearchBarContainer";
+import SearchbarContainer from "./SearchbarContainer";
 
 function BooklogListContainer() {
   const [order, setOrder] = useState("");
@@ -47,7 +47,7 @@ function BooklogListContainer() {
   return (
     <>
       <h1>북로그 트랜드</h1>
-      <SearchBarContainer />
+      <SearchbarContainer />
       <BooklogListPresenter data={data} isPopular={order === "like"} />
       <Pagination
         activePage={page}
