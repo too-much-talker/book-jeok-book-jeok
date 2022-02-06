@@ -89,6 +89,7 @@ public class BookReviewController {
             status = HttpStatus.OK.value();
             responseData.put("msg", "작성한 리뷰들이 있습니다");
             responseData.put("myBookReviews",reviewsByMemberSeq);
+            responseData.put("totalCnt", bookReviewService.countBookReviewsByMemberSeq(memberSeq));
             }
         }
 
@@ -115,6 +116,7 @@ public class BookReviewController {
             status = HttpStatus.OK.value();
             responseData.put("msg", "작성된 리뷰들이 있습니다");
             responseData.put("myBookReviews",reviewsByBookInfoSeq);
+            responseData.put("totalCnt", bookReviewService.countBookReviewsByBookInfoSeq(bookInfoSeq));
         }
 
         return BaseResponseDto.builder()
