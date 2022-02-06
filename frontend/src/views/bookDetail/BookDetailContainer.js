@@ -6,10 +6,11 @@ import { useSelector } from 'react-redux';
 
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
-        //console.log(user.memberInfo.seq);
         if(user.jwtToken!==""){
   
         }  
+        // const { jwtToken } = useSelector((state) => state.authReducer);
+        // console.log(jwtToken);
 
         let useParam=useParams();
         const url = "http://i6a305.p.ssafy.io:8080";

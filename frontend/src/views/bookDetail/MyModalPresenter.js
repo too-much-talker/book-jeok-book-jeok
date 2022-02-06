@@ -20,11 +20,14 @@ const Notice= styled.div`
 position:relative;
 margin:auto;
 `;
-const Contents= styled.div`
+const StarRating= styled.input`
 position:relative;
 `;
-const Content= styled.input`
-
+const Summary= styled.input`
+position:relative;
+`;
+const CreatedDate= styled.input`
+position:relative;
 `;
 const Buttons = styled.div`
 display:flex;
@@ -81,11 +84,11 @@ const MyModalPresenter = (props) => {
         <ExitBtn onClick={handleClose}>X</ExitBtn>
       </Header>
          
-          <Contents>
-              <Content onChange={handleStarRating} value={starRating}></Content>
-              <Content onChange={handleSummary} value={summary}></Content>
-              <Content onChange={handleCreatedDate} value={createdDate}></Content>
-          </Contents>
+          {/* <Contents> */}
+              <StarRating onChange={handleStarRating} value={starRating}></StarRating>
+              <Summary onChange={handleSummary} value={summary}></Summary>
+              <CreatedDate onChange={handleCreatedDate} value={createdDate}></CreatedDate>
+          {/* </Contents> */}
         <Buttons>
             <Btn onClick={modifyReview}>수정</Btn>
             <Btn onClick={deleteReview}>삭제</Btn>

@@ -12,8 +12,8 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
     const [starRating, setStarRating]= useState();
     const [summary, setSummary]= useState();
     const [memberSeq, setMemberSeq]= useState(user.memberInfo.seq);
-    
-
+    const [rating, setRating]= useState(0); 
+    const [bookseq, setBookSeq]= useState(seq);
 
     function handleStarRating(event){
         setStarRating(event.target.value);
@@ -22,20 +22,24 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
         setSummary(event.target.value);
     }
 
-
+    function ratingHandler(param){
+        setRating((param));
+    }
 
     function RegisterReview(){
+        console.log(user);
         axios
         .post(url + `/api/v1/bookreviews`, 
         {
-            bookInfoSeq: seq,
+            bookInfoSeq:seq ,
             memberSeq: memberSeq,
-            starRating: starRating,
+            starRating: rating,
             summary:summary
-        })
+        }, user )
         .then(function (response) {
           console.log(response);
           alert("등록이 완료되었습니다.");
+          onCancel();
         })
         .catch(function (error) {
           console.log(error);
@@ -43,7 +47,7 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
     }
 
     return(
-    <WriteModalPresenter RegisterReview={RegisterReview} handleStarRating={handleStarRating} handleSummary={handleSummary} starRating={starRating} summary={summary}  isOpen={isOpen} onCancel={onCancel}></WriteModalPresenter>
+    <WriteModalPresenter ratingHandler={ratingHandler} RegisterReview={RegisterReview} handleStarRating={handleStarRating} handleSummary={handleSummary} starRating={starRating} summary={summary}  isOpen={isOpen} onCancel={onCancel}></WriteModalPresenter>
     );
 
 }
