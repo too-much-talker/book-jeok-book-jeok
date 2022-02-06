@@ -4,6 +4,8 @@ import ReviewItem from "./ReviewItem";
 import BooklogItem from "./BooklogItem";
 import Pagination from "react-js-pagination";
 import '../bookInfo/bookSearch/Paging.css';
+import MyModalContainer from "./MyModalContainer";
+// import WriteModalContainer from "./WriteModalContainer";
 const Block= styled.div`
 // margin-top:3    
 // text-align:center;
@@ -95,8 +97,11 @@ const Blank=styled.div`
 width:50%;
 height:8%;
 `;
-const ReviewButton = styled.button`
+const MyReviewButton = styled.button`
 position:relative;
+`;
+const WriteReviewButton = styled.button`
+position:relative
 `;
 const ReviewContents= styled.div`
 position:relative;
@@ -152,10 +157,18 @@ position:absolute;
 left:36%;
 `;
 
+
+
+
+
 function BookDetailPresenter({
     reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
-    image,title, author,publisher, publicationDate}){
+    image,title, author,publisher, publicationDate,
+    MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
+    ,setMyModalOpen,setWriteModalOpen
+    ,handleMyModalOpen,handleWriteModalOpen,userReview
+}){
     return(
         <Block>
         <Line></Line>
@@ -176,7 +189,11 @@ function BookDetailPresenter({
 
                 <BookReview>
                     <ReviewHeader>이 책의 책리뷰</ReviewHeader>
-                    <ReviewContents>
+                    <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰 {MyModalOpen}</MyReviewButton>
+                    <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview}></MyModalContainer>
+                    <WriteReviewButton onClick={setWriteModalOpen(true)}>책리뷰 작성하기</WriteReviewButton>
+                    {/* <WriteModalContainer></WriteModalContainer> */}
+                    <ReviewContents> 
                         <Blank></Blank>
                         {reviews && reviews.map(review=>(
                             <ReviewItem

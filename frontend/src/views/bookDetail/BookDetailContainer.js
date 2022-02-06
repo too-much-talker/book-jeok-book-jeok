@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
-        console.log(user);
+        //console.log(user.memberInfo.seq);
         if(user.jwtToken!==""){
   
         }  
@@ -27,9 +27,10 @@ function BookDetailContainer(bookInfoSeq){
         const [booklogOrder, setBooklogOrder]= useState("recent");
         const [booklogTotalCnt, setBooklogTotalCnt]= useState();
         /////로그인한 사용자 정보 땡겨오는거부터 하자!!!!!!!
+        const [MyModalOpen, setMyModalOpen] = useState(false);
+        const [WriteModalOpen, setWriteModalOpen]= useState(false);
 
-        
-
+        const [userReview, setUserReview]= useState();
         useEffect(() => {
             getBookInfo();
             getBookReview();
@@ -64,7 +65,7 @@ function BookDetailContainer(bookInfoSeq){
             //책정보 데려오기
             axios.get(url+`/api/v1/bookinfos/${useParam.seq}`)
             .then(function (response){
-                console.log(response.data.data.bookInfo);
+               // console.log(response.data.data.bookInfo);
                 setImage(response.data.data.bookInfo.largeImgUrl);
                 setTitle(response.data.data.bookInfo.title);
                 setAuthor(response.data.data.bookInfo.author);
@@ -76,17 +77,52 @@ function BookDetailContainer(bookInfoSeq){
               }); 
         }
         
+
+        useEffect(() => {
+          getUserReview();
+          return () => {
+          };
+        }, [reviews]);  
+
+        useEffect(() => {
+          putUserReview();
+          return () => {
+          };
+        }, [userReview]);  
+
+        function putUserReview(){
+          console.log(userReview);
+        }
         
         function getBookReview(){
             //책 리뷰 가져오기
             axios.get(url+`/api/v1/bookreviews/bookinfos/${useParam.seq}`)
             .then(function (response){
-                setReviews(response.data.data.myBookReviews);
+              console.log(response.data.data);
+              setReviews(response.data.data.myBookReviews);
                 setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
-            })
+              })
             .catch(function (error) {
                 console.log(error);
               }); 
+        }
+
+        function getUserReview(){
+          console.log(reviews);
+          if(reviews!==undefined){
+            for(let i=0; i<reviews.length; i++){
+              if(reviews[i].memberSeq===61){
+                console.log(reviews[i]);
+                setUserReview({
+                  starRating: reviews[i].starRating,
+                  summary:reviews[i].summary,
+                  createdDate: reviews[i].createdDate,
+                  bookReviewSeq: reviews[i].bookReviewSeq
+                });
+              }
+            }
+          }
+
         }
 
         function writeBookReview(){
@@ -144,11 +180,29 @@ function BookDetailContainer(bookInfoSeq){
         
         }
 
+        function handleMyModalOpen(){
+          setMyModalOpen(true);
+        }
+        function handleWriteModalOpen(){
+          setWriteModalOpen(true);
+        }
+        function handleMyModalClose(){
+          setMyModalOpen(false);
+        }
+        function handleWriteModalClose(){
+          setWriteModalOpen(false);
+        }
     return(
         <BookDetailPresenter 
         reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
         booklogs={booklogs} booklogPage={booklogPage} booklogPageHandler={booklogPageHandler} booklogOrderHandler={booklogOrderHandler} booklogTotalCnt={booklogTotalCnt}
-        image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}></BookDetailPresenter>
-    );
+        image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}
+        handleMyModalClose={handleMyModalClose} handleWriteModalClose={handleWriteModalClose}
+        setMyModalOpen={setMyModalOpen} setWriteModalOpen={setWriteModalOpen}
+        handleMyModalOpen={handleMyModalOpen} handleWriteModalOpen={handleWriteModalOpen}
+        MyModalOpen={MyModalOpen}
+        userReview={userReview}
+        ></BookDetailPresenter>
+        );
 }
 export default BookDetailContainer;
