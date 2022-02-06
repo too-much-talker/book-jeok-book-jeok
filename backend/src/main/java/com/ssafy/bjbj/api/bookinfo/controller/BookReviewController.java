@@ -10,6 +10,7 @@ import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class BookReviewController {
 
     private final BookReviewService bookReviewService;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
     public BaseResponseDto register(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
 
@@ -65,6 +67,7 @@ public class BookReviewController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/members/{memberSeq}")
     public BaseResponseDto getMyBookReviews(@PathVariable Long memberSeq, Authentication authentication) {
 
@@ -125,6 +128,7 @@ public class BookReviewController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping("/{bookReviewSeq}")
     public BaseResponseDto update(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, @PathVariable Long bookReviewSeq, Authentication authentication) {
 
@@ -166,6 +170,7 @@ public class BookReviewController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{bookReviewSeq}")
     public BaseResponseDto delete(@PathVariable Long bookReviewSeq) {
 
