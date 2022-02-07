@@ -44,8 +44,6 @@ const menus = ["북로그", "독서모임", "책정보", "챌린지", "공지"];
 const links = ["/booklogs/list/like", "/", "/search", "/", "/"];
 
 function Navigation({ isLogin }) {
-  console.log(isLogin);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -62,14 +60,16 @@ function Navigation({ isLogin }) {
         jwtToken: "",
       })
     );
-    navigate("/");
+
+    sessionStorage.removeItem("jwtToken");
+    window.location.replace("/");
   };
 
   return (
     <NaviBlock>
       <UL>
         {menus.map((menu, index) => (
-          <LI>
+          <LI key={index}>
             <StyledLink to={links[index]}>{menu}</StyledLink>
           </LI>
         ))}

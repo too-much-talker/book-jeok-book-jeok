@@ -7,13 +7,19 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
-@ToString(of = { "booklogSeq", "memberSeq", "title", "content", "summary", "starRating", "readDate", "isOpen", "views", "createdDate"})
+@ToString(of = { "booklogSeq", "memberSeq", "bookInfoSeq", "nickname", "title", "content", "summary", "starRating", "readDate", "isOpen", "views", "createdDate"})
 @Getter
 public class ResBooklogDto {
 
     private Long booklogSeq;
 
     private Long memberSeq;
+
+    private Long bookInfoSeq;
+
+    private String nickname;
+
+    private Integer likes;
 
     private String title;
 
@@ -33,9 +39,12 @@ public class ResBooklogDto {
 
     @QueryProjection
     @Builder
-    public ResBooklogDto(Long booklogSeq, Long memberSeq, String title, String content, String summary, Integer starRating, LocalDate readDate, Boolean isOpen, Integer views, LocalDate createdDate) {
+    public ResBooklogDto(Long booklogSeq, Long memberSeq, Long bookInfoSeq, String nickname, Integer likes, String title, String content, String summary, Integer starRating, LocalDate readDate, Boolean isOpen, Integer views, LocalDate createdDate) {
         this.booklogSeq = booklogSeq;
         this.memberSeq = memberSeq;
+        this.bookInfoSeq = bookInfoSeq;
+        this.nickname = nickname;
+        this.likes = likes;
         this.title = title;
         this.content = content;
         this.summary = summary;

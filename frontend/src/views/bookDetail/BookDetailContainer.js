@@ -15,13 +15,16 @@ function BookDetailContainer(bookInfoSeq){
         const [publisher, setPublisher]= useState();
         const [publicationDate, setPublicationDate]= useState();
         const [reviews, setReviews]= useState();
+        const [starRating, setStarRating]= useState();
+
         const [reviewPage, setReviewPage]= useState(1);
-        const [reviewTotalCnt, setReviewTotalCnt]= useState();
+        const [reviewTotalCnt, setReviewTotalCnt]= useState(1);
 
         const [booklogs, setBooklogs]= useState();
         const [booklogPage, setBooklogPage]= useState(1);
         const [booklogOrder, setBooklogOrder]= useState("recent");
         const [booklogTotalCnt, setBooklogTotalCnt]= useState();
+
         /////로그인한 사용자 정보 땡겨오는거부터 하자!!!!!!!
         const [MyModalOpen, setMyModalOpen] = useState(false);
         const [WriteModalOpen, setWriteModalOpen]= useState(false);
@@ -33,6 +36,7 @@ function BookDetailContainer(bookInfoSeq){
               bookReviewSeq:"",
               memberInfo:""
           });
+
         useEffect(() => {
             getBookInfo();
             getBookReview();
@@ -73,6 +77,7 @@ function BookDetailContainer(bookInfoSeq){
                 setAuthor(response.data.data.bookInfo.author);
                 setPublisher(response.data.data.bookInfo.publisher);
                 setPublicationDate(response.data.data.bookInfo.publicationDate);
+                //setStarRating(response.data.data.bookInfo.starRating);
             })
             .catch(function (error) {
                 console.log(error);
@@ -100,10 +105,12 @@ function BookDetailContainer(bookInfoSeq){
             //책 리뷰 가져오기
             axios.get(url+`/api/v1/bookreviews/bookinfos/${useParam.seq}`)
             .then(function (response){
+
               console.log(response.data.data);
               setReviews(response.data.data.myBookReviews);
                 setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
               })
+
             .catch(function (error) {
                 console.log(error);
               }); 
@@ -127,6 +134,7 @@ function BookDetailContainer(bookInfoSeq){
           }
 
         }
+
 
 
         function reviewPageHandler(event){
@@ -182,7 +190,9 @@ function BookDetailContainer(bookInfoSeq){
         MyModalOpen={MyModalOpen}
         userReview={userReview}
         bookInfoSeq={useParam.seq}
+        starRating={starRating}
         ></BookDetailPresenter>
+
         );
 }
 export default BookDetailContainer;
