@@ -354,7 +354,7 @@ public class BooklogController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/me")
-    public BaseResponseDto myBooklogList(@RequestBody boolean isAll, Pageable pageable, Authentication authentication) {
+    public BaseResponseDto myBooklogList(@RequestParam boolean all, Pageable pageable, Authentication authentication) {
         log.debug("BooklogController.myBooklogList() 나의 북로그 목록 조회 API 호출");
 
         Integer status = null;
@@ -362,7 +362,7 @@ public class BooklogController {
 
         Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
         try {
-            ResMyBooklogPageDto resMyBooklogPageDto = booklogService.getResMyBooklogPageDto(isAll, pageable, memberSeq);
+            ResMyBooklogPageDto resMyBooklogPageDto = booklogService.getResMyBooklogPageDto(all, pageable, memberSeq);
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "나의 북로그 조회 성공");
