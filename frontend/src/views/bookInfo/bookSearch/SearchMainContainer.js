@@ -14,7 +14,7 @@ function SearchMainContainer(){
         };
       }, []);  
 
-    function goDetail(seq){
+    function goDetail(seq,starRating){
         document.location.href = `/detail/${seq}`;
       }
 

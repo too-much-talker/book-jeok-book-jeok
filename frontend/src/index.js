@@ -65,7 +65,6 @@ render(
               <Route path="/" element={<App />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-
               <Route path="/searchMain" element={<SearchMainContainer />} />
               <Route path="/search/" element={<SearchMainContainer />} />
               <Route

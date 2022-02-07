@@ -69,6 +69,10 @@ dependencies {
 
 	// spring boot test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// openvidu
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation 'io.openvidu:openvidu-java-client:2.18.0'
 }
 
 test {
