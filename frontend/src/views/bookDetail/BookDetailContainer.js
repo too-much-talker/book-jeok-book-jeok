@@ -18,10 +18,7 @@ function BookDetailContainer(bookInfoSeq){
         const [booklogPage, setBooklogPage]= useState(1);
         const [booklogOrder, setBooklogOrder]= useState("recent");
         const [booklogTotalCnt, setBooklogTotalCnt]= useState();
-        /////로그인한 사용자 정보 땡겨오는거부터 하자!!!!!!!
-
         
-
         useEffect(() => {
             getBookInfo();
             getBookReview();

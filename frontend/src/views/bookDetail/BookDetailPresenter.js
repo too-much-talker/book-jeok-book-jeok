@@ -145,7 +145,7 @@ function BookDetailPresenter({
                         {reviews && reviews.map(review=>(
                             <ReviewItem
                                 summary={review.summary}
-                                reviewStarRating={review.starRating}
+                                reviewStarRating={(review.starRating)}
                                 reviewDate={review.createdDate}
                             >
                             </ReviewItem>
