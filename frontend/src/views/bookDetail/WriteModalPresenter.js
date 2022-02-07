@@ -39,11 +39,14 @@ justify-content:center;
 `;
 const Content= styled.input`
 position:relative;
+width:40%;
 `;
+
 const Words= styled.div`
 position:relative;
 font-size:15px;
 margin-right:10px;
+margin-bottom:10px;
 `;
 const STAR= styled.div`
 position:relative;
