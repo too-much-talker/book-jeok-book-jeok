@@ -6,13 +6,13 @@ import styled from "styled-components";
 const Header = styled.div`
 position:relative;
 display:flex;
-height:40%;
+height:35%;
 `;
 const ExitBtn= styled.div`
 position:relative;
 border:1px solid black;
 width:5%;
-height:25%;
+height:30%;
 border-radius:20px;
 `;
 const Notice= styled.div`
