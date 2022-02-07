@@ -22,18 +22,12 @@ import java.time.LocalDateTime;
 public class ReadingGroupBoardServiceTests {
 
     @Autowired
-    private ReadingGroupBoardService readingGroupBoardService;
-
-    @Autowired
-    private ReadingGroupRepository readingGroupRepository;
-
-    @Autowired
     private MemberService memberService;
 
     private Member member1;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         String email1 = "member1@bjbj.com";
         memberService.saveMember(RequestMemberDto.builder()
                 .email(email1)
@@ -43,15 +37,18 @@ public class ReadingGroupBoardServiceTests {
                 .phoneNumber("010-9999-1111")
                 .build());
         member1 = memberService.findMemberByEmail(email1);
-
-        //ReadingGroupService 제작 후 수정
-
     }
 
     //ReadingGroupService 제작 후 수정
     @DisplayName("독서모임 게시판 작성 테스트")
     @Test
     public void readingGroupBoardRegisterTest() {
+
+    }
+
+    @DisplayName("독서모임 게시판 상세 조회 테스트")
+    @Test
+    public void getDetailReadingGroupBoardTest() {
 
     }
 }
