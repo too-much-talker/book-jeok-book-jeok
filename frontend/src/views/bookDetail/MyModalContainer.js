@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 
 function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtToken,url}){
-    console.log(userReview);
+    //console.log(userReview);
 
     let useParam = useParams();
     //console.log(user.memberInfo.seq);

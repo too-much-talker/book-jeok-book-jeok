@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
         const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-
+        //console.log(user);
         let useParam=useParams();
         const url = "https://i6a305.p.ssafy.io:8443";
 
@@ -18,14 +18,31 @@ function BookDetailContainer(bookInfoSeq){
         const [publicationDate, setPublicationDate]= useState();
         const [seq, setSeq]= useState();
         
-        const [reviews, setReviews]= useState();
+        const [reviews, setReviews]= useState([{
+               bookReviewSeq: "",
+                bookInfoSeq: "",
+                memberSeq: "",
+                memberNickname: "",
+                starRating: "",
+                summary: "",
+                createdDate: ""
+        },{
+          bookReviewSeq: "",
+           bookInfoSeq: "",
+           memberSeq: "",
+           memberNickname: "",
+           starRating: "",
+           summary: "",
+           createdDate: ""
+   }]);
         const [starRating, setStarRating]= useState();
 
         const [reviewPage, setReviewPage]= useState(1);
-        const [reviewTotalCnt, setReviewTotalCnt]= useState(1);
+        const [reviewTotalCnt, setReviewTotalCnt]= useState();
 
         const [booklogs, setBooklogs]= useState();
         const [booklogPage, setBooklogPage]= useState(1);
+
         const [booklogOrder, setBooklogOrder]= useState("recent");
         const [booklogTotalCnt, setBooklogTotalCnt]= useState();
 
@@ -41,7 +58,6 @@ function BookDetailContainer(bookInfoSeq){
               memberInfo:""
           });
 
-
         useEffect(() => {
             getBookInfo();
             getBookReview();
@@ -52,11 +68,11 @@ function BookDetailContainer(bookInfoSeq){
             };
           }, []);
 
-          useEffect(() => {
-            getBookReview();
-            return () => {
-            };
-          }, [reviewPage]);
+          // useEffect(() => {
+          //   getBookReview();
+          //   return () => {
+          //   };
+          // }, [reviewPage]);
 
           useEffect(() => {
             getBookLog();
@@ -89,13 +105,13 @@ function BookDetailContainer(bookInfoSeq){
               }); 
               
         }
-        
 
         useEffect(() => {
           getUserReview();
           return () => {
           };
         }, [reviews]);  
+
 
         useEffect(() => {
           putUserReview();
@@ -111,10 +127,8 @@ function BookDetailContainer(bookInfoSeq){
             //책 리뷰 가져오기
             axios.get(url+`/api/v1/bookreviews/bookinfos/${useParam.seq}`)
             .then(function (response){
-
-              console.log(response.data.data);
               setReviews(response.data.data.myBookReviews);
-              setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
+              setReviewTotalCnt(response.data.data.totalCnt);
               })
 
             .catch(function (error) {
@@ -166,6 +180,7 @@ function BookDetailContainer(bookInfoSeq){
               }); 
         
         }
+        //console.log(userReview);
 
         function handleMyModalOpen(){
           if(jwtToken==="" ||jwtToken===undefined|| jwtToken===null){
@@ -183,7 +198,7 @@ function BookDetailContainer(bookInfoSeq){
           if(jwtToken===""||jwtToken===undefined|| jwtToken===null){
             alert("로그인 후 사용할 수 있습니다.")
           }
-          else if(userReview.starRating!=="" || userReview.starRating!==null || userReview.starRating!==undefined|| userReview.starRating!==0){
+          else if(userReview.memberInfo===user.memberInfo.seq){
             alert("이미 작성한 책리뷰가 있습니다.");
           }
             else{
@@ -197,7 +212,14 @@ function BookDetailContainer(bookInfoSeq){
         function handleWriteModalClose(){
           setWriteModalOpen(false);
         }
-    return(
+
+        const indexOfLastPost = reviewPage * 5;
+        const indexOfFirstPost = indexOfLastPost - 5;
+        const currentReviews = reviews.slice(indexOfFirstPost, indexOfLastPost);
+        function paginate(pagenumber){
+          setReviewPage(pagenumber);
+        }
+        return(
         <BookDetailPresenter 
         reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
         booklogs={booklogs} booklogPage={booklogPage} booklogPageHandler={booklogPageHandler} booklogOrderHandler={booklogOrderHandler} booklogTotalCnt={booklogTotalCnt}
@@ -211,6 +233,8 @@ function BookDetailContainer(bookInfoSeq){
         starRating={starRating}
         user={user} jwtToken={jwtToken}
         seq={seq} url={url}
+        currentReviews={currentReviews}
+        paginate={paginate}
         ></BookDetailPresenter>
 
         );
