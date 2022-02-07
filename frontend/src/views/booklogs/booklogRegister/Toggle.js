@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // 클래스를 설정하며 .toggle--checked 클래스가 활성화 되었을 경우의 CSS도 구현
@@ -52,10 +52,16 @@ const Desc = styled.div`
 // State를 바꿔줄 이벤트 함수 구현
 export const Toggle = (props) => {
   const [isOn, setisOn] = useState(false);
+  //
+  useEffect(() => {
+    if (props.modify) {
+      setisOn(props.isOpen);
+    }
+  }, []);
 
   const toggleHandler = () => {
     setisOn(!isOn);
-    props.toggle(isOn);
+    props.toggle(!isOn);
   };
 
   return (
