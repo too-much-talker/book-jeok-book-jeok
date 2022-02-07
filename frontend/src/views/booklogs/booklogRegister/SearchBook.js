@@ -3,7 +3,9 @@ import { useEffect, useState, useRef } from "react";
 import SearchedBook from "./SearchedBook";
 import Pagination from "react-js-pagination";
 import styled from "styled-components";
-const url = "http://i6a305.p.ssafy.io:8080";
+
+const url = "https://i6a305.p.ssafy.io:8443";
+
 const Wrapper = styled.div`
   text-align: center;
   justify-content: center;
