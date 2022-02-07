@@ -156,10 +156,14 @@ function BookDetailContainer(bookInfoSeq){
         }
 
         function handleMyModalOpen(){
-          setMyModalOpen(true);
+            if(user.jwtToken===""){
+                alert("로그인 후 사용할 수 있습니다.")
+              }else{
+                setMyModalOpen(true);
+              }
         }
         function handleWriteModalOpen(){
-          setWriteModalOpen(true);
+                setWriteModalOpen(true);
         }
         function handleMyModalClose(){
           setMyModalOpen(false);
