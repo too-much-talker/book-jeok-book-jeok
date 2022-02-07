@@ -77,34 +77,22 @@ const Content = styled.div`
   text-align: left;
 `;
 
-function cutTitle(title) {
-  if (title !== null && title.length > 10) {
-    return title.substr(0, 10) + "...";
-  } else return title;
-}
-
-function cutContent(content) {
-  if (content !== null && content.length > 40) {
-    return content.substr(0, 39);
+function cutText(content, size) {
+  if (content !== null && content.length > size) {
+    return content.substr(0, size - 1) + "...";
   } else return content;
 }
 
 function BooklogCard({ booklog }) {
-  let content = booklog.content;
-
-  if (content !== null && content.length > 40) {
-    content = content.substr(0, 39);
-  }
-
   return (
     <Card>
       <ImgGrid>
         <Img src={booklog.imgUrl} alt="book img"></Img>
       </ImgGrid>
       <InnerGrid>
-        <ContentLink to="/">
-          <Title>{cutTitle(booklog.title)}</Title>
-          <Content>{cutContent(booklog.content)}...</Content>
+        <ContentLink to={`/booklogs/detail/${booklog.booklogSeq}`}>
+          <Title>{cutText(booklog.title, 10)}</Title>
+          <Content>{cutText(booklog.content, 40)}</Content>
         </ContentLink>
         <Date>{booklog.createdDate}</Date>
         <Wrapper>

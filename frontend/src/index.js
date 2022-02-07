@@ -40,6 +40,7 @@ const Body = styled.body`
   width: 100vw;
   height: 100%;
   // margin: 0 auto;
+  
 `;
 
 // box 2개를 감싸는 Wrapper를 하나 더 만듦.
@@ -51,6 +52,7 @@ const Wrapper = styled.div`
   // display: inline-block; // Body-ScrollWrapper 수평 가운데 정렬
   // margin-top: 10vh;
   margin: 0 auto;
+
 `;
 
 const rootElement = document.getElementById("root");
@@ -65,7 +67,6 @@ render(
               <Route path="/" element={<App />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-
               <Route path="/searchMain" element={<SearchMainContainer />} />
               <Route path="/search/" element={<SearchMainContainer />} />
               <Route
@@ -76,7 +77,7 @@ render(
 
               <Route path="/booklogs/*" element={<Booklogs />}>
                 <Route index element={<BooklogListContainer />} />
-                {/* <Route path="detail"/> */}
+                <Route path="detail" />
               </Route>
               <Route path="/mypage" element={<MyPage />}>
                 <Route index element={<UserInfoContainer />} />

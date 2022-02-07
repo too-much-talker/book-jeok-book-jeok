@@ -3,9 +3,9 @@ import { useState } from "react";
 import MyModalPresenter from "./MyModalPresenter";
 import axios from "axios";
 
-function MyModalContainer({ isOpen, onCancel,userReview }){
-    const url = "http://i6a305.p.ssafy.io:8080";
-    console.log("이거다",userReview);
+
+function MyModalContainer({ isOpen, onCancel,userReview ,url}){
+    console.log(userReview);
     const handleClose = () => {
         onCancel();
       };
@@ -43,11 +43,11 @@ function MyModalContainer({ isOpen, onCancel,userReview }){
     }
 
     function deleteReview(){
-        console.log("삭제");
         axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`)
         .then(function (response){
           console.log(response);
-          handleClose();
+          alert(response.data.data.msg);
+          document.location.href = `/detail/${useParam.seq}`; 
           })
         .catch(function (error) {
             console.log(error);
