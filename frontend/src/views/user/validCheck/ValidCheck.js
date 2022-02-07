@@ -173,5 +173,6 @@ export {
   checkNameLength,
   checkPhoneNumber,
   checkPhoneDuplicate,
-  checkPasswordConfim
+  checkPasswordConfim,
+
 };
