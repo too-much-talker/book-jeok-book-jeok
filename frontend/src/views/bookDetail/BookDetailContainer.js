@@ -171,6 +171,9 @@ function BookDetailContainer(bookInfoSeq){
           if(jwtToken==="" ||jwtToken===undefined|| jwtToken===null){
             alert("로그인 후 사용할 수 있습니다.")
           }
+          else if(userReview.starRating==="" || userReview.starRating===null || userReview.starRating===undefined|| userReview.starRating===0){
+            alert("이 책에 대한 나의 책리뷰가 없습니다.")
+          }
           else{
             setMyModalOpen(true);
           }
@@ -179,7 +182,11 @@ function BookDetailContainer(bookInfoSeq){
         function handleWriteModalOpen(){
           if(jwtToken===""||jwtToken===undefined|| jwtToken===null){
             alert("로그인 후 사용할 수 있습니다.")
-          }else{
+          }
+          else if(userReview.starRating!=="" || userReview.starRating!==null || userReview.starRating!==undefined|| userReview.starRating!==0){
+            alert("이미 작성한 책리뷰가 있습니다.");
+          }
+            else{
             setWriteModalOpen(true);
           }
 
