@@ -3,10 +3,8 @@ import { useState } from "react";
 import WriteModalPresenter from "./WriteModalPresenter";
 import axios from "axios";
 
-function WriteModalContainer({ isOpen, onCancel, user,seq }){
-    const url = "http://i6a305.p.ssafy.io:8080";
-    //const url="https://42b4a868-15cd-4d2a-9218-74c0cca488a2.mock.pstmn.io";
-    const token=user.jwtToken;
+function WriteModalContainer({ isOpen, onCancel, user,jwtToken,seq ,url}){
+
     const handleClose = () => {
         onCancel();
       };
@@ -38,7 +36,7 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
         }, 
         {
             headers: {
-               Authorization: `Bearer `+token
+               Authorization: `Bearer `+jwtToken
             }
         }
         )

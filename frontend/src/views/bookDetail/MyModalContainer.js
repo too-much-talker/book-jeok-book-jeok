@@ -3,8 +3,7 @@ import { useState } from "react";
 import MyModalPresenter from "./MyModalPresenter";
 import axios from "axios";
 
-function MyModalContainer({ isOpen, onCancel,userReview }){
-    const url = "http://i6a305.p.ssafy.io:8080";
+function MyModalContainer({ isOpen, onCancel,userReview ,url}){
     console.log(userReview);
     const handleClose = () => {
         onCancel();

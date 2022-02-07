@@ -6,15 +6,11 @@ import { useSelector } from 'react-redux';
 
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
-        if(user.jwtToken!==""){
-  
-        }  
-        console.log(user.jwtToken);
-        // const { jwtToken } = useSelector((state) => state.authReducer);
-        // console.log(jwtToken);
+        const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
+        console.log(jwtToken);
 
         let useParam=useParams();
-        const url = "http://i6a305.p.ssafy.io:8080";
+        const url = "https://i6a305.p.ssafy.io:8443";
         const [title, setTitle]= useState();
         const [author, setAuthor]= useState();
         const [image, setImage]= useState();
@@ -163,14 +159,14 @@ function BookDetailContainer(bookInfoSeq){
         }
 
         function handleMyModalOpen(){
-          if(user.jwtToken===""){
+          if(jwtToken===""){
             alert("로그인 후 사용할 수 있습니다.")
           }else{
             setMyModalOpen(true);
           }
         }
         function handleWriteModalOpen(){
-          if(user.jwtToken===""){
+          if(jwtToken===""){
             alert("로그인 후 사용할 수 있습니다.")
           }else{
             setWriteModalOpen(true);
@@ -192,8 +188,8 @@ function BookDetailContainer(bookInfoSeq){
         handleMyModalOpen={handleMyModalOpen} handleWriteModalOpen={handleWriteModalOpen}
         MyModalOpen={MyModalOpen} WriteModalOpen={WriteModalOpen}
         userReview={userReview}
-        user={user}
-        seq={seq}
+        user={user} jwtToken={jwtToken}
+        seq={seq} url={url}
         ></BookDetailPresenter>
         );
 }

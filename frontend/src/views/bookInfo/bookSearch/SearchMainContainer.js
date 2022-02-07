@@ -4,7 +4,7 @@ import axios from "axios";
 import SearchResultContainer from "./SearchResultContainer";
 
 function SearchMainContainer(){
-    const url = "http://i6a305.p.ssafy.io:8080";
+    const url = "https://i6a305.p.ssafy.io:8443";
     const [bestSellers, setBestSellers] = useState([]);
     useEffect(() => {
         getBestSellers();

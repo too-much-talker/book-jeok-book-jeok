@@ -166,7 +166,8 @@ function BookDetailPresenter({
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating,jwtToken,
+    url
 }){
     return(
 
@@ -190,9 +191,9 @@ function BookDetailPresenter({
                 <BookReview>
                     <ReviewHeader>이 책의 책리뷰</ReviewHeader>
                     <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰</MyReviewButton>
-                    <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview}></MyModalContainer>
+                    <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} url={url}></MyModalContainer>
                     <WriteReviewButton onClick={handleWriteModalOpen} >책리뷰 작성하기</WriteReviewButton>
-                    <WriteModalContainer isOpen={WriteModalOpen}onCancel={handleWriteModalClose} user={user} seq={seq}></WriteModalContainer>
+                    <WriteModalContainer isOpen={WriteModalOpen}onCancel={handleWriteModalClose} user={user} jwtToken={jwtToken} seq={seq} url={url}></WriteModalContainer>
                     
                     <ReviewContents> 
                         <Blank></Blank>
