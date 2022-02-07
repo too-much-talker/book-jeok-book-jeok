@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BooklogDetailBookInfo from "./BooklogDetailBookInfo";
-import heart from "../../../../res/img/heart_empty.png";
+import heart from "../../../../res/img/heart_fill.png";
+import heartEmpty from "../../../../res/img/heart_empty.png";
 import view from "../../../../res/img/view.png";
 
 const Wrapper = styled.div`
@@ -38,6 +39,10 @@ const Icon = styled.img`
   margin-right: 0.3rem;
 `;
 
+const Heart = styled(Icon)`
+  cursor: pointer;
+`;
+
 const UtilButton = styled.div`
   display: flex;
   justify-content: space-between;
@@ -51,7 +56,7 @@ const Box = styled.div`
   margin: 0 auto;
 `;
 
-function DetailForm({ booklog }) {
+function DetailForm({ isLike, likes, onClickHeart, booklog }) {
   return (
     <Box>
       <div>
@@ -77,7 +82,12 @@ function DetailForm({ booklog }) {
           <div>
             <span>
               <Like>
-                <Icon src={heart} /> {booklog.likes}
+                {isLike ? (
+                  <Heart onClick={onClickHeart} src={heart} />
+                ) : (
+                  <Heart onClick={onClickHeart} src={heartEmpty} />
+                )}{" "}
+                {likes}
               </Like>
             </span>
             <Like>

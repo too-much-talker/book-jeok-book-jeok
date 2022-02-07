@@ -20,4 +20,34 @@ async function booklogDetail(booklogSeq, header, success, fail) {
     .catch(fail);
 }
 
-export { booklogList, findBooklog, booklogDetail };
+async function isLikeBooklog(booklogSeq, header, success, fail) {
+  await api
+    .get(`/api/v1/booklogs/${booklogSeq}/like`, header)
+    .then(success)
+    .catch(fail);
+}
+
+async function setLikeBooklog(booklogSeq, header, isLike, success, fail) {
+  if (isLike) {
+    console.log("delete 요청");
+
+    await api
+      .delete(`/api/v1/booklogs/${booklogSeq}/like`, header)
+      .then(success)
+      .catch(fail);
+  } else {
+    console.log("post 요청");
+    await api
+      .post(`/api/v1/booklogs/${booklogSeq}/like`, {}, header)
+      .then(success)
+      .catch(fail);
+  }
+}
+
+export {
+  booklogList,
+  findBooklog,
+  booklogDetail,
+  isLikeBooklog,
+  setLikeBooklog,
+};
