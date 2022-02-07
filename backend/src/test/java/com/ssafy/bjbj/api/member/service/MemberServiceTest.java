@@ -44,7 +44,7 @@ public class MemberServiceTest {
         assertThat(responseMemberDto2).isNotNull();
     }
 
-    @DisplayName("응답용 회원 Dto 조회 서비스 메서드 테스트")
+    @DisplayName("회원 수정 서비스 테스트")
     @Test
     public void updateMember() {
 
