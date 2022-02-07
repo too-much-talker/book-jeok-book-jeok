@@ -9,7 +9,6 @@ function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtTok
     console.log(userReview);
 
     let useParam = useParams();
-    const 
     //console.log(user.memberInfo.seq);
     const handleClose = () => {
         onCancel();
@@ -31,9 +30,14 @@ function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtTok
     const [bookReviewSeq, setBookReviewSeq]= useState();
     const [memberInfo, setMemberInfo]= useState();
 
-    function handleStarRating(event){
-        setStarRating(event.target.value);
+    // function handleStarRating(event){
+    //     setStarRating(event.target.value);
+    // }
+    
+    function handleStarRating(param){
+        setStarRating(param);
     }
+
     function handleSummary(event){
         setSummary(event.target.value);
     }
@@ -49,7 +53,7 @@ function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtTok
         },
         {
             headers:{
-                Authorization:`Bearer `+token
+                Authorization:`Bearer `+jwtToken
             }
         }
         

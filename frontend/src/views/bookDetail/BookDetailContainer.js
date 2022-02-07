@@ -6,9 +6,7 @@ import { useSelector } from 'react-redux';
 
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
-
         const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-        console.log(jwtToken);
 
         let useParam=useParams();
         const url = "https://i6a305.p.ssafy.io:8443";
@@ -172,7 +170,8 @@ function BookDetailContainer(bookInfoSeq){
         function handleMyModalOpen(){
           if(jwtToken==="" ||jwtToken===undefined|| jwtToken===null){
             alert("로그인 후 사용할 수 있습니다.")
-          }else{
+          }
+          else{
             setMyModalOpen(true);
           }
         }
