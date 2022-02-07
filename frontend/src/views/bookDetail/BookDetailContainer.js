@@ -1,5 +1,5 @@
 import BookDetailPresenter from "./BookDetailPresenter"; 
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useReducer } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -78,6 +78,7 @@ function BookDetailContainer(bookInfoSeq){
             .catch(function (error) {
                 console.log(error);
               }); 
+              
         }
         
 
@@ -103,7 +104,7 @@ function BookDetailContainer(bookInfoSeq){
             .then(function (response){
               console.log(response.data.data);
               setReviews(response.data.data.myBookReviews);
-                setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
+              setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
               })
             .catch(function (error) {
                 console.log(error);

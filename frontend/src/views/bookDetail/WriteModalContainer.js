@@ -5,10 +5,12 @@ import axios from "axios";
 
 function WriteModalContainer({ isOpen, onCancel, user,seq }){
     const url = "http://i6a305.p.ssafy.io:8080";
+    //const url="https://42b4a868-15cd-4d2a-9218-74c0cca488a2.mock.pstmn.io";
+    const token=user.jwtToken;
     const handleClose = () => {
         onCancel();
       };
-
+    
     const [starRating, setStarRating]= useState();
     const [summary, setSummary]= useState();
     const [memberSeq, setMemberSeq]= useState(user.memberInfo.seq);
@@ -25,9 +27,7 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
     function ratingHandler(param){
         setRating((param));
     }
-
     function RegisterReview(){
-        console.log(user);
         axios
         .post(url + `/api/v1/bookreviews`, 
         {
@@ -35,7 +35,13 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
             memberSeq: memberSeq,
             starRating: rating,
             summary:summary
-        }, user )
+        }, 
+        {
+            headers: {
+               Authorization: `Bearer `+token
+            }
+        }
+        )
         .then(function (response) {
           console.log(response);
           alert("등록이 완료되었습니다.");
