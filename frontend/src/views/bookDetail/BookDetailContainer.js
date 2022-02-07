@@ -159,14 +159,14 @@ function BookDetailContainer(bookInfoSeq){
         }
 
         function handleMyModalOpen(){
-          if(jwtToken===""){
+          if(jwtToken==="" ||jwtToken===undefined|| jwtToken===null){
             alert("로그인 후 사용할 수 있습니다.")
           }else{
             setMyModalOpen(true);
           }
         }
         function handleWriteModalOpen(){
-          if(jwtToken===""){
+          if(jwtToken===""||jwtToken===undefined|| jwtToken===null){
             alert("로그인 후 사용할 수 있습니다.")
           }else{
             setWriteModalOpen(true);
