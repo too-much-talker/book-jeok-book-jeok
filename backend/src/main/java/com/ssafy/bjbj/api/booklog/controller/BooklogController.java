@@ -461,4 +461,34 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("/{booklogSeq}/like")
+    public BaseResponseDto isLike(@PathVariable Long booklogSeq, Authentication authentication) {
+        log.debug("BooklogController.isLike() 북로그 좋아요 조회 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            boolean isLike = likeService.isLike(booklogSeq, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "북로그 좋아요 조회 성공");
+            responseData.put("isLike", isLike);
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }
