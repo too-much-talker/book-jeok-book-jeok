@@ -27,13 +27,15 @@ const Writer = styled.span`
 `;
 
 const Like = styled.span`
-  margin-right: 1rem;
+  margin-right: 1.5rem;
   text-align: left;
+  font-size: 1.6rem;
 `;
 
 const Icon = styled.img`
   width: 1.5rem;
   text-align: left;
+  margin-right: 0.3rem;
 `;
 
 const UtilButton = styled.div`
@@ -69,17 +71,17 @@ function DetailForm({ booklog }) {
       <Wrapper2>
         <BooklogInfo>
           <span>{booklog.createdDate}</span>
-          <Writer>bjbj</Writer>
+          <Writer>{booklog.nickname}</Writer>
           <div>
             <span>
               <Like>
                 <Icon src={heart} /> {booklog.likes}
               </Like>
             </span>
-            <span>
+            <Like>
               <Icon src={view} />
-              views
-            </span>
+              {booklog.likes}
+            </Like>
           </div>
         </BooklogInfo>
         <hr />
