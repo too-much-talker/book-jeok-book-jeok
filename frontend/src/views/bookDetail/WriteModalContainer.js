@@ -45,7 +45,7 @@ function WriteModalContainer({ isOpen, onCancel, user,seq }){
         .then(function (response) {
           console.log(response);
           alert("등록이 완료되었습니다.");
-          onCancel();
+          document.location.href = `/detail/${seq}`;
         })
         .catch(function (error) {
           console.log(error);
