@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.readinggroup.service;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
@@ -16,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -41,10 +41,6 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
         List<FileInfo> fileInfos = fileHandler.parseFileInfo(files);
 
-        if (!fileInfos.isEmpty()) {
-            fileInfoRepository.saveAll(fileInfos);
-        }
-
         Member member = memberRepository.findBySeq(reqReadingGroupBoardDto.getMemberSeq());
 
         ReadingGroupBoard savedReadingGroupBoard = readingGroupBoardRepository.save(ReadingGroupBoard.builder()
@@ -56,6 +52,34 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
                 .readingGroup(readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq()))
                 .build());
 
+        if (!fileInfos.isEmpty()) {
+            for (FileInfo fileInfo : fileInfos) {
+                fileInfo.setRootSeq(savedReadingGroupBoard.getSeq());
+                fileInfoRepository.save(fileInfo);
+            }
+        }
+
         return savedReadingGroupBoard.getSeq();
     }
+
+    @Override
+    public ResReadingGroupBoardDto findReadingGroupBoardBySeq(Long readingGroupBoardSeq) {
+        ReadingGroupBoard readingGroupBoard = readingGroupBoardRepository.findBySeq(readingGroupBoardSeq);
+
+        if (readingGroupBoard == null) {
+            return null;
+        } else {
+
+            return ResReadingGroupBoardDto.builder()
+                    .memberSeq(readingGroupBoard.getMember().getSeq())
+                    .readingGroupSeq(readingGroupBoardSeq)
+                    .title(readingGroupBoard.getTitle())
+                    .content(readingGroupBoard.getContent())
+                    .nickname(readingGroupBoard.getMember().getNickname())
+                    .createDate(readingGroupBoard.getCreatedDate())
+                    .build();
+        }
+
+    }
+
 }

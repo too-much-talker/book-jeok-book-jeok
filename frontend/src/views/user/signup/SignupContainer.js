@@ -1,14 +1,14 @@
 import Signup from "./SignupPresenter";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import {
   checkId,
   checkEmail,
   checkNickname,
-  checkPassword,
   checkNameLength,
   checkPhoneNumber,
-  checkPhoneDuplicate
+  checkPhoneDuplicate,
+  checkPassword
 } from "../validCheck/ValidCheck";
 
 function SignupContainer() {
@@ -18,7 +18,8 @@ function SignupContainer() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const url = "http://i6a305.p.ssafy.io:8080";
+  const [checkValid, setCheckValid]= useState(true);
+  const url = "https://i6a305.p.ssafy.io:8443";
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -52,7 +53,8 @@ function SignupContainer() {
     checkNickname(nickname, url);
   }
   function CheckPassword() {
-    checkPassword(password, passwordConfirm, email, nickname, name);
+    checkPassword(password, email, nickname, name,checkValidHandler);
+    
   }
   function CheckNameLength() {
     checkNameLength(name);
@@ -65,6 +67,17 @@ function SignupContainer() {
     checkPhoneDuplicate(phoneNumber,url);
   }
   
+  function checkPasswordConfim(password, passwordConfirm){
+    if (password !== passwordConfirm) {
+      return false;
+    }
+    return true;
+  }
+
+  function checkValidHandler(param){
+    setCheckValid(param);
+  }
+
   const onCreate = () => {
     if (
       email === "" ||
@@ -76,8 +89,9 @@ function SignupContainer() {
     ) {
       alert("입력하지 않은 정보가 있습니다. 확인해주세요.");
     } else {
+      console.log(checkValid);
       if (
-        checkPassword(password, passwordConfirm, email, nickname, name) === true
+        checkValid===true
       ) {
         console.log(email, password, name, nickname, phoneNumber);
         axios

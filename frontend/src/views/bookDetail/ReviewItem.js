@@ -8,8 +8,6 @@ height:16%;
 padding-top:2px;
 margin-left:30px;
 margin-bottom:7px;
-;
-
 `;
 const ReviewStarRating= styled.div`
 width:7.4%;
