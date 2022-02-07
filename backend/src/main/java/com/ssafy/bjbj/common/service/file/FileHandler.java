@@ -21,9 +21,9 @@ public class FileHandler {
             return fileInfos;
         }
 
-        String absolutePath = new File("").getAbsolutePath() + "\\";
+        String absolutePath = new File("").getAbsolutePath() + File.separator;
 
-        String path = "images/" + LocalDate.now();
+        String path ="images" + File.separator + LocalDate.now();
         File file = new File(path);
 
         if (!file.exists()) {
