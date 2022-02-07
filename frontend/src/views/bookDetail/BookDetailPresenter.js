@@ -167,7 +167,7 @@ function BookDetailPresenter({
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
     ,setMyModalOpen,setWriteModalOpen
-    ,handleMyModalOpen,handleWriteModalOpen,userReview
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,bookInfoSeq
 }){
     return(
         <Block>
@@ -190,7 +190,7 @@ function BookDetailPresenter({
                 <BookReview>
                     <ReviewHeader>이 책의 책리뷰</ReviewHeader>
                     <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰 {MyModalOpen}</MyReviewButton>
-                    <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview}></MyModalContainer>
+                    <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} bookInfoSeq={bookInfoSeq}></MyModalContainer>
                     <WriteReviewButton onClick={setWriteModalOpen(true)}>책리뷰 작성하기</WriteReviewButton>
                     {/* <WriteModalContainer></WriteModalContainer> */}
                     <ReviewContents> 

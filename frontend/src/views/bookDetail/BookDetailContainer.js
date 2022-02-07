@@ -7,11 +7,7 @@ import { useSelector } from 'react-redux';
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
         //console.log(user.memberInfo.seq);
-        if(user.jwtToken!==""){
-  
-        }  
-
-        let useParam=useParams();
+        let useParam = useParams();
         const url = "http://i6a305.p.ssafy.io:8080";
         const [title, setTitle]= useState();
         const [author, setAuthor]= useState();
@@ -30,7 +26,13 @@ function BookDetailContainer(bookInfoSeq){
         const [MyModalOpen, setMyModalOpen] = useState(false);
         const [WriteModalOpen, setWriteModalOpen]= useState(false);
 
-        const [userReview, setUserReview]= useState();
+        const [userReview, setUserReview]= useState({
+              starRating:"",
+              summary:"",
+              createdDate:"",
+              bookReviewSeq:"",
+              memberInfo:""
+          });
         useEffect(() => {
             getBookInfo();
             getBookReview();
@@ -111,13 +113,14 @@ function BookDetailContainer(bookInfoSeq){
           console.log(reviews);
           if(reviews!==undefined){
             for(let i=0; i<reviews.length; i++){
-              if(reviews[i].memberSeq===61){
+              if(reviews[i].memberSeq===user.memberInfo.seq){
                 console.log(reviews[i]);
                 setUserReview({
                   starRating: reviews[i].starRating,
                   summary:reviews[i].summary,
                   createdDate: reviews[i].createdDate,
-                  bookReviewSeq: reviews[i].bookReviewSeq
+                  bookReviewSeq: reviews[i].bookReviewSeq,
+                  memberInfo: reviews[i].memberSeq
                 });
               }
             }
@@ -125,34 +128,6 @@ function BookDetailContainer(bookInfoSeq){
 
         }
 
-        function writeBookReview(){
-
-        }
-
-        // function modifyBookReview(){
-        //     axios.put(url+`/api/v1/bookreviews/${bookReviewSeq}`,{
-        //         bookInfoSeq:bookInfoSeq, 
-        //         memberSeq:memberSeq, 
-        //         starRating: starRating,  ////이거 바궈야함. 이 리뷰의 starrating으로
-        //         summary: summary
-        //     })
-        //     .then(function (response){
-        //         console.log(response.data.data.modifiedBookReview);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //       }); 
-        // }
-
-        // function deleteBookReview(){
-        //     axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`)
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // }
 
         function reviewPageHandler(event){
             setReviewPage(event);
@@ -202,6 +177,7 @@ function BookDetailContainer(bookInfoSeq){
         handleMyModalOpen={handleMyModalOpen} handleWriteModalOpen={handleWriteModalOpen}
         MyModalOpen={MyModalOpen}
         userReview={userReview}
+        bookInfoSeq={useParam.seq}
         ></BookDetailPresenter>
         );
 }

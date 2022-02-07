@@ -39,7 +39,7 @@ height:10%;
 border-radius:100px;
 `;
 const MyModalPresenter = (props) => {
-  const {modifyReview,handleStarRating,handleSummary, handleCreatedDate,deleteReview,starRating, summary,createdDate,isOpen, onCancel } = props;
+  const {modifyReview,handleStarRating,handleSummary, deleteReview,starRating, summary,isOpen, onCancel } = props;
 
   const handleClose = () => {
     onCancel();
@@ -84,7 +84,6 @@ const MyModalPresenter = (props) => {
           <Contents>
               <Content onChange={handleStarRating} value={starRating}></Content>
               <Content onChange={handleSummary} value={summary}></Content>
-              <Content onChange={handleCreatedDate} value={createdDate}></Content>
           </Contents>
         <Buttons>
             <Btn onClick={modifyReview}>수정</Btn>
