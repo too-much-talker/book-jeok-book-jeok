@@ -66,7 +66,9 @@ function DetailForm({ booklog }) {
           />
         </UtilButton> */}
       </div>
-      <Wrapper>{/* <BooklogDetailBookInfo booklog={booklog} /> */}</Wrapper>
+      <Wrapper>
+        <BooklogDetailBookInfo booklog={booklog} />
+      </Wrapper>
       <hr></hr>
       <Wrapper2>
         <BooklogInfo>
@@ -80,18 +82,14 @@ function DetailForm({ booklog }) {
             </span>
             <Like>
               <Icon src={view} />
-              {booklog.likes}
+              {booklog.views + 1}
             </Like>
           </div>
         </BooklogInfo>
         <hr />
         <div>
-          <h5>제목</h5>
-          <div>
-            <p>{booklog.title}</p>
-          </div>
+          <h5>{booklog.title}</h5>
           <br></br>
-          <h5>내용</h5>
           <p>{booklog.content}</p>
         </div>
       </Wrapper2>
