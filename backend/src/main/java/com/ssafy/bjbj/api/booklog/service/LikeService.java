@@ -6,4 +6,6 @@ public interface LikeService {
 
     void unLike(Long booklogSeq, Long memberSeq);
 
+    boolean isLike(Long booklogSeq, Long memberSeq);
+
 }

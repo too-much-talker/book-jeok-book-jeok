@@ -84,6 +84,7 @@ const BookReview= styled.div`
 position:relative;
 width:100vh;
 height:50%;
+<<<<<<< HEAD
 `;
 const ReviewHeader = styled.div`
 position:relative;
@@ -141,7 +142,6 @@ border-radius:20px;
 box-shadow: 4px 5px 7px 2px lightgrey;
 margin-bottom:-55px;
 //background:red;
-
 `;
 
 const SelectBox = styled.select`
@@ -166,14 +166,16 @@ function BookDetailPresenter({
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating
 }){
     return(
+
         <Block>
         <Line></Line>
         <Contents>
             <BookInfoBlock> 
                 <BookTitle>{title}</BookTitle>
+                <BookStarRating>평점 : ★{starRating}</BookStarRating>
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
                 </BookImage>
@@ -184,7 +186,6 @@ function BookDetailPresenter({
                 </BookInfo>
             </BookInfoBlock>
             <ReviewBookLog>
-
 
                 <BookReview>
                     <ReviewHeader>이 책의 책리뷰</ReviewHeader>

@@ -23,18 +23,22 @@ function BookDetailContainer(bookInfoSeq){
         const [seq, setSeq]= useState();
         
         const [reviews, setReviews]= useState();
+        const [starRating, setStarRating]= useState();
+
         const [reviewPage, setReviewPage]= useState(1);
-        const [reviewTotalCnt, setReviewTotalCnt]= useState();
+        const [reviewTotalCnt, setReviewTotalCnt]= useState(1);
 
         const [booklogs, setBooklogs]= useState();
         const [booklogPage, setBooklogPage]= useState(1);
         const [booklogOrder, setBooklogOrder]= useState("recent");
         const [booklogTotalCnt, setBooklogTotalCnt]= useState();
+
         /////로그인한 사용자 정보 땡겨오는거부터 하자!!!!!!!
         const [MyModalOpen, setMyModalOpen] = useState(false);
         const [WriteModalOpen, setWriteModalOpen]= useState(false);
 
         const [userReview, setUserReview]= useState();
+
         useEffect(() => {
             getBookInfo();
             getBookReview();
@@ -75,6 +79,7 @@ function BookDetailContainer(bookInfoSeq){
                 setAuthor(response.data.data.bookInfo.author);
                 setPublisher(response.data.data.bookInfo.publisher);
                 setPublicationDate(response.data.data.bookInfo.publicationDate);
+                //setStarRating(response.data.data.bookInfo.starRating);
             })
             .catch(function (error) {
                 console.log(error);
@@ -107,11 +112,11 @@ function BookDetailContainer(bookInfoSeq){
               setReviews(response.data.data.myBookReviews);
               setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
               })
+
             .catch(function (error) {
                 console.log(error);
               }); 
         }
-
         function getUserReview(){
           console.log(reviews);
           if(reviews!==undefined){
@@ -130,34 +135,6 @@ function BookDetailContainer(bookInfoSeq){
 
         }
 
-        function writeBookReview(){
-
-        }
-
-        // function modifyBookReview(){
-        //     axios.put(url+`/api/v1/bookreviews/${bookReviewSeq}`,{
-        //         bookInfoSeq:bookInfoSeq, 
-        //         memberSeq:memberSeq, 
-        //         starRating: starRating,  ////이거 바궈야함. 이 리뷰의 starrating으로
-        //         summary: summary
-        //     })
-        //     .then(function (response){
-        //         console.log(response.data.data.modifiedBookReview);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //       }); 
-        // }
-
-        // function deleteBookReview(){
-        //     axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`)
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // }
 
         function reviewPageHandler(event){
             setReviewPage(event);
@@ -209,7 +186,7 @@ function BookDetailContainer(bookInfoSeq){
         <BookDetailPresenter 
         reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
         booklogs={booklogs} booklogPage={booklogPage} booklogPageHandler={booklogPageHandler} booklogOrderHandler={booklogOrderHandler} booklogTotalCnt={booklogTotalCnt}
-        image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}
+        starRating={starRating} image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}
         handleMyModalClose={handleMyModalClose} handleWriteModalClose={handleWriteModalClose}
         setMyModalOpen={setMyModalOpen} setWriteModalOpen={setWriteModalOpen}
         handleMyModalOpen={handleMyModalOpen} handleWriteModalOpen={handleWriteModalOpen}

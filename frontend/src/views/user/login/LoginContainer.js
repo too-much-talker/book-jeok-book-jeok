@@ -9,9 +9,10 @@ import { useEffect } from "react";
 function LoginContainer() {
   const navigate = useNavigate();
 
-  const { jwtToken } = useSelector((state) => state.authReducer);
+  // const { jwtToken } = useSelector((state) => state.authReducer);
+  const jwtToken = sessionStorage.getItem("jwtToken");
   useEffect(() => {
-    if (jwtToken !== "") {
+    if (jwtToken !== "" && jwtToken !== undefined && jwtToken !== null) {
       alert("접근이 불가능한 페이지입니다.");
       navigate("/");
     }
@@ -30,15 +31,17 @@ function LoginContainer() {
       userInfo,
       (response) => {
         if (response.data.status === 200) {
-          // let token = response.data.data["jwtToken"];
-          // sessionStorage.setItem("access-token", JSON.stringify(token));
+          let token = response.data.data["jwtToken"];
+          sessionStorage.setItem("jwtToken", JSON.stringify(token));
           dispatch(setUserInfo(response.data.data));
           console.log("로그인 성공");
-          navigate("/");
+          window.location.replace("/");
+        } else {
+          alert("계정이 없습니다.");
         }
       },
-      () => {
-        alert("로그인 실패");
+      (error) => {
+        console.log("로그인 에러발생");
       }
     );
   };
