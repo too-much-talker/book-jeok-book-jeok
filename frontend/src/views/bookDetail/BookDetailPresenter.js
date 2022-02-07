@@ -181,7 +181,9 @@ position:absolute;
 left:36%;
 `;
 
+const Booklog= styled.div`
 
+`;
 
 
 
@@ -191,7 +193,7 @@ function BookDetailPresenter({
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
     ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating,jwtToken,
-    url
+    url,goBooklog
 }){
     return(
 
@@ -259,14 +261,14 @@ function BookDetailPresenter({
                     <BooklogContents>
                         <Blank2></Blank2>
                             {booklogs && booklogs.map(booklog=>(
-                                <BooklogItem
-                                    title={booklog.title}
-                                    content={booklog.content}
-                                    //test용
-                                    //content="세이더네임세븐틴 안녕하세요 세븐틴입니다. 최승철 윤정한 홍지수 문준휘 권순영 전원우 이지훈 서명호 김민규 이석민 부승관 최한솔 이찬"
-                                    createdDate={booklog.createdDate}
-                                >
-                                </BooklogItem>
+                                <Booklog onClick={()=>goBooklog(booklog.booklogSeq)} >
+                                    <BooklogItem
+                                        title={booklog.title}
+                                        content={booklog.content}
+                                        createdDate={booklog.createdDate}
+                                    >
+                                    </BooklogItem>
+                                </Booklog>
                             ))}  
                     </BooklogContents>
                     <Page>

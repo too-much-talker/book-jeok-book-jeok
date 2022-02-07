@@ -178,6 +178,11 @@ function BookDetailContainer(bookInfoSeq){
         function handleWriteModalClose(){
           setWriteModalOpen(false);
         }
+
+        function goBooklog(seq){
+          document.location.href = `/booklogs/detail/${seq}`;
+        }
+
     return(
         <BookDetailPresenter 
         reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
@@ -189,7 +194,7 @@ function BookDetailContainer(bookInfoSeq){
         MyModalOpen={MyModalOpen} WriteModalOpen={WriteModalOpen}
         userReview={userReview}
         user={user} jwtToken={jwtToken}
-        seq={seq} url={url}
+        seq={seq} url={url} goBooklog={goBooklog}
         ></BookDetailPresenter>
         );
 }
