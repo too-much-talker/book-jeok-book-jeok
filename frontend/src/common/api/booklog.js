@@ -13,4 +13,11 @@ async function findBooklog(info, success, fail) {
     .catch(fail);
 }
 
-export { booklogList, findBooklog };
+async function booklogDetail(booklogSeq, header, success, fail) {
+  await api
+    .get(`/api/v1/booklogs/${booklogSeq}`, header)
+    .then(success)
+    .catch(fail);
+}
+
+export { booklogList, findBooklog, booklogDetail };
