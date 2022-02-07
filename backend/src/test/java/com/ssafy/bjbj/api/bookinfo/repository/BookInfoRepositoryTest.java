@@ -133,10 +133,18 @@ public class BookInfoRepositoryTest {
     @DisplayName("책 정보 Dto List를 request에 맞게 조회하는 repository 테스트")
     @Test
     public void findListByRequest() {
-
         bookInfoRepository.save(bookInfo1);
+        em.flush();
+        em.clear();
+
         bookInfoRepository.save(bookInfo2);
+        em.flush();
+        em.clear();
+
         memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
         bookReview1 = BookReview.builder()
                 .bookInfo(bookInfoRepository.findBySeq(bookInfo1.getSeq()))
                 .member(memberRepository.findBySeq(member1.getSeq()))
@@ -145,6 +153,8 @@ public class BookInfoRepositoryTest {
                 .isDeleted(false)
                 .build();
         bookReviewRepository.save(bookReview1);
+        em.flush();
+        em.clear();
 
         List<ResBookInfoSmallDto> resBookListDto1 = bookInfoRepository.findListByRequest(new ReqBookListDto(1, 10, "title", "2", "latest"));
         assertThat(bookInfo2.getSeq()).isEqualTo(resBookListDto1.get(0).getSeq());
