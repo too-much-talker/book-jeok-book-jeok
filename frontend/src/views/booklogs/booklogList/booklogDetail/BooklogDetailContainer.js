@@ -8,13 +8,17 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function BooklogDetailContainer() {
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const [booklog, setBooklog] = useState({});
   let params = useParams();
-  const { jwtToken } = useSelector((state) => state.authReducer);
+  // const { jwtToken } = useSelector((state) => state.authReducer);
+  const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
   useEffect(() => {
+    setLoading(true);
     booklogDetail(
       params.booklogSeq,
       {
@@ -32,16 +36,22 @@ function BooklogDetailContainer() {
           alert("접근이 불가능한 페이지입니다.");
           navigate("/");
         }
+        setLoading(false);
       },
       (error) => {
-        console.log(error);
+        alert("접근이 불가능한 페이지입니다.");
+        navigate("/");
       }
     );
   }, [params]);
 
   return (
     <div>
-      <BooklogDetailPresenter booklog={booklog} />
+      {loading ? (
+        <p>Loading....</p>
+      ) : (
+        <BooklogDetailPresenter booklog={booklog} />
+      )}
     </div>
   );
 }
