@@ -29,7 +29,7 @@ const HeaderRoot = styled.header`
 function Header() {
   // const { jwtToken, memberInfo } = useSelector((state) => state.authReducer);
   // console.log(jwtToken, memberInfo);
-  const jwtToken = sessionStorage.getItem("jwtToken");
+  const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
   return (
     <HeaderRoot>

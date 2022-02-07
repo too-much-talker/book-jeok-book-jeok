@@ -75,7 +75,7 @@ render(
 
               <Route path="/booklogs/*" element={<Booklogs />}>
                 <Route index element={<BooklogListContainer />} />
-                {/* <Route path="detail"/> */}
+                <Route path="detail" />
               </Route>
               <Route path="/mypage" element={<MyPage />}>
                 <Route index element={<UserInfoContainer />} />
