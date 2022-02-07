@@ -38,9 +38,10 @@ public class BookInfoRepositoryImpl implements BookInfoRepositoryCustom {
                         bookInfo.categoryId,
                         bookInfo.categoryName,
                         bookInfo.publisher,
-                        bookInfo.publicationDate))
-                .from(bookInfo)
-                .where(bookInfo.seq.eq(seq))
+                        bookInfo.publicationDate,
+                        round(bookReview.starRating.avg(), 2).coalesce(0.0)))
+                .from(bookInfo, bookReview)
+                .where(bookInfo.seq.eq(seq).and(bookReview.bookInfo.seq.eq(seq)))
                 .fetchOne();
     }
 

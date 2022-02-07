@@ -3,21 +3,16 @@ import SearchNavContainer from "./SearchNavContainer";
 import BookItem from "./BookItem";
 import Pagination from "react-js-pagination";
 import './Paging.css';
-import {useEffect, useState } from "react";
-import { findAllInRenderedTree } from "react-dom/cjs/react-dom-test-utils.production.min";
 const ResultBlock = styled.div`
 position:absolute;
 display:flex;
 left:50%;
-top:25%;
+top:30%;
 transform: translate(-50%, -50%);
 background:white;
-width:1400px;
+width:1200px;
 height:50px;
 border-bottom: 2px solid black;
-background:yellow
-
-
 `;
 const ResultText = styled.div`
 position:relative;
@@ -30,32 +25,40 @@ font-weight:bold
 `;
 const Resultwords=styled.div`
 margin-left:10px;
+margin-right:10px;
+
 `
 const SelectBox = styled.select`
 position :relative;
-width:80px;
-height:50px;
-left:63%;
+left:70%;
+top:15%;
+width: 82px;
+height: 35px;
+background: url('https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png') calc(100% - 5px) center no-repeat;
+background-size: 20px;
+padding: 5px 10px 5px 5px;
+border-radius: 4px;
+
 `;
 
 const BookListBlock = styled.div`
 position:relative;
 display: flex;
-justify-content: space-between;
 align-items: flex-start;
 flex-wrap: wrap;
-text-align:center;
-width: 70%;
-margin:auto;
-margin-top:250px;
+// text-align:center;
+margin-top:150px;
+margin-left:-80px;
+// background:red;
+width:1200px;
 `;
 
+const Book = styled.div`
+width:280px;
+margin:10px;
+`;
 
-//onSearchHandler,onSearch,onSearchCategoryHandler,books,booksPerPage, totalBooks, paginat
-
-
-
-function SearchResultPresenter ({page, handlePageChange,url,totalCnt,orderHandler,useParam,books }){
+function SearchResultPresenter ({goDetail,page, handlePageChange,url,totalCnt,orderHandler,useParam,books }){
 
   return(
       <>
@@ -74,12 +77,9 @@ function SearchResultPresenter ({page, handlePageChange,url,totalCnt,orderHandle
         </SelectBox>
       </ResultBlock>
       <BookListBlock> 
-
-        {/* resultcontainer가 레더링 되자마자 얘도 실행이 되는데 그 때 얘는 빈 공간이어서 error가 뜨는데 
-        books 데이터가 들어오기 전에 이걸 어떻게 처리해야할까요 ㅜㅜ */}
-        {/* 질문!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
-          {books.map(book=>(
-            <div>
+          
+          {books&&books.map(book=>(
+            <Book onClick={()=>goDetail(book.seq)} >
               <BookItem 
                 url={url}
                 key={book.seq}
@@ -91,7 +91,7 @@ function SearchResultPresenter ({page, handlePageChange,url,totalCnt,orderHandle
                 publicationDate= {book.publicationDate}
                 starRating={book.starRating}
               ></BookItem>
-            </div>
+            </Book>
           ))
           }
       </BookListBlock>

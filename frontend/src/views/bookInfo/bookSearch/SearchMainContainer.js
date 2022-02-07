@@ -4,7 +4,7 @@ import axios from "axios";
 import SearchResultContainer from "./SearchResultContainer";
 
 function SearchMainContainer(){
-    const url = "http://i6a305.p.ssafy.io:8080";
+    const url = "https://i6a305.p.ssafy.io:8443";
     const [bestSellers, setBestSellers] = useState([]);
     useEffect(() => {
         getBestSellers();
@@ -12,25 +12,20 @@ function SearchMainContainer(){
         return () => {
           console.log('컴포넌트가 화면에서 사라짐');
         };
-      }, []);
+      }, []);  
 
-      function goDetail(bookInfoSeq){
-        let url= `/detail/${bookInfoSeq}`;
-        document.location.href = url;
+    function goDetail(seq,starRating){
+        document.location.href = `/detail/${seq}`;
       }
 
-      function go(){
-        
-      }
-    function getBestSellers(){ ///처음 시작할때
+    function getBestSellers(){ 
         axios.post(url+`/api/v1/bookinfos/` ,
         {
             page:1,
             limit:12,
-            searchCategory : "title", 
+            searchCategory : "total", 
             searchKeyword :"",  
-            // searchKeyword : "", //이건 테스트 하기 위한거
-            orderCategory: "latest"
+            orderCategory: "star"
           })
         .then(function (response){
           console.log(response.data.data.bookList);

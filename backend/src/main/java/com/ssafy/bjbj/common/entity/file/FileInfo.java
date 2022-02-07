@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.common.entity.file;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.*;
 
@@ -17,6 +18,9 @@ public class FileInfo extends BaseLastModifiedEntity {
     @Id
     private Long seq;
 
+    @Column(name = "root_seq", columnDefinition = "BIGINT UNSIGNED")
+    private Long rootSeq;
+
     @Column(nullable = false)
     private String originFileName;
 
@@ -29,11 +33,17 @@ public class FileInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    @QueryProjection
     @Builder
-    public FileInfo(String originFileName, String encodedFileName, String savedPath, boolean isDeleted) {
+    public FileInfo(Long rootSeq, String originFileName, String encodedFileName, String savedPath, boolean isDeleted) {
+        this.rootSeq = rootSeq;
         this.originFileName = originFileName;
         this.encodedFileName = encodedFileName;
         this.savedPath = savedPath;
         this.isDeleted = isDeleted;
+    }
+
+    public void setRootSeq(Long rootSeq) {
+        this.rootSeq = rootSeq;
     }
 }

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
 // 클래스를 설정하며 .toggle--checked 클래스가 활성화 되었을 경우의 CSS도 구현
 const ToggleContainer = styled.div`
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
   display: inline-block;
-  left: 25%;
+  left: 10%;
   cursor: pointer;
 
   > .toggle-container {
@@ -13,15 +14,15 @@ const ToggleContainer = styled.div`
     height: 24px;
     border-radius: 30px;
     background-color: red;
-    transition: all .2s ease;
+    transition: all 0.2s ease;
     &.toggle--checked {
-        background-color: blue;
+      background-color: blue;
     }
   }
-  
-  >.toggle--checked {
-      background-color: #ac88c2;
-    }
+
+  > .toggle--checked {
+    background-color: #ac88c2;
+  }
 
   > .toggle-circle {
     position: absolute;
@@ -31,13 +32,13 @@ const ToggleContainer = styled.div`
     height: 22px;
     border-radius: 50%;
     background-color: #ffffff;
-    transition: all .25s ease;
+    transition: all 0.25s ease;
     &.toggle--checked {
-        left: 27px;
+      left: 27px;
     }
   }
-  
-  >.toggle--checked {
+
+  > .toggle--checked {
     left: 23px;
   }
 `;
@@ -51,21 +52,26 @@ const Desc = styled.div`
 // State를 바꿔줄 이벤트 함수 구현
 export const Toggle = (props) => {
   const [isOn, setisOn] = useState(false);
+  //
+  useEffect(() => {
+    if (props.modify) {
+      setisOn(props.isOpen);
+    }
+  }, []);
 
   const toggleHandler = () => {
-    setisOn(!isOn)
-    props.toggle(isOn);
+    setisOn(!isOn);
+    props.toggle(!isOn);
   };
 
   return (
     <>
       <ToggleContainer onClick={toggleHandler}>
         {/* 조건부 스타일링 : Toggle이 ON일 경우 toggle--checked 클래스를 추가 */}
-        <div className = {`toggle-container ${isOn ? "toggle--checked" : ""}`}/>
-        <div className = {`toggle-circle ${isOn ? "toggle--checked" : ""}`}/>
+        <div className={`toggle-container ${isOn ? "toggle--checked" : ""}`} />
+        <div className={`toggle-circle ${isOn ? "toggle--checked" : ""}`} />
         <Desc> {isOn ? "공개" : "비공개"} </Desc>
       </ToggleContainer>
-
     </>
   );
 };

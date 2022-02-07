@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class BooklogController {
 
     private final LikeService likeService;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
     public BaseResponseDto register(@Valid @RequestBody RequestBooklogDto requestBooklogDto, Errors errors, Authentication authentication) {
         log.debug("BooklogController.register() 북로그 작성 API 호출");
@@ -83,6 +85,7 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping("/{booklogSeq}")
     public BaseResponseDto update(@PathVariable Long booklogSeq, @Valid @RequestBody RequestBooklogDto requestBooklogDto, Errors errors, Authentication authentication) {
         log.debug("BooklogController.modify() 북로그 수정 API 호출");
@@ -132,6 +135,7 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{booklogSeq}")
     public BaseResponseDto remove(@PathVariable Long booklogSeq, Authentication authentication) {
         log.debug("BooklogController.remove() 북로그 삭제 API 호출");
@@ -168,6 +172,7 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PatchMapping("/{booklogSeq}")
     public BaseResponseDto changeIsOpen(@PathVariable Long booklogSeq, @RequestBody Boolean open, Authentication authentication) {
         log.debug("BooklogController.changeIsOpen() 북로그 공개여부 변경 API 호출");
@@ -204,6 +209,7 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping("/{booklogSeq}/like")
     public BaseResponseDto like(@PathVariable Long booklogSeq, Authentication authentication) {
         log.debug("BooklogController.like() 북로그 좋아요(하트) API 호출");
@@ -239,7 +245,8 @@ public class BooklogController {
                 .data(responseData)
                 .build();
     }
-    
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{booklogSeq}/like")
     public BaseResponseDto unLike(@PathVariable Long booklogSeq, Authentication authentication) {
         log.debug("BooklogController.unLike() 북로그 좋아요(하트) 취소 API 호출");
@@ -276,6 +283,7 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/{booklogSeq}")
     public BaseResponseDto get(@PathVariable Long booklogSeq, Authentication authentication) {
         log.debug("BooklogController.getBooklog() 북로그 조회 API 호출");
@@ -344,8 +352,9 @@ public class BooklogController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/me")
-    public BaseResponseDto myBooklogList(@RequestBody boolean isAll, Pageable pageable, Authentication authentication) {
+    public BaseResponseDto myBooklogList(@RequestParam boolean all, Pageable pageable, Authentication authentication) {
         log.debug("BooklogController.myBooklogList() 나의 북로그 목록 조회 API 호출");
 
         Integer status = null;
@@ -353,7 +362,7 @@ public class BooklogController {
 
         Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
         try {
-            ResMyBooklogPageDto resMyBooklogPageDto = booklogService.getResMyBooklogPageDto(isAll, pageable, memberSeq);
+            ResMyBooklogPageDto resMyBooklogPageDto = booklogService.getResMyBooklogPageDto(all, pageable, memberSeq);
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "나의 북로그 조회 성공");
@@ -419,6 +428,7 @@ public class BooklogController {
     }
 
     // /api/v1/booklogs/likes
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/likes")
     public BaseResponseDto likeBooklogList(Pageable pageable, Authentication authentication) {
         log.debug("BooklogController.likeBooklogLIst() 좋아요를 누른 북로그 목록 조회 API 호출");
@@ -436,6 +446,36 @@ public class BooklogController {
             responseData.put("currentPage", resLikeBooklogPageDto.getCurrentPage());
             responseData.put("totalPage", resLikeBooklogPageDto.getTotalPage());
             responseData.put("booklogs", resLikeBooklogPageDto.getLikeBooklogDtos());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("/{booklogSeq}/like")
+    public BaseResponseDto isLike(@PathVariable Long booklogSeq, Authentication authentication) {
+        log.debug("BooklogController.isLike() 북로그 좋아요 조회 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            boolean isLike = likeService.isLike(booklogSeq, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "북로그 좋아요 조회 성공");
+            responseData.put("isLike", isLike);
         } catch (Exception e) {
             // Server error : Database Connection Fail, etc..
             log.debug("[Error] Exception error");

@@ -8,6 +8,9 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
+  .summary {
+    margin-bottom: 0;
+  }
 `;
 
 const Info = styled.div`
@@ -19,12 +22,19 @@ const Table = styled.div`
   align: "center";
 `;
 
+const UtilButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+  button {
+    margin-left: 1rem;
+  }
+`;
 
 function RegisterForm({
   toggleHandler,
   onSubmitChangeBook,
   onSubmitArticle,
-  tmpUrl,
+  bookImg,
   selectedBook,
   ratingHandler,
   onSentenceChange,
@@ -32,27 +42,21 @@ function RegisterForm({
   onTitleChange,
   TitleValue,
   onContentChange,
-  ContentValue,
+  ContentValue
 }) {
   return (
     <div>
       <div>
-        <Toggle toggle={toggleHandler} />
-        <button
-          onClick={onSubmitChangeBook}
-          style={{ position: "absolute", right: 0, marginRight: "450px" }}
-        >
-          책 변경
-        </button>
-        <button
-          onClick={onSubmitArticle}
-          style={{ position: "absolute", right: 0, marginRight: "350px" }}
-        >
-          저장
-        </button>
+        <UtilButton>
+          <Toggle toggle={toggleHandler} />
+          <div>
+            <button onClick={onSubmitChangeBook}>책 변경</button>
+            <button onClick={onSubmitArticle}>저장</button>
+          </div>
+        </UtilButton>
       </div>
       <Wrapper>
-        <img src={tmpUrl}></img>
+        <img src={bookImg} alt={selectedBook.title}></img>
         <Info>
           <Table>
             <tbody>
@@ -82,7 +86,8 @@ function RegisterForm({
                 <th> 한줄평 </th>
                 <td>
                   <input
-                    type="text"
+                    // type="text"
+                    className="summary"
                     onChange={onSentenceChange}
                     value={oneSentence}
                     size="40"

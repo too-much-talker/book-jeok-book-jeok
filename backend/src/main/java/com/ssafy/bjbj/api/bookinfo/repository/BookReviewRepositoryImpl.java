@@ -1,6 +1,5 @@
 package com.ssafy.bjbj.api.bookinfo.repository;
 
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.bookinfo.dto.response.QResponseBookReviewByBookInfoDto;
@@ -24,6 +23,24 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
 
     public BookReviewRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Integer countBookReviewsByMemberSeq(Long memberSeq) {
+        JPAQuery<Integer> query = queryFactory.select(bookReview.count().intValue())
+                .from(bookReview)
+                .where(bookReview.member.seq.eq(memberSeq)
+                        .and(bookReview.isDeleted.isFalse()));
+        return query.fetchOne();
+    }
+
+    @Override
+    public Integer countBookReviewsByBookInfoSeq(Long bookInfoSeq) {
+        JPAQuery<Integer> query = queryFactory.select(bookReview.count().intValue())
+                .from(bookReview)
+                .where(bookReview.bookInfo.seq.eq(bookInfoSeq)
+                        .and(bookReview.isDeleted.isFalse()));
+        return query.fetchOne();
     }
 
     @Override

@@ -97,4 +97,18 @@ class LikeServiceTest {
                 .isInstanceOf(NotFoundLikeException.class);
     }
 
+    @DisplayName("북로그 좋아요 조회 테스트")
+    @Test
+    public void isLikeTest() {
+        likeRepository.deleteAll();
+
+        boolean isLike1 = likeService.isLike(booklog1.getSeq(), member1.getSeq());
+        assertThat(isLike1).isFalse();
+
+        likeService.like(booklog1.getSeq(), member1.getSeq());
+
+        boolean isLike2 = likeService.isLike(booklog1.getSeq(), member1.getSeq());
+        assertThat(isLike2).isTrue();
+    }
+
 }
