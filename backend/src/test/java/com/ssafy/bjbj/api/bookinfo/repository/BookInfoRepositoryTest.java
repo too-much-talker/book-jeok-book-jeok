@@ -103,7 +103,6 @@ public class BookInfoRepositoryTest {
                 .publicationDate(LocalDateTime.parse("2023-02-20T12:30:00"))
                 .build();
 
-
     }
 
     @DisplayName("응답용 책 정보 Dto를 seq로 조회하는 repository 테스트")
@@ -132,19 +131,12 @@ public class BookInfoRepositoryTest {
 
     @DisplayName("책 정보 Dto List를 request에 맞게 조회하는 repository 테스트")
     @Test
-    public void findListByRequest() {
+    public void findListByRequest() throws InterruptedException {
+        bookReviewRepository.deleteAll();
+
         bookInfoRepository.save(bookInfo1);
-        em.flush();
-        em.clear();
-
         bookInfoRepository.save(bookInfo2);
-        em.flush();
-        em.clear();
-
         memberRepository.save(member1);
-        em.flush();
-        em.clear();
-
         bookReview1 = BookReview.builder()
                 .bookInfo(bookInfoRepository.findBySeq(bookInfo1.getSeq()))
                 .member(memberRepository.findBySeq(member1.getSeq()))
@@ -157,7 +149,7 @@ public class BookInfoRepositoryTest {
         em.clear();
 
         List<ResBookInfoSmallDto> resBookListDto1 = bookInfoRepository.findListByRequest(new ReqBookListDto(1, 10, "title", "2", "latest"));
-        assertThat(bookInfo2.getSeq()).isEqualTo(resBookListDto1.get(0).getSeq());
+        assertThat(resBookListDto1.get(0).getSeq()).isEqualTo(bookInfo2.getSeq());
 
         List<ResBookInfoSmallDto> resBookListDto2 = bookInfoRepository.findListByRequest(new ReqBookListDto(1, 10, "title", "", "star"));
         assertThat(resBookListDto2.get(0).getSeq()).isEqualTo(bookInfo1.getSeq());
