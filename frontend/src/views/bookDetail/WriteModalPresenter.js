@@ -4,15 +4,15 @@ import StarRating from "../booklogs/booklogRegister/StarRating";
 import styled from "styled-components";
 
 const Header = styled.div`
-position:relaive;
+position:relative;
 display:flex;
+height:40%;
 `;
 const ExitBtn= styled.div`
 position:relative;
-right:3%;
 border:1px solid black;
-width:4%;
-height:4%;
+width:5%;
+height:25%;
 border-radius:20px;
 `;
 const Notice= styled.div`
@@ -20,38 +20,47 @@ position:relative;
 margin:auto;
 font-size:20px;
 `;
+
 const Contents= styled.div`
-position:relative;
-justify-content: center;
-background:red;
- align-items: center;
+position:relative; 
+text-align: center;
+align-items : center // 세로 중앙 정렬
+
 `;
 const Star= styled.div`
-position:relative;
+margin: 0 auto;
 display:flex;
-text-align:center;
+justify-content:center;
 `;
 const Summary= styled.div`
-position:relative;
+margin: 0 auto;
 display:flex;
+justify-content:center;
 `;
 const Content= styled.input`
 position:relative;
-size:200px;
 `;
 const Words= styled.div`
-font-size:15px;`;
-
+position:relative;
+font-size:15px;
+margin-right:10px;
+`;
+const STAR= styled.div`
+position:relative;
+text-align:left;
+`;
 const Buttons = styled.div`
 display:flex;
 position:relative;
 justify-content: center;
+height:30%;
 `;
 const Btn = styled.div`
+margin-top:3%;
     position:relative;
     border:1px solid black;
-width:10%;
-height:10%;
+width:15%;
+height:40%;
 border-radius:100px;
 `;
 const WriteModalPresenter = (props) => {
@@ -99,13 +108,14 @@ const WriteModalPresenter = (props) => {
           <Contents>
               <Star>
                   <Words>평점을 체크해주세요</Words>
-                  <StarRating rate={ratingHandler} />
+                  <STAR>
+                    <StarRating rate={ratingHandler} />
+                  </STAR>
               </Star>
               <Summary>
                   <Words>한줄평을 작성해주세요</Words>
                   <Content onChange={handleSummary}></Content>
             </Summary>
-              
           </Contents>
         <Buttons>
             <Btn onClick={RegisterReview}>등록하기</Btn>
