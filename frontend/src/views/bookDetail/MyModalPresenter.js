@@ -150,7 +150,6 @@ const MyModalPresenter = (props) => {
       <Contents>
         <Star>
           <Words>평점 : ★ {starRating} </Words>
-          {/* <StarRating onChange={handleStarRating} value={starRating}></StarRating> */}
           <StarRating rate={handleStarRating}/>
         </Star>
         <Summary>

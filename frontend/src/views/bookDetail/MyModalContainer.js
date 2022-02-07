@@ -22,18 +22,12 @@ function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtTok
         console.log(userReview);
       },[userReview]);
 
-    // const [starRating, setStarRating]= useState(userReview.starRating);
-    // const [summary, setSummary]= useState(userReview.summary);
-    // const [bookReviewSeq, setBookReviewSeq]= useState();
+
     const [starRating, setStarRating]= useState();
     const [summary, setSummary]= useState();
     const [bookReviewSeq, setBookReviewSeq]= useState();
     const [memberInfo, setMemberInfo]= useState();
 
-    // function handleStarRating(event){
-    //     setStarRating(event.target.value);
-    // }
-    
     function handleStarRating(param){
         setStarRating(param);
     }
