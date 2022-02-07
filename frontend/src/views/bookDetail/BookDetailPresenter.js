@@ -41,27 +41,38 @@ height:100vh;
 
 /////책정보
 const BookTitle= styled.div`
-margin-left:15%;
 position:relative;
-width:24vw;
+width:80%;
 text-align:left;
 font-size:30px;
 font-weight:bold;
+margin-left:10%;
+margin-right:10%;
 `;
 const BookStarRating= styled.div`
-margin-left:15%;
 position:relative;
-width:24vw;
+width:80%;
 text-align:left;
+font-size:30px;
+font-weight:bold;
+margin-left:10%;
+margin-right:10%;
 font-size:20px;
+margin-top:2%;
 `;
 const BookImage= styled.div`
+position:relative;
 margin-top:15px;
+width:80%;
+margin-left:10%;
+margin-righr:10%;
 `;
 const BookInfo= styled.div`
 margin-top:40px;
 margin:auto;
-width:300px;
+width:80%;
+margin-left:10%;
+margin-righr:10%;
 text-align:left;
 height:30%;
 font-size:18px;
@@ -127,7 +138,7 @@ margin-bottom:-8%;
 ///북로그
 const BookLog= styled.div`
 position:relative;
-height:80%;
+height:75%;
 width:95%;
 `;
 
@@ -193,7 +204,7 @@ function BookDetailPresenter({
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
                 </BookImage>
-                    <BookInfo>
+                <BookInfo>
                         <BookInfoDetail>작가 : {author} </BookInfoDetail>
                         <BookInfoDetail>출판사 : {publisher} </BookInfoDetail>
                         <BookInfoDetail>출판일 : {publicationDate}</BookInfoDetail>
