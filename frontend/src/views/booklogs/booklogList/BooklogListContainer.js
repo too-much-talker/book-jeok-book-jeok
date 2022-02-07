@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import { booklogList, findBooklog } from "../../../common/api/booklog";
 import "./Paging.css";
 import Pagination from "react-js-pagination";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import SearchbarContainer from "./SearchbarContainer";
 import QueryString from "qs";
 import { useLocation } from "react-router";
 
 function BooklogListContainer() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
   const location = useLocation(); //바뀐 부분
 
   const [order, setOrder] = useState("");
@@ -28,6 +31,8 @@ function BooklogListContainer() {
   const [totalCnt, setTotalCnt] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
+
     if (order !== "search") {
       booklogList(
         {
@@ -36,19 +41,26 @@ function BooklogListContainer() {
           sort: order,
         },
         (response) => {
-          console.log(response);
-          setTotalPage(response.data.data.totalPage);
-          setData(response.data.data.booklogs);
-          setTotalCnt(response.data.data.totalCnt);
+          if (response.data.status == 200) {
+            setTotalPage(response.data.data.totalPage);
+            setData(response.data.data.booklogs);
+            setTotalCnt(response.data.data.totalCnt);
+          } else {
+            alert("오류가 발생했습니다.");
+            navigate("/");
+          }
         },
         (error) => {
-          console.log(error);
+          alert("오류가 발생했습니다.");
+          navigate("/");
         }
       );
+      setLoading(false);
     } else if (order === "search") {
       const queryData = QueryString.parse(location.search, {
         ignoreQueryPrefix: true,
       });
+      setLoading(true);
       findBooklog(
         {
           page: page,
@@ -56,15 +68,22 @@ function BooklogListContainer() {
           ...queryData,
         },
         (response) => {
-          console.log(response);
-          setTotalPage(response.data.data.totalPage);
-          setData(response.data.data.booklogs);
-          setTotalCnt(response.data.data.totalCnt);
+          if (response.data.status == 200) {
+            console.log(response);
+            setTotalPage(response.data.data.totalPage);
+            setData(response.data.data.booklogs);
+            setTotalCnt(response.data.data.totalCnt);
+          } else {
+            alert("오류가 발생했습니다.");
+            navigate("/");
+          }
         },
         (error) => {
-          console.log(error);
+          alert("오류가 발생했습니다.");
+          navigate("/");
         }
       );
+      setLoading(false);
     }
   }, [page, order, totalPage, location]);
 
@@ -74,23 +93,29 @@ function BooklogListContainer() {
 
   return (
     <>
-      <h1>북로그 트랜드</h1>
-      <SearchbarContainer />
-      <BooklogListPresenter
-        order={order}
-        data={data}
-        isPopular={order === "like"}
-        totalCnt={totalCnt}
-      />
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={size}
-        totalItemsCount={totalCnt}
-        pageRangeDisplayed={5}
-        prevPageText={"‹"}
-        nextPageText={"›"}
-        onChange={handlePageChange}
-      />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h1>북로그 트랜드</h1>
+          <SearchbarContainer />
+          <BooklogListPresenter
+            order={order}
+            data={data}
+            isPopular={order === "like"}
+            totalCnt={totalCnt}
+          />
+          <Pagination
+            activePage={page}
+            itemsCountPerPage={size}
+            totalItemsCount={totalCnt}
+            pageRangeDisplayed={5}
+            prevPageText={"‹"}
+            nextPageText={"›"}
+            onChange={handlePageChange}
+          />
+        </>
+      )}
     </>
   );
 }
