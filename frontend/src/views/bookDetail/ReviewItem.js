@@ -35,7 +35,6 @@ function ReviewItem({summary,reviewStarRating,reviewDate}){
             <ReviewStarRating>★ {reviewStarRating}</ReviewStarRating>
             <ReviewContents>{summary}</ReviewContents>
             <ReviewDate>{date} {time}</ReviewDate>
-
         </Block>
 
     );

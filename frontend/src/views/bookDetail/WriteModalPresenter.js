@@ -1,48 +1,73 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
-
+import StarRating from "../booklogs/booklogRegister/StarRating";
 import styled from "styled-components";
 
 const Header = styled.div`
-position:relaive;
+position:relative;
 display:flex;
-
+height:35%;
 `;
 const ExitBtn= styled.div`
 position:relative;
-right:3%;
 border:1px solid black;
-width:4%;
-height:4%;
+width:5%;
+height:30%;
 border-radius:20px;
 `;
 const Notice= styled.div`
 position:relative;
 margin:auto;
+font-size:20px;
 `;
-const StarRating= styled.input`
-position:relative;
+
+const Contents= styled.div`
+position:relative; 
+text-align: center;
+align-items : center // 세로 중앙 정렬
+
 `;
-const Summary= styled.input`
-position:relative;
+const Star= styled.div`
+margin: 0 auto;
+display:flex;
+justify-content:center;
 `;
-const CreatedDate= styled.input`
+const Summary= styled.div`
+margin: 0 auto;
+display:flex;
+justify-content:center;
+`;
+const Content= styled.input`
 position:relative;
+width:40%;
+`;
+
+const Words= styled.div`
+position:relative;
+font-size:15px;
+margin-right:10px;
+margin-bottom:10px;
+`;
+const STAR= styled.div`
+position:relative;
+text-align:left;
 `;
 const Buttons = styled.div`
 display:flex;
 position:relative;
 justify-content: center;
+height:30%;
 `;
 const Btn = styled.div`
+margin-top:3%;
     position:relative;
     border:1px solid black;
-width:10%;
-height:10%;
+width:15%;
+height:40%;
 border-radius:100px;
 `;
-const MyModalPresenter = (props) => {
-  const {modifyReview,handleStarRating,handleSummary, deleteReview,starRating, summary,isOpen, onCancel } = props;
+const WriteModalPresenter = (props) => {
+  const {ratingHandler,RegisterReview,handleStarRating,handleSummary, handleCreatedDate,deleteReview,starRating, summary,createdDate,isOpen, onCancel } = props;
 
   const handleClose = () => {
     onCancel();
@@ -80,25 +105,27 @@ const MyModalPresenter = (props) => {
         }}
       > 
       <Header>
-        <Notice>내용을 수정한 후 완료를 누르면 수정된 내용이 책 리뷰에 반영됩니다.</Notice>
+        <Notice>책리뷰를 작성해주세요 !</Notice>
         <ExitBtn onClick={handleClose}>X</ExitBtn>
       </Header>
-         
-
-          {/* <Contents> */}
-              <StarRating onChange={handleStarRating} value={starRating}></StarRating>
-              <Summary onChange={handleSummary} value={summary}></Summary>
-              <CreatedDate onChange={handleCreatedDate} value={createdDate}></CreatedDate>
-          {/* </Contents> */}
-
+          <Contents>
+              <Star>
+                  <Words>평점을 체크해주세요</Words>
+                  <STAR>
+                    <StarRating rate={ratingHandler} />
+                  </STAR>
+              </Star>
+              <Summary>
+                  <Words>한줄평을 작성해주세요</Words>
+                  <Content onChange={handleSummary}></Content>
+            </Summary>
+          </Contents>
         <Buttons>
-            <Btn onClick={modifyReview}>수정</Btn>
-            <Btn onClick={deleteReview}>삭제</Btn>
+            <Btn onClick={RegisterReview}>등록하기</Btn>
         </Buttons>
-
       </ReactModal>
     </>
   );
 };
 
-export default MyModalPresenter;
+export default WriteModalPresenter;

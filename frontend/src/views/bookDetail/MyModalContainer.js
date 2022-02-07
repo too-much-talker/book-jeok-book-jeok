@@ -2,15 +2,14 @@
 import { useState,useEffect } from "react";
 import MyModalPresenter from "./MyModalPresenter";
 import axios from "axios";
-import { useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
-function MyModalContainer({ isOpen, onCancel,userReview ,bookInfoSeq}){
-    const url = "http://i6a305.p.ssafy.io:8080";
-    const user=useSelector(state => state.authReducer);
-    const token=user.jwtToken;
+
+
+function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtToken,url}){
     console.log(userReview);
 
     let useParam = useParams();
+    const 
     //console.log(user.memberInfo.seq);
     const handleClose = () => {
         onCancel();

@@ -5,29 +5,19 @@ import BooklogItem from "./BooklogItem";
 import Pagination from "react-js-pagination";
 import '../bookInfo/bookSearch/Paging.css';
 import MyModalContainer from "./MyModalContainer";
-// import WriteModalContainer from "./WriteModalContainer";
+import WriteModalContainer from "./WriteModalContainer";
 const Block= styled.div`
-// margin-top:3    
-// text-align:center;
-// position:absolute;
-// margin-left:-200px;
-// width:1430px;
-// height:2000px;
-// background:green;
-// display:flex;
 `;
 const Line = styled.div`
-position:absolute;
-width:1230px;
-margin-left:-100px;
+position:relative;
+width:100%;
 justify-content:center; 
 border-top: 1px solid black;
 `;
 const Contents = styled.div`
-position:absolute;
+position:relative;
 display: flex;
-width:1230px;
-margin-left:-100px;
+width:100%;
 margin-top:20px;
 `;
 
@@ -44,38 +34,48 @@ height:100vh;
 
 const ReviewBookLog= styled.div`
 position:relative;
-width:50%;
+width:65%;
 height:100vh;
 `;
 
 
 /////책정보
 const BookTitle= styled.div`
-margin-left:15%;
 position:relative;
-width:24vw;
+width:80%;
 text-align:left;
 font-size:30px;
 font-weight:bold;
+margin-left:10%;
+margin-right:10%;
 `;
 const BookStarRating= styled.div`
-margin-left:15%;
 position:relative;
-width:24vw;
+width:80%;
 text-align:left;
+font-size:30px;
+font-weight:bold;
+margin-left:10%;
+margin-right:10%;
 font-size:20px;
+margin-top:2%;
 `;
 const BookImage= styled.div`
+position:relative;
 margin-top:15px;
+width:80%;
+margin-left:10%;
+margin-righr:10%;
 `;
 const BookInfo= styled.div`
 margin-top:40px;
 margin:auto;
-width:300px;
+width:80%;
+margin-left:10%;
+margin-righr:10%;
 text-align:left;
 height:30%;
 font-size:18px;
-
 `;
 const BookInfoDetail= styled.div`
 `;
@@ -83,52 +83,77 @@ const BookInfoDetail= styled.div`
 ////책리뷰
 const BookReview= styled.div`
 position:relative;
-width:100vh;
+width:95%;
 height:50%;
 `;
 const ReviewHeader = styled.div`
 position:relative;
+display:flex;
+`;
+
+const ReviewTitle= styled.div`
+position:relative;
 text-align:left;
 font-size:23px;
-margin-top:10px;
 margin-left:10px;
 margin-bottom:5px;
+width:30%;
 `;
+
 const Blank=styled.div`
 width:50%;
 height:8%;
 `;
+const Buttons= styled.div`
+position:relative;
+width:70%;
+height:2%;
+margin-left:0%;
+text-align:right;
+margin-right:2%;
+`;
+
+
 const MyReviewButton = styled.button`
 position:relative;
+width:20%;
+padding: 0px;
+margin:0px;
+margin-right:1%;
 `;
 const WriteReviewButton = styled.button`
-position:relative
+position:relative;
+width:30%;
+padding: 0px;
+margin:0px;
 `;
 const ReviewContents= styled.div`
 position:relative;
 height:80%;
 border-radius:20px;
 box-shadow: 4px 5px 7px 2px lightgrey;
-margin-bottom:-55px;
+margin-bottom:-8%;
 `;
 
 ///북로그
 const BookLog= styled.div`
 position:relative;
-height:80%;
-width:100vh;
+height:75%;
+width:95%;
 `;
 
 const BooklogHeader = styled.div`
 position:relative;
-text-align:left;
-font-size:23px;
-margin-top:10px;
-margin-left:10px;
-margin-bottom:5px;
-width:35%;
+display:flex;  
 `;
 
+const BooklogText= styled.div`
+position:relative;
+text-align:left;
+font-size:23px;
+margin-left:10px;
+width:35%;
+`;
 
 const Blank2=styled.div`
 width:50%;
@@ -140,18 +165,15 @@ position:relative;
 height:80%;
 border-radius:20px;
 box-shadow: 4px 5px 7px 2px lightgrey;
-margin-bottom:-55px;
-//background:red;
-
-
+margin-bottom:-8%;
 `;
 
 const SelectBox = styled.select`
-top:0%;
-left:35%;
-position :absolute;
+left:40%;
+position :relative;
 width:14%;
-height:6%;
+height:100%;
+margin:0px;
 `;
 
 const Page= styled.div`
@@ -169,7 +191,9 @@ function BookDetailPresenter({
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
     ,setMyModalOpen,setWriteModalOpen
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,bookInfoSeq
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,bookInfoSeq,user,seq,jwtToken,
+    url
+
 }){
     return(
 
@@ -182,7 +206,7 @@ function BookDetailPresenter({
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
                 </BookImage>
-                    <BookInfo>
+                <BookInfo>
                         <BookInfoDetail>작가 : {author} </BookInfoDetail>
                         <BookInfoDetail>출판사 : {publisher} </BookInfoDetail>
                         <BookInfoDetail>출판일 : {publicationDate}</BookInfoDetail>
@@ -191,11 +215,18 @@ function BookDetailPresenter({
             <ReviewBookLog>
 
                 <BookReview>
-                    <ReviewHeader>이 책의 책리뷰</ReviewHeader>
-                    <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰 {MyModalOpen}</MyReviewButton>
-                    <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} bookInfoSeq={bookInfoSeq}></MyModalContainer>
-                    <WriteReviewButton onClick={setWriteModalOpen(true)}>책리뷰 작성하기</WriteReviewButton>
-                    {/* <WriteModalContainer></WriteModalContainer> */}
+                   <ReviewHeader>
+                        <ReviewTitle>이 책의 책리뷰</ReviewTitle>
+                        <Buttons>
+                            <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰</MyReviewButton>
+                            <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} bookInfoSeq={bookInfoSeq} user={user} jwtToken={jwtToken} url={url}></MyModalContainer>
+                            <WriteReviewButton onClick={handleWriteModalOpen} >책리뷰 작성하기</WriteReviewButton>
+                            <WriteModalContainer isOpen={WriteModalOpen}onCancel={handleWriteModalClose} user={user} jwtToken={jwtToken} seq={seq} url={url}></WriteModalContainer>
+                        </Buttons>
+                    </ReviewHeader>
+       
+                    
+
                     <ReviewContents> 
                         <Blank></Blank>
                         {reviews && reviews.map(review=>(
@@ -219,11 +250,15 @@ function BookDetailPresenter({
                 </BookReview>
 
                 <BookLog>
-                    <BooklogHeader>이 책을 주제로 쓴 북로그</BooklogHeader>
+                    <BooklogHeader>
+                        <BooklogText>이 책을 주제로 쓴 북로그</BooklogText>
                         <SelectBox defaultValue="recent" onClick={booklogOrderHandler}>
                             <option value="recent" >최신순</option>
                             <option value="like">좋아요순</option>
                         </SelectBox>
+
+                    </BooklogHeader>
+
                     <BooklogContents>
                         <Blank2></Blank2>
                             {booklogs && booklogs.map(booklog=>(
@@ -249,9 +284,6 @@ function BookDetailPresenter({
                     </Page>
 
                 </BookLog> 
-
-
-
 
             </ReviewBookLog>
         </Contents>

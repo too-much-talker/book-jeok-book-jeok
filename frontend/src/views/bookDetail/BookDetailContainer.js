@@ -1,19 +1,25 @@
 import BookDetailPresenter from "./BookDetailPresenter"; 
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useReducer } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 function BookDetailContainer(bookInfoSeq){
         const user=useSelector(state => state.authReducer);
-        //console.log(user.memberInfo.seq);
-        let useParam = useParams();
-        const url = "http://i6a305.p.ssafy.io:8080";
+
+        const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
+        console.log(jwtToken);
+
+        let useParam=useParams();
+        const url = "https://i6a305.p.ssafy.io:8443";
+
         const [title, setTitle]= useState();
         const [author, setAuthor]= useState();
         const [image, setImage]= useState();
         const [publisher, setPublisher]= useState();
         const [publicationDate, setPublicationDate]= useState();
+        const [seq, setSeq]= useState();
+        
         const [reviews, setReviews]= useState();
         const [starRating, setStarRating]= useState();
 
@@ -36,6 +42,7 @@ function BookDetailContainer(bookInfoSeq){
               bookReviewSeq:"",
               memberInfo:""
           });
+
 
         useEffect(() => {
             getBookInfo();
@@ -71,7 +78,7 @@ function BookDetailContainer(bookInfoSeq){
             //책정보 데려오기
             axios.get(url+`/api/v1/bookinfos/${useParam.seq}`)
             .then(function (response){
-               // console.log(response.data.data.bookInfo);
+                setSeq(response.data.data.bookInfo.seq);
                 setImage(response.data.data.bookInfo.largeImgUrl);
                 setTitle(response.data.data.bookInfo.title);
                 setAuthor(response.data.data.bookInfo.author);
@@ -82,6 +89,7 @@ function BookDetailContainer(bookInfoSeq){
             .catch(function (error) {
                 console.log(error);
               }); 
+              
         }
         
 
@@ -108,7 +116,7 @@ function BookDetailContainer(bookInfoSeq){
 
               console.log(response.data.data);
               setReviews(response.data.data.myBookReviews);
-                setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
+              setReviewTotalCnt(response.data.data.myBookReviews.totalCnt);
               })
 
             .catch(function (error) {
@@ -135,8 +143,6 @@ function BookDetailContainer(bookInfoSeq){
 
         }
 
-
-
         function reviewPageHandler(event){
             setReviewPage(event);
         }
@@ -153,7 +159,7 @@ function BookDetailContainer(bookInfoSeq){
             //북로그 가져오기
             axios.get(url+`/api/v1/booklogs?page=${booklogPage}&size=5&sort=${booklogOrder}`)
             .then(function (response){
-                console.log(response.data.data.booklogs.content);
+                //console.log(response.data.data.booklogs.content);
                 setBooklogs(response.data.data.booklogs);
                 setBooklogTotalCnt(response.data.data.totalCnt);
             })  
@@ -164,14 +170,20 @@ function BookDetailContainer(bookInfoSeq){
         }
 
         function handleMyModalOpen(){
-            if(user.jwtToken===""){
-                alert("로그인 후 사용할 수 있습니다.")
-              }else{
-                setMyModalOpen(true);
-              }
+          if(jwtToken==="" ||jwtToken===undefined|| jwtToken===null){
+            alert("로그인 후 사용할 수 있습니다.")
+          }else{
+            setMyModalOpen(true);
+          }
         }
+
         function handleWriteModalOpen(){
-                setWriteModalOpen(true);
+          if(jwtToken===""||jwtToken===undefined|| jwtToken===null){
+            alert("로그인 후 사용할 수 있습니다.")
+          }else{
+            setWriteModalOpen(true);
+          }
+
         }
         function handleMyModalClose(){
           setMyModalOpen(false);
@@ -183,14 +195,16 @@ function BookDetailContainer(bookInfoSeq){
         <BookDetailPresenter 
         reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
         booklogs={booklogs} booklogPage={booklogPage} booklogPageHandler={booklogPageHandler} booklogOrderHandler={booklogOrderHandler} booklogTotalCnt={booklogTotalCnt}
-        image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}
+        starRating={starRating} image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}
         handleMyModalClose={handleMyModalClose} handleWriteModalClose={handleWriteModalClose}
         setMyModalOpen={setMyModalOpen} setWriteModalOpen={setWriteModalOpen}
         handleMyModalOpen={handleMyModalOpen} handleWriteModalOpen={handleWriteModalOpen}
-        MyModalOpen={MyModalOpen}
+        MyModalOpen={MyModalOpen} WriteModalOpen={WriteModalOpen}
         userReview={userReview}
         bookInfoSeq={useParam.seq}
         starRating={starRating}
+        user={user} jwtToken={jwtToken}
+        seq={seq} url={url}
         ></BookDetailPresenter>
 
         );

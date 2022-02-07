@@ -19,7 +19,7 @@ function SignupContainer() {
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [checkValid, setCheckValid]= useState(true);
-  const url = "http://i6a305.p.ssafy.io:8080";
+  const url = "https://i6a305.p.ssafy.io:8443";
 
   const onEmailHandler = (event) => {
     setEmail(event.currentTarget.value);
