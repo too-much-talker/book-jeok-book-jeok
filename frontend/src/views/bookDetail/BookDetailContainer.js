@@ -11,7 +11,7 @@ function BookDetailContainer(bookInfoSeq){
         const [publisher, setPublisher]= useState();
         const [publicationDate, setPublicationDate]= useState();
         const [reviews, setReviews]= useState();
-
+        const [starRating, setStarRating]= useState();
         const [reviewPage, setReviewPage]= useState(1);
         const [reviewTotalCnt, setReviewTotalCnt]= useState();
 
@@ -41,6 +41,7 @@ function BookDetailContainer(bookInfoSeq){
                 setAuthor(response.data.data.bookInfo.author);
                 setPublisher(response.data.data.bookInfo.publisher);
                 setPublicationDate(response.data.data.bookInfo.publicationDate);
+                //setStarRating(response.data.data.bookInfo.starRating);
             })
             .catch(function (error) {
                 console.log(error);
@@ -61,35 +62,6 @@ function BookDetailContainer(bookInfoSeq){
                 console.log(error);
               }); 
         }
-
-        function writeBookReview(){
-
-        }
-
-        // function modifyBookReview(){
-        //     axios.put(url+`/api/v1/bookreviews/${bookReviewSeq}`,{
-        //         bookInfoSeq:bookInfoSeq, 
-        //         memberSeq:memberSeq, 
-        //         starRating: starRating,  ////이거 바궈야함. 이 리뷰의 starrating으로
-        //         summary: summary
-        //     })
-        //     .then(function (response){
-        //         console.log(response.data.data.modifiedBookReview);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //       }); 
-        // }
-
-        // function deleteBookReview(){
-        //     axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`)
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // }
 
         function reviewPageHandler(event){
             setReviewPage(event);
@@ -124,7 +96,8 @@ function BookDetailContainer(bookInfoSeq){
         <BookDetailPresenter 
         reviewPage={reviewPage} reviewTotalCnt={reviewTotalCnt}reviews={reviews} reviewPageHandler={reviewPageHandler} 
         booklogPageHandler={booklogPageHandler} 
-        image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}></BookDetailPresenter>
-    );
+        starRating={starRating} image={image} title ={title} author={author} publisher={publisher} publicationDate={publicationDate}></BookDetailPresenter>
+        
+        );
 }
 export default BookDetailContainer;

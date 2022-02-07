@@ -118,7 +118,7 @@ width:100vh;
 `;
 
 function BookDetailPresenter({
-    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
+    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,starRating,
     image,title, author,publisher, publicationDate}){
     return(
         <Block>
@@ -126,7 +126,7 @@ function BookDetailPresenter({
         <Contents>
             <BookInfoBlock> 
                 <BookTitle>{title}</BookTitle>
-                <BookStarRating>평점 : ★</BookStarRating>
+                <BookStarRating>평점 : ★{starRating}</BookStarRating>
                 <BookImage>
                     <img src={image} height="400" width="300"></img>
                 </BookImage>
