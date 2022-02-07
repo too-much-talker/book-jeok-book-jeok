@@ -28,7 +28,7 @@ const HeaderRoot = styled.header`
 
 function Header() {
   const { jwtToken, memberInfo } = useSelector((state) => state.authReducer);
-  console.log(jwtToken, memberInfo);
+  // console.log(jwtToken, memberInfo);
 
   return (
     <HeaderRoot>
