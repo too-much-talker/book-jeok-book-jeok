@@ -61,4 +61,10 @@ public class LikeServiceImpl implements LikeService {
         }
     }
 
+    @Override
+    public boolean isLike(Long booklogSeq, Long memberSeq) {
+        Like findLike = likeRepository.findByBooklogSeqAndMemberSeq(booklogSeq, memberSeq);
+        return findLike != null;
+    }
+
 }
