@@ -4,6 +4,7 @@ import lombok.*;
 
 @ToString(of = {"memberSeq","readingGroupSeq", "title", "content"})
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 public class ReqReadingGroupBoardDto {
