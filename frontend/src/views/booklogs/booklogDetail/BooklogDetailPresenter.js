@@ -2,7 +2,30 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Toggle from "../booklogRegister/Toggle";
 import StarRating from "../booklogRegister/StarRating";
+const Wrapper = styled.div`
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    .summary {
+      margin-bottom: 0;
+    }
+  `;
 
+  const Wrapper2 = styled.div`
+    text-align: left;
+    padding-left: 20rem;
+  `;
+
+  const Info = styled.div`
+    display: inline-block;
+    padding-left: 5rem;
+  `;
+
+  const Table = styled.div`
+    align: center;
+  `;
+  
 function DetailForm({
   isEditing,
   isOpen,
@@ -27,29 +50,7 @@ function DetailForm({
       margin-left: 1rem;
     }
   `;
-  const Wrapper = styled.div`
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    .summary {
-      margin-bottom: 0;
-    }
-  `;
-
-  const Wrapper2 = styled.div`
-    text-align: left;
-    padding-left: 20rem;
-  `;
-
-  const Info = styled.div`
-    display: inline-block;
-    padding-left: 5rem;
-  `;
-
-  const Table = styled.div`
-    align: center;
-  `;
+  
 
   const Desc = styled.div`
     text-align: left;
@@ -66,7 +67,7 @@ function DetailForm({
   const Circle = styled.div`
     display: inline-block;
   `;
-
+  console.log(isOpen);
   return (
     <div>
       <div>
@@ -83,7 +84,7 @@ function DetailForm({
                 ></IsOpenCircle>
               </div>
             ) : (
-              <Toggle toggle={toggleHandler} />
+              <Toggle toggle={toggleHandler} modify={true} isOpen={isOpen} />
             )}
           </Circle>
 
@@ -94,7 +95,7 @@ function DetailForm({
           ) : (
             <div>
               <button onClick={editButtonHandler}>수정</button>
-              <button onClick={onDeleteArticle}>삭제</button>
+              {/* <button onClick={onDeleteArticle}>삭제</button> */}
             </div>
           )}
         </UtilButton>
