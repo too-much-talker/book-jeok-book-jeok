@@ -44,8 +44,10 @@ public class BookInfoRepositoryTest {
     private BookInfo bookInfo2;
 
     private Member member1;
+    private Member member2;
 
     private BookReview bookReview1;
+    private BookReview bookReview2;
 
     @BeforeEach
     public void setUp() {
@@ -56,6 +58,17 @@ public class BookInfoRepositoryTest {
                 .name("홍길동")
                 .nickname("nickname")
                 .phoneNumber("010-1234-5789")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(100)
+                .build();
+
+        member2 = Member.builder()
+                .email("bjbj123@bjbj.com")
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hhhhhh")
+                .phoneNumber("010-9876-5789")
                 .role(Role.MEMBER)
                 .exp(0)
                 .point(100)
@@ -110,6 +123,26 @@ public class BookInfoRepositoryTest {
     public void findBookInfoBySeq() {
 
         em.persist(bookInfo1);
+        memberRepository.save(member1);
+        bookReview1 = BookReview.builder()
+                .bookInfo(bookInfoRepository.findBySeq(bookInfo1.getSeq()))
+                .member(memberRepository.findBySeq(member1.getSeq()))
+                .starRating(4)
+                .summary("test summary")
+                .isDeleted(false)
+                .build();
+        bookReviewRepository.save(bookReview1);
+
+        memberRepository.save(member2);
+        bookReview2 = BookReview.builder()
+                .bookInfo(bookInfoRepository.findBySeq(bookInfo1.getSeq()))
+                .member(memberRepository.findBySeq(member2.getSeq()))
+                .starRating(5)
+                .summary("test summary")
+                .isDeleted(false)
+                .build();
+        bookReviewRepository.save(bookReview2);
+
         em.flush();
         em.clear();
 
@@ -127,6 +160,7 @@ public class BookInfoRepositoryTest {
         assertThat(bookInfo1.getCategoryName()).isEqualTo(savedBookInfo.getCategoryName());
         assertThat(bookInfo1.getPublisher()).isEqualTo(savedBookInfo.getPublisher());
         assertThat(bookInfo1.getPublicationDate()).isEqualTo(savedBookInfo.getPublicationDate());
+        assertThat(savedBookInfo.getStarRating()).isEqualTo((4.0 + 5.0) / 2);
     }
 
     @DisplayName("책 정보 Dto List를 request에 맞게 조회하는 repository 테스트")
