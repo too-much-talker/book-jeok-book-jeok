@@ -120,7 +120,8 @@ width:100vh;
 function BookDetailPresenter({
     reviews,reviewPage,reviewTotalCnt,reviewPageHandler,starRating,
     image,title, author,publisher, publicationDate}){
-    return(
+    console.log(reviewTotalCnt);
+        return(
         <Block>
         <Line></Line>
         <Contents>

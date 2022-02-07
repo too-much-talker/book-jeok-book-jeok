@@ -13,7 +13,7 @@ function BookDetailContainer(bookInfoSeq){
         const [reviews, setReviews]= useState();
         const [starRating, setStarRating]= useState();
         const [reviewPage, setReviewPage]= useState(1);
-        const [reviewTotalCnt, setReviewTotalCnt]= useState();
+        const [reviewTotalCnt, setReviewTotalCnt]= useState(1);
 
         const [booklogPage, setBooklogPage]= useState(1);
         const [booklogOrder, setBooklogOrder]= useState("recent");
@@ -57,6 +57,7 @@ function BookDetailContainer(bookInfoSeq){
                 console.log(response.data.data.msg);
                 setReviews(response.data.data.myBookReviews);
                 setReviewTotalCnt(response.data.data.myBookReviews.totalCnt)
+                console.log(response.data.data.myBookReviews.totalCnt);
             })
             .catch(function (error) {
                 console.log(error);
