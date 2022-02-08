@@ -63,7 +63,12 @@ function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtTok
     }
 
     function deleteReview(){
-        axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`)
+        axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`,
+        {
+            headers:{
+                Authorization:`Bearer `+jwtToken
+            }
+        })
         .then(function (response){
           console.log(response);
           alert(response.data.data.msg);
