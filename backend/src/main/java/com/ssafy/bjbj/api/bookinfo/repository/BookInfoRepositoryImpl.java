@@ -26,7 +26,7 @@ public class BookInfoRepositoryImpl implements BookInfoRepositoryCustom {
     @Override
     public ResBookInfoDto findResBookInfoDtoBySeq(Long bookInfoSeq) {
         return queryFactory
-                .select(new QresBookInfoDto(
+                .select(new QResBookInfoDto(
                         bookInfo.seq,
                         bookInfo.isbn,
                         bookInfo.title,

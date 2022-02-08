@@ -6,9 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@ToString(of = {"memberNickname", "startRating", "summary", "createdDate"})
+@ToString(of = { "bookReviewSeq", "bookInfoSeq", "memberSeq", "memberNickname", "starRating", "summary", "createdDate" })
 @NoArgsConstructor
 @Getter
 public class ResBookReviewByBookInfoDto {
@@ -25,7 +26,7 @@ public class ResBookReviewByBookInfoDto {
 
     private String summary;
 
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 
     @QueryProjection
     @Builder
@@ -36,7 +37,7 @@ public class ResBookReviewByBookInfoDto {
         this.memberNickname = memberNickname;
         this.starRating = starRating;
         this.summary = summary;
-        this.createdDate = createdDate;
+        this.createdDate = createdDate.toLocalDate();
     }
 
 }
