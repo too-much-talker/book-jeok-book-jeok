@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.member.repository;
 
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
-import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Activity;
 import com.ssafy.bjbj.api.member.entity.ActivityType;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -123,7 +123,7 @@ class MemberRepositoryTest {
     public void findResponseMemberDtoByEmail() {
         // 회원 가입 전
         String email = "test@test.com";
-        ResponseMemberDto responseMemberDto1 = memberRepository.findResponseMemberDtoByEmail(email);
+        ResLoginMemberDto responseMemberDto1 = memberRepository.findResLoginMemberDtoByEmail(email);
         assertThat(responseMemberDto1).isNull();
 
         // 회원 가입
@@ -139,7 +139,7 @@ class MemberRepositoryTest {
                 .build());
 
         // 회원 가입 후
-        ResponseMemberDto responseMemberDto2 = memberRepository.findResponseMemberDtoByEmail(email);
+        ResLoginMemberDto responseMemberDto2 = memberRepository.findResLoginMemberDtoByEmail(email);
         assertThat(responseMemberDto2).isNotNull();
     }
 

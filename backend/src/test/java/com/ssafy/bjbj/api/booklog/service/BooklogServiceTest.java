@@ -5,7 +5,6 @@ import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.*;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
-import com.ssafy.bjbj.api.booklog.entity.Like;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
