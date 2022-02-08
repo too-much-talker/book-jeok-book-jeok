@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import userList from "./asset/data";
 import { UserTable, EditUserForm } from "./UserInfoPresenter";
 import styled from "styled-components";
 import axios from "axios";
@@ -70,6 +69,7 @@ function UserInfoContainer() {
       jwtToken: "",
     }));
     sessionStorage.removeItem("jwtToken");
+    alert("다시 로그인 해주세요.")
     window.location.replace("/login");
   };
   const deleteUser = (id) => {
@@ -93,7 +93,7 @@ function UserInfoContainer() {
     setUser(newUser);
     setEditing(false);
     logOut();
-    alert("다시 로그인 해주세요.")
+    
   };
   function validId(event) {
     event.preventDefault();

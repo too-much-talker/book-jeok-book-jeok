@@ -178,25 +178,17 @@ const UserTable = (props) => {
     </Form1>
   );
 };
-
+const ExpPoint = styled.div`
+  .ep{
+    font-size: .3rem;
+  }
+`;
 const UserExpPoint = (props) => {
   return (
-    <div>
-      {props.users.length > 0 ? (
-        props.users.map((user) => {
-          const { id, exp, point } = user;
-          return (
-            <div key={id}>
-              <p>
-                {exp} {point}
-              </p>
-            </div>
-          );
-        })
-      ) : (
-        <tr></tr>
-      )}
-    </div>
+    <ExpPoint>
+      <p className="ep">경험치 {props.exp}</p>
+      <p className="ep">포인트 {props.point}</p>
+    </ExpPoint>
   );
 };
 
