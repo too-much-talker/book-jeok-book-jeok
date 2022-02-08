@@ -8,11 +8,12 @@ import DUMMY_DATA from "../user/myPage/userInfo/weeds/dummydata";
 
 const Side = styled.div`
   display: flex;
-  border-right: 1px solid black;
+  border-right: 1px solid #cccccc;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 20%;
+  width: 30%;
+  height: 150%;
+  font-size: 2rem;
+  text-align: left;
 `;
 const Menu = styled.div`
   margin-top: 30px;
@@ -38,7 +39,6 @@ function Sidebar() {
               style={{ color: "gray", textDecoration: "none" }}
               to={menu.path}
               key={index}
-              // activeStyle={{ color: "black" }}
             >
               <div className="sidebar-item">
                 <p>{menu.name}</p>
@@ -48,7 +48,7 @@ function Sidebar() {
         })}
       </Menu>
       <UserExpPoint users={users} />
-      <Weeds datas={DUMMY_DATA}/>
+      <Weeds datas={DUMMY_DATA} />
     </Side>
   );
 }

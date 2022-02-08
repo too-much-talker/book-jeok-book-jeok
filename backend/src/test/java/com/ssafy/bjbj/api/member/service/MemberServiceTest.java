@@ -91,8 +91,8 @@ public class MemberServiceTest {
         // 추후에 북로그, 챌린지 관련 API 개발 후에 이 메서드 테스트 로직 추가 필요
     }
 
-    @Test
-    public void subscribeMemberTests() {
+//    @Test
+//    public void subscribeMemberTests() {
         // 추후에 테스트 메서드 추가 필요
 //        //다른 회원 가입
 //        boolean saveMember1 = memberService.saveMember(RequestMemberDto.builder()
@@ -128,6 +128,6 @@ public class MemberServiceTest {
 //
 //        boolean canSubscribe2 = memberService.subscribeMember(fromMemberId, toMemberId);
 //        assertThat(canSubscribe2).isFalse();
-    }
+//    }
 
 }

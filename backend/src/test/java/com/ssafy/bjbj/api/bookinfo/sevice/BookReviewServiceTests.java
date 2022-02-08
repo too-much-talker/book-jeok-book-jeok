@@ -1,8 +1,8 @@
 package com.ssafy.bjbj.api.bookinfo.sevice;
 
-import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.bookinfo.repository.BookReviewRepository;
 import com.ssafy.bjbj.api.bookinfo.service.BookReviewService;
@@ -10,6 +10,7 @@ import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,14 +47,16 @@ public class BookReviewServiceTests {
         member1 = memberService.findMemberByEmail(email);
     }
 
+    @DisplayName("북리뷰 수정 테스트")
     @Test
     public void updateBookReviewTests() {
-        ResponseBookReviewByMemberDto createBookReviewDto = bookReviewService.registerBookReview(RequestBookReviewDto.builder()
+        ReqBookReviewDto reqBookReviewDto = ReqBookReviewDto.builder()
                 .bookInfoSeq(1L)
-                .memberSeq(member1.getSeq())
                 .starRating(3)
                 .summary("test summary")
-                .build());
+                .build();
+
+        ResBookReviewByMemberDto createBookReviewDto = bookReviewService.registerBookReview(reqBookReviewDto, member1.getSeq());
         // 수정 전 체크
         BookReview bookReview1 = bookReviewRepository.findBySeq(createBookReviewDto.getBookReviewSeq());
 
@@ -61,14 +64,13 @@ public class BookReviewServiceTests {
         assertThat(bookReview1.getSummary()).isEqualTo(createBookReviewDto.getSummary());
 
         //수정
-        RequestBookReviewDto modifiedBookReview = RequestBookReviewDto.builder()
+        ReqBookReviewDto modifiedBookReview = ReqBookReviewDto.builder()
                 .bookInfoSeq(1L)
-                .memberSeq(member1.getSeq())
                 .starRating(1)
                 .summary("modified summary")
                 .build();
 
-        ResModifiedBookReviewDto modifiedBookReviewDto = bookReviewService.updateBookReview(modifiedBookReview);
+        ResModifiedBookReviewDto modifiedBookReviewDto = bookReviewService.updateBookReview(modifiedBookReview, member1.getSeq(), bookReview1.getSeq());
 
         //수정 후 체크
         BookReview bookReview2 = bookReviewRepository.findBySeq(modifiedBookReviewDto.getBookReviewSeq());
@@ -76,7 +78,6 @@ public class BookReviewServiceTests {
         assertThat(bookReview2.getStarRating()).isEqualTo(modifiedBookReview.getStarRating());
         assertThat(bookReview2.getSummary()).isEqualTo(modifiedBookReview.getSummary());
     }
-
 
     // 다대다 테이블 테스트 관련 논의 필요
 //    @Test

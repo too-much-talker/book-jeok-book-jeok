@@ -86,7 +86,6 @@ function RegisterForm({
                 <th> 한줄평 </th>
                 <td>
                   <input
-                    // type="text"
                     className="summary"
                     onChange={onSentenceChange}
                     value={oneSentence}

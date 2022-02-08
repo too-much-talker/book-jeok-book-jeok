@@ -1,13 +1,11 @@
 package com.ssafy.bjbj.api.bookinfo.repository;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.bookinfo.dto.response.QResponseBookReviewByBookInfoDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.QResponseBookReviewByMemberDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.QResBookReviewByBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.QResBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
-import com.ssafy.bjbj.api.bookinfo.entity.QBookReview;
 
 import javax.persistence.EntityManager;
 
@@ -27,25 +25,25 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
 
     @Override
     public Integer countBookReviewsByMemberSeq(Long memberSeq) {
-        JPAQuery<Integer> query = queryFactory.select(bookReview.count().intValue())
+        return queryFactory.select(bookReview.count().intValue())
                 .from(bookReview)
                 .where(bookReview.member.seq.eq(memberSeq)
-                        .and(bookReview.isDeleted.isFalse()));
-        return query.fetchOne();
+                        .and(bookReview.isDeleted.isFalse()))
+                .fetchOne();
     }
 
     @Override
     public Integer countBookReviewsByBookInfoSeq(Long bookInfoSeq) {
-        JPAQuery<Integer> query = queryFactory.select(bookReview.count().intValue())
+        return queryFactory.select(bookReview.count().intValue())
                 .from(bookReview)
                 .where(bookReview.bookInfo.seq.eq(bookInfoSeq)
-                        .and(bookReview.isDeleted.isFalse()));
-        return query.fetchOne();
+                        .and(bookReview.isDeleted.isFalse()))
+                .fetchOne();
     }
 
     @Override
-    public List<ResponseBookReviewByMemberDto> findAllBookReviewDtoByMemberSeq(Long memberSeq) {
-        return queryFactory.select(new QResponseBookReviewByMemberDto(
+    public List<ResBookReviewByMemberDto> findAllBookReviewDtoByMemberSeq(Long memberSeq) {
+        return queryFactory.select(new QResBookReviewByMemberDto(
                         bookReview.seq,
                         bookReview.bookInfo.seq,
                         bookReview.member.seq,
@@ -57,21 +55,22 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
                         bookReview.createdDate
                 ))
                 .from(bookReview)
-                .where(bookReview.member.seq.eq(memberSeq).and(bookReview.isDeleted.eq(false)))
+                .where(bookReview.member.seq.eq(memberSeq).and(bookReview.isDeleted.isFalse()))
                 .orderBy(bookReview.createdDate.desc())
                 .fetch();
     }
 
     @Override
-    public List<ResponseBookReviewByBookInfoDto> findAllBookReviewDtoByBookInfoSeq(Long bookInfoSeq) {
-        return queryFactory.select(new QResponseBookReviewByBookInfoDto(
-                bookReview.seq,
-                bookReview.bookInfo.seq,
-                bookReview.member.seq,
-                bookReview.member.nickname,
-                bookReview.starRating,
-                bookReview.summary,
-                bookReview.createdDate
+    public List<ResBookReviewByBookInfoDto> findAllBookReviewDtoByBookInfoSeq(Long bookInfoSeq) {
+        return queryFactory
+                .select(new QResBookReviewByBookInfoDto(
+                        bookReview.seq,
+                        bookReview.bookInfo.seq,
+                        bookReview.member.seq,
+                        bookReview.member.nickname,
+                        bookReview.starRating,
+                        bookReview.summary,
+                        bookReview.createdDate
                 ))
                 .from(bookReview)
                 .where(bookReview.bookInfo.seq.eq(bookInfoSeq).and(bookReview.isDeleted.eq(false)))
@@ -81,12 +80,13 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
 
     @Override
     public BookReview findLatestBookReviewByBookInfoAndMember(Long bookInfoSeq, Long memberSeq) {
-        BookReview bookReview = queryFactory.selectFrom(QBookReview.bookReview)
-                .join(QBookReview.bookReview.bookInfo, bookInfo).fetchJoin()
-                .join(QBookReview.bookReview.member, member).fetchJoin()
-                .where(QBookReview.bookReview.bookInfo.seq.eq(bookInfoSeq).and(QBookReview.bookReview.member.seq.eq(memberSeq)
-                        .and(QBookReview.bookReview.isDeleted.eq(false))))
+        return queryFactory
+                .selectFrom(bookReview)
+                .join(bookReview.bookInfo, bookInfo).fetchJoin()
+                .join(bookReview.member, member).fetchJoin()
+                .where(bookReview.bookInfo.seq.eq(bookInfoSeq).and(bookReview.member.seq.eq(memberSeq)
+                        .and(bookReview.isDeleted.eq(false))))
                 .fetchOne();
-        return bookReview;
     }
+
 }

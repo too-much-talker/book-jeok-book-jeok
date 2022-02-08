@@ -1,9 +1,10 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
-import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookListDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookSearchDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoSmallDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookListDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,17 @@ public class BookInfoServiceImpl implements BookInfoService {
     private final BookInfoRepository bookInfoRepository;
 
     @Override
-    public ResponseBookInfoDto findResponseBookInfoDtoBySeq(Long seq) {
-        return bookInfoRepository.findResponseBookInfoDtoBySeq(seq);
+    public ResBookInfoDto findResBookInfoDtoBySeq(Long seq) {
+        ResBookInfoDto resBookInfoDto = bookInfoRepository.findResBookInfoDtoBySeq(seq);
+        if (resBookInfoDto == null) {
+            throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
+        }
+
+        return resBookInfoDto;
     }
 
     @Override
-    public ResBookListDto findResponseBookListDtosByRequest(ReqBookListDto reqBookInfoDto) {
+    public ResBookListDto findResBookSearchDto(ReqBookSearchDto reqBookInfoDto) {
 
         List<ResBookInfoSmallDto> listByRequest = bookInfoRepository.findListByRequest(reqBookInfoDto);
         String keyword = reqBookInfoDto.getSearchKeyword();
@@ -50,7 +56,7 @@ public class BookInfoServiceImpl implements BookInfoService {
 
         return ResBookListDto.builder()
                 .totalCnt(totalCnt)
-                .currentPage(Integer.valueOf(reqBookInfoDto.getPage()))
+                .currentPage(reqBookInfoDto.getPage())
                 .totalPage((int) Math.ceil((double) totalCnt / reqBookInfoDto.getLimit()))
                 .resBookInfoSmallDtos(listByRequest)
                 .build();

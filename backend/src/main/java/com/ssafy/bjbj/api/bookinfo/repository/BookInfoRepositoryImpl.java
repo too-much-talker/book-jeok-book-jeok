@@ -4,7 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookListDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookSearchDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.*;
 
 import javax.persistence.EntityManager;
@@ -24,9 +24,9 @@ public class BookInfoRepositoryImpl implements BookInfoRepositoryCustom {
     }
 
     @Override
-    public ResponseBookInfoDto findResponseBookInfoDtoBySeq(Long seq) {
+    public ResBookInfoDto findResBookInfoDtoBySeq(Long bookInfoSeq) {
         return queryFactory
-                .select(new QResponseBookInfoDto(
+                .select(new QResBookInfoDto(
                         bookInfo.seq,
                         bookInfo.isbn,
                         bookInfo.title,
@@ -40,13 +40,14 @@ public class BookInfoRepositoryImpl implements BookInfoRepositoryCustom {
                         bookInfo.publisher,
                         bookInfo.publicationDate,
                         round(bookReview.starRating.avg(), 2).coalesce(0.0)))
-                .from(bookInfo, bookReview)
-                .where(bookInfo.seq.eq(seq).and(bookReview.bookInfo.seq.eq(seq)))
+                .from(bookInfo)
+                .leftJoin(bookInfo.bookReviews, bookReview).on(bookReview.bookInfo.eq(bookInfo).and(bookReview.isDeleted.isFalse()))
+                .where(bookInfo.seq.eq(bookInfoSeq))
                 .fetchOne();
     }
 
     @Override
-    public List<ResBookInfoSmallDto> findListByRequest(ReqBookListDto reqBookInfoDto) {
+    public List<ResBookInfoSmallDto> findListByRequest(ReqBookSearchDto reqBookInfoDto) {
 
         long limit = reqBookInfoDto.getLimit();
         long offset = (reqBookInfoDto.getPage() - 1) * limit;
