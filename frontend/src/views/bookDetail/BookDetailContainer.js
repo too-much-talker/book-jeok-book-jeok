@@ -19,23 +19,23 @@ function BookDetailContainer(bookInfoSeq){
         const [seq, setSeq]= useState();
         
         const [reviews, setReviews]= useState(
-        //   [{
-        //        bookReviewSeq: "",
-        //         bookInfoSeq: "",
-        //         memberSeq: "",
-        //         memberNickname: "",
-        //         starRating: "",
-        //         summary: "",
-        //         createdDate: ""
-        //       },{
-        //         bookReviewSeq: "",
-        //         bookInfoSeq: "",
-        //         memberSeq: "",
-        //         memberNickname: "",
-        //         starRating: "",
-        //         summary: "",
-        //         createdDate: ""
-        // }]
+          [{
+               bookReviewSeq: "",
+                bookInfoSeq: "",
+                memberSeq: "",
+                memberNickname: "",
+                starRating: "",
+                summary: "",
+                createdDate: ""
+              },{
+                bookReviewSeq: "",
+                bookInfoSeq: "",
+                memberSeq: "",
+                memberNickname: "",
+                starRating: "",
+                summary: "",
+                createdDate: ""
+        }]
         );
         const [starRating, setStarRating]= useState();
 
@@ -69,11 +69,11 @@ function BookDetailContainer(bookInfoSeq){
             };
           }, []);
 
-          // useEffect(() => {
-          //   getBookReview();
-          //   return () => {
-          //   };
-          // }, [reviewPage]);
+          useEffect(() => {
+            getBookReview();
+            return () => {
+            };
+          }, [reviewPage]);
 
           useEffect(() => {
             getBookLog();
@@ -92,7 +92,7 @@ function BookDetailContainer(bookInfoSeq){
             //책정보 데려오기
             axios.get(url+`/api/v1/bookinfos/${useParam.seq}`)
             .then(function (response){
-              console.log(response);
+              console.log(response.data.data.bookInfo);
                 setSeq(response.data.data.bookInfo.seq);
                 setImage(response.data.data.bookInfo.largeImgUrl);
                 setTitle(response.data.data.bookInfo.title);
@@ -129,7 +129,9 @@ function BookDetailContainer(bookInfoSeq){
             //책 리뷰 가져오기
             axios.get(url+`/api/v1/bookreviews/bookinfos/${useParam.seq}`)
             .then(function (response){
+              
               if(response.data.data.msg!=="작성된 북리뷰가 하나도 없습니다"){
+                console.log(response.data.data)
                 setReviews(response.data.data.myBookReviews);
                 setReviewTotalCnt(response.data.data.totalCnt);
               }
@@ -225,11 +227,11 @@ function BookDetailContainer(bookInfoSeq){
         const indexOfLastPost = reviewPage * 5;
         const indexOfFirstPost = indexOfLastPost - 5;
         console.log(reviews);
-        //const currentReviews = reviews.slice(indexOfFirstPost, indexOfLastPost);
-        const currentReviews=reviews;
+        const currentReviews = reviews.slice(indexOfFirstPost, indexOfLastPost);
+        // const currentReviews=reviews;
         
         function paginate(pagenumber){
-          // setReviewPage(pagenumber);
+          setReviewPage(pagenumber);
         }
         return(
         <BookDetailPresenter 
