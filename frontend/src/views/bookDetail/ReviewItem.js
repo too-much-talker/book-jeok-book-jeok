@@ -30,7 +30,6 @@ font-size:10px
 function ReviewItem({summary,reviewStarRating,reviewDate}){
     const date=reviewDate.substr(0,10);
     const time=reviewDate.substr(11,17);
-    console.log(reviewStarRating);
     return(
         <Block>
             <ReviewStarRating>★ {reviewStarRating}</ReviewStarRating>
