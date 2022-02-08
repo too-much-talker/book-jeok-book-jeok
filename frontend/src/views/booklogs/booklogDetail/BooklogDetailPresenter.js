@@ -25,6 +25,9 @@ const Wrapper = styled.div`
   const Table = styled.div`
     align: center;
   `;
+  const ToggleWrapper = styled.div `
+    padding-left: 20rem;
+  `;
   
 function DetailForm({
   isEditing,
@@ -75,14 +78,14 @@ function DetailForm({
         <UtilButton>
           <Circle>
             {!isEditing ? (
-              <div>
+              <ToggleWrapper>
                 <Desc> {isOpen ? "공개" : "비공개"} </Desc>
                 <IsOpenCircle
                   style={
                     isOpen ? { background: "blue" } : { background: "red" }
                   }
                 ></IsOpenCircle>
-              </div>
+              </ToggleWrapper>
             ) : (
               <Toggle toggle={toggleHandler} modify={true} isOpen={isOpen} />
             )}
