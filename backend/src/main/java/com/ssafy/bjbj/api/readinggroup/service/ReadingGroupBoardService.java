@@ -1,8 +1,9 @@
 package com.ssafy.bjbj.api.readinggroup.service;
 
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
-import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardDto;
-import com.ssafy.bjbj.common.entity.file.FileInfo;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupArticleDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardPageDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface ReadingGroupBoardService {
 
     Long register(ReqReadingGroupBoardDto reqReadingGroupBoardDto, List<MultipartFile> files) throws Exception;
 
-    ResReadingGroupBoardDto findReadingGroupBoardBySeq(Long readingGroupBoardSeq);
+    ResReadingGroupArticleDto findReadingGroupArticleBySeq(Long readingGroupArticleSeq, Long memberSeq);
 
+    ResReadingGroupBoardPageDto getResReadingGroupBoardListDto(Long readingGroupSeq, Pageable pageable);
 }
