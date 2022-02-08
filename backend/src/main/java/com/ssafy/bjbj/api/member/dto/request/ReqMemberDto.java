@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 @ToString(of = {"email", "password", "name", "nickname", "phoneNumber"})
 @NoArgsConstructor
 @Getter
-public class RequestMemberDto {
+public class ReqMemberDto {
 
     /**
      * 정규 표현식 -> 이메일 형식에 맞게.
@@ -43,7 +43,7 @@ public class RequestMemberDto {
     private String phoneNumber;
 
     @Builder
-    public RequestMemberDto(String email, String password, String name, String nickname, String phoneNumber) {
+    public ReqMemberDto(String email, String password, String name, String nickname, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.name = name;

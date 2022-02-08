@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Getter
-@ToString(of = {"seq", "isbn", "title", "author", "description", "price", "smallImgUrl", "largeImgUrl", "categoryId", "categoryName", "publisher", "publicationDate", "starRating", "isDeleted"})
+@ToString(of = {"seq", "isbn", "title", "author", "description", "price", "smallImgUrl", "largeImgUrl", "categoryId", "categoryName", "publisher", "publicationDate", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_book_info")
 @Entity
@@ -57,11 +59,11 @@ public class BookInfo extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "bookInfo")
+    @OneToMany(mappedBy = "bookInfo", cascade = ALL)
     private List<Booklog> booklogs = new ArrayList<>();
 
     // 나에 대해 리뷰를 쓴 멤버들
-    @OneToMany(mappedBy = "bookInfo")
+    @OneToMany(mappedBy = "bookInfo", cascade = ALL)
     private List<BookReview> bookReviews = new ArrayList<>();
 
     @Builder
@@ -79,4 +81,5 @@ public class BookInfo extends BaseLastModifiedEntity {
         this.publisher = publisher;
         this.publicationDate = publicationDate;
     }
+
 }

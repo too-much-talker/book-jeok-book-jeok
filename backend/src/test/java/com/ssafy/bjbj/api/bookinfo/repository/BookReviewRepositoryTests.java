@@ -1,10 +1,13 @@
 package com.ssafy.bjbj.api.bookinfo.repository;
 
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -33,72 +39,38 @@ public class BookReviewRepositoryTests {
     @Autowired
     private EntityManager em;
 
-    @DisplayName("북리뷰 추가 테스트")
-    @Test
-    public void registerReviewTest() {
-        BookReview bookReview = BookReview.builder()
-                .bookInfo(bookInfoRepository.findBySeq(1L))
-                .member(memberRepository.findBySeq(1L))
-                .starRating(4)
-                .summary("test summary")
-                .isDeleted(false)
-                .build();
+    private Member member1, member2;
 
-        bookReviewRepository.save(bookReview);
+    private BookInfo bookInfo1, bookInfo2;
 
-        em.flush();
-        em.clear();
+    private BookReview bookReview1;
 
-        BookReview savedBookReview = bookReviewRepository.findBySeq(bookReview.getSeq());
+    @BeforeEach
+    public void setUp() {
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
 
-        assertThat(bookReview.getSeq()).isEqualTo(savedBookReview.getSeq());
-    }
-
-    @DisplayName("내 북리뷰 목록 조회 테스트")
-    @Test
-    public void findAllReviewBookDtoByMemberSeqTests() {
-
-        Member member = Member.builder()
-                .email("bjbj@bjbj.com")
-                .password("test1234")
-                .name("홍길동")
-                .nickname("hong")
-                .phoneNumber("010-1234-5789")
+        member1 = Member.builder()
+                .email("test1@test.com")
+                .password("password1")
+                .name("name1")
+                .nickname("nickname1")
+                .phoneNumber("010-0000-0001")
                 .role(Role.MEMBER)
                 .exp(0)
                 .point(100)
                 .build();
-        em.persist(member);
-        //북리뷰 작성 전
-        assertThat(bookReviewRepository.findAllBookReviewDtoByMemberSeq(member.getSeq())).isEmpty();
 
-        bookReviewRepository.save(BookReview.builder()
-                .bookInfo(bookInfoRepository.findBySeq(1L))
-                .member(member)
-                .starRating(3)
-                .summary("테스트")
-                .isDeleted(false)
-                .build());
-        bookReviewRepository.save(BookReview.builder()
-                .bookInfo(bookInfoRepository.findBySeq(2L))
-                .member(member)
-                .starRating(4)
-                .summary("테스트2")
-                .isDeleted(false)
-                .build());
-
-        em.flush();
-        em.clear();
-        //북리뷰 작성 후
-        assertThat(bookReviewRepository.findAllBookReviewDtoByMemberSeq(member.getSeq()).stream().count()).isEqualTo(2);
-
-    }
-
-    @DisplayName("책정보별 북리뷰 목록 조회 테스트")
-    @Test
-    public void findAllReviewBookDtoByBookInfoSeqTests() {
-
-        String date = "2021-12-20T12:30:00";
+        member2 = Member.builder()
+                .email("test2@test.com")
+                .password("password2")
+                .name("name2")
+                .nickname("nickname2")
+                .phoneNumber("010-0000-0002")
+                .role(Role.MEMBER)
+                .exp(0)
+                .point(100)
+                .build();
 
         String isbn = "isbn";
         String title = "title";
@@ -110,9 +82,10 @@ public class BookReviewRepositoryTests {
         Integer categoryId = 101;
         String categoryName = "categoryName";
         String publisher = "publisher";
-        LocalDateTime publicationDate = LocalDateTime.parse(date);
+        LocalDate date = LocalDate.now();
+        LocalDateTime publicationDate = LocalDateTime.of(date, LocalTime.now());
 
-        BookInfo bookInfo = BookInfo.builder()
+        bookInfo1 = BookInfo.builder()
                 .isbn(isbn)
                 .title(title)
                 .author(author)
@@ -126,37 +99,91 @@ public class BookReviewRepositoryTests {
                 .publicationDate(publicationDate)
                 .build();
 
-        bookInfoRepository.save(bookInfo);
+        bookInfo2 = BookInfo.builder()
+                .isbn(isbn + "2")
+                .title(title + "2")
+                .author(author + "2")
+                .description(description + "2")
+                .price(price)
+                .smallImgUrl(smallImgUrl + "2")
+                .largeImgUrl(largeImgUrl + "2")
+                .categoryId(categoryId)
+                .categoryName(categoryName + "2")
+                .publisher(publisher + "2")
+                .publicationDate(LocalDateTime.of(date.plusDays(1), LocalTime.now()))
+                .build();
+    }
 
-        Member member1 = Member.builder()
-                .email("bjbj12@bjbj.com")
-                .password("test1234")
-                .name("홍길동")
-                .nickname("hongkar")
-                .phoneNumber("010-1234-3214")
-                .role(Role.MEMBER)
-                .exp(0)
-                .point(100)
+    @DisplayName("북리뷰 추가 테스트")
+    @Test
+    public void registerReviewTest() {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+
+        bookReview1 = BookReview.builder()
+                .bookInfo(bookInfo1)
+                .member(member1)
+                .starRating(4)
+                .summary("test summary")
+                .isDeleted(false)
                 .build();
-        Member member2 = Member.builder()
-                .email("bjbj13@bjbj.com")
-                .password("test1234")
-                .name("홍길동")
-                .nickname("hongkur")
-                .phoneNumber("010-1234-5152")
-                .role(Role.MEMBER)
-                .exp(0)
-                .point(100)
-                .build();
+
+        bookReviewRepository.save(bookReview1);
+
+        em.flush();
+        em.clear();
+
+        BookReview savedBookReview = bookReviewRepository.findBySeq(bookReview1.getSeq());
+
+        assertThat(bookReview1.getSeq()).isEqualTo(savedBookReview.getSeq());
+    }
+
+    @DisplayName("내 북리뷰 목록 조회 테스트")
+    @Test
+    public void findAllReviewBookDtoByMemberSeqTests() {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+        bookInfoRepository.save(bookInfo2);
+
+        //북리뷰 작성 전
+        assertThat(bookReviewRepository.findAllBookReviewDtoByMemberSeq(member1.getSeq())).isEmpty();
+
+        bookReviewRepository.save(BookReview.builder()
+                .bookInfo(bookInfo1)
+                .member(member1)
+                .starRating(3)
+                .summary("테스트")
+                .isDeleted(false)
+                .build());
+        bookReviewRepository.save(BookReview.builder()
+                .bookInfo(bookInfo2)
+                .member(member1)
+                .starRating(4)
+                .summary("테스트2")
+                .isDeleted(false)
+                .build());
+
+        em.flush();
+        em.clear();
+
+        //북리뷰 작성 후
+        List<ResBookReviewByMemberDto> resBookReviewByMemberDtos = bookReviewRepository.findAllBookReviewDtoByMemberSeq(member1.getSeq());
+        assertThat(resBookReviewByMemberDtos.size()).isEqualTo(2);
+    }
+
+    @DisplayName("책정보별 북리뷰 목록 조회 테스트")
+    @Test
+    public void findAllReviewBookDtoByBookInfoSeqTests() {
+        bookInfoRepository.save(bookInfo1);
         memberRepository.save(member1);
         memberRepository.save(member2);
 
         //북리뷰 작성 전
-        Long bookInfoSeq = bookInfo.getSeq();
+        Long bookInfoSeq = bookInfo1.getSeq();
         assertThat(bookReviewRepository.findAllBookReviewDtoByBookInfoSeq(bookInfoSeq)).isEmpty();
 
         bookReviewRepository.save(BookReview.builder()
-                .bookInfo(bookInfoRepository.findBySeq(bookInfoSeq))
+                .bookInfo(bookInfo1)
                 .member(member1)
                 .starRating(3)
                 .summary("테스트")
@@ -164,7 +191,7 @@ public class BookReviewRepositoryTests {
                 .build());
 
         bookReviewRepository.save(BookReview.builder()
-                .bookInfo(bookInfoRepository.findBySeq(bookInfoSeq))
+                .bookInfo(bookInfo1)
                 .member(member2)
                 .starRating(4)
                 .summary("테스트2")
@@ -173,9 +200,10 @@ public class BookReviewRepositoryTests {
 
         em.flush();
         em.clear();
-        //북리뷰 작성 후
-        assertThat(bookReviewRepository.findAllBookReviewDtoByBookInfoSeq(bookInfoSeq).stream().count()).isEqualTo(2);
 
+        //북리뷰 작성 후
+        List<ResBookReviewByBookInfoDto> resBookReviewByBookInfoDtos = bookReviewRepository.findAllBookReviewDtoByBookInfoSeq(bookInfoSeq);
+        assertThat(resBookReviewByBookInfoDtos.size()).isEqualTo(2);
     }
 
 }

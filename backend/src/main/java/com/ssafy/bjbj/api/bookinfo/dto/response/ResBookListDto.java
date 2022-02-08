@@ -25,4 +25,5 @@ public class ResBookListDto {
         this.totalPage = totalPage;
         this.resBookInfoSmallDtos = resBookInfoSmallDtos;
     }
+
 }

@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.member.service;
 
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
@@ -45,22 +45,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public boolean saveMember(RequestMemberDto memberDto) {
-        String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
+    public Member register(ReqMemberDto reqMemberDto) {
+        String encryptedPassword = passwordEncoder.encode(reqMemberDto.getPassword());
         log.debug("패스워드 암호화 " + encryptedPassword);
 
-        Member savedMember = memberRepository.save(Member.builder()
-                .email(memberDto.getEmail())
+        return memberRepository.save(Member.builder()
+                .email(reqMemberDto.getEmail())
                 .password(encryptedPassword)
-                .name(memberDto.getName())
-                .nickname(memberDto.getNickname())
-                .phoneNumber(memberDto.getPhoneNumber())
+                .name(reqMemberDto.getName())
+                .nickname(reqMemberDto.getNickname())
+                .phoneNumber(reqMemberDto.getPhoneNumber())
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
                 .build());
-
-        return savedMember.getSeq() != null;
     }
 
     /**
@@ -98,11 +96,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public boolean updateMember(RequestMemberDto memberDto, Long seq) {
+    public boolean updateMember(ReqMemberDto reqMemberDto, Long seq) {
 
-        String encryptedPassword = passwordEncoder.encode(memberDto.getPassword());
+        String encryptedPassword = passwordEncoder.encode(reqMemberDto.getPassword());
         Member member = memberRepository.findMemberBySeq(seq);
-        member.changeMember(encryptedPassword, memberDto.getName(), memberDto.getNickname(), memberDto.getPhoneNumber());
+        member.changeMember(encryptedPassword, reqMemberDto.getName(), reqMemberDto.getNickname(), reqMemberDto.getPhoneNumber());
     
         return true;
     }

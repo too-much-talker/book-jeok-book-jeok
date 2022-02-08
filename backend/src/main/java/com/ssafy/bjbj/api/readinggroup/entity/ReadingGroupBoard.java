@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -44,8 +45,8 @@ public class ReadingGroupBoard extends BaseLastModifiedEntity {
     @ManyToOne(fetch = LAZY)
     private ReadingGroup readingGroup;
 
-    @JoinColumn(name = "reading_group_board_seq")
-    @OneToMany
+//    @JoinColumn(name = "reading_group_board_seq")
+    @OneToMany(mappedBy = "readingGroupBoard", cascade = ALL)
     private List<ReadingGroupBoardComment> readingGroupBoardComments = new ArrayList<>();
 
     @QueryProjection
@@ -70,4 +71,5 @@ public class ReadingGroupBoard extends BaseLastModifiedEntity {
     public void delete() {
         this.isDeleted = true;
     }
+
 }
