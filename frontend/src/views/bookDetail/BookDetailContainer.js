@@ -18,23 +18,25 @@ function BookDetailContainer(bookInfoSeq){
         const [publicationDate, setPublicationDate]= useState();
         const [seq, setSeq]= useState();
         
-        const [reviews, setReviews]= useState([{
-               bookReviewSeq: "",
-                bookInfoSeq: "",
-                memberSeq: "",
-                memberNickname: "",
-                starRating: "",
-                summary: "",
-                createdDate: ""
-              },{
-                bookReviewSeq: "",
-                bookInfoSeq: "",
-                memberSeq: "",
-                memberNickname: "",
-                starRating: "",
-                summary: "",
-                createdDate: ""
-        }]);
+        const [reviews, setReviews]= useState(
+        //   [{
+        //        bookReviewSeq: "",
+        //         bookInfoSeq: "",
+        //         memberSeq: "",
+        //         memberNickname: "",
+        //         starRating: "",
+        //         summary: "",
+        //         createdDate: ""
+        //       },{
+        //         bookReviewSeq: "",
+        //         bookInfoSeq: "",
+        //         memberSeq: "",
+        //         memberNickname: "",
+        //         starRating: "",
+        //         summary: "",
+        //         createdDate: ""
+        // }]
+        );
         const [starRating, setStarRating]= useState();
 
         const [reviewPage, setReviewPage]= useState(1);
@@ -86,18 +88,18 @@ function BookDetailContainer(bookInfoSeq){
             };
           }, [booklogOrder]);
         
-        function getBookInfo(){
-
+        function getBookInfo(){ 
             //책정보 데려오기
             axios.get(url+`/api/v1/bookinfos/${useParam.seq}`)
             .then(function (response){
+              console.log(response);
                 setSeq(response.data.data.bookInfo.seq);
                 setImage(response.data.data.bookInfo.largeImgUrl);
                 setTitle(response.data.data.bookInfo.title);
                 setAuthor(response.data.data.bookInfo.author);
                 setPublisher(response.data.data.bookInfo.publisher);
                 setPublicationDate(response.data.data.bookInfo.publicationDate);
-                //setStarRating(response.data.data.bookInfo.starRating);
+                setStarRating(response.data.data.bookInfo.starRating);
             })
             .catch(function (error) {
                 console.log(error);
@@ -131,7 +133,6 @@ function BookDetailContainer(bookInfoSeq){
                 setReviews(response.data.data.myBookReviews);
                 setReviewTotalCnt(response.data.data.totalCnt);
               }
-
               })
 
             .catch(function (error) {
@@ -224,9 +225,11 @@ function BookDetailContainer(bookInfoSeq){
         const indexOfLastPost = reviewPage * 5;
         const indexOfFirstPost = indexOfLastPost - 5;
         console.log(reviews);
-        const currentReviews = reviews.slice(indexOfFirstPost, indexOfLastPost);
+        //const currentReviews = reviews.slice(indexOfFirstPost, indexOfLastPost);
+        const currentReviews=reviews;
+        
         function paginate(pagenumber){
-          setReviewPage(pagenumber);
+          // setReviewPage(pagenumber);
         }
         return(
         <BookDetailPresenter 
@@ -239,7 +242,6 @@ function BookDetailContainer(bookInfoSeq){
         MyModalOpen={MyModalOpen} WriteModalOpen={WriteModalOpen}
         userReview={userReview}
         bookInfoSeq={useParam.seq}
-        starRating={starRating}
         user={user} jwtToken={jwtToken}
         seq={seq} url={url}
         currentReviews={currentReviews}

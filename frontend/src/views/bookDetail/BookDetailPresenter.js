@@ -145,7 +145,7 @@ margin:0px;
 ///북로그
 const BookLog= styled.div`
 position:relative;
-height:75%;
+height:70%;
 width:95%;
 `;
 
@@ -165,6 +165,7 @@ width:35%;
 const Blank2=styled.div`
 width:50%;
 height:5%;
+margin-top:1%;
 `;
 
 const BooklogContents= styled.div`
@@ -189,6 +190,7 @@ left:36%;
 `;
 
 const Booklog= styled.div`
+margin-bottom:3%;
 
 `;
 
