@@ -58,6 +58,11 @@ public class ReadingGroupBoard extends BaseLastModifiedEntity {
         this.readingGroup = readingGroup;
     }
 
+    public void changeReadingGroupArticle(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     public void incrementViews() {
         this.views++;
     }
