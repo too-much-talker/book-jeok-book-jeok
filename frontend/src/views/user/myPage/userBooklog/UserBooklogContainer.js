@@ -5,23 +5,16 @@ import axios from "axios";
 import BookLogCard from "./BookLogCard";
 import { useSelector } from "react-redux";
 import Pagination from "react-js-pagination";
+import UserBooklogList from "./UserBooklogPresenter";
 
 const url = "https://i6a305.p.ssafy.io:8443";
-const Title = styled.div`
-  display: flex;
-  width: 80rem;
-  padding-left: 10px;
-  justify-content: center;
-`;
+
 const BookLog = styled.div`
-  /* display: flex; */
   width: 100%;
   text-align: center;
-  /* margin: 5rem; */
 `;
 const Register = styled.div`
   text-align: right;
-  margin-right: 8rem;
 `;
 const Header = styled.div`
   display: flex;
@@ -33,7 +26,7 @@ const Header = styled.div`
     display: inline-block;
   }
 `;
-function UserBooklogPresenter() {
+function UserBooklogContainer() {
   const { path } = useParams();
   const [totalCnt, setTotalCnt] = useState(0);
   const [context, setContext] = useState([]);
@@ -81,33 +74,13 @@ function UserBooklogPresenter() {
     setPage(1);
   };
   return (
-    <div>
-      <h2>나의 북로그</h2>
-      <div>
-        <Header>
-          <span>
-            <label>공개된 북로그만 보기</label>
-            <input value={isOpen} onChange={checkBoxHandler} type="checkbox" />
-          </span>
-        </Header>
-        <Link to="/booklogregister">
-          <Register>
-          <button>작성</button>
-          </Register>
-        </Link>
-        <BookLog>{context}</BookLog>
-        
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={10}
-          totalItemsCount={totalCnt}
-          pageRangeDisplayed={5}
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={handlePageChange}
-        />
-      </div>
-    </div>
+    <UserBooklogList
+    isOpen={isOpen}
+    checkBoxHandler={checkBoxHandler}
+    context={context}
+    page={page}
+    totalCnt={totalCnt}
+    ></UserBooklogList>
   );
 }
-export default UserBooklogPresenter;
+export default UserBooklogContainer;

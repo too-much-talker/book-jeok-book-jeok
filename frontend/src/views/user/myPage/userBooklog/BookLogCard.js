@@ -1,80 +1,60 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Pagination from "react-js-pagination";
+
 const Card = styled.div`
-  width: 30rem;
-  height: 18rem;
-  /* float: left; */
-  display: inline-block;
-  margin: 1rem 3rem;
-  padding: 0.7rem;
-  border-radius: 5%;
-  box-shadow: 4px 5px 7px 2px lightgrey;
   font-size: 1.2rem;
-  // display: inline-block;
-`;
-
-const InnerGrid = styled.div`
-  width: 60%;
-  height: 100%;
+  width: 120px;
+  height: 300px;
   float: left;
-  // text-align: center;
-  position: relative;
-`;
-
-const ImgGrid = styled(InnerGrid)`
-  width: 40%;
-  position: relative;
+  margin-left: 75px;
 `;
 
 const Img = styled.img`
-  width: 75%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 10%;
+  width: 120px;
 `;
 
-const ContentLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-`;
+// const ContentLink = styled(Link)`
+//   text-decoration: none;
+//   color: black;
+// `;
 
 const Date = styled.div`
   width: 100%;
   font-size: 0.8rem;
-  text-align: left;
+  text-align: right;
   border-top: solid 1px;
+  top: 32rem;
 `;
 
 const Title = styled.h6`
-  margin: 0.2rem;
-  margin-top: 0.6rem;
+    color: black;
 `;
 
 const Private = styled.div`
   width: 1rem;
   height: 1rem;
   border-radius: 10rem;
-  position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  background-color: #3B4CF6;
-  
-  ${({ active }) => active && `
+  /* position: absolute;
+  /* bottom: 1.5rem; */
+  top: 6rem;
+  right: 8rem;
+  background-color: #3b4cf6;
+
+  ${({ active }) =>
+    active &&
+    `
     background: #ED544A;
   `}
-  .description{
+  .description {
     color: #777;
     position: absolute;
-    top:-2.5rem;
+    top: -2.5rem;
     border: 1px solid #777;
     background-color: white;
     width: 4rem;
   }
 `;
-
 
 function BooklogCard(props) {
   const [isEntered, setIsEntered] = useState(false);
@@ -84,22 +64,24 @@ function BooklogCard(props) {
   const mouseLeaveHandler = () => {
     setIsEntered(false);
   };
-  const {imgUrl, title, createdDate, open} = props.book;
-  const description = open ? <div className="description">공개</div> : <div className="description">비공개</div>;
+  const { imgUrl, title, createdDate, open } = props.book;
+  const description = open ? (
+    <div className="description">공개</div>
+  ) : (
+    <div className="description">비공개</div>
+  );
   return (
     <Card>
-      <ImgGrid>
+        <Title>{title}</Title>
         <Img src={imgUrl} alt="book img"></Img>
-      </ImgGrid>
-      <InnerGrid>
-        <ContentLink to="/">
-          <Title>{title}</Title>
-        </ContentLink>
         <Date>{createdDate}</Date>
-        <Private active={!open} onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}>
-          {isEntered&&description}
+        <Private
+          active={!open}
+          onMouseEnter={mouseEnterHandler}
+          onMouseLeave={mouseLeaveHandler}
+        >
+          {isEntered && description}
         </Private>
-      </InnerGrid>
     </Card>
   );
 }
