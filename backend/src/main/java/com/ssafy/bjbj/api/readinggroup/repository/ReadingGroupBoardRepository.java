@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ReadingGroupBoardRepository extends JpaRepository<ReadingGroupBoard, Long> {
+public interface ReadingGroupBoardRepository extends JpaRepository<ReadingGroupBoard, Long>, ReadingGroupBoardRepositoryCustom {
 
     @Query("SELECT rgb FROM ReadingGroupBoard rgb WHERE rgb.seq = :seq")
     ReadingGroupBoard findBySeq(@Param("seq") Long seq);
