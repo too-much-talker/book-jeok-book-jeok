@@ -10,6 +10,7 @@ import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +47,7 @@ public class BookReviewServiceTests {
         member1 = memberService.findMemberByEmail(email);
     }
 
+    @DisplayName("북리뷰 수정 테스트")
     @Test
     public void updateBookReviewTests() {
         ResponseBookReviewByMemberDto createBookReviewDto = bookReviewService.registerBookReview(RequestBookReviewDto.builder()

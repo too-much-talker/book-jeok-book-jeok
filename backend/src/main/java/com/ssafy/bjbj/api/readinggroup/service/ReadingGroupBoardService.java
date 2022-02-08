@@ -15,4 +15,6 @@ public interface ReadingGroupBoardService {
     ResReadingGroupArticleDto findReadingGroupArticleBySeq(Long readingGroupArticleSeq, Long memberSeq);
 
     ResReadingGroupBoardPageDto getResReadingGroupBoardListDto(Long readingGroupSeq, Pageable pageable);
+
+    void deleteReadingGroupArticle(Long readingGroupArticleSeq, Long memberSeq);
 }

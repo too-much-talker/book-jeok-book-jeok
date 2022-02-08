@@ -46,4 +46,8 @@ public class FileInfo extends BaseLastModifiedEntity {
     public void setRootSeq(Long rootSeq) {
         this.rootSeq = rootSeq;
     }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

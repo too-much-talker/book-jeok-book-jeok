@@ -5,4 +5,6 @@ import java.util.List;
 public interface FileInfoService {
 
     List<String> findAllFileInfoByReadingGroupBoardSeq(Long readingGroupBoardSeq);
+
+    void deleteFileInfo(Long rootSeq, Long memberSeq);
 }

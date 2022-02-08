@@ -50,16 +50,19 @@ public class ReadingGroupBoard extends BaseLastModifiedEntity {
 
     @QueryProjection
     @Builder
-    public ReadingGroupBoard(String title, String content, Integer views, boolean isDeleted, Member member, ReadingGroup readingGroup) {
+    public ReadingGroupBoard(String title, String content, Integer views, Member member, ReadingGroup readingGroup) {
         this.title = title;
         this.content = content;
         this.views = views;
-        this.isDeleted = isDeleted;
         this.member = member;
         this.readingGroup = readingGroup;
     }
 
     public void incrementViews() {
         this.views++;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

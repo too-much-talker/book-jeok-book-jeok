@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.readinggroup.service;
 
+import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
@@ -10,6 +11,7 @@ import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleExce
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import com.ssafy.bjbj.common.entity.file.FileInfo;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import com.ssafy.bjbj.common.repository.file.FileInfoRepository;
 import com.ssafy.bjbj.common.service.file.FileHandler;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +52,6 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
                 .title(reqReadingGroupBoardDto.getTitle())
                 .content(reqReadingGroupBoardDto.getContent())
                 .views(0)
-                .isDeleted(false)
                 .member(member)
                 .readingGroup(readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq()))
                 .build());
@@ -103,5 +104,24 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
                 .totalPage(totalPage)
                 .resReadingGroupArticleDtos(readingGroupDtos)
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public void deleteReadingGroupArticle(Long readingGroupArticleSeq, Long memberSeq) {
+
+        ReadingGroupBoard readingGroupBoard = readingGroupBoardRepository.findBySeq(readingGroupArticleSeq);
+
+        System.out.println("readingGroupBoard = " + readingGroupBoard);
+
+        if (readingGroupBoard == null) {
+            throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
+        } else if (!readingGroupBoard.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        } else if (readingGroupBoard.isDeleted()) {
+            throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
+        } else {
+            readingGroupBoard.delete();
+        }
     }
 }
