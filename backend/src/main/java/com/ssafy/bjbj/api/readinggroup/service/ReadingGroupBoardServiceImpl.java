@@ -65,7 +65,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
         return ResReadingGroupArticleDto.builder()
                 .memberSeq(readingGroupBoard.getMember().getSeq())
-                .readingGroupSeq(readingGroupArticleSeq)
+                .readingGroupSeq(readingGroupBoard.getReadingGroup().getSeq())
                 .readingGroupBoardSeq(readingGroupArticleSeq)
                 .title(readingGroupBoard.getTitle())
                 .content(readingGroupBoard.getContent())
@@ -107,7 +107,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
         return ResReadingGroupArticleDto.builder()
                 .memberSeq(readingGroupBoard.getMember().getSeq())
-                .readingGroupSeq(readingGroupArticleSeq)
+                .readingGroupSeq(reqReadingGroupBoardDto.getReadingGroupSeq())
                 .readingGroupBoardSeq(readingGroupArticleSeq)
                 .title(readingGroupBoard.getTitle())
                 .content(readingGroupBoard.getContent())
