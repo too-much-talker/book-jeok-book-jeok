@@ -6,6 +6,7 @@ import Pagination from "react-js-pagination";
 import '../bookInfo/bookSearch/Paging.css';
 import MyModalContainer from "./MyModalContainer";
 import WriteModalContainer from "./WriteModalContainer";
+import ReviewPagination from "./ReviewPagination";
 const Block= styled.div`
 `;
 const Line = styled.div`
@@ -96,13 +97,25 @@ position:relative;
 text-align:left;
 font-size:23px;
 margin-left:10px;
-margin-bottom:5px;
 width:30%;
+`;
+const REVIEWS = styled.div`
+margin-top:1%;
+width:100%;
+height:80%;
 `;
 
 const Blank=styled.div`
 width:50%;
-height:8%;
+height:5%;
+`;
+
+const ReviewContents= styled.div`
+position:relative;
+height:80%;
+border-radius:20px;
+box-shadow: 4px 5px 7px 2px lightgrey;
+margin-bottom:-8%;
 `;
 const Buttons= styled.div`
 position:relative;
@@ -127,13 +140,7 @@ width:30%;
 padding: 0px;
 margin:0px;
 `;
-const ReviewContents= styled.div`
-position:relative;
-height:80%;
-border-radius:20px;
-box-shadow: 4px 5px 7px 2px lightgrey;
-margin-bottom:-8%;
-`;
+
 
 ///북로그
 const BookLog= styled.div`
@@ -186,12 +193,13 @@ left:36%;
 
 
 function BookDetailPresenter({
-    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
+    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,starRating,
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating,jwtToken,
-    url
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,bookInfoSeq,user,seq,jwtToken,
+    url,currentReviews,paginate
+
 }){
     return(
 
@@ -213,37 +221,38 @@ function BookDetailPresenter({
             <ReviewBookLog>
 
                 <BookReview>
-                    <ReviewHeader>
+                <ReviewHeader>
                         <ReviewTitle>이 책의 책리뷰</ReviewTitle>
                         <Buttons>
                             <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰</MyReviewButton>
-                            <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} url={url}></MyModalContainer>
+                            <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} bookInfoSeq={bookInfoSeq} user={user} jwtToken={jwtToken} url={url}></MyModalContainer>
                             <WriteReviewButton onClick={handleWriteModalOpen} >책리뷰 작성하기</WriteReviewButton>
                             <WriteModalContainer isOpen={WriteModalOpen}onCancel={handleWriteModalClose} user={user} jwtToken={jwtToken} seq={seq} url={url}></WriteModalContainer>
                         </Buttons>
                     </ReviewHeader>
-       
-                    
+
                     <ReviewContents> 
                         <Blank></Blank>
-                        {reviews && reviews.map(review=>(
-                            <ReviewItem
+                        <REVIEWS>
+                        {currentReviews &&
+                            currentReviews.length > 0 &&
+                            currentReviews.map(review => (
+                                <ReviewItem
                                 summary={review.summary}
                                 reviewStarRating={review.starRating}
                                 reviewDate={review.createdDate}
                             >
                             </ReviewItem>
-                        ))}
+                            ))}
+                        </REVIEWS>
+      
+                            <ReviewPagination
+                            postPerPage={5}
+                            totalPosts={reviewTotalCnt}
+                            paginate={paginate}
+                            />
+
                     </ReviewContents>
-                    <Page>
-                        <Pagination activePage={reviewPage} 
-                            itemsCountPerPage={5} 
-                            totalItemsCount={reviewTotalCnt} 
-                            pageRangeDisplayed={5} 
-                            prevPageText={"‹"} 
-                            nextPageText={"›"} 
-                            onChange={reviewPageHandler} />
-                    </Page>
                 </BookReview>
 
                 <BookLog>
@@ -258,16 +267,14 @@ function BookDetailPresenter({
 
                     <BooklogContents>
                         <Blank2></Blank2>
-                            {booklogs && booklogs.map(booklog=>(
-                                <BooklogItem
-                                    title={booklog.title}
-                                    content={booklog.content}
-                                    //test용
-                                    //content="세이더네임세븐틴 안녕하세요 세븐틴입니다. 최승철 윤정한 홍지수 문준휘 권순영 전원우 이지훈 서명호 김민규 이석민 부승관 최한솔 이찬"
-                                    createdDate={booklog.createdDate}
-                                >
-                                </BooklogItem>
-                            ))}  
+                        {booklogs && booklogs.map(booklog=>(
+                            <BooklogItem
+                                title={booklog.title}
+                                content={booklog.content}
+                                createdDate={booklog.createdDate}
+                            >
+                            </BooklogItem>
+                        ))}  
                     </BooklogContents>
                     <Page>
                         <Pagination
@@ -279,10 +286,7 @@ function BookDetailPresenter({
                                 nextPageText={"›"} 
                                 onChange={booklogPageHandler} />
                     </Page>
-
                 </BookLog> 
-
-
 
             </ReviewBookLog>
         </Contents>
