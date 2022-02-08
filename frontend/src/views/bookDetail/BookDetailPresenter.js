@@ -6,6 +6,7 @@ import Pagination from "react-js-pagination";
 import '../bookInfo/bookSearch/Paging.css';
 import MyModalContainer from "./MyModalContainer";
 import WriteModalContainer from "./WriteModalContainer";
+import ReviewPagination from "./ReviewPagination";
 const Block= styled.div`
 `;
 const Line = styled.div`
@@ -96,13 +97,25 @@ position:relative;
 text-align:left;
 font-size:23px;
 margin-left:10px;
-margin-bottom:5px;
 width:30%;
+`;
+const REVIEWS = styled.div`
+margin-top:1%;
+width:100%;
+height:80%;
 `;
 
 const Blank=styled.div`
 width:50%;
-height:8%;
+height:5%;
+`;
+
+const ReviewContents= styled.div`
+position:relative;
+height:80%;
+border-radius:20px;
+box-shadow: 4px 5px 7px 2px lightgrey;
+margin-bottom:-8%;
 `;
 const Buttons= styled.div`
 position:relative;
@@ -127,13 +140,7 @@ width:30%;
 padding: 0px;
 margin:0px;
 `;
-const ReviewContents= styled.div`
-position:relative;
-height:80%;
-border-radius:20px;
-box-shadow: 4px 5px 7px 2px lightgrey;
-margin-bottom:-8%;
-`;
+
 
 ///북로그
 const BookLog= styled.div`
@@ -188,12 +195,12 @@ const Booklog= styled.div`
 
 
 function BookDetailPresenter({
-    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
+    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,starRating,
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating,jwtToken,
-    url,goBooklog
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating,jwtToken,bookInfoSeq,
+    url,goBooklog,seq,currentReviews,paginate
 }){
     return(
 
@@ -215,37 +222,38 @@ function BookDetailPresenter({
             <ReviewBookLog>
 
                 <BookReview>
-                    <ReviewHeader>
+                <ReviewHeader>
                         <ReviewTitle>이 책의 책리뷰</ReviewTitle>
                         <Buttons>
                             <MyReviewButton onClick={handleMyModalOpen}>내 책리뷰</MyReviewButton>
-                            <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} url={url}></MyModalContainer>
+                            <MyModalContainer isOpen={MyModalOpen} onCancel={handleMyModalClose} userReview={userReview} bookInfoSeq={bookInfoSeq} user={user} jwtToken={jwtToken} url={url}></MyModalContainer>
                             <WriteReviewButton onClick={handleWriteModalOpen} >책리뷰 작성하기</WriteReviewButton>
                             <WriteModalContainer isOpen={WriteModalOpen}onCancel={handleWriteModalClose} user={user} jwtToken={jwtToken} seq={seq} url={url}></WriteModalContainer>
                         </Buttons>
                     </ReviewHeader>
-       
-                    
+
                     <ReviewContents> 
                         <Blank></Blank>
-                        {reviews && reviews.map(review=>(
-                            <ReviewItem
+                        <REVIEWS>
+                        {currentReviews &&
+                            currentReviews.length > 0 &&
+                            currentReviews.map(review => (
+                                <ReviewItem
                                 summary={review.summary}
                                 reviewStarRating={review.starRating}
                                 reviewDate={review.createdDate}
                             >
                             </ReviewItem>
-                        ))}
+                            ))}
+                        </REVIEWS>
+      
+                            <ReviewPagination
+                            postPerPage={5}
+                            totalPosts={reviewTotalCnt}
+                            paginate={paginate}
+                            />
+
                     </ReviewContents>
-                    <Page>
-                        <Pagination activePage={reviewPage} 
-                            itemsCountPerPage={5} 
-                            totalItemsCount={reviewTotalCnt} 
-                            pageRangeDisplayed={5} 
-                            prevPageText={"‹"} 
-                            nextPageText={"›"} 
-                            onChange={reviewPageHandler} />
-                    </Page>
                 </BookReview>
 
                 <BookLog>
@@ -270,6 +278,7 @@ function BookDetailPresenter({
                                     </BooklogItem>
                                 </Booklog>
                             ))}  
+
                     </BooklogContents>
                     <Page>
                         <Pagination
@@ -281,10 +290,7 @@ function BookDetailPresenter({
                                 nextPageText={"›"} 
                                 onChange={booklogPageHandler} />
                     </Page>
-
                 </BookLog> 
-
-
 
             </ReviewBookLog>
         </Contents>

@@ -19,7 +19,6 @@ const StarRating = props => {
 
   // Manages rating selection
   const [rating, setRating] = React.useState(0);
-
   const hoverOver = event => {
     let starId = 0;
     if (event && event.target && event.target.getAttribute("star-id")) {
