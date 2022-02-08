@@ -40,10 +40,11 @@ const StyledLink = styled(Link)`
   color: black;
 `;
 
-const menus = ["북로그", "독서모임", "책정보", "챌린지", "공지"];
-const links = ["/booklogs/list/like", "/", "/search", "/", "/"];
+
+const links = ["/booklogs/list/like", "/", "/search", "/", "/","/mypage"];
 
 function Navigation({ isLogin }) {
+  const menus = isLogin ? ["북로그", "독서모임", "책정보", "챌린지", "공지", "마이페이지"] : ["북로그", "독서모임", "책정보", "챌린지", "공지"];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -39,7 +39,7 @@ function UserBooklogContainer() {
   const pageLoading = async () => {
     // console.log(enteredText.current.value);
     const books = await axios.get(
-      url + `/api/v1/booklogs/me?page=${page}&size=10&all=${!isOpen}`,
+      url + `/api/v1/booklogs/me?page=${page}&size=8&all=${!isOpen}`,
       {
         headers: {
           Authorization: `Bearer ` + jwtToken,
@@ -80,7 +80,8 @@ function UserBooklogContainer() {
     context={context}
     page={page}
     totalCnt={totalCnt}
-    ></UserBooklogList>
+    handlePageChange={handlePageChange}
+    />
   );
 }
 export default UserBooklogContainer;
