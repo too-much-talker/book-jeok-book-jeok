@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import DetailForm from "./BooklogDetailPresenter";
+import { useSelector } from "react-redux";
 
-const url = "https://77e1dca6-cd01-4930-ae25-870e7444cc55.mock.pstmn.io";
+const url = "https://i6a305.p.ssafy.io:8443";
 
 function BooklogDetailContainer(props) {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,14 +17,23 @@ function BooklogDetailContainer(props) {
   const [enteredToggle, setEnteredToggle] = useState(false);
   const location = useLocation();
   const bookLogSeq = location.state.logSeq;
-  const bookInfoSeq = location.state.infoSeq;
+  let bookInfoSeq;
   const [enteredRating, setEnteredRating] = useState(0);
 
   let bookLogData;
   let bookInfoData;
+  const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
+  const user = useSelector((state) => state.authReducer);
+
   const getBookLog = async () => {
     setIsLoading(true);
-    const bookData1 = await axios.get(url + `/api/v1/booklogs/${bookLogSeq}`);
+    const bookData1 = await axios.get(url + `/api/v1/booklogs/${bookLogSeq}`, {
+      headers: {
+        Authorization: `Bearer ` + jwtToken,
+      },
+    });
+    console.log(bookData1);
+    bookInfoSeq = bookData1.data.data.booklog.bookInfoSeq;
     const bookData2 = await axios.get(url + `/api/v1/bookinfos/${bookInfoSeq}`);
     console.log(bookData2);
     bookLogData = bookData1.data.data.booklog;
@@ -42,35 +52,54 @@ function BooklogDetailContainer(props) {
     getBookLog();
   }, []);
 
-  const saveArticle = async (event) => {
-    if (enteredContent === "" || enteredTitle === "") {
-      alert("제목과 내용을 입력해주세요.");
-    }
-    else{
+  //토큰
 
+  const saveArticle = async (event) => {
     event.preventDefault();
-    
-    const response = await axios.put(url + `/api/v1/booklogs/${bookLogSeq}`, {
-      memberSeq: 1,
-      booklogSeq: bookInfoSeq,
-      bookInfoSeq: bookInfoSeq,
-      title: enteredTitle,
-      isOpen: !enteredToggle,
-      content: enteredContent,
-      summary: enteredSummary,
-      starRating: enteredRating,
-      readDate: new Date()
-    });
+    const response = await axios.put(
+      url + `/api/v1/booklogs/${bookLogSeq}`,
+      {
+        memberSeq: user.memberInfo.seq,
+        booklogSeq: bookInfoSeq,
+        bookInfoSeq: bookInfoSeq,
+        title: enteredTitle,
+        isOpen: !enteredToggle,
+        content: enteredContent,
+        summary: enteredSummary,
+        starRating: enteredRating,
+        readDate: new Date(),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      }
+    );
     setIsEditing(!isEditing);
     alert(response.data.data.msg);
-  }
   };
 
   const onDeleteArticle = async (event) => {
     event.preventDefault();
-    const response = await axios.delete(url + `/api/v1/booklogs/${bookLogSeq}`);
-    window.location.replace("/mypage/mybooklog");
-    alert(response.data.data.msg);
+    axios
+      .delete(
+        url + `/api/v1/booklogs/${bookLogSeq}`,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + jwtToken,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response.status);
+        if (response.status === 204) {
+          alert(response.data.data.msg);
+          window.location.replace("/mypage/mybooklog");
+        } else {
+          alert(response.data.data.msg);
+        }
+      });
   };
   const editButtonHandler = () => {
     setIsEditing(!isEditing);
