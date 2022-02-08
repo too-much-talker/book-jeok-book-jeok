@@ -34,4 +34,22 @@ public class FileInfoServiceImpl implements FileInfoService{
 
         return paths;
     }
+
+    @Override
+    public void deleteFileInfo(Long rootSeq, Long memberSeq) {
+
+        List<FileInfo> fileInfos = fileInfoRepository.findAllByRootSeq(rootSeq);
+
+        if (!fileInfos.isEmpty()) {
+            for (FileInfo fileInfo : fileInfos) {
+                File file = new File(fileInfo.getSavedPath() + File.separator + fileInfo.getEncodedFileName());
+
+                if (file.exists()) {
+                    file.delete();
+                }
+
+                fileInfo.delete();
+            }
+        }
+    }
 }
