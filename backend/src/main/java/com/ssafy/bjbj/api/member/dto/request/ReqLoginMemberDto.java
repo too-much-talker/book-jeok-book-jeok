@@ -1,4 +1,4 @@
-package com.ssafy.bjbj.api.member.dto;
+package com.ssafy.bjbj.api.member.dto.request;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 
 @ToString(of = {"email", "password"})
 @Getter
-public class LoginDto {
+public class ReqLoginMemberDto {
 
     /**
      * 정규 표현식 -> 이메일 형식에 맞게.
