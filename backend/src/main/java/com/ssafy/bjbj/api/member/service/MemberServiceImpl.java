@@ -2,7 +2,7 @@ package com.ssafy.bjbj.api.member.service;
 
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
-import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.entity.Subscribe;
@@ -73,8 +73,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
-        return memberRepository.findResponseMemberDtoByEmail(email);
+    public ResLoginMemberDto findResLoginMemberDtoByEmail(String email) {
+        return memberRepository.findResLoginMemberDtoByEmail(email);
     }
 
     @Override

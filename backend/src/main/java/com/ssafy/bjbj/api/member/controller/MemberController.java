@@ -1,8 +1,8 @@
 package com.ssafy.bjbj.api.member.controller;
 
-import com.ssafy.bjbj.api.member.dto.LoginDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqLoginMemberDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
-import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
@@ -90,7 +90,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public BaseResponseDto login(@Valid @RequestBody LoginDto loginDto, Errors errors) {
+    public BaseResponseDto login(@Valid @RequestBody ReqLoginMemberDto reqLoginMemberDto, Errors errors) {
         log.debug("MemberController.login() 호출");
 
         Integer status = null;
@@ -106,22 +106,22 @@ public class MemberController {
                 // global error
                 responseData.put("msg", "global error");
             }
-        }
-
-        ResponseMemberDto responseMemberDto = memberService.findResponseMemberDtoByEmail(loginDto.getEmail());
-        if (responseMemberDto == null) {
-            status = HttpStatus.NO_CONTENT.value();
-            responseData.put("msg", "존재하지 않는 회원입니다.");
-        } else if (!passwordEncoder.matches(loginDto.getPassword(), responseMemberDto.getPassword())) {
-            status = HttpStatus.UNAUTHORIZED.value();
-            responseData.put("msg", "잘못된 비밀번호입니다.");
         } else {
-            String jwtToken = JwtTokenUtil.getToken(responseMemberDto.getEmail());
+            ResLoginMemberDto resLoginMemberDto = memberService.findResLoginMemberDtoByEmail(reqLoginMemberDto.getEmail());
+            if (resLoginMemberDto == null) {
+                status = HttpStatus.NO_CONTENT.value();
+                responseData.put("msg", "존재하지 않는 회원입니다.");
+            } else if (!passwordEncoder.matches(reqLoginMemberDto.getPassword(), resLoginMemberDto.getPassword())) {
+                status = HttpStatus.UNAUTHORIZED.value();
+                responseData.put("msg", "잘못된 비밀번호입니다.");
+            } else {
+                String jwtToken = JwtTokenUtil.getToken(resLoginMemberDto.getEmail());
 
-            status = HttpStatus.OK.value();
-            responseData.put("message", "로그인에 성공했습니다.");
-            responseData.put("memberInfo", responseMemberDto);
-            responseData.put("jwtToken", jwtToken);
+                status = HttpStatus.OK.value();
+                responseData.put("message", "로그인에 성공했습니다.");
+                responseData.put("memberInfo", resLoginMemberDto);
+                responseData.put("jwtToken", jwtToken);
+            }
         }
 
         return BaseResponseDto.builder()

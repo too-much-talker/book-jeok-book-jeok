@@ -2,7 +2,7 @@ package com.ssafy.bjbj.api.member.service;
 
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
-import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface MemberService {
 
     Member findMemberByEmail(String email);
 
-    ResponseMemberDto findResponseMemberDtoByEmail(String email);
+    ResLoginMemberDto findResLoginMemberDtoByEmail(String email);
 
     Member findMemberByNickname(String nickname);
 

@@ -145,7 +145,7 @@ margin:0px;
 ///북로그
 const BookLog= styled.div`
 position:relative;
-height:75%;
+height:70%;
 width:95%;
 `;
 
@@ -165,6 +165,7 @@ width:35%;
 const Blank2=styled.div`
 width:50%;
 height:5%;
+margin-top:1%;
 `;
 
 const BooklogContents= styled.div`
@@ -188,18 +189,18 @@ position:absolute;
 left:36%;
 `;
 
+const Booklog= styled.div`
+margin-bottom:3%;
 
-
-
+`;
 
 function BookDetailPresenter({
-    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,starRating,
+    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,bookInfoSeq,user,seq,jwtToken,
-    url,currentReviews,paginate
-
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,starRating,jwtToken,bookInfoSeq,
+    url,goBooklog,seq,currentReviews,paginate
 }){
     return(
 
@@ -234,7 +235,9 @@ function BookDetailPresenter({
                     <ReviewContents> 
                         <Blank></Blank>
                         <REVIEWS>
-                        {currentReviews &&
+                        {currentReviews && currentReviews[0].starRating!==""&& 
+                         currentReviews[0].starRating!==null &&
+                         currentReviews[0].starRating!==undefined&&
                             currentReviews.length > 0 &&
                             currentReviews.map(review => (
                                 <ReviewItem
@@ -267,14 +270,17 @@ function BookDetailPresenter({
 
                     <BooklogContents>
                         <Blank2></Blank2>
-                        {booklogs && booklogs.map(booklog=>(
-                            <BooklogItem
-                                title={booklog.title}
-                                content={booklog.content}
-                                createdDate={booklog.createdDate}
-                            >
-                            </BooklogItem>
-                        ))}  
+                            {booklogs && booklogs.map(booklog=>(
+                                <Booklog onClick={()=>goBooklog(booklog.booklogSeq)} >
+                                    <BooklogItem
+                                        title={booklog.title}
+                                        content={booklog.content}
+                                        createdDate={booklog.createdDate}
+                                    >
+                                    </BooklogItem>
+                                </Booklog>
+                            ))}  
+
                     </BooklogContents>
                     <Page>
                         <Pagination
