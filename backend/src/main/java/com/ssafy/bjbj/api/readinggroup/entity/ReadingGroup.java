@@ -13,7 +13,7 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
-@ToString(of = {"seq", "title", "content", "views", "limitPoint", "maxMember", "deadline", "status", "startDate", "endDate", "readingGroupType", "isDeleted"})
+@ToString(of = {"seq", "title", "content", "views", "limitLevel", "maxMember", "deadline", "status", "startDate", "endDate", "readingGroupType", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_reading_group")
 @Entity
@@ -34,7 +34,7 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     private Integer views;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
-    private Integer limitPoint;
+    private Integer limitLevel;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer maxMember;
@@ -77,11 +77,11 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
 
     @Builder
-    public ReadingGroup(String title, String content, Integer views, Integer limitPoint, Integer maxMember, LocalDateTime deadline, Status status, LocalDateTime startDate, LocalDateTime endDate, ReadingGroupType readingGroupType, boolean isDeleted, Member member) {
+    public ReadingGroup(String title, String content, Integer views, Integer limitLevel, Integer maxMember, LocalDateTime deadline, Status status, LocalDateTime startDate, LocalDateTime endDate, ReadingGroupType readingGroupType, boolean isDeleted, Member member) {
         this.title = title;
         this.content = content;
         this.views = views;
-        this.limitPoint = limitPoint;
+        this.limitLevel = limitLevel;
         this.maxMember = maxMember;
         this.deadline = deadline;
         this.status = status;
@@ -91,4 +91,5 @@ public class ReadingGroup extends BaseLastModifiedEntity {
         this.isDeleted = isDeleted;
         this.member = member;
     }
+
 }

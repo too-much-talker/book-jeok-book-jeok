@@ -48,18 +48,18 @@ public class ReadingGroupBoardRepositoryTests {
 
     @BeforeEach
     public void setUp() throws InterruptedException {
-        readingGroupBoardRepository.deleteAll();
-        em.flush();
-        em.clear();
-        readingGroupRepository.deleteAll();
-        em.flush();
-        em.clear();
-        bookReviewRepository.deleteAll();
-        em.flush();
-        em.clear();
-        memberRepository.deleteAll();
-        em.flush();
-        em.clear();
+//        readingGroupBoardRepository.deleteAll();
+//        em.flush();
+//        em.clear();
+//        readingGroupRepository.deleteAll();
+//        em.flush();
+//        em.clear();
+//        bookReviewRepository.deleteAll();
+//        em.flush();
+//        em.clear();
+//        memberRepository.deleteAll();
+//        em.flush();
+//        em.clear();
 
         member1 = memberRepository.save(Member.builder()
                 .email("member1@bjbj.com")
@@ -76,7 +76,7 @@ public class ReadingGroupBoardRepositoryTests {
                 .title("title")
                 .content("test")
                 .views(0)
-                .limitPoint(0)
+                .limitLevel(1)
                 .maxMember(10)
                 .deadline(LocalDateTime.parse("2023-12-20T12:30:00"))
                 .status(Status.PRE)

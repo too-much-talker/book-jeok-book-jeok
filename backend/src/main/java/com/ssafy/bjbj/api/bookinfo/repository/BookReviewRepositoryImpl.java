@@ -1,12 +1,11 @@
 package com.ssafy.bjbj.api.bookinfo.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.bjbj.api.bookinfo.dto.response.QResBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.QResBookReviewByMemberDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.QResponseBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
-import com.ssafy.bjbj.api.bookinfo.entity.QBookReview;
 
 import javax.persistence.EntityManager;
 
@@ -64,7 +63,7 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
     @Override
     public List<ResBookReviewByBookInfoDto> findAllBookReviewDtoByBookInfoSeq(Long bookInfoSeq) {
         return queryFactory
-                .select(new QResponseBookReviewByBookInfoDto(
+                .select(new QResBookReviewByBookInfoDto(
                         bookReview.seq,
                         bookReview.bookInfo.seq,
                         bookReview.member.seq,
