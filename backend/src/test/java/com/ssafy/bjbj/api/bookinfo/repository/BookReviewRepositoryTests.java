@@ -54,7 +54,7 @@ public class BookReviewRepositoryTests {
         assertThat(bookReview.getSeq()).isEqualTo(savedBookReview.getSeq());
     }
 
-
+    @DisplayName("내 북리뷰 목록 조회 테스트")
     @Test
     public void findAllReviewBookDtoByMemberSeqTests() {
 
@@ -94,6 +94,7 @@ public class BookReviewRepositoryTests {
 
     }
 
+    @DisplayName("책정보별 북리뷰 목록 조회 테스트")
     @Test
     public void findAllReviewBookDtoByBookInfoSeqTests() {
 

@@ -10,6 +10,7 @@ import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupType;
 import com.ssafy.bjbj.common.entity.Status;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -87,6 +88,7 @@ public class ReadingGroupBoardRepositoryTests {
                 .build());
     }
 
+    @DisplayName("독서모임 게시판 조회 테스트")
     @Test
     public void getReadingGroupBoardListTest() {
 
@@ -98,7 +100,6 @@ public class ReadingGroupBoardRepositoryTests {
                 .title("title1")
                 .content("content1")
                 .views(0)
-                .isDeleted(false)
                 .member(member1)
                 .readingGroup(readingGroup1)
                 .build());
@@ -107,7 +108,6 @@ public class ReadingGroupBoardRepositoryTests {
                 .title("title2")
                 .content("content2")
                 .views(0)
-                .isDeleted(false)
                 .member(member1)
                 .readingGroup(readingGroup1)
                 .build());
@@ -116,7 +116,6 @@ public class ReadingGroupBoardRepositoryTests {
                 .title("title3")
                 .content("content3")
                 .views(0)
-                .isDeleted(false)
                 .member(member1)
                 .readingGroup(readingGroup1)
                 .build());
@@ -127,6 +126,9 @@ public class ReadingGroupBoardRepositoryTests {
         List<ResReadingGroupArticleDto> readingGroupBoardDtos = readingGroupBoardRepository.findReadingGroupDtos(readingGroup1.getSeq(), pageable);
         assertThat(readingGroupBoardDtos.size()).isEqualTo(3);
         assertThat(readingGroupBoardDtos.get(0).getReadingGroupBoardSeq()).isEqualTo(readingGroupBoard3.getSeq());
+        assertThat(readingGroupBoardDtos.get(1).getReadingGroupBoardSeq()).isEqualTo(readingGroupBoard2.getSeq());
+        assertThat(readingGroupBoardDtos.get(2).getReadingGroupBoardSeq()).isEqualTo(readingGroupBoard1.getSeq());
+
     }
 
 }
