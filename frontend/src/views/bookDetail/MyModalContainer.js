@@ -1,39 +1,61 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import MyModalPresenter from "./MyModalPresenter";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function MyModalContainer({ isOpen, onCancel,userReview ,url}){
-    console.log(userReview);
+
+function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtToken,url}){
+    //console.log(userReview);
+
+    let useParam = useParams();
+    //console.log(user.memberInfo.seq);
     const handleClose = () => {
         onCancel();
       };
-    
+
+      useEffect(() => {
+        setStarRating(userReview.starRating)
+        setSummary(userReview.summary);
+        setBookReviewSeq(userReview.bookReviewSeq);
+        setMemberInfo(userReview.memberInfo);
+        console.log(userReview);
+      },[userReview]);
+
+
     const [starRating, setStarRating]= useState();
     const [summary, setSummary]= useState();
-    const [createdDate, setCreatedDate]= useState();
     const [bookReviewSeq, setBookReviewSeq]= useState();
+    const [memberInfo, setMemberInfo]= useState();
 
-    // const [starRating, setStarRating]= useState(userReview.starRating);
-    // const [summary, setSummary]= useState(userReview.summary);
-    // const [createdDate, setCreatedDate]= useState(userReview.createdDate);
-
-    function handleStarRating(event){
-        setStarRating(event.target.value);
+    function handleStarRating(param){
+        setStarRating(param);
     }
+
     function handleSummary(event){
         setSummary(event.target.value);
     }
-    function handleCreatedDate(event){
-        setCreatedDate(event.target.value);
-    }
-
 
     function modifyReview(){
-        axios.put(url+`/api/v1/bookreviews/${bookReviewSeq}`)
+        console.log(user.memberInfo.seq);
+        console.log(bookInfoSeq,memberInfo,starRating,summary)
+        axios.put(url+`/api/v1/bookreviews/${bookReviewSeq}`,{
+            bookInfoSeq: bookInfoSeq,
+            memberSeq:user.memberInfo.seq,
+            starRating:starRating,
+            summary:summary
+        },
+        {
+            headers:{
+                Authorization:`Bearer `+jwtToken
+            }
+        }
+        
+        )
         .then(function (response){
           console.log(response);
-          handleClose();
+          alert(response.data.data.msg);
+          document.location.href = `/detail/${useParam.seq}`; 
           })
         .catch(function (error) {
             console.log(error);
@@ -46,7 +68,7 @@ function MyModalContainer({ isOpen, onCancel,userReview ,url}){
 
 
     return(
-    <MyModalPresenter modifyReview={modifyReview} handleStarRating={handleStarRating} handleSummary={handleSummary} handleCreatedDate={handleCreatedDate}deleteReview={deleteReview}starRating={starRating} summary={summary} createdDate={createdDate} isOpen={isOpen} onCancel={onCancel}></MyModalPresenter>
+    <MyModalPresenter modifyReview={modifyReview} handleStarRating={handleStarRating} handleSummary={handleSummary} deleteReview={deleteReview}starRating={starRating} summary={summary} isOpen={isOpen} onCancel={onCancel}></MyModalPresenter>
     );
 
 }
