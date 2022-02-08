@@ -28,13 +28,12 @@ font-size:10px
 `;//작성일
 
 function ReviewItem({summary,reviewStarRating,reviewDate}){
-    const date=reviewDate.substr(0,10);
-    const time=reviewDate.substr(11,17);
+
     return(
         <Block>
             <ReviewStarRating>★ {reviewStarRating}</ReviewStarRating>
             <ReviewContents>{summary}</ReviewContents>
-            <ReviewDate></ReviewDate>
+            <ReviewDate>{reviewDate}</ReviewDate>
         </Block>
 
     );
