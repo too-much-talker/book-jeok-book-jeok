@@ -7,6 +7,7 @@ import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleExce
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupBoardService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import com.ssafy.bjbj.common.service.file.FileInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class ReadingGroupBoardController {
                 Long seq = readingGroupBoardService.register(reqReadingGroupBoardDto, files);
 
                 status = HttpStatus.CREATED.value();
-                responseData.put("msg", "독서모임 포스팅을 작성하였습니다.");
+                responseData.put("msg", "독서모임 게시글 포스팅을 작성하였습니다.");
                 responseData.put("readingGroupBoardSeq", seq);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -70,8 +71,8 @@ public class ReadingGroupBoardController {
                 .build();
     }
 
-    @GetMapping("/{readingGroupBoardSeq}")
-    public BaseResponseDto getDetail(@PathVariable Long readingGroupBoardSeq, Authentication authentication) {
+    @GetMapping("/{readingGroupArticleSeq}")
+    public BaseResponseDto getDetail(@PathVariable Long readingGroupArticleSeq, Authentication authentication) {
         log.debug("ReadingGroupBoardController.getDetail() 독서모임 게시글 상세조회 API 호출");
 
         Integer status = null;
@@ -80,9 +81,9 @@ public class ReadingGroupBoardController {
         Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
 
         try {
-            ResReadingGroupArticleDto resReadingGroupArticleDto = readingGroupBoardService.findReadingGroupArticleBySeq(readingGroupBoardSeq, memberSeq);
+            ResReadingGroupArticleDto resReadingGroupArticleDto = readingGroupBoardService.findReadingGroupArticleBySeq(readingGroupArticleSeq, memberSeq);
 
-            List<String> fileInfoPaths = fileInfoService.findAllFileInfoByReadingGroupBoardSeq(readingGroupBoardSeq);
+            List<String> fileInfoPaths = fileInfoService.findAllFileInfoByReadingGroupBoardSeq(readingGroupArticleSeq);
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "독서모임 게시글을 불러왔습니다.");
@@ -136,4 +137,39 @@ public class ReadingGroupBoardController {
                 .data(responseData)
                 .build();
     }
+
+    @DeleteMapping("/{readingGroupArticleSeq}")
+    public BaseResponseDto deleteArticle(@PathVariable Long readingGroupArticleSeq, Authentication authentication) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+
+        try {
+            readingGroupBoardService.deleteReadingGroupArticle(readingGroupArticleSeq, memberSeq);
+
+            fileInfoService.deleteFileInfo(readingGroupArticleSeq, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서모임 게시글을 삭제하였습니다");
+        } catch (NotFoundReadingGroupArticleException | NotEqualMemberException e) {
+            log.error("삭제할 독서모임 게시글 조회 실패");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }
