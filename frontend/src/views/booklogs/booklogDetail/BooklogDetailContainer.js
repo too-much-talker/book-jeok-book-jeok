@@ -15,13 +15,12 @@ function BooklogDetailContainer(props) {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredContent, setEnteredContent] = useState("");
   const [enteredToggle, setEnteredToggle] = useState(false);
+  const [bookInfoSeq, setBookInfoSeq] = useState(0);
   const location = useLocation();
   const bookLogSeq = location.state.logSeq;
-  let bookInfoSeq;
   const [enteredRating, setEnteredRating] = useState(0);
 
-  let bookLogData;
-  let bookInfoData;
+  let bookLogData,bookInfoData,tmpSeq;
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   const user = useSelector((state) => state.authReducer);
 
@@ -32,10 +31,9 @@ function BooklogDetailContainer(props) {
         Authorization: `Bearer ` + jwtToken,
       },
     });
-    console.log(bookData1);
-    bookInfoSeq = bookData1.data.data.booklog.bookInfoSeq;
-    const bookData2 = await axios.get(url + `/api/v1/bookinfos/${bookInfoSeq}`);
-    console.log(bookData2);
+    tmpSeq = bookData1.data.data.booklog.bookInfoSeq;
+    setBookInfoSeq(bookData1.data.data.booklog.bookInfoSeq);
+    const bookData2 = await axios.get(url + `/api/v1/bookinfos/${tmpSeq}`);
     bookLogData = bookData1.data.data.booklog;
     bookInfoData = bookData2.data.data.bookInfo;
     setEnteredContent(bookLogData.content);
@@ -56,18 +54,19 @@ function BooklogDetailContainer(props) {
 
   const saveArticle = async (event) => {
     event.preventDefault();
+    console.log(bookLogSeq);
+    console.log(bookInfoSeq);
     const response = await axios.put(
       url + `/api/v1/booklogs/${bookLogSeq}`,
       {
         memberSeq: user.memberInfo.seq,
-        booklogSeq: bookInfoSeq,
+        booklogSeq: bookLogSeq,
         bookInfoSeq: bookInfoSeq,
         title: enteredTitle,
         isOpen: !enteredToggle,
         content: enteredContent,
         summary: enteredSummary,
         starRating: enteredRating,
-        readDate: new Date(),
       },
       {
         headers: {
@@ -75,6 +74,7 @@ function BooklogDetailContainer(props) {
         },
       }
     );
+    console.log(response);
     setIsEditing(!isEditing);
     alert(response.data.data.msg);
   };
@@ -84,7 +84,6 @@ function BooklogDetailContainer(props) {
     axios
       .delete(
         url + `/api/v1/booklogs/${bookLogSeq}`,
-        {},
         {
           headers: {
             Authorization: "Bearer " + jwtToken,
@@ -93,7 +92,7 @@ function BooklogDetailContainer(props) {
       )
       .then(function (response) {
         console.log(response.status);
-        if (response.status === 204) {
+        if (response.status === 200) {
           alert(response.data.data.msg);
           window.location.replace("/mypage/mybooklog");
         } else {
