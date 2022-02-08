@@ -2,10 +2,10 @@ import styled from "styled-components";
 import icon from  "../../../res/img/search.png";
 
 const SearchBlock = styled.div`
-position:absolute;
+position:relative;
 left:50%;
-top:20%;
-width:1200px;
+margin-top:3%;
+width:100%;
 height:60px;
 text-align:center;
 transform: translate(-50%, -50%);
@@ -15,7 +15,7 @@ const SelectBox = styled.select`
 position :absolute;
 width: 82px;
 height: 35px;
-left:20%;
+left:18%;
 top:16%;
 background: url('https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png') calc(100% - 5px) center no-repeat;
 background-size: 20px;

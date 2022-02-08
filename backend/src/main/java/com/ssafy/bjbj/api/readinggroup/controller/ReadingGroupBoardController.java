@@ -43,27 +43,21 @@ public class ReadingGroupBoardController {
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
-        boolean isAuthenticatedMember = details.getMember().getSeq().equals(reqReadingGroupBoardDto.getMemberSeq());
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
 
-        if (!isAuthenticatedMember) {
-            status = HttpStatus.UNAUTHORIZED.value();
-            responseData.put("msg", "인증되지 않은 회원입니다");
-        } else {
+        try {
+            Long rootSeq = readingGroupBoardService.register(reqReadingGroupBoardDto, memberSeq);
 
-            try {
-                Long seq = readingGroupBoardService.register(reqReadingGroupBoardDto, files);
+            fileInfoService.registerFileInfo(rootSeq, files);
 
-                status = HttpStatus.CREATED.value();
-                responseData.put("msg", "독서모임 게시글 포스팅을 작성하였습니다.");
-                responseData.put("readingGroupBoardSeq", seq);
-            } catch (Exception e) {
-                e.printStackTrace();
+            status = HttpStatus.CREATED.value();
+            responseData.put("msg", "독서모임 게시글 포스팅을 작성하였습니다.");
+            responseData.put("readingGroupBoardSeq", rootSeq);
+        } catch (Exception e) {
+            e.printStackTrace();
 
-                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-                responseData.put("msg", "요청을 수행할 수 없습니다.");
-            }
-
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
         return BaseResponseDto.builder()
                 .status(status)
@@ -71,6 +65,7 @@ public class ReadingGroupBoardController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/{readingGroupArticleSeq}")
     public BaseResponseDto getDetail(@PathVariable Long readingGroupArticleSeq, Authentication authentication) {
         log.debug("ReadingGroupBoardController.getDetail() 독서모임 게시글 상세조회 API 호출");
@@ -108,6 +103,7 @@ public class ReadingGroupBoardController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/list/{readingGroupSeq}")
     public BaseResponseDto getList(Pageable pageable, @PathVariable Long readingGroupSeq) {
 
@@ -138,8 +134,51 @@ public class ReadingGroupBoardController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @PutMapping("/{readingGroupArticleSeq}")
+    public BaseResponseDto updateArticle(@PathVariable Long readingGroupArticleSeq,
+                                         @Valid @RequestPart(value = "reqReadingGroupBoard") ReqReadingGroupBoardDto reqReadingGroupBoardDto,
+                                         @RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                         Authentication authentication) {
+        log.debug("ReadingGroupBoardController.updateArticle() 독서모임 게시글 수정 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            ResReadingGroupArticleDto resReadingGroupArticleDto = readingGroupBoardService.updateReadingGroupArticleBySeq(readingGroupArticleSeq, memberSeq, reqReadingGroupBoardDto);
+
+            fileInfoService.updateFileInfo(readingGroupArticleSeq, files);
+            List<String> fileInfoPaths = fileInfoService.findAllFileInfoByReadingGroupBoardSeq(readingGroupArticleSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서모임 게시글을 수정했습니다.");
+            responseData.put("readingGroupArticle", resReadingGroupArticleDto);
+            responseData.put("imagePaths", fileInfoPaths);
+        } catch (NotFoundReadingGroupArticleException | NotEqualMemberException e) {
+            log.error("삭제할 독서모임 게시글 조회 실패");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{readingGroupArticleSeq}")
     public BaseResponseDto deleteArticle(@PathVariable Long readingGroupArticleSeq, Authentication authentication) {
+        log.debug("ReadingGroupBoardController.deleteArticle() 독서모임 게시글 삭제 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
