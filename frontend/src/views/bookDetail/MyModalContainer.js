@@ -4,7 +4,6 @@ import MyModalPresenter from "./MyModalPresenter";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-
 function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtToken,url}){
     //console.log(userReview);
 
@@ -64,7 +63,24 @@ function MyModalContainer({ isOpen, onCancel,userReview ,user,bookInfoSeq,jwtTok
     }
 
     function deleteReview(){
+        axios.delete(url+`/api/v1/bookreviews/${bookReviewSeq}`,
+        {
+            headers:{
+                Authorization:`Bearer `+jwtToken
+            }
+        })
+        .then(function (response){
+          console.log(response);
+          alert(response.data.data.msg);
+          document.location.href = `/detail/${useParam.seq}`; 
+          })
+        .catch(function (error) {
+            console.log(error);
+            alert("삭제 중 문제가 발생하였습니다.")
+          }); 
+
     }
+
 
 
     return(
