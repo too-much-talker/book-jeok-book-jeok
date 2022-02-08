@@ -1,22 +1,23 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
-import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookReviewException;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.bookinfo.repository.BookReviewRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,76 +39,75 @@ public class BookReviewServiceImpl implements BookReviewService {
     }
 
     @Override
-    public List<ResponseBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
+    public List<ResBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq) {
         return bookReviewRepository.findAllBookReviewDtoByMemberSeq(memberSeq);
     }
 
     @Override
-    public List<ResponseBookReviewByBookInfoDto> findAllBookReviewsByBookInfoSeq(Long bookInfoSeq) {
+    public List<ResBookReviewByBookInfoDto> findAllBookReviewsByBookInfoSeq(Long bookInfoSeq) {
         return bookReviewRepository.findAllBookReviewDtoByBookInfoSeq(bookInfoSeq);
     }
 
     @Transactional
     @Override
-    public boolean deleteBookReview(Long bookReviewSeq) {
-
+    public void deleteBookReview(Long bookReviewSeq, Long memberSeq) {
         BookReview bookReview = bookReviewRepository.findBySeq(bookReviewSeq);
-
-        if (!bookReview.isDeleted()) {
-            bookReview.delete();
-            return true;
+        if (bookReview == null) {
+            throw new NotFoundBookReviewException("올바르지 않은 요청입니다.");
+        } else if (!bookReview.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
         }
-        return false;
+
+        bookReview.delete();
     }
 
     @Transactional
     @Override
-    public ResponseBookReviewByMemberDto registerBookReview(RequestBookReviewDto bookReviewDto) {
+    public ResBookReviewByMemberDto registerBookReview(ReqBookReviewDto bookReviewDto, Long memberSeq) {
+        Long bookInfoSeq = bookReviewDto.getBookInfoSeq();
+        BookInfo bookInfo = bookInfoRepository.findBySeq(bookInfoSeq);
+        if (bookInfo == null) {
+            throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
+        }
 
-        BookInfo bookInfo = bookInfoRepository.findBySeq(bookReviewDto.getBookInfoSeq());
-        Member member = memberRepository.findMemberBySeq(bookReviewDto.getMemberSeq());
-
-        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookReviewDto.getBookInfoSeq(), bookReviewDto.getMemberSeq());
-
+        BookReview latestBookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookInfoSeq, memberSeq);
         if (latestBookReview != null) {
             latestBookReview.delete();
         }
 
-            BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
-                    .bookInfo(bookInfo)
-                    .member(member)
-                    .starRating(bookReviewDto.getStarRating())
-                    .summary(bookReviewDto.getSummary())
-                    .isDeleted(false)
-                    .build());
+        Member member = memberRepository.findMemberBySeq(memberSeq);
+        BookReview savedBookReview = bookReviewRepository.save(BookReview.builder()
+                .bookInfo(bookInfo)
+                .member(member)
+                .starRating(bookReviewDto.getStarRating())
+                .summary(bookReviewDto.getSummary())
+                .isDeleted(false)
+                .build());
 
-            return ResponseBookReviewByMemberDto.builder()
-                    .bookReviewSeq(savedBookReview.getSeq())
-                    .bookInfoSeq(savedBookReview.getBookInfo().getSeq())
-                    .memberSeq(savedBookReview.getMember().getSeq())
-                    .bookTitle(savedBookReview.getBookInfo().getTitle())
-                    .bookAuthor(savedBookReview.getBookInfo().getAuthor())
-                    .memberNickname(savedBookReview.getMember().getNickname())
-                    .starRating(savedBookReview.getStarRating())
-                    .summary(savedBookReview.getSummary())
-                    .createdDate(savedBookReview.getCreatedDate())
-                    .build();
+        return ResBookReviewByMemberDto.builder()
+                .bookReviewSeq(savedBookReview.getSeq())
+                .bookInfoSeq(savedBookReview.getBookInfo().getSeq())
+                .memberSeq(savedBookReview.getMember().getSeq())
+                .bookTitle(savedBookReview.getBookInfo().getTitle())
+                .bookAuthor(savedBookReview.getBookInfo().getAuthor())
+                .memberNickname(savedBookReview.getMember().getNickname())
+                .starRating(savedBookReview.getStarRating())
+                .summary(savedBookReview.getSummary())
+                .createdDate(savedBookReview.getCreatedDate())
+                .build();
     }
 
     @Transactional
     @Override
-    public ResModifiedBookReviewDto updateBookReview(RequestBookReviewDto requestBookReviewDto) {
-
-        Long bookInfoSeq = requestBookReviewDto.getBookInfoSeq();
-        Long memberSeq = requestBookReviewDto.getMemberSeq();
-
-        BookReview bookReview = bookReviewRepository.findLatestBookReviewByBookInfoAndMember(bookInfoSeq, memberSeq);
-
+    public ResModifiedBookReviewDto updateBookReview(ReqBookReviewDto reqBookReviewDto, Long memberSeq, Long bookReviewSeq) {
+        BookReview bookReview = bookReviewRepository.findBySeq(bookReviewSeq);
         if (bookReview == null) {
-            return null;
+            throw new NotFoundBookReviewException("올바르지 않은 요청입니다.");
+        } else if (!bookReview.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
         }
 
-        bookReview.changeBookReview(requestBookReviewDto.getStarRating(), requestBookReviewDto.getSummary());
+        bookReview.changeBookReview(reqBookReviewDto.getStarRating(), reqBookReviewDto.getSummary());
 
         return ResModifiedBookReviewDto.builder()
                 .bookReviewSeq(bookReview.getSeq())

@@ -1,6 +1,5 @@
 package com.ssafy.bjbj.api.bookinfo.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString(of = {"memberNickname", "startRating", "summary", "createdDate"})
 @NoArgsConstructor
 @Getter
-public class ResponseBookReviewByBookInfoDto {
+public class ResBookReviewByBookInfoDto {
 
     private Long bookReviewSeq;
 
@@ -30,7 +29,7 @@ public class ResponseBookReviewByBookInfoDto {
 
     @QueryProjection
     @Builder
-    public ResponseBookReviewByBookInfoDto(Long bookReviewSeq, Long bookInfoSeq, Long memberSeq, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
+    public ResBookReviewByBookInfoDto(Long bookReviewSeq, Long bookInfoSeq, Long memberSeq, String memberNickname, Integer starRating, String summary, LocalDateTime createdDate) {
         this.bookReviewSeq = bookReviewSeq;
         this.bookInfoSeq = bookInfoSeq;
         this.memberSeq = memberSeq;
@@ -39,4 +38,5 @@ public class ResponseBookReviewByBookInfoDto {
         this.summary = summary;
         this.createdDate = createdDate;
     }
+
 }

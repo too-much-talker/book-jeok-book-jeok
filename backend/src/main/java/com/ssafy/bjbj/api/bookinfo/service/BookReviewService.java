@@ -1,9 +1,9 @@
 package com.ssafy.bjbj.api.bookinfo.service;
 
-import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 
 import java.util.List;
@@ -12,17 +12,18 @@ public interface BookReviewService {
 
     BookReview findBookReviewByBookSeq(Long bookReviewSeq);
 
-    List<ResponseBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq);
+    List<ResBookReviewByMemberDto> findAllBookReviewsByMemberSeq(Long memberSeq);
 
-    List<ResponseBookReviewByBookInfoDto> findAllBookReviewsByBookInfoSeq(Long bookInfoSeq);
+    List<ResBookReviewByBookInfoDto> findAllBookReviewsByBookInfoSeq(Long bookInfoSeq);
 
-    ResponseBookReviewByMemberDto registerBookReview(RequestBookReviewDto requestBookReviewDto);
+    ResBookReviewByMemberDto registerBookReview(ReqBookReviewDto reqBookReviewDto, Long memberSeq);
 
-    ResModifiedBookReviewDto updateBookReview(RequestBookReviewDto requestBookReviewDto);
+    ResModifiedBookReviewDto updateBookReview(ReqBookReviewDto reqBookReviewDto, Long memberSeq, Long bookReviewSeq);
 
     Integer countBookReviewsByMemberSeq(Long memberSeq);
 
     Integer countBookReviewsByBookInfoSeq(Long bookInfoSeq);
 
-    boolean deleteBookReview(Long bookReviewSeq);
+    void deleteBookReview(Long bookReviewSeq, Long memberSeq);
+
 }
