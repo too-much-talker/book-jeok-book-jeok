@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@ToString(of = {"originFileName", "encodedFileName", "savedPath", "isDeleted"})
+@ToString(of = {"rootSeq", "originFileName", "encodedFileName", "savedPath", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_file_info")
 @Entity
