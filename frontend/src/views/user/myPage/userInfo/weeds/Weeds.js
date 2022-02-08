@@ -3,7 +3,6 @@ import react, { useState } from "react";
 import styled from "styled-components";
 
 const StyledWeeds = styled.div `
-  margin: 3rem;
   width: 16rem;
   height: 24rem;
 `;

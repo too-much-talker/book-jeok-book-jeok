@@ -4,6 +4,7 @@ import { UserExpPoint } from "../user/myPage/userInfo/UserInfoPresenter";
 import React, { useEffect, useState } from "react";
 import Weeds from "../user/myPage/userInfo/weeds/Weeds";
 import axios from "axios";
+
 const url = "https://i6a305.p.ssafy.io:8443";
 const Side = styled.div`
   display: flex;
@@ -19,6 +20,7 @@ const Menu = styled.div`
   width: 200px;
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
 `;
 function Sidebar() {
   const [activities, setActivities] = useState([]);

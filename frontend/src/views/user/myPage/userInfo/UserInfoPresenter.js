@@ -186,8 +186,8 @@ const ExpPoint = styled.div`
 const UserExpPoint = (props) => {
   return (
     <ExpPoint>
-      <p className="ep">경험치 {props.exp}</p>
-      <p className="ep">포인트 {props.point}</p>
+      <br></br>
+      <p className="ep">경험치 {props.exp} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  포인트 {props.point}</p>
     </ExpPoint>
   );
 };
