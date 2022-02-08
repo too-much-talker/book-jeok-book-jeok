@@ -26,15 +26,15 @@ function BookDetailContainer(bookInfoSeq){
                 starRating: "",
                 summary: "",
                 createdDate: ""
-        },{
-          bookReviewSeq: "",
-           bookInfoSeq: "",
-           memberSeq: "",
-           memberNickname: "",
-           starRating: "",
-           summary: "",
-           createdDate: ""
-   }]);
+              },{
+                bookReviewSeq: "",
+                bookInfoSeq: "",
+                memberSeq: "",
+                memberNickname: "",
+                starRating: "",
+                summary: "",
+                createdDate: ""
+        }]);
         const [starRating, setStarRating]= useState();
 
         const [reviewPage, setReviewPage]= useState(1);
@@ -46,7 +46,6 @@ function BookDetailContainer(bookInfoSeq){
         const [booklogOrder, setBooklogOrder]= useState("recent");
         const [booklogTotalCnt, setBooklogTotalCnt]= useState();
 
-        /////로그인한 사용자 정보 땡겨오는거부터 하자!!!!!!!
         const [MyModalOpen, setMyModalOpen] = useState(false);
         const [WriteModalOpen, setWriteModalOpen]= useState(false);
 
@@ -107,6 +106,7 @@ function BookDetailContainer(bookInfoSeq){
         }
 
         useEffect(() => {
+          console.log(reviews);
           getUserReview();
           return () => {
           };
@@ -127,8 +127,11 @@ function BookDetailContainer(bookInfoSeq){
             //책 리뷰 가져오기
             axios.get(url+`/api/v1/bookreviews/bookinfos/${useParam.seq}`)
             .then(function (response){
-              setReviews(response.data.data.myBookReviews);
-              setReviewTotalCnt(response.data.data.totalCnt);
+              if(response.data.data.msg!=="작성된 북리뷰가 하나도 없습니다"){
+                setReviews(response.data.data.myBookReviews);
+                setReviewTotalCnt(response.data.data.totalCnt);
+              }
+
               })
 
             .catch(function (error) {
@@ -220,6 +223,7 @@ function BookDetailContainer(bookInfoSeq){
 
         const indexOfLastPost = reviewPage * 5;
         const indexOfFirstPost = indexOfLastPost - 5;
+        console.log(reviews);
         const currentReviews = reviews.slice(indexOfFirstPost, indexOfLastPost);
         function paginate(pagenumber){
           setReviewPage(pagenumber);

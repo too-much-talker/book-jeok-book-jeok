@@ -192,14 +192,12 @@ const Booklog= styled.div`
 
 `;
 
-
-
 function BookDetailPresenter({
-    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,starRating,
+    reviews,reviewPage,reviewTotalCnt,reviewPageHandler,
     booklogs,booklogPage,booklogTotalCnt,booklogPageHandler,booklogOrderHandler,
     image,title, author,publisher, publicationDate,
     MyModalOpen,WriteModalOpen,handleMyModalClose,handleWriteModalClose
-    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,seq,starRating,jwtToken,bookInfoSeq,
+    ,handleMyModalOpen,handleWriteModalOpen,userReview,user,starRating,jwtToken,bookInfoSeq,
     url,goBooklog,seq,currentReviews,paginate
 }){
     return(
@@ -235,7 +233,9 @@ function BookDetailPresenter({
                     <ReviewContents> 
                         <Blank></Blank>
                         <REVIEWS>
-                        {currentReviews &&
+                        {currentReviews && currentReviews[0].starRating!==""&& 
+                         currentReviews[0].starRating!==null &&
+                         currentReviews[0].starRating!==undefined&&
                             currentReviews.length > 0 &&
                             currentReviews.map(review => (
                                 <ReviewItem
