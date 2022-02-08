@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.member.controller;
 
 import com.ssafy.bjbj.api.member.dto.request.ReqLoginMemberDto;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
@@ -32,13 +32,13 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping
-    public BaseResponseDto register(@Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
+    public BaseResponseDto register(@Valid @RequestBody ReqMemberDto reqMemberDto, Errors errors) {
         log.debug("MemberController.register");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        String password = memberDto.getPassword();
+        String password = reqMemberDto.getPassword();
 
         if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
@@ -50,30 +50,30 @@ public class MemberController {
                 // global error
                 responseData.put("msg", "global error");
             }
-        } else if (password.contains(memberDto.getEmail().split("@")[0])) {
+        } else if (password.contains(reqMemberDto.getEmail().split("@")[0])) {
             // 패스워드에 이메일이 포함된 경우
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("field", "email into password");
             responseData.put("msg", "패스워드에 이메일이 포함될 수 없습니다.");
-        } else if (password.contains(memberDto.getName())) {
+        } else if (password.contains(reqMemberDto.getName())) {
             // 패스워드에 이름이 포함된 경우
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("field", "name into password");
             responseData.put("msg", "패스워드에 이름이 포함될 수 없습니다.");
-        } else if (password.contains(memberDto.getNickname())) {
+        } else if (password.contains(reqMemberDto.getNickname())) {
             // 패스워드에 닉네임이 포함된 경우
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("field", "nickname into password");
             responseData.put("msg", "패스워드에 닉네임이 포함될 수 없습니다.");
-        } else if (memberService.hasEmail(memberDto.getEmail())) {
+        } else if (memberService.hasEmail(reqMemberDto.getEmail())) {
             // 이메일 중복
             status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 이메일입니다.");
-        } else if (memberService.hasNickname(memberDto.getNickname())) {
+        } else if (memberService.hasNickname(reqMemberDto.getNickname())) {
             // 닉네임 중복
             status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 닉네임입니다.");
-        } else if (!memberService.saveMember(memberDto)) {
+        } else if (memberService.register(reqMemberDto) == null) {
             // 회원가입 실패
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
             responseData.put("msg", "회원가입 실패");
@@ -265,13 +265,13 @@ public class MemberController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping
-    public BaseResponseDto update(Authentication authentication, @Valid @RequestBody RequestMemberDto memberDto, Errors errors) {
+    public BaseResponseDto update(Authentication authentication, @Valid @RequestBody ReqMemberDto reqMemberDto, Errors errors) {
         log.debug("회원정보 수정");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        String password = memberDto.getPassword();
+        String password = reqMemberDto.getPassword();
 
         // 사용자가 api 요청시 값을 조작했는지 확인
         CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
@@ -287,14 +287,14 @@ public class MemberController {
                 // global error
                 responseData.put("msg", "global error");
             }
-        } else if ((responseData = checkPassword(password, memberDto)).size() != 0) {
+        } else if ((responseData = checkPassword(password, reqMemberDto)).size() != 0) {
             // 비밀번호가 형식에 맞지 않는 경우
             status = HttpStatus.BAD_REQUEST.value();
-        } else if (memberService.hasNickname(memberDto.getNickname()) && memberService.findMemberByNickname(memberDto.getNickname()).getSeq() != seq) {
+        } else if (memberService.hasNickname(reqMemberDto.getNickname()) && memberService.findMemberByNickname(reqMemberDto.getNickname()).getSeq() != seq) {
             // 기존에 존재하는 닉네임이 내 닉네임이 아닐 경우 == 새로 변경한 닉네임이 이미 사용중인 경우(다른 사람의 닉네임)
             status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 닉네임입니다.");
-        } else if (!memberService.updateMember(memberDto, seq)) {
+        } else if (!memberService.updateMember(reqMemberDto, seq)) {
             // 정보 수정 실패
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
             responseData.put("msg", "정보 수정 실패");
@@ -309,18 +309,18 @@ public class MemberController {
                 .build();
     }
     
-    private Map<String, Object> checkPassword(String password, RequestMemberDto memberDto) {
+    private Map<String, Object> checkPassword(String password, ReqMemberDto reqMemberDto) {
 
         Map<String, Object> responseData = new HashMap<>();
-        if (password.contains(memberDto.getEmail().split("@")[0])) {
+        if (password.contains(reqMemberDto.getEmail().split("@")[0])) {
             // 패스워드에 이메일이 포함된 경우
             responseData.put("field", "email into password");
             responseData.put("msg", "패스워드에 이메일이 포함될 수 없습니다.");
-        } else if (password.contains(memberDto.getName())) {
+        } else if (password.contains(reqMemberDto.getName())) {
             // 패스워드에 이름이 포함된 경우
             responseData.put("field", "name into password");
             responseData.put("msg", "패스워드에 이름이 포함될 수 없습니다.");
-        } else if (password.contains(memberDto.getNickname())) {
+        } else if (password.contains(reqMemberDto.getNickname())) {
             // 패스워드에 닉네임이 포함된 경우
             responseData.put("field", "nickname into password");
             responseData.put("msg", "패스워드에 닉네임이 포함될 수 없습니다.");

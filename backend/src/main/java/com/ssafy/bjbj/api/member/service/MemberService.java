@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.member.service;
 
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 
@@ -13,7 +13,7 @@ public interface MemberService {
 
     boolean hasNickname(String nickname);
 
-    boolean saveMember(RequestMemberDto memberDto);
+    Member register(ReqMemberDto reqMemberDto);
 
     Member findMemberByEmail(String email);
 
@@ -21,7 +21,7 @@ public interface MemberService {
 
     Member findMemberByNickname(String nickname);
 
-    boolean updateMember(RequestMemberDto memberDto, Long seq);
+    boolean updateMember(ReqMemberDto reqMemberDto, Long seq);
 
     Integer getPointBySeq(Long seq);
 

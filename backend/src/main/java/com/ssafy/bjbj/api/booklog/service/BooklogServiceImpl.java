@@ -2,7 +2,7 @@ package com.ssafy.bjbj.api.booklog.service;
 
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
-import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.request.ReqBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.*;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
@@ -37,7 +37,7 @@ public class BooklogServiceImpl implements BooklogService {
 
     @Transactional
     @Override
-    public Long register(RequestBooklogDto reqBooklogDto) {
+    public Booklog register(ReqBooklogDto reqBooklogDto) {
         BookInfo bookInfo = bookInfoRepository.findBySeq(reqBooklogDto.getBookInfoSeq());
         if (bookInfo == null) {
             throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
@@ -48,7 +48,7 @@ public class BooklogServiceImpl implements BooklogService {
         LocalDateTime readDate = reqBooklogDto.getReadDate() == null ?
                 null : LocalDateTime.parse(reqBooklogDto.getReadDate() + "T00:00:00");
 
-        Booklog booklog = Booklog.builder()
+        return booklogRepository.save(Booklog.builder()
                 .title(reqBooklogDto.getTitle())
                 .content(reqBooklogDto.getContent())
                 .summary(reqBooklogDto.getSummary())
@@ -58,23 +58,19 @@ public class BooklogServiceImpl implements BooklogService {
                 .views(0)
                 .member(member)
                 .bookInfo(bookInfo)
-                .build();
-
-        Booklog savedBooklog = booklogRepository.save(booklog);
-
-        return savedBooklog.getSeq();
+                .build());
     }
 
     @Transactional
     @Override
-    public Long update(Long booklogSeq, RequestBooklogDto reqBooklogDto) {
+    public Booklog update(Long booklogSeq, ReqBooklogDto reqBooklogDto) {
         Booklog savedBooklog = booklogRepository.findBySeq(booklogSeq);
         if (!savedBooklog.getBookInfo().getSeq().equals(reqBooklogDto.getBookInfoSeq())) {
             throw new NotFoundBookInfoException("올바르지 않은 요청입니다.");
         }
 
         savedBooklog.changeBooklog(reqBooklogDto);
-        return savedBooklog.getSeq();
+        return savedBooklog;
     }
 
     @Transactional

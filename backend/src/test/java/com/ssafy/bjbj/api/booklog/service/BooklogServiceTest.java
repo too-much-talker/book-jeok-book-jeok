@@ -2,12 +2,13 @@ package com.ssafy.bjbj.api.booklog.service;
 
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
-import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.request.ReqBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.*;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,37 +43,35 @@ class BooklogServiceTest {
     @Autowired
     private BookInfoRepository bookInfoRepository;
 
-    private Member member1;
-    private Member member2;
-
-    private Booklog booklog1;
-    private Booklog booklog2;
+    @Autowired
+    private MemberRepository memberRepository;
 
     private BookInfo bookInfo1;
 
+    private ReqMemberDto reqMemberDto1, reqMemberDto2;
+
     @BeforeEach
     public void setUp() throws InterruptedException {
-        String email1 = "member1@bjbj.com";
-        memberService.saveMember(RequestMemberDto.builder()
-                .email(email1)
-                .password("password")
-                .name("name")
-                .nickname("member1")
-                .phoneNumber("010-9999-1111")
-                .build());
-        member1 = memberService.findMemberByEmail(email1);
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
 
-        String email2 = "member2@bjbj.com";
-        memberService.saveMember(RequestMemberDto.builder()
-                .email(email2)
-                .password("password")
-                .name("name")
-                .nickname("member2")
-                .phoneNumber("010-9999-2222")
-                .build());
-        member2 = memberService.findMemberByEmail(email2);
+        reqMemberDto1 = ReqMemberDto.builder()
+                .email("test1@test.com")
+                .password("password1")
+                .name("name1")
+                .nickname("nickname")
+                .phoneNumber("010-0000-0001")
+                .build();
 
-        bookInfo1 = bookInfoRepository.save(BookInfo.builder()
+        reqMemberDto2 = ReqMemberDto.builder()
+                .email("test2@test.com")
+                .password("password2")
+                .name("name2")
+                .nickname("nickname2")
+                .phoneNumber("010-0000-0002")
+                .build();
+
+        bookInfo1 = BookInfo.builder()
                 .isbn("isbn")
                 .title("제목")
                 .author("저자")
@@ -84,56 +83,19 @@ class BooklogServiceTest {
                 .categoryName("카테고리 이름")
                 .publisher("출판사")
                 .publicationDate(LocalDateTime.now())
-                .build());
-
-        Long booklogSeq1 = booklogService.register(RequestBooklogDto.builder()
-                .memberSeq(member1.getSeq())
-                .bookInfoSeq(bookInfo1.getSeq())
-                .title("북로그 제목")
-                .content("북로그 내용")
-                .summary("북로그 한줄평")
-                .starRating(4)
-                .readDate("2021-12-21")
-                .isOpen(true)
-                .build());
-        booklog1 = booklogService.findBySeq(booklogSeq1);
-        Thread.sleep(1000);
-
-        Long booklogSeq2 = booklogService.register(RequestBooklogDto.builder()
-                .memberSeq(member1.getSeq())
-                .bookInfoSeq(bookInfo1.getSeq())
-                .title("북로그 제목")
-                .content("북로그 내용")
-                .summary("북로그 한줄평")
-                .starRating(4)
-                .readDate("2021-12-21")
-                .isOpen(true)
-                .build());
-        booklog2 = booklogService.findBySeq(booklogSeq2);
+                .build();
     }
 
     @DisplayName("북로그 작성 테스트")
     @Test
     public void booklog_register_test() {
+        bookInfoRepository.save(bookInfo1);
+
         // 회원가입
-        String email = "email@bjbj.com";
-        memberService.saveMember(RequestMemberDto.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("nickname")
-                .phoneNumber("010-1234-5678")
-                .build());
-
-        Member savedMember = memberService.findMemberByEmail(email);
-
-        // 책 정보 저장
-        /*
-        책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
-         */
+        Member savedMember = memberService.register(reqMemberDto1);
 
         // 북로그 작성
-        RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
+        ReqBooklogDto reqBooklogDto = ReqBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목")
@@ -144,41 +106,30 @@ class BooklogServiceTest {
                 .isOpen(true)
                 .build();
 
-        Long savedBooklogSeq = booklogService.register(reqBooklogDto);
+        Booklog savedBooklog = booklogService.register(reqBooklogDto);
 
         // 작성된 북로그 검증
-        Booklog savedBooklog = booklogRepository.findBySeq(savedBooklogSeq);
-        assertThat(reqBooklogDto.getMemberSeq()).isEqualTo(savedBooklog.getMember().getSeq());
-        assertThat(reqBooklogDto.getBookInfoSeq()).isEqualTo(savedBooklog.getBookInfo().getSeq());
-        assertThat(reqBooklogDto.getTitle()).isEqualTo(savedBooklog.getTitle());
-        assertThat(reqBooklogDto.getContent()).isEqualTo(savedBooklog.getContent());
-        assertThat(reqBooklogDto.getSummary()).isEqualTo(savedBooklog.getSummary());
-        assertThat(reqBooklogDto.getStarRating()).isEqualTo(savedBooklog.getStarRating());
-        assertThat(reqBooklogDto.getReadDate()).isEqualTo(savedBooklog.getReadDate().toLocalDate().toString());
-        assertThat(reqBooklogDto.getIsOpen()).isEqualTo(savedBooklog.isOpen());
+        Booklog findBooklog = booklogRepository.findBySeq(savedBooklog.getSeq());
+        assertThat(reqBooklogDto.getMemberSeq()).isEqualTo(findBooklog.getMember().getSeq());
+        assertThat(reqBooklogDto.getBookInfoSeq()).isEqualTo(findBooklog.getBookInfo().getSeq());
+        assertThat(reqBooklogDto.getTitle()).isEqualTo(findBooklog.getTitle());
+        assertThat(reqBooklogDto.getContent()).isEqualTo(findBooklog.getContent());
+        assertThat(reqBooklogDto.getSummary()).isEqualTo(findBooklog.getSummary());
+        assertThat(reqBooklogDto.getStarRating()).isEqualTo(findBooklog.getStarRating());
+        assertThat(reqBooklogDto.getReadDate()).isEqualTo(findBooklog.getReadDate().toLocalDate().toString());
+        assertThat(reqBooklogDto.getIsOpen()).isEqualTo(findBooklog.isOpen());
     }
 
     @DisplayName("북로그 수정 테스트")
     @Test
     public void booklog_update_test() {
-        // 회원가입
-        String email = "email@bjbj.com";
-        memberService.saveMember(RequestMemberDto.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("nickname")
-                .phoneNumber("010-1234-5678")
-                .build());
-        Member savedMember = memberService.findMemberByEmail(email);
+        bookInfoRepository.save(bookInfo1);
 
-        // 책 정보 저장
-        /*
-        책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
-         */
+        // 회원가입
+        Member savedMember = memberService.register(reqMemberDto1);
 
         // 북로그 작성
-        RequestBooklogDto reqBooklogDto1 = RequestBooklogDto.builder()
+        ReqBooklogDto reqBooklogDto1 = ReqBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목")
@@ -188,10 +139,10 @@ class BooklogServiceTest {
                 .readDate(null)
                 .isOpen(false)
                 .build();
-        Long savedBooklogSeq1 = booklogService.register(reqBooklogDto1);
+        Booklog savedBooklog = booklogService.register(reqBooklogDto1);
 
         // 북로그 수정
-        RequestBooklogDto reqBooklogDto2 = RequestBooklogDto.builder()
+        ReqBooklogDto reqBooklogDto2 = ReqBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목2")
@@ -201,41 +152,30 @@ class BooklogServiceTest {
                 .readDate("2021-12-21")
                 .isOpen(true)
                 .build();
-        Long savedBooklogSeq2 = booklogService.update(savedBooklogSeq1, reqBooklogDto2);
+        booklogService.update(savedBooklog.getSeq(), reqBooklogDto2);
 
         // 수정된 북로그 검증
-        Booklog savedBooklog = booklogRepository.findBySeq(savedBooklogSeq2);
-        assertThat(reqBooklogDto2.getMemberSeq()).isEqualTo(savedBooklog.getMember().getSeq());
-        assertThat(reqBooklogDto2.getBookInfoSeq()).isEqualTo(savedBooklog.getBookInfo().getSeq());
-        assertThat(reqBooklogDto2.getTitle()).isEqualTo(savedBooklog.getTitle());
-        assertThat(reqBooklogDto2.getContent()).isEqualTo(savedBooklog.getContent());
-        assertThat(reqBooklogDto2.getSummary()).isEqualTo(savedBooklog.getSummary());
-        assertThat(reqBooklogDto2.getStarRating()).isEqualTo(savedBooklog.getStarRating());
-        assertThat(reqBooklogDto2.getReadDate()).isEqualTo(savedBooklog.getReadDate().toLocalDate().toString());
-        assertThat(reqBooklogDto2.getIsOpen()).isEqualTo(savedBooklog.isOpen());
+        Booklog findBooklolg = booklogRepository.findBySeq(savedBooklog.getSeq());
+        assertThat(reqBooklogDto2.getMemberSeq()).isEqualTo(findBooklolg.getMember().getSeq());
+        assertThat(reqBooklogDto2.getBookInfoSeq()).isEqualTo(findBooklolg.getBookInfo().getSeq());
+        assertThat(reqBooklogDto2.getTitle()).isEqualTo(findBooklolg.getTitle());
+        assertThat(reqBooklogDto2.getContent()).isEqualTo(findBooklolg.getContent());
+        assertThat(reqBooklogDto2.getSummary()).isEqualTo(findBooklolg.getSummary());
+        assertThat(reqBooklogDto2.getStarRating()).isEqualTo(findBooklolg.getStarRating());
+        assertThat(reqBooklogDto2.getReadDate()).isEqualTo(findBooklolg.getReadDate().toLocalDate().toString());
+        assertThat(reqBooklogDto2.getIsOpen()).isEqualTo(findBooklolg.isOpen());
     }
 
     @DisplayName("북로그 삭제 테스트")
     @Test
     public void booklog_remove_test() {
-        // 회원가입
-        String email = "email@bjbj.com";
-        memberService.saveMember(RequestMemberDto.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("nickname")
-                .phoneNumber("010-1234-5678")
-                .build());
-        Member savedMember = memberService.findMemberByEmail(email);
+        bookInfoRepository.save(bookInfo1);
 
-        // 책 정보 저장
-        /*
-        책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
-         */
+        // 회원가입
+        Member savedMember = memberService.register(reqMemberDto1);
 
         // 북로그 작성
-        RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
+        ReqBooklogDto reqBooklogDto = ReqBooklogDto.builder()
                 .memberSeq(savedMember.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목")
@@ -245,20 +185,23 @@ class BooklogServiceTest {
                 .readDate(null)
                 .isOpen(false)
                 .build();
-        Long savedBooklogSeq = booklogService.register(reqBooklogDto);
+        Booklog savedBooklog = booklogService.register(reqBooklogDto);
 
-        booklogService.remove(savedBooklogSeq, savedMember.getSeq());
+        booklogService.remove(savedBooklog.getSeq(), savedMember.getSeq());
 
         // 삭제 검증
-        Booklog deletedBooklog = booklogRepository.findBySeq(savedBooklogSeq);
+        Booklog deletedBooklog = booklogRepository.findBySeq(savedBooklog.getSeq());
         assertThat(deletedBooklog.isDeleted()).isTrue();
     }
 
     @DisplayName("북로그 공개여부 수정 테스트")
     @Test
     public void booklogIsOpenChangeTest() {
+        bookInfoRepository.save(bookInfo1);
+        Member member1 = memberService.register(reqMemberDto1);
+
         // 북로그 작성
-        RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
+        ReqBooklogDto reqBooklogDto = ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목")
@@ -268,23 +211,36 @@ class BooklogServiceTest {
                 .readDate("2021-12-21")
                 .isOpen(true)
                 .build();
-        Long savedBooklogSeq = booklogService.register(reqBooklogDto);
+        Booklog savedBooklog = booklogService.register(reqBooklogDto);
 
         // 저장된 북로그 공개여부 확인
-        Booklog savedBooklog = booklogService.findBySeq(savedBooklogSeq);
         assertThat(savedBooklog.isOpen()).isTrue();
 
         // 공개여부 수정
-        booklogService.changeIsOpen(savedBooklogSeq, member1.getSeq(), false);
+        booklogService.changeIsOpen(savedBooklog.getSeq(), member1.getSeq(), false);
 
         // 수정된 공개여부 검증
-        Booklog changedBooklog = booklogService.findBySeq(savedBooklogSeq);
+        Booklog changedBooklog = booklogService.findBySeq(savedBooklog.getSeq());
         assertThat(changedBooklog.isOpen()).isFalse();
     }
 
     @DisplayName("북로그 조회 테스트")
     @Test
     public void booklogGetTest() {
+        bookInfoRepository.save(bookInfo1);
+        Member member1 = memberService.register(reqMemberDto1);
+
+        Booklog booklog1 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .isOpen(true)
+                .content(null)
+                .title("제목1")
+                .readDate("2021-12-31")
+                .summary(null)
+                .starRating(3)
+                .build());
+
         ResBooklogDto resBooklogDto1 = booklogService.getResBooklogDtoBooklog(booklog1.getSeq(), member1.getSeq());
         assertThat(resBooklogDto1).isNotNull();
         assertThat(resBooklogDto1.getBooklogSeq()).isEqualTo(booklog1.getSeq());
@@ -308,7 +264,9 @@ class BooklogServiceTest {
     @DisplayName("최근 일주일 공개 북로그 페이지 조회 테스트")
     @Test
     public void recentOpenBooklogPageTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        Member member1 = memberService.register(reqMemberDto1);
+        Member member2 = memberService.register(reqMemberDto2);
+        bookInfoRepository.save(bookInfo1);
 
         Pageable pageableRecent = PageRequest.of(1, 2, Sort.Direction.ASC, "recent");
         Pageable pageableLike = PageRequest.of(1, 2, Sort.Direction.ASC, "like");
@@ -317,7 +275,7 @@ class BooklogServiceTest {
         assertThat(find1.getTotalPage()).isEqualTo(0);
         assertThat(find1.getOpenBooklogDtos()).isEmpty();
 
-        Long savedBooklogSeq1 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog1 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목1")
@@ -327,10 +285,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true)
                 .build());
-        Booklog savedBooklog1 = booklogService.findBySeq(savedBooklogSeq1);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq2 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog2 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목2")
@@ -340,10 +297,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true)
                 .build());
-        Booklog savedBooklog2 = booklogService.findBySeq(savedBooklogSeq2);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq3 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog3 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목3")
@@ -353,15 +309,14 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true)
                 .build());
-        Booklog savedBooklog3 = booklogService.findBySeq(savedBooklogSeq3);
         Thread.sleep(1000);
 
         // booklog1 좋아요 2개
-        likeService.like(savedBooklogSeq1, member1.getSeq());
-        likeService.like(savedBooklogSeq1, member2.getSeq());
+        likeService.like(savedBooklog1.getSeq(), member1.getSeq());
+        likeService.like(savedBooklog1.getSeq(), member2.getSeq());
 
         // booklog2 좋아요 1개
-        likeService.like(savedBooklogSeq2, member1.getSeq());
+        likeService.like(savedBooklog2.getSeq(), member1.getSeq());
 
 
         /**
@@ -373,22 +328,23 @@ class BooklogServiceTest {
         assertThat(find2.getTotalPage()).isEqualTo(2);
         assertThat(find2.getTotalCnt()).isEqualTo(3);
         assertThat(find2.getOpenBooklogDtos().size()).isEqualTo(2);
-        assertThat(find2.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq3);
-        assertThat(find2.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+        assertThat(find2.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog3.getSeq());
+        assertThat(find2.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklog2.getSeq());
 
         // 좋아요순 : 1 -> 2 -> 3
         ResOpenBooklogPageDto find3 = booklogService.getResOpenBooklogListDto(pageableLike);
         assertThat(find3.getTotalPage()).isEqualTo(2);
         assertThat(find3.getTotalCnt()).isEqualTo(3);
         assertThat(find3.getOpenBooklogDtos().size()).isEqualTo(2);
-        assertThat(find3.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq1);
-        assertThat(find3.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+        assertThat(find3.getOpenBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
+        assertThat(find3.getOpenBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklog2.getSeq());
     }
 
     @DisplayName("나의 북로그 페이지 조회 테스트")
     @Test
     public void myBooklogPageTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        Member member1 = memberService.register(reqMemberDto1);
+        bookInfoRepository.save(bookInfo1);
 
         Pageable pageable = PageRequest.of(1, 2);
         ResMyBooklogPageDto find1 = booklogService.getResMyBooklogPageDto(true, pageable, member1.getSeq());
@@ -396,7 +352,7 @@ class BooklogServiceTest {
         assertThat(find1.getTotalPage()).isEqualTo(0);
         assertThat(find1.getMyBooklogDtos()).isEmpty();
 
-        Long savedBooklogSeq1 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog1 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목1")
@@ -406,10 +362,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true)
                 .build());
-        Booklog savedBooklog1 = booklogService.findBySeq(savedBooklogSeq1);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq2 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog2 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목2")
@@ -419,10 +374,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true)
                 .build());
-        Booklog savedBooklog2 = booklogService.findBySeq(savedBooklogSeq2);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq3 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog3 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목3")
@@ -432,7 +386,6 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(false)
                 .build());
-        Booklog savedBooklog3 = booklogService.findBySeq(savedBooklogSeq3);
         Thread.sleep(1000);
         
         // 모든 북로그 조회 -> 총 3개
@@ -440,32 +393,34 @@ class BooklogServiceTest {
         assertThat(find2.getTotalPage()).isEqualTo(2);
         assertThat(find2.getTotalCnt()).isEqualTo(3);
         assertThat(find2.getMyBooklogDtos().size()).isEqualTo(2);
-        assertThat(find2.getMyBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq3);
-        assertThat(find2.getMyBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
+        assertThat(find2.getMyBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog3.getSeq());
+        assertThat(find2.getMyBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklog2.getSeq());
 
         // 공개 북로그 조회 -> 총 2개
         ResMyBooklogPageDto find3 = booklogService.getResMyBooklogPageDto(false, pageable, member1.getSeq());
         assertThat(find3.getTotalPage()).isEqualTo(1);
         assertThat(find3.getTotalCnt()).isEqualTo(2);
         assertThat(find3.getMyBooklogDtos().size()).isEqualTo(2);
-        assertThat(find3.getMyBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq2);
-        assertThat(find3.getMyBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq1);
+        assertThat(find3.getMyBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog2.getSeq());
+        assertThat(find3.getMyBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
     }
 
     @DisplayName("북로그 검색 페이지 조회 테스트")
     @Test
     public void searchBooklogPageTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        Member member1 = memberService.register(reqMemberDto1);
+        Member member2 = memberService.register(reqMemberDto2);
+        bookInfoRepository.save(bookInfo1);
 
         Pageable pageable = PageRequest.of(1, 2);
         String keyword = "북로그";
-        String writer = "member1";
+        String writer = member1.getNickname();
         ResSearchBooklogPageDto find1 = booklogService.getResSearchBooklogPageDto(pageable, keyword, writer);
         assertThat(find1.getTotalCnt()).isEqualTo(0);
         assertThat(find1.getTotalPage()).isEqualTo(0);
         assertThat(find1.getSearchBooklogDtos()).isEmpty();
 
-        Long savedBooklogSeq1ByMember1 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog1 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목1")
@@ -475,10 +430,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true) // 공개
                 .build());
-        Booklog savedBooklog1 = booklogService.findBySeq(savedBooklogSeq1ByMember1);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq2ByMember2 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog2 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member2.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("제목2")
@@ -488,10 +442,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true) // 공개
                 .build());
-        Booklog savedBooklog2 = booklogService.findBySeq(savedBooklogSeq2ByMember2);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq3ByMember1 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog3 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목3")
@@ -501,10 +454,9 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(false) // 비공개
                 .build());
-        Booklog savedBooklog3 = booklogService.findBySeq(savedBooklogSeq3ByMember1);
         Thread.sleep(1000);
 
-        Long savedBooklogSeq4ByMember2 = booklogService.register(RequestBooklogDto.builder()
+        Booklog savedBooklog4 = booklogService.register(ReqBooklogDto.builder()
                 .memberSeq(member2.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목4")
@@ -514,34 +466,59 @@ class BooklogServiceTest {
                 .readDate("2022-01-01")
                 .isOpen(true) // 공개
                 .build());
-        Booklog savedBooklog4 = booklogService.findBySeq(savedBooklogSeq4ByMember2);
 
         // keyword = "북로그" and writer = null
         ResSearchBooklogPageDto find2 = booklogService.getResSearchBooklogPageDto(pageable, keyword, null);
         assertThat(find2.getTotalPage()).isEqualTo(1);
         assertThat(find2.getTotalCnt()).isEqualTo(2);
         assertThat(find2.getSearchBooklogDtos().size()).isEqualTo(2);
-        assertThat(find2.getSearchBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq4ByMember2);
-        assertThat(find2.getSearchBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklogSeq1ByMember1);
+        assertThat(find2.getSearchBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog4.getSeq());
+        assertThat(find2.getSearchBooklogDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
 
-        // keyword = null and writer = member1
-        ResSearchBooklogPageDto find3 = booklogService.getResSearchBooklogPageDto(pageable, null, "member1");
+        // keyword = null and writer = member1.getNickname()
+        ResSearchBooklogPageDto find3 = booklogService.getResSearchBooklogPageDto(pageable, null, writer);
         assertThat(find3.getTotalPage()).isEqualTo(1);
         assertThat(find3.getTotalCnt()).isEqualTo(1);
         assertThat(find3.getSearchBooklogDtos().size()).isEqualTo(1);
-        assertThat(find3.getSearchBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq1ByMember1);
+        assertThat(find3.getSearchBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
 
-        // keyword = "북로그" and writer = member1
-        ResSearchBooklogPageDto find4 = booklogService.getResSearchBooklogPageDto(pageable, keyword, "member1");
+        // keyword = "북로그" and writer = member1.getNickname()
+        ResSearchBooklogPageDto find4 = booklogService.getResSearchBooklogPageDto(pageable, keyword, writer);
         assertThat(find4.getTotalPage()).isEqualTo(1);
         assertThat(find4.getTotalCnt()).isEqualTo(1);
         assertThat(find4.getSearchBooklogDtos().size()).isEqualTo(1);
-        assertThat(find4.getSearchBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklogSeq1ByMember1);
+        assertThat(find4.getSearchBooklogDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
     }
 
     @DisplayName("좋아요한 북로그 목록 페이지 테스트")
     @Test
-    public void likeBooklogPageTest() {
+    public void likeBooklogPageTest() throws InterruptedException {
+        Member member1 = memberService.register(reqMemberDto1);
+        bookInfoRepository.save(bookInfo1);
+
+        Booklog booklog1 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .isOpen(true)
+                .content(null)
+                .title("제목1")
+                .readDate("2021-12-31")
+                .summary(null)
+                .starRating(3)
+                .build());
+        Thread.sleep(1000);
+
+        Booklog booklog2 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .isOpen(true)
+                .content(null)
+                .title("제목1")
+                .readDate("2021-12-31")
+                .summary(null)
+                .starRating(3)
+                .build());
+
         Pageable pageable = PageRequest.of(1, 10);
 
         ResLikeBooklogPageDto find1 = booklogService.getResLikeBooklogPageDto(pageable, member1.getSeq());

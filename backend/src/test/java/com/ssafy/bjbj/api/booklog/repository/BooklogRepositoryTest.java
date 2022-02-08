@@ -2,7 +2,7 @@ package com.ssafy.bjbj.api.booklog.repository;
 
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
-import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.request.ReqBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.LikeBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.MyBooklogDto;
 import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
@@ -47,41 +47,40 @@ class BooklogRepositoryTest {
     @Autowired
     private EntityManager em;
 
-    private Member member1 = null;
-    private Member member2 = null;
+    private Member member1, member2;
 
-    private Booklog booklog1 = null;
-    private Booklog booklog2 = null;
+    private Booklog booklog1, booklog2;
 
-    private BookInfo bookInfo1 = null;
+    private BookInfo bookInfo1;
 
     @BeforeEach
-    public void setUp() throws InterruptedException {
-        String email1 = "member1@bjbj.com";
-        member1 = memberRepository.save(Member.builder()
-                .email(email1)
-                .password("password")
-                .name("name")
-                .nickname("member1")
-                .phoneNumber("010-9999-1111")
+    public void setUp() {
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
+
+        member1 = Member.builder()
+                .email("test1@test.com")
+                .password("password1")
+                .name("name1")
+                .nickname("nickname1")
+                .phoneNumber("010-0000-0001")
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
-                .build());
+                .build();
 
-        String email2 = "member2@bjbj.com";
-        member2 = memberRepository.save(Member.builder()
-                .email(email2)
-                .password("password")
-                .name("name")
-                .nickname("member2")
-                .phoneNumber("010-9999-2222")
+        member2 = Member.builder()
+                .email("test2@test.com")
+                .password("password2")
+                .name("name2")
+                .nickname("nickname")
+                .phoneNumber("010-0000-0002")
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
-                .build());
+                .build();
 
-        bookInfo1 = bookInfoRepository.save(BookInfo.builder()
+        bookInfo1 = BookInfo.builder()
                 .isbn("isbn")
                 .title("제목")
                 .author("저자")
@@ -93,10 +92,10 @@ class BooklogRepositoryTest {
                 .categoryName("카테고리 이름")
                 .publisher("출판사")
                 .publicationDate(LocalDateTime.now())
-                .build());
+                .build();
 
         // 북로그 작성
-        booklog1 = booklogRepository.save(Booklog.builder()
+        booklog1 = Booklog.builder()
                 .title("북로그 제목1")
                 .content(null)
                 .summary(null)
@@ -106,10 +105,9 @@ class BooklogRepositoryTest {
                 .views(0)
                 .member(member1)
                 .bookInfo(bookInfo1)
-                .build());
-        Thread.sleep(1000);
+                .build();
 
-        booklog2 = booklogRepository.save(Booklog.builder()
+        booklog2 = Booklog.builder()
                 .title("북로그 제목2")
                 .content(null)
                 .summary(null)
@@ -119,30 +117,15 @@ class BooklogRepositoryTest {
                 .views(0)
                 .member(member1)
                 .bookInfo(bookInfo1)
-                .build());
+                .build();
     }
 
     @DisplayName("북로그 엔티티 등록 테스트")
     @Test
     public void booklog_register_test() {
         // 회원가입
-        String email = "email@bjbj.com";
-        Member savedMember = memberRepository.save(Member.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("nickname")
-                .phoneNumber("010-1234-5678")
-                .exp(0)
-                .point(100)
-                .role(Role.MEMBER)
-                .build());
-
-        // 책 정보 저장
-        /*
-        책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
-         */
-        BookInfo savedBookInfo = bookInfoRepository.findBySeq(bookInfo1.getSeq());
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
 
         // 북로그 작성
         Booklog booklog = Booklog.builder()
@@ -153,8 +136,8 @@ class BooklogRepositoryTest {
                 .readDate(LocalDateTime.parse("2021-12-21" + "T00:00:00"))
                 .isOpen(true)
                 .views(0)
-                .member(savedMember)
-                .bookInfo(savedBookInfo)
+                .member(member1)
+                .bookInfo(bookInfo1)
                 .build();
 
         booklogRepository.save(booklog);
@@ -178,23 +161,8 @@ class BooklogRepositoryTest {
     @Test
     public void booklog_update_test() {
         // 회원가입
-        String email = "email@bjbj.com";
-        Member savedMember = memberRepository.save(Member.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("nickname")
-                .phoneNumber("010-1234-5678")
-                .exp(0)
-                .point(100)
-                .role(Role.MEMBER)
-                .build());
-
-        // 책 정보 저장
-        /*
-        책 정보의 경우 현재 등록 메서드가 없으므로 이미 db에 저장된 775번 책 정보를 사용
-         */
-        BookInfo savedBookInfo = bookInfoRepository.findBySeq(bookInfo1.getSeq());
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
 
         // 북로그 작성
         Booklog booklog = Booklog.builder()
@@ -205,8 +173,8 @@ class BooklogRepositoryTest {
                 .readDate(null)
                 .isOpen(true)
                 .views(0)
-                .member(savedMember)
-                .bookInfo(savedBookInfo)
+                .member(member1)
+                .bookInfo(bookInfo1)
                 .build();
 
         booklogRepository.save(booklog);
@@ -215,8 +183,8 @@ class BooklogRepositoryTest {
 
         // 북로그 수정
         Booklog findBooklog = booklogRepository.findBySeq(booklog.getSeq());
-        RequestBooklogDto reqBooklogDto = RequestBooklogDto.builder()
-                .memberSeq(savedMember.getSeq())
+        ReqBooklogDto reqBooklogDto = ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
                 .bookInfoSeq(bookInfo1.getSeq())
                 .title("북로그 제목2")
                 .content("북로그 내용2")
@@ -245,6 +213,12 @@ class BooklogRepositoryTest {
     @DisplayName("북로그 엔티티 공개여부 수정 테스트")
     @Test
     public void booklogEntityIsOpenChangeTest() {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+
+        booklog1.changeIsOpen(false);
+        booklogRepository.save(booklog1);
+
         // 수정
         booklog1.changeIsOpen(true);
         em.flush();
@@ -258,42 +232,22 @@ class BooklogRepositoryTest {
     @DisplayName("최근 일주일 공개 북로그 개수 조회 테스트")
     @Test
     public void recentOpenBooklogCountTest() throws InterruptedException {
-        booklogRepository.deleteAll();
-
         Integer count = booklogRepository.countByOpenBooklogAndRecentOneWeek();
         assertThat(count).isEqualTo(0);
 
-        booklogRepository.save(Booklog.builder()
-                .title("북로그 제목1")
-                .content(null)
-                .summary(null)
-                .starRating(null)
-                .readDate(null)
-                .isOpen(false)
-                .views(0)
-                .member(member1)
-                .bookInfo(bookInfo1)
-                .build());
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+
+        booklog1.changeIsOpen(false);
+        booklogRepository.save(booklog1);
         em.flush();
         em.clear();
         Thread.sleep(1000);
         count = booklogRepository.countByOpenBooklogAndRecentOneWeek();
         assertThat(count).isEqualTo(0);
 
-        em.flush();
-        em.clear();
-
-        booklogRepository.save(Booklog.builder()
-                .title("북로그 제목2")
-                .content(null)
-                .summary(null)
-                .starRating(null)
-                .readDate(null)
-                .isOpen(true)
-                .views(0)
-                .member(member1)
-                .bookInfo(bookInfo1)
-                .build());
+        booklog2.changeIsOpen(true);
+        booklogRepository.save(booklog2);
         em.flush();
         em.clear();
         Thread.sleep(1000);
@@ -304,7 +258,9 @@ class BooklogRepositoryTest {
     @DisplayName("최근 일주일 공개 북로그 목록 조회 테스트")
     @Test
     public void RecentOpenBooklogListTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        bookInfoRepository.save(bookInfo1);
 
         Pageable pageableRecent = PageRequest.of(1, 10, Sort.Direction.ASC, "recent");
         Pageable pageableLike = PageRequest.of(1, 10, Sort.Direction.ASC, "like");
@@ -385,7 +341,8 @@ class BooklogRepositoryTest {
     @DisplayName("나의 북로그 개수 조회 테스트")
     @Test
     public void myBooklogCountTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
 
         Integer count = booklogRepository.countMyBooklogByMemberSeq(true, member1.getSeq());
         assertThat(count).isEqualTo(0);
@@ -439,7 +396,8 @@ class BooklogRepositoryTest {
     @DisplayName("나의 북로그 목록 조회 테스트")
     @Test
     public void myBooklogListTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
 
         Pageable pageable = PageRequest.of(1, 10);
         List<MyBooklogDto> find1 = booklogRepository.findMyBooklogDtos(true, pageable, member1.getSeq());
@@ -504,7 +462,8 @@ class BooklogRepositoryTest {
     @DisplayName("검색된 북로그 개수 조회 테스트")
     @Test
     public void searchBooklogCountTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
 
         String keyword = "북로그";
         String writer = "member1";
@@ -556,11 +515,13 @@ class BooklogRepositoryTest {
     @DisplayName("검색된 북로그 목록 조회 테스트")
     @Test
     public void searchBooklogListTest() throws InterruptedException {
-        booklogRepository.deleteAll();
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        bookInfoRepository.save(bookInfo1);
 
         Pageable pageable = PageRequest.of(1, 10);
         String keyword = "북로그";
-        String writer = "member1";
+        String writer = member1.getNickname();
         List<SearchBooklogDto> find1 = booklogRepository.findSearchBooklog(pageable, keyword, writer);
         assertThat(find1).isEmpty();
 
@@ -624,12 +585,12 @@ class BooklogRepositoryTest {
         assertThat(find2.get(0).getBooklogSeq()).isEqualTo(savedBooklog4ByMember2.getSeq());
         assertThat(find2.get(1).getBooklogSeq()).isEqualTo(savedBooklog1ByMember1.getSeq());
 
-        // keyword = "북로그" and writer = "member1"
+        // keyword = "북로그" and writer = member1.getNickname()
         List<SearchBooklogDto> find3 = booklogRepository.findSearchBooklog(pageable, keyword, writer);
         assertThat(find3.size()).isEqualTo(1);
         assertThat(find3.get(0).getBooklogSeq()).isEqualTo(savedBooklog1ByMember1.getSeq());
 
-        // keyword = null and writer = "member1"
+        // keyword = null and writer = member1.getNickname()
         List<SearchBooklogDto> find4 = booklogRepository.findSearchBooklog(pageable, null, writer);
         assertThat(find4.size()).isEqualTo(2);
         assertThat(find4.get(0).getBooklogSeq()).isEqualTo(savedBooklog2ByMember1.getSeq());
@@ -638,24 +599,25 @@ class BooklogRepositoryTest {
 
     @DisplayName("좋아요한 북로그 목록 반환 테스트")
     @Test
-    public void likeBooklogListTest() {
+    public void likeBooklogListTest() throws InterruptedException {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+        booklogRepository.save(booklog1);
+        Thread.sleep(1000);
+        booklogRepository.save(booklog2);
+
         Pageable pageable = PageRequest.of(1, 10);
 
         // 북로그 2개 좋아요
-        Like like1 = Like.builder()
+        likeRepository.save(Like.builder()
                 .booklog(booklog1)
                 .member(member1)
-                .build();
-        likeRepository.save(like1);
-        em.flush();
-        em.clear();
-        Like like2 = Like.builder()
+                .build());
+
+        likeRepository.save(Like.builder()
                 .booklog(booklog2)
                 .member(member1)
-                .build();
-        likeRepository.save(like2);
-        em.flush();
-        em.clear();
+                .build());
 
         List<LikeBooklogDto> find1 = booklogRepository.findLikeBooklogDtos(pageable, member1.getSeq());
         assertThat(find1.size()).isEqualTo(2);

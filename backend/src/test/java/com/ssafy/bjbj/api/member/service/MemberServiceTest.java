@@ -1,8 +1,10 @@
 package com.ssafy.bjbj.api.member.service;
 
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,15 @@ public class MemberServiceTest {
     private MemberService memberService;
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    public void setUp() {
+        memberRepository.deleteAll();
+    }
 
     @DisplayName("응답용 회원 Dto 조회 서비스 메서드 테스트")
     @Test
@@ -31,13 +41,13 @@ public class MemberServiceTest {
         assertThat(responseMemberDto1).isNull();
 
         // 회원 가입
-        memberService.saveMember(RequestMemberDto.builder()
-                        .email(email)
-                        .password("test1234")
-                        .name("홍길동")
-                        .nickname("hong")
-                        .phoneNumber("010-1234-5678")
-                        .build());
+        memberService.register(ReqMemberDto.builder()
+                .email(email)
+                .password("test1234")
+                .name("홍길동")
+                .nickname("hong")
+                .phoneNumber("010-1234-5678")
+                .build());
 
         // 회원 가입 후
         ResLoginMemberDto responseMemberDto2 = memberService.findResLoginMemberDtoByEmail(email);
@@ -55,17 +65,17 @@ public class MemberServiceTest {
         String phoneNumber = "010-1234-5678";
 
         // 회원 등록
-        RequestMemberDto memberDto = RequestMemberDto.builder()
+        ReqMemberDto memberDto = ReqMemberDto.builder()
                 .email(email)
                 .password("password")
                 .name("name")
                 .nickname("nickname")
                 .phoneNumber("010-1111-1111")
                 .build();
-        memberService.saveMember(memberDto);
+        memberService.register(memberDto);
 
         // 정보를 수정할 회원 seq와 수정된 회원 정보
-        RequestMemberDto newMemberDto = RequestMemberDto.builder()
+        ReqMemberDto newMemberDto = ReqMemberDto.builder()
                 .email(email)
                 .password(password)
                 .name(name)
@@ -85,11 +95,11 @@ public class MemberServiceTest {
         assertThat(updatedMember.getPhoneNumber()).isEqualTo(phoneNumber);
     }
 
-    @DisplayName("ID로 활동량 카운트 get 테스트")
-    @Test
-    public void getAllActivityCountsTest() {
-        // 추후에 북로그, 챌린지 관련 API 개발 후에 이 메서드 테스트 로직 추가 필요
-    }
+//    @DisplayName("ID로 활동량 카운트 get 테스트")
+//    @Test
+//    public void getAllActivityCountsTest() {
+//        // 추후에 북로그, 챌린지 관련 API 개발 후에 이 메서드 테스트 로직 추가 필요
+//    }
 
 //    @Test
 //    public void subscribeMemberTests() {

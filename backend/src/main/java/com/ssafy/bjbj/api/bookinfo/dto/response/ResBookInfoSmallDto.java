@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @ToString(of = {"seq", "title", "author", "largeImgUrl", "publisher", "publicationDate", "starRating", "bookReviewCount"})
@@ -20,7 +21,7 @@ public class ResBookInfoSmallDto {
 
     private String publisher;
 
-    private LocalDateTime publicationDate;
+    private LocalDate publicationDate;
 
     private Double starRating;
 
@@ -33,8 +34,9 @@ public class ResBookInfoSmallDto {
         this.author = author;
         this.largeImgUrl = largeImgUrl;
         this.publisher = publisher;
-        this.publicationDate = publicationDate;
+        this.publicationDate = publicationDate.toLocalDate();
         this.starRating = starRating;
         this.bookReviewCount = bookReviewCount;
     }
+
 }
