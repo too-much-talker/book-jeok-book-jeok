@@ -5,8 +5,8 @@ import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.QActivityCountDto;
-import com.ssafy.bjbj.api.member.dto.response.QResponseMemberDto;
-import com.ssafy.bjbj.api.member.dto.response.ResponseMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.QResLoginMemberDto;
+import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 
 import javax.persistence.EntityManager;
 
@@ -24,15 +24,17 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public ResponseMemberDto findResponseMemberDtoByEmail(String email) {
+    public ResLoginMemberDto findResLoginMemberDtoByEmail(String email) {
         return queryFactory
-                .select(new QResponseMemberDto(
+                .select(new QResLoginMemberDto(
                         member.seq,
                         member.email,
                         member.password,
                         member.name,
                         member.nickname,
-                        member.phoneNumber))
+                        member.phoneNumber,
+                        member.point,
+                        member.exp))
                 .from(member)
                 .where(member.email.eq(email))
                 .fetchOne();
