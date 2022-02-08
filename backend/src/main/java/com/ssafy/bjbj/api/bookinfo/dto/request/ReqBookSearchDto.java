@@ -8,7 +8,7 @@ import lombok.ToString;
 @ToString(of = {"page", "limit", "searchCategory", "searchKeyword", "orderCategory"})
 @NoArgsConstructor
 @Getter
-public class ReqBookListDto {
+public class ReqBookSearchDto {
 
     private Integer page;
 
@@ -21,11 +21,12 @@ public class ReqBookListDto {
     private String orderCategory;
 
     @Builder
-    public ReqBookListDto(int page, int limit, String searchCategory, String searchKeyword, String orderCategory) {
+    public ReqBookSearchDto(int page, int limit, String searchCategory, String searchKeyword, String orderCategory) {
         this.page = page;
         this.limit = limit;
         this.searchCategory = searchCategory;
         this.searchKeyword = searchKeyword;
         this.orderCategory = orderCategory;
     }
+
 }
