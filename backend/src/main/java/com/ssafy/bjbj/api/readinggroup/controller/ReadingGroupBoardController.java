@@ -1,17 +1,19 @@
 package com.ssafy.bjbj.api.readinggroup.controller;
 
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
-import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupArticleDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardPageDto;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupBoardService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.service.file.FileInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +24,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/readinggroupboards")
+@RequestMapping("/api/v1/reading-groups/boards")
 @RestController
 public class ReadingGroupBoardController {
 
@@ -69,22 +71,64 @@ public class ReadingGroupBoardController {
     }
 
     @GetMapping("/{readingGroupBoardSeq}")
-    public BaseResponseDto getDetail(@PathVariable Long readingGroupBoardSeq) {
+    public BaseResponseDto getDetail(@PathVariable Long readingGroupBoardSeq, Authentication authentication) {
+        log.debug("ReadingGroupBoardController.getDetail() 독서모임 게시글 상세조회 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        ResReadingGroupBoardDto resReadingGroupBoardDto = readingGroupBoardService.findReadingGroupBoardBySeq(readingGroupBoardSeq);
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
 
-        if (resReadingGroupBoardDto == null) {
-            status = HttpStatus.BAD_REQUEST.value();
-            responseData.put("msg", "요청한 독서모임 게시글이 없습니다.");
-        } else {
+        try {
+            ResReadingGroupArticleDto resReadingGroupArticleDto = readingGroupBoardService.findReadingGroupArticleBySeq(readingGroupBoardSeq, memberSeq);
+
+            List<String> fileInfoPaths = fileInfoService.findAllFileInfoByReadingGroupBoardSeq(readingGroupBoardSeq);
+
             status = HttpStatus.OK.value();
             responseData.put("msg", "독서모임 게시글을 불러왔습니다.");
-            responseData.put("readingGroupBoard", resReadingGroupBoardDto);
-            List<String> fileInfoPaths = fileInfoService.findAllFileInfoByReadingGroupBoardSeq(readingGroupBoardSeq);
+            responseData.put("readingGroupArticle", resReadingGroupArticleDto);
             responseData.put("imagePaths", fileInfoPaths);
+        } catch (NotFoundReadingGroupArticleException e) {
+            log.error("독서모임 게시글 조회 실패");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", "올바르지 않은 요청입니다.");
+        } catch (Exception e) {
+            log.error("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/list/{readingGroupSeq}")
+    public BaseResponseDto getList(Pageable pageable, @PathVariable Long readingGroupSeq) {
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResReadingGroupBoardPageDto resReadingGroupBoardPageDto = readingGroupBoardService.getResReadingGroupBoardListDto(readingGroupSeq, pageable);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서 모임 게시판 목록 조회 성공");
+            responseData.put("totalCnt", resReadingGroupBoardPageDto.getTotalCnt());
+            responseData.put("currentPage", resReadingGroupBoardPageDto.getCurrentPage());
+            responseData.put("totalPage", resReadingGroupBoardPageDto.getTotalPage());
+            responseData.put("readingGroupBoards", resReadingGroupBoardPageDto.getResReadingGroupArticleDtos());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
 
         return BaseResponseDto.builder()
