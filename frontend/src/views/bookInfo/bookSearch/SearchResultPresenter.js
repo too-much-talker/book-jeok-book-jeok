@@ -4,15 +4,15 @@ import BookItem from "./BookItem";
 import Pagination from "react-js-pagination";
 import './Paging.css';
 const ResultBlock = styled.div`
-position:absolute;
+position:relative;
 display:flex;
 left:50%;
-top:30%;
 transform: translate(-50%, -50%);
 background:white;
-width:1200px;
+width:100%;
 height:50px;
 border-bottom: 2px solid black;
+// margin-top:3%;
 `;
 const ResultText = styled.div`
 position:relative;
@@ -30,7 +30,7 @@ margin-right:10px;
 `
 const SelectBox = styled.select`
 position :relative;
-left:70%;
+left:65%;
 top:15%;
 width: 82px;
 height: 35px;
@@ -46,16 +46,12 @@ position:relative;
 display: flex;
 align-items: flex-start;
 flex-wrap: wrap;
-// text-align:center;
-margin-top:150px;
-margin-left:-80px;
 // background:red;
-width:1200px;
+width:100%;
 `;
 
 const Book = styled.div`
-width:280px;
-margin:10px;
+width:25%;
 `;
 
 function SearchResultPresenter ({goDetail,page, handlePageChange,url,totalCnt,orderHandler,useParam,books }){

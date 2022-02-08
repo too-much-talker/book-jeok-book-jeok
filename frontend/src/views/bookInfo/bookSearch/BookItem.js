@@ -2,16 +2,19 @@ import styled from "styled-components"
 import axios from "axios";
 import { useEffect, useState } from "react";
 const Block= styled.div`
-width:280px;
+position:relative;
+width:100%;
 margin-bottom:50px;
 `;
 const Image=styled.div`
 `;
 const Content = styled.div``;
 const Contents= styled.div`
-width:220px;
+position:relative;
+width:180px;
 margin:auto;
 text-align:left;
+
 `;
 
 function BookItem({url,bookInfoSeq,title, author,largeImgUrl,publisher,publicationDate,starRating}){
@@ -20,7 +23,7 @@ function BookItem({url,bookInfoSeq,title, author,largeImgUrl,publisher,publicati
         <>
             <Block>
                 <Image>
-                <img src={largeImgUrl} height="300" width="220"></img>
+                <img src={largeImgUrl} height="250" width="180"></img>
                 </Image>
                 <Contents>
                 <Content>제목:{title}</Content>

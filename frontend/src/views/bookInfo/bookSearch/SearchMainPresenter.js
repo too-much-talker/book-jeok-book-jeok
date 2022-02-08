@@ -4,28 +4,22 @@ import { Link } from "react-router-dom";
 import BookItem from "./BookItem";
 import SearchNavContainer from "./SearchNavContainer";
 
-const BookResultBlock= styled.div`
-width:100vw;
-height:100vh;
-background:yellow;
-`;
 
 const ResultBlock = styled.div`
-position:absolute;
+position:relative;
 left:50%;
-top:30%;
 transform: translate(-50%, -50%);
 background:white;
-width:1250px;
+width:100%;
 height:60px;
 border-top: 2px solid black;
-margin-top:20px;
+margin-top:3%;
 `;
 
 const ResultText = styled.div`
 position:absolute;
-margin-left:20px;
-margin-top:20px;
+margin-left:3%;
+margin-top:1%;
 font-size:30px;
 `;
 
@@ -34,16 +28,12 @@ position:relative;
 display: flex;
 align-items: flex-start;
 flex-wrap: wrap;
-// text-align:center;
-margin-top:150px;
-margin-left:-80px;
 // background:red;
-width:1200px;
+width:100%;
 `;
 
 const Book = styled.div`
-width:280px;
-margin:10px;
+width:25%;
 `;
 function SearchMainPresenter ({goDetail,bestSellers}){
         return( 
