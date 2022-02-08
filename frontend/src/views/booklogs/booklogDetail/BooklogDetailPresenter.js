@@ -95,7 +95,7 @@ function DetailForm({
           ) : (
             <div>
               <button onClick={editButtonHandler}>수정</button>
-              {/* <button onClick={onDeleteArticle}>삭제</button> */}
+              <button onClick={onDeleteArticle}>삭제</button>
             </div>
           )}
         </UtilButton>

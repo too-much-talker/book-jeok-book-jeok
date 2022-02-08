@@ -10,11 +10,17 @@ import {
 } from "../../validCheck/ValidCheck";
 
 const Form2 = styled.div`
+  margin-left: 15rem;
   text-align: left;
 `;
 
 const Form1 = styled.div`
-  margin-left: 35rem;
+  margin-left: 15rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  border-radius: 3rem;
+  border: 1px solid #cccccc;
+  width: 550px;
 `;
 const EditUserForm = (props) => {
   // useEffect(() => {
@@ -88,7 +94,7 @@ const EditUserForm = (props) => {
         <label>비밀번호</label>
         <input
           type="password"
-          value={props.password}
+          // value={props.password}
           name="password"
           onChange={props.passwordChange}
           onBlur={passwordBlurHandler}
@@ -96,7 +102,7 @@ const EditUserForm = (props) => {
         <label>비밀번호확인</label>
         <input
           type="password"
-          value={props.passwordConfirm}
+          // value={props.passwordConfirm}
           name="password"
           onChange={props.passwordConfirmChange}
           onBlur={passwordConfirmBlurHandler}
@@ -129,6 +135,8 @@ const EditUserForm = (props) => {
         onBlur={phoneBlurHandler}
       /> */}
         {/* <input className="u-full-width" type="text" value={user.phoneNumber} name="phoneNumber" onChange={handleChange} onBlur={props.checkPhoneNumber}/> */}
+        <br></br>
+        <br></br>
         <div>
           <button
             className={buttonStyle}
@@ -162,6 +170,8 @@ const UserTable = (props) => {
         <p>{nickname}</p>
         {/* <label>핸드폰번호</label>
         <p>010-5023-9161</p> */}
+        <br></br>
+        <br></br>
         <button onClick={props.editUser}>수정하기</button>
         <button>탈퇴하기</button>
       </Form2>

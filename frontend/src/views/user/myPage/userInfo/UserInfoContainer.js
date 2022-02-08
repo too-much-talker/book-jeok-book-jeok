@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import userList from "./asset/data";
 import { UserTable, EditUserForm } from "./UserInfoPresenter";
-import profile from "./asset/ProfilePicture.png";
 import styled from "styled-components";
 import axios from "axios";
 import { setUserInfo } from "../../../../common/reducers/modules/auth";
@@ -159,9 +158,8 @@ function UserInfoContainer() {
     <div className="container">
       <div className="title">
         <h2>나의 정보수정</h2>
-        <hr></hr>
-        <Profile src={profile}></Profile>
-        <br></br>
+        {/* <hr></hr>
+        <Profile src={profile}></Profile> */}
         <br></br>
         <br></br>
       </div>
