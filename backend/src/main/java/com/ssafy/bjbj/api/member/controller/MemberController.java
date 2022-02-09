@@ -308,6 +308,36 @@ public class MemberController {
                 .data(responseData)
                 .build();
     }
+
+    @GetMapping("/phone/{phoneNumber}/exist")
+    public BaseResponseDto isExistPhoneNumber(@PathVariable String phoneNumber) {
+        log.debug("MemberController.isExistPhoneNumber() 핸드폰 번호 중복 확인 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        String regx = "^[0-9]{3}-[0-9]{3,4}-[0-9]{3,4}$";
+        Pattern pattern = Pattern.compile(regx);
+
+        if (pattern.matcher(phoneNumber).matches()) {
+            if (memberService.hasPhoneNumber(phoneNumber)) {
+                status = HttpStatus.OK.value();
+                responseData.put("msg", "이미 존재하는 핸드폰 번호입니다.");
+            } else {
+                status = HttpStatus.NO_CONTENT.value();
+                responseData.put("msg", "사용하실 수 있는 핸드폰 번호입니다.");
+            }
+        } else {
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", "올바르지 않은 요청입니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
     
     private Map<String, Object> checkPassword(String password, ReqMemberDto reqMemberDto) {
 
@@ -328,4 +358,5 @@ public class MemberController {
 
         return responseData;
     }
+
 }
