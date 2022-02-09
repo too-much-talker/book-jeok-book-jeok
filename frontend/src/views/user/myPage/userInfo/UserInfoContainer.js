@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { UserTable, EditUserForm } from "./UserInfoPresenter";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { setUserInfo } from "../../../../common/reducers/modules/auth";
 import {
   checkId,
@@ -57,6 +58,9 @@ function UserInfoContainer() {
   const phoneChangeHandler = (event) => {
     setEnteredPhone(event.target.value);
   };
+
+  const navigate = useNavigate();
+
   const logOut = () => {
     dispatch(setUserInfo({
       memberInfo: {
@@ -70,10 +74,10 @@ function UserInfoContainer() {
     }));
     sessionStorage.removeItem("jwtToken");
     alert("다시 로그인 해주세요.")
-    window.location.replace("/login");
+    navigate("/login");
   };
   const deleteUser = (id) => {
-    window.location.replace("/");
+    navigate("/");
     // setUsers(users.filter((user) => user.id !== id));
   };
 
