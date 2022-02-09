@@ -27,4 +27,6 @@ public interface BooklogService {
 
     ResLikeBooklogPageDto getResLikeBooklogPageDto(Pageable pageable, Long memberSeq);
 
+    ResOpenBooklogPageByBookInfoDto getResOpenBooklogPageByBookInfoDto(Long bookInfoSeq, Pageable pageable);
+
 }

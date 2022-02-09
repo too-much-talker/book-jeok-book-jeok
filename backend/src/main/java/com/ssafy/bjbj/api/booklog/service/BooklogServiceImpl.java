@@ -198,4 +198,18 @@ public class BooklogServiceImpl implements BooklogService {
                 .build();
     }
 
+    @Override
+    public ResOpenBooklogPageByBookInfoDto getResOpenBooklogPageByBookInfoDto(Long bookInfoSeq, Pageable pageable) {
+        Integer totalCnt = booklogRepository.countOpenBooklogByBookInfoSeq(bookInfoSeq);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<OpenBooklogByBookInfoDto> openBooklogByBookInfoDtos = booklogRepository.findOpenBooklogByBookInfoDtos(bookInfoSeq, pageable);
+
+        return ResOpenBooklogPageByBookInfoDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .openBooklogByBookInfoDtos(openBooklogByBookInfoDtos)
+                .build();
+    }
+
 }

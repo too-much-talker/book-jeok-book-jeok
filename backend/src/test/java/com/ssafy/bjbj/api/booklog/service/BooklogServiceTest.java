@@ -544,4 +544,48 @@ class BooklogServiceTest {
         assertThat(find3.getLikeBooklogDtos().get(0).getBooklogSeq()).isEqualTo(booklog2.getSeq());
     }
 
+    @DisplayName("책으로 북로그 목록 페이지 조회 테스트")
+    @Test
+    public void getOpenBooklogPageByBookInfoTest() throws InterruptedException {
+        Member member1 = memberService.register(reqMemberDto1);
+        bookInfoRepository.save(bookInfo1);
+
+        Pageable pageable = PageRequest.of(1, 2);
+        ResOpenBooklogPageByBookInfoDto find1 = booklogService.getResOpenBooklogPageByBookInfoDto(bookInfo1.getSeq(), pageable);
+        assertThat(find1.getTotalCnt()).isEqualTo(0);
+        assertThat(find1.getTotalPage()).isEqualTo(0);
+        assertThat(find1.getOpenBooklogByBookInfoDtos()).isEmpty();
+
+        Booklog savedBooklog1 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .title("북로그 제목1")
+                .content(null)
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true) // 공개
+                .build());
+        Thread.sleep(1000);
+
+        Booklog savedBooklog2 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .title("제목2")
+                .content("본문2")
+                .summary(null)
+                .starRating(1)
+                .readDate("2022-01-01")
+                .isOpen(true) // 공개
+                .build());
+
+        // keyword = "북로그" and writer = null
+        ResOpenBooklogPageByBookInfoDto find2 = booklogService.getResOpenBooklogPageByBookInfoDto(bookInfo1.getSeq(), pageable);
+        assertThat(find2.getTotalPage()).isEqualTo(1);
+        assertThat(find2.getTotalCnt()).isEqualTo(2);
+        assertThat(find2.getOpenBooklogByBookInfoDtos().size()).isEqualTo(2);
+        assertThat(find2.getOpenBooklogByBookInfoDtos().get(0).getBooklogSeq()).isEqualTo(savedBooklog2.getSeq());
+        assertThat(find2.getOpenBooklogByBookInfoDtos().get(1).getBooklogSeq()).isEqualTo(savedBooklog1.getSeq());
+    }
+
 }
