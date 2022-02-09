@@ -73,14 +73,24 @@ public class MemberController {
             // 닉네임 중복
             status = HttpStatus.CONFLICT.value();
             responseData.put("msg", "이미 존재하는 닉네임입니다.");
-        } else if (memberService.register(reqMemberDto) == null) {
-            // 회원가입 실패
-            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            responseData.put("msg", "회원가입 실패");
+        } else if (memberService.hasPhoneNumber(reqMemberDto.getPhoneNumber())) {
+            // 핸드폰 번호 중복
+            status = HttpStatus.CONFLICT.value();
+            responseData.put("msg", "이미 존재하는 핸드폰 번호입니다.");
         } else {
-            // 회원가입 성공
-            status = HttpStatus.CREATED.value();
-            responseData.put("msg", "회원가입 성공");
+            try {
+                memberService.register(reqMemberDto);
+
+                // 회원가입 성공
+                status = HttpStatus.CREATED.value();
+                responseData.put("msg", "회원가입 성공");
+            } catch (Exception e) {
+                log.error("회원가입 실패");
+
+                // 회원가입 실패
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "회원가입 실패");
+            }
         }
 
         return BaseResponseDto.builder()
