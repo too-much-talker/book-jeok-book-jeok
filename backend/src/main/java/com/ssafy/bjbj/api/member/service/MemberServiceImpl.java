@@ -145,5 +145,10 @@ public class MemberServiceImpl implements MemberService {
 
         return false;
     }
-    
+
+    @Override
+    public boolean hasPhoneNumber(String phoneNumber) {
+        return memberRepository.existsByPhoneNumber(phoneNumber);
+    }
+
 }
