@@ -21,7 +21,7 @@ import MyPage from "./views/user/myPage/index";
 import UserInfoContainer from "./views/user/myPage/userInfo/UserInfoContainer";
 import styled from "styled-components";
 import Header from "./views/main/header/Header";
-import "./common/css/index.css";
+import "./common/css/font.css";
 import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRegisterContainer";
 import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetailContainer";
 import ReadingGroup from "./views/readingGroup/index";
@@ -42,6 +42,7 @@ const Body = styled.body`
   width: 100vw;
   height: 100%;
   // margin: 0 auto;
+  font-family: "Gown";
 `;
 
 // box 2개를 감싸는 Wrapper를 하나 더 만듦.
