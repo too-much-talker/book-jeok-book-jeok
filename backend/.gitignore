@@ -1,5 +1,7 @@
 *.yml
 
+images/
+
 HELP.md
 .gradle
 build/

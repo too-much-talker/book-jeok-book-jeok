@@ -4,11 +4,12 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @ToString(of = {"seq", "isbn", "title", "author", "description", "price", "smallImgUrl", "largeImgUrl", "categoryId", "categoryName", "publisher", "publicationDate", "starRating"})
 @Getter
-public class ResponseBookInfoDto {
+public class ResBookInfoDto {
 
     private Long seq;
 
@@ -32,12 +33,12 @@ public class ResponseBookInfoDto {
 
     private String publisher;
 
-    private LocalDateTime publicationDate;
+    private LocalDate publicationDate;
 
     private Double starRating;
 
     @QueryProjection
-    public ResponseBookInfoDto(Long seq, String isbn, String title, String author, String description, Integer price, String smallImgUrl, String largeImgUrl, Integer categoryId, String categoryName, String publisher, LocalDateTime publicationDate, Double starRating) {
+    public ResBookInfoDto(Long seq, String isbn, String title, String author, String description, Integer price, String smallImgUrl, String largeImgUrl, Integer categoryId, String categoryName, String publisher, LocalDateTime publicationDate, Double starRating) {
         this.seq = seq;
         this.isbn = isbn;
         this.title = title;
@@ -49,7 +50,8 @@ public class ResponseBookInfoDto {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.publisher = publisher;
-        this.publicationDate = publicationDate;
+        this.publicationDate = publicationDate.toLocalDate();
         this.starRating = starRating;
     }
+
 }

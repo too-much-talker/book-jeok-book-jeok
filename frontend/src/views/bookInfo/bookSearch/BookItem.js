@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import React from "react";
 
 const Block = styled.div`
-  width: 280px;
+  position: relative;
+  width: 100%;
   margin-bottom: 50px;
 `;
+
 const Image = styled.div``;
 const Content = styled.div``;
+
 const Contents = styled.div`
-  width: 220px;
+  position: relative;
+  width: 180px;
   margin: auto;
   text-align: left;
 `;
@@ -29,7 +33,7 @@ function BookItem({
     <>
       <Block>
         <Image>
-          <img src={largeImgUrl} height="300" width="220"></img>
+          <img src={largeImgUrl} height="250" width="180"></img>
         </Image>
         <Contents>
           <Content>제목:{title}</Content>

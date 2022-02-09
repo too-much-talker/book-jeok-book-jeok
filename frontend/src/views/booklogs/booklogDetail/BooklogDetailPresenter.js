@@ -27,6 +27,10 @@ const Table = styled.div`
   align: center;
 `;
 
+const ToggleWrapper = styled.div`
+  padding-left: 20rem;
+`;
+
 function DetailForm({
   isEditing,
   isOpen,
@@ -75,14 +79,14 @@ function DetailForm({
         <UtilButton>
           <Circle>
             {!isEditing ? (
-              <div>
+              <ToggleWrapper>
                 <Desc> {isOpen ? "공개" : "비공개"} </Desc>
                 <IsOpenCircle
                   style={
                     isOpen ? { background: "blue" } : { background: "red" }
                   }
                 ></IsOpenCircle>
-              </div>
+              </ToggleWrapper>
             ) : (
               <Toggle toggle={toggleHandler} modify={true} isOpen={isOpen} />
             )}
@@ -95,7 +99,7 @@ function DetailForm({
           ) : (
             <div>
               <button onClick={editButtonHandler}>수정</button>
-              {/* <button onClick={onDeleteArticle}>삭제</button> */}
+              <button onClick={onDeleteArticle}>삭제</button>
             </div>
           )}
         </UtilButton>

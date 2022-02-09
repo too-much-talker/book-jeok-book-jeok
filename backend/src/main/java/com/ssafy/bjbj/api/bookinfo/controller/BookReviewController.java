@@ -1,12 +1,15 @@
 package com.ssafy.bjbj.api.bookinfo.controller;
 
-import com.ssafy.bjbj.api.bookinfo.dto.RequestBookReviewDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookReviewDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResModifiedBookReviewDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByBookInfoDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookReviewByMemberDto;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookReviewException;
 import com.ssafy.bjbj.api.bookinfo.service.BookReviewService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,19 +33,13 @@ public class BookReviewController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
-    public BaseResponseDto register(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, Authentication authentication) {
+    public BaseResponseDto register(@Valid @RequestBody ReqBookReviewDto reqBookReviewDto, Errors errors, Authentication authentication) {
+        log.debug("BookReviewController.register() 책 리뷰 작성 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
-        boolean isAuthenticatedMember = details.getMember().getSeq().equals(requestBookReviewDto.getMemberSeq());
-
-        if (!isAuthenticatedMember) {
-            // 작성한 멤버의 정보가 요청한 멤버의 정보가 일치하지 않은 경우
-            status = HttpStatus.UNAUTHORIZED.value();
-            responseData.put("msg", "인증되지 않은 회원입니다");
-        } else if (errors.hasErrors()) {
+        if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
             if (errors.hasFieldErrors()) {
                 // field error
@@ -54,45 +51,23 @@ public class BookReviewController {
             }
         } else {
             // 북리뷰를 작성
-            ResponseBookReviewByMemberDto responseBookReviewDto = bookReviewService.registerBookReview(requestBookReviewDto);
+            Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+            try {
+                ResBookReviewByMemberDto resBookReviewByMemberDto = bookReviewService.registerBookReview(reqBookReviewDto, memberSeq);
 
-            status = HttpStatus.CREATED.value();
-            responseData.put("msg", "새로운 리뷰를 작성했습니다.");
-            responseData.put("reviewInfo", responseBookReviewDto);
-        }
+                status = HttpStatus.CREATED.value();
+                responseData.put("msg", "새로운 리뷰를 작성했습니다.");
+                responseData.put("reviewInfo", resBookReviewByMemberDto);
+            } catch (NotFoundBookInfoException e) {
+                log.error("책 정보를 찾지 못했습니다.");
 
-        return BaseResponseDto.builder()
-                .status(status)
-                .data(responseData)
-                .build();
-    }
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (Exception e) {
+                log.error("서버 에러 발생");
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
-    @GetMapping("/members/{memberSeq}")
-    public BaseResponseDto getMyBookReviews(@PathVariable Long memberSeq, Authentication authentication) {
-
-        Integer status = null;
-        Map<String, Object> responseData = new HashMap<>();
-
-        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
-        boolean isAuthenticatedMember = details.getMember().getSeq().equals(memberSeq);
-
-        if (!isAuthenticatedMember) {
-            status = HttpStatus.UNAUTHORIZED.value();
-            responseData.put("msg", "인증되지 않은 회원입니다");
-        } else {
-            List<ResponseBookReviewByMemberDto> reviewsByMemberSeq = bookReviewService.findAllBookReviewsByMemberSeq(memberSeq);
-
-            if (reviewsByMemberSeq.size() == 0) {
-                // 북리뷰가 하나도 없을경우
-                status = HttpStatus.NO_CONTENT.value();
-                responseData.put("msg", "작성한 북리뷰가 하나도 없습니다");
-            } else {
-            // 북리뷰 조회 성공
-            status = HttpStatus.OK.value();
-            responseData.put("msg", "작성한 리뷰들이 있습니다");
-            responseData.put("myBookReviews",reviewsByMemberSeq);
-            responseData.put("totalCnt", bookReviewService.countBookReviewsByMemberSeq(memberSeq));
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "요청을 수행할 수 없습니다.");
             }
         }
 
@@ -102,15 +77,45 @@ public class BookReviewController {
                 .build();
     }
 
-    @GetMapping("/bookinfos/{bookInfoSeq}")
-    public BaseResponseDto getBookInfoBookReviews(@PathVariable Long bookInfoSeq) {
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("/me")
+    public BaseResponseDto getMyBookReviews(Authentication authentication) {
+        log.debug("BookReviewController.getMyBookReviews 나의 책 리뷰 목록 조회 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        List<ResponseBookReviewByBookInfoDto> reviewsByBookInfoSeq = bookReviewService.findAllBookReviewsByBookInfoSeq(bookInfoSeq);
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        List<ResBookReviewByMemberDto> resBookReviewByMemberDtos = bookReviewService.findAllBookReviewsByMemberSeq(memberSeq);
 
-        if (reviewsByBookInfoSeq.size() == 0) {
+        if (resBookReviewByMemberDtos.size() == 0) {
+            // 북리뷰가 하나도 없을경우
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "작성한 북리뷰가 하나도 없습니다");
+        } else {
+            // 북리뷰 조회 성공
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "작성한 리뷰들이 있습니다");
+            responseData.put("myBookReviews", resBookReviewByMemberDtos);
+            responseData.put("totalCnt", bookReviewService.countBookReviewsByMemberSeq(memberSeq));
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/bookinfos/{bookInfoSeq}")
+    public BaseResponseDto getBookReviewByBookInfo(@PathVariable Long bookInfoSeq) {
+        log.debug("BookReviewController.getBookReviewByBookInfo() 책 정보로 책 리뷰 목록 조회 API 호출");
+        
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        List<ResBookReviewByBookInfoDto> resBookReviewByBookInfoDtos = bookReviewService.findAllBookReviewsByBookInfoSeq(bookInfoSeq);
+
+        if (resBookReviewByBookInfoDtos.size() == 0) {
             // 북리뷰가 하나도 없을경우
             status = HttpStatus.NO_CONTENT.value();
             responseData.put("msg", "작성된 북리뷰가 하나도 없습니다");
@@ -118,7 +123,7 @@ public class BookReviewController {
             // 북리뷰 조회 성공
             status = HttpStatus.OK.value();
             responseData.put("msg", "작성된 리뷰들이 있습니다");
-            responseData.put("myBookReviews",reviewsByBookInfoSeq);
+            responseData.put("myBookReviews", resBookReviewByBookInfoDtos);
             responseData.put("totalCnt", bookReviewService.countBookReviewsByBookInfoSeq(bookInfoSeq));
         }
 
@@ -130,18 +135,13 @@ public class BookReviewController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping("/{bookReviewSeq}")
-    public BaseResponseDto update(@Valid @RequestBody RequestBookReviewDto requestBookReviewDto, Errors errors, @PathVariable Long bookReviewSeq, Authentication authentication) {
+    public BaseResponseDto update(@Valid @RequestBody ReqBookReviewDto reqBookReviewDto, Errors errors, @PathVariable Long bookReviewSeq, Authentication authentication) {
+        log.debug("BookReviewController.update() 책 리뷰 수정 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        CustomUserDetails details = (CustomUserDetails) authentication.getDetails();
-        boolean isAuthenticatedMember = details.getMember().getSeq().equals(requestBookReviewDto.getMemberSeq());
-
-        if (!isAuthenticatedMember) {
-            status = HttpStatus.UNAUTHORIZED.value();
-            responseData.put("msg", "인증되지 않은 회원입니다");
-        } else if (errors.hasErrors()) {
+        if (errors.hasErrors()) {
             status = HttpStatus.BAD_REQUEST.value();
             if (errors.hasFieldErrors()) {
                 // field error
@@ -152,15 +152,28 @@ public class BookReviewController {
                 responseData.put("msg", "global error");
             }
         } else {
-            ResModifiedBookReviewDto modifiedBookReviewDto = bookReviewService.updateBookReview(requestBookReviewDto);
+            Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+            try {
+                ResModifiedBookReviewDto modifiedBookReviewDto = bookReviewService.updateBookReview(reqBookReviewDto, memberSeq, bookReviewSeq);
 
-            if (modifiedBookReviewDto == null) {
-                status = HttpStatus.BAD_REQUEST.value();
-                responseData.put("msg", "요청한 북리뷰가 없습니다");
-            } else {
                 status = HttpStatus.OK.value();
-                responseData.put("msg", "수정되었습니다");
+                responseData.put("msg", "리뷰를 수정하였습니다");
                 responseData.put("modifiedBookReview", modifiedBookReviewDto);
+            } catch (NotEqualMemberException e) {
+                log.error("책 리뷰 작성자가 다릅니다.");
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (NotFoundBookReviewException e) {
+                log.error("책 리뷰를 찾지 못했습니다.");
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (Exception e) {
+                log.error("서버 에러 발생");
+
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "요청을 수행할 수 없습니다.");
             }
         }
 
@@ -172,19 +185,33 @@ public class BookReviewController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{bookReviewSeq}")
-    public BaseResponseDto delete(@PathVariable Long bookReviewSeq) {
+    public BaseResponseDto delete(@PathVariable Long bookReviewSeq, Authentication authentication) {
+        log.debug("BookReviewController.delete() 책 리뷰 삭제 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        if (!bookReviewService.deleteBookReview(bookReviewSeq)){
-            // 삭제할 북리뷰가 없는경우
-            status = HttpStatus.NOT_FOUND.value();
-            responseData.put("msg", "삭제 가능한 북리뷰가 없습니다.");
-        } else {
-            // 북리뷰 삭제 성공
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            bookReviewService.deleteBookReview(bookReviewSeq, memberSeq);
+
             status = HttpStatus.OK.value();
             responseData.put("msg", "리뷰를 삭제했습니다.");
+        } catch (NotFoundBookReviewException e) {
+            log.error("책 리뷰를 찾지 못했습니다.");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (NotEqualMemberException e) {
+            log.error("책 리뷰 작성자가 다릅니다.");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
 
         return BaseResponseDto.builder()
@@ -192,5 +219,6 @@ public class BookReviewController {
                 .data(responseData)
                 .build();
     }
+
 }
 

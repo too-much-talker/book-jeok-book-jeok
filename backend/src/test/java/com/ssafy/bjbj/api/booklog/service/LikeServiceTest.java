@@ -1,12 +1,14 @@
 package com.ssafy.bjbj.api.booklog.service;
 
-import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
+import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
+import com.ssafy.bjbj.api.booklog.dto.request.ReqBooklogDto;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.entity.Like;
 import com.ssafy.bjbj.api.booklog.exception.DuplicateLikeException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundLikeException;
 import com.ssafy.bjbj.api.booklog.repository.LikeRepository;
-import com.ssafy.bjbj.api.member.dto.request.RequestMemberDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -34,38 +38,55 @@ class LikeServiceTest {
     @Autowired
     private LikeRepository likeRepository;
 
-    private Member member1;
+    @Autowired
+    private BookInfoRepository bookInfoRepository;
 
-    private Booklog booklog1;
+    private BookInfo bookInfo1;
+
+    private ReqMemberDto reqMemberDto1;
 
     @BeforeEach
     public void setUp() {
-        String email = "setupEmail@bjbj.com";
-        memberService.saveMember(RequestMemberDto.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("setupNickanme")
-                .phoneNumber("010-0000-0000")
-                .build());
-        member1 = memberService.findMemberByEmail(email);
+        reqMemberDto1 = ReqMemberDto.builder()
+                .email("test1@test.com")
+                .password("password1")
+                .name("name1")
+                .nickname("nickname1")
+                .phoneNumber("010-0000-0001")
+                .build();
 
-        Long booklogId = booklogService.register(RequestBooklogDto.builder()
-                .memberSeq(member1.getSeq())
-                .bookInfoSeq(1L)
-                .title("title")
-                .content("content")
-                .summary("summary")
-                .starRating(4)
-                .readDate("2021-12-21")
-                .isOpen(true)
-                .build());
-        booklog1 = booklogService.findBySeq(booklogId);
+        bookInfo1 = BookInfo.builder()
+                .isbn("isbn")
+                .title("제목")
+                .author("저자")
+                .description("설명")
+                .price(10000)
+                .smallImgUrl("smallImgUrl")
+                .largeImgUrl("largeImgUrl")
+                .categoryId(100)
+                .categoryName("카테고리 이름")
+                .publisher("출판사")
+                .publicationDate(LocalDateTime.now())
+                .build();
     }
 
     @DisplayName("북로그 좋아요 테스트")
     @Test
     public void likeTest() {
+        Member member1 = memberService.register(reqMemberDto1);
+        bookInfoRepository.save(bookInfo1);
+
+        Booklog booklog1 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .isOpen(true)
+                .content(null)
+                .title("제목1")
+                .readDate("2021-12-31")
+                .summary(null)
+                .starRating(3)
+                .build());
+
         Like findLike = likeRepository.findByBooklogSeqAndMemberSeq(booklog1.getSeq(), member1.getSeq());
         assertThat(findLike).isNull();
 
@@ -83,6 +104,20 @@ class LikeServiceTest {
     @DisplayName("북로그 좋아요 취소 테스트")
     @Test
     public void unLikeTest() {
+        Member member1 = memberService.register(reqMemberDto1);
+        bookInfoRepository.save(bookInfo1);
+
+        Booklog booklog1 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .isOpen(true)
+                .content(null)
+                .title("제목1")
+                .readDate("2021-12-31")
+                .summary(null)
+                .starRating(3)
+                .build());
+
         likeService.like(booklog1.getSeq(), member1.getSeq());
         Like savedLike = likeRepository.findByBooklogSeqAndMemberSeq(booklog1.getSeq(), member1.getSeq());
         assertThat(savedLike).isNotNull();
@@ -100,7 +135,19 @@ class LikeServiceTest {
     @DisplayName("북로그 좋아요 조회 테스트")
     @Test
     public void isLikeTest() {
-        likeRepository.deleteAll();
+        Member member1 = memberService.register(reqMemberDto1);
+        bookInfoRepository.save(bookInfo1);
+
+        Booklog booklog1 = booklogService.register(ReqBooklogDto.builder()
+                .memberSeq(member1.getSeq())
+                .bookInfoSeq(bookInfo1.getSeq())
+                .isOpen(true)
+                .content(null)
+                .title("제목1")
+                .readDate("2021-12-31")
+                .summary(null)
+                .starRating(3)
+                .build());
 
         boolean isLike1 = likeService.isLike(booklog1.getSeq(), member1.getSeq());
         assertThat(isLike1).isFalse();

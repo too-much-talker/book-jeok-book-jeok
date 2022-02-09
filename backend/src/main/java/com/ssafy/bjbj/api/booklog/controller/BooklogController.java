@@ -1,6 +1,6 @@
 package com.ssafy.bjbj.api.booklog.controller;
 
-import com.ssafy.bjbj.api.booklog.dto.request.RequestBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.request.ReqBooklogDto;
 import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.dto.response.*;
 import com.ssafy.bjbj.api.booklog.exception.DuplicateLikeException;
@@ -14,7 +14,6 @@ import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -37,14 +36,14 @@ public class BooklogController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
-    public BaseResponseDto register(@Valid @RequestBody RequestBooklogDto requestBooklogDto, Errors errors, Authentication authentication) {
+    public BaseResponseDto register(@Valid @RequestBody ReqBooklogDto reqBooklogDto, Errors errors, Authentication authentication) {
         log.debug("BooklogController.register() 북로그 작성 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
         Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
-        if (!memberSeq.equals(requestBooklogDto.getMemberSeq())) {
+        if (!memberSeq.equals(reqBooklogDto.getMemberSeq())) {
             // 다른 계정의 seq를 보냈을 때
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("msg", "올바르지 않은 요청입니다.");
@@ -60,7 +59,7 @@ public class BooklogController {
             }
         } else {
             try {
-                booklogService.register(requestBooklogDto);
+                booklogService.register(reqBooklogDto);
 
                 status = HttpStatus.CREATED.value();
                 responseData.put("msg", "북로그를 작성하였습니다.");
@@ -87,14 +86,14 @@ public class BooklogController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping("/{booklogSeq}")
-    public BaseResponseDto update(@PathVariable Long booklogSeq, @Valid @RequestBody RequestBooklogDto requestBooklogDto, Errors errors, Authentication authentication) {
+    public BaseResponseDto update(@PathVariable Long booklogSeq, @Valid @RequestBody ReqBooklogDto reqBooklogDto, Errors errors, Authentication authentication) {
         log.debug("BooklogController.modify() 북로그 수정 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
         Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
-        if (!memberSeq.equals(requestBooklogDto.getMemberSeq())) {
+        if (!memberSeq.equals(reqBooklogDto.getMemberSeq())) {
             // 다른 계정의 seq를 보냈을 때
             status = HttpStatus.BAD_REQUEST.value();
             responseData.put("msg", "올바르지 않은 요청입니다.");
@@ -110,7 +109,7 @@ public class BooklogController {
             }
         } else {
             try {
-                booklogService.update(booklogSeq, requestBooklogDto);
+                booklogService.update(booklogSeq, reqBooklogDto);
 
                 status = HttpStatus.OK.value();
                 responseData.put("msg", "북로그를 수정하였습니다.");
@@ -479,6 +478,37 @@ public class BooklogController {
         } catch (Exception e) {
             // Server error : Database Connection Fail, etc..
             log.debug("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping("/bookinfos/{bookInfoSeq}")
+    public BaseResponseDto listByBookInfo(@PathVariable Long bookInfoSeq, Pageable pageable) {
+        log.debug("BooklogController.listByBookInfo() 책으로 북로그 목록 조회 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResOpenBooklogPageByBookInfoDto resOpenBooklogPageByBookInfoDto = booklogService.getResOpenBooklogPageByBookInfoDto(bookInfoSeq, pageable);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "책으로 북로그 목록 조회 성공");
+            responseData.put("totalCnt", resOpenBooklogPageByBookInfoDto.getTotalCnt());
+            responseData.put("currentPage", resOpenBooklogPageByBookInfoDto.getCurrentPage());
+            responseData.put("totalPage", resOpenBooklogPageByBookInfoDto.getTotalPage());
+            responseData.put("booklogs", resOpenBooklogPageByBookInfoDto.getOpenBooklogByBookInfoDtos());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.error("[Error] Exception error");
             e.printStackTrace();
 
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();

@@ -1,14 +1,15 @@
 package com.ssafy.bjbj.api.bookinfo.repository;
 
-import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookListDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookSearchDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoSmallDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoDto;
 
 import java.util.List;
 
 public interface BookInfoRepositoryCustom {
 
-    ResponseBookInfoDto findResponseBookInfoDtoBySeq(Long seq);
+    ResBookInfoDto findResBookInfoDtoBySeq(Long seq);
 
-    List<ResBookInfoSmallDto> findListByRequest(ReqBookListDto reqBookInfoDto);
+    List<ResBookInfoSmallDto> findListByRequest(ReqBookSearchDto reqBookInfoDto);
+
 }

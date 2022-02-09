@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 @ToString(of = { "memberSeq", "bookInfoSeq", "title", "content", "summary", "starRating", "readDate", "isOpen"})
 @NoArgsConstructor
 @Getter
-public class RequestBooklogDto {
+public class ReqBooklogDto {
 
     @NotNull(message = "회원 식별키가 없습니다.")
     private Long memberSeq;
@@ -38,7 +38,7 @@ public class RequestBooklogDto {
     private Boolean isOpen;
 
     @Builder
-    public RequestBooklogDto(Long memberSeq, Long bookInfoSeq, String title, String content, String summary, Integer starRating, String readDate, Boolean isOpen) {
+    public ReqBooklogDto(Long memberSeq, Long bookInfoSeq, String title, String content, String summary, Integer starRating, String readDate, Boolean isOpen) {
         this.memberSeq = memberSeq;
         this.bookInfoSeq = bookInfoSeq;
         this.title = title;

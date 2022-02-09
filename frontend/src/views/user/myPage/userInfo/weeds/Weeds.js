@@ -5,8 +5,8 @@ import React from "react";
 
 const StyledWeeds = styled.div`
   margin: 3rem;
-  width: 8rem;
-  height: 12rem;
+  width: 16rem;
+  height: 24rem;
 `;
 
 const Weeds = (props) => {

@@ -1,8 +1,9 @@
 package com.ssafy.bjbj.api.bookinfo.controller;
 
-import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookListDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookSearchDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookListDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.bookinfo.service.BookInfoService;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -29,21 +30,28 @@ public class BookInfoController {
 
     private final BookInfoService bookInfoService;
 
-    @GetMapping("/{seq}")
-    public BaseResponseDto bookInfoDetail(@PathVariable Long seq) {
-        log.debug("책 상세 페이지 조회");
+    @GetMapping("/{bookInfoSeq}")
+    public BaseResponseDto getDetail(@PathVariable Long bookInfoSeq) {
+        log.debug("BookInfoController.getDetail() 책 정보 조회 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        ResponseBookInfoDto responseBookInfoDto = bookInfoService.findResponseBookInfoDtoBySeq(seq);
+        try {
+            ResBookInfoDto resBookInfoDto = bookInfoService.findResBookInfoDtoBySeq(bookInfoSeq);
 
-        if (responseBookInfoDto == null) {
-            status = HttpStatus.NO_CONTENT.value();
-            responseData.put("msg", "존재하지 않는 책입니다.");
-        } else {
             status = HttpStatus.OK.value();
-            responseData.put("bookInfo", responseBookInfoDto);
+            responseData.put("bookInfo", resBookInfoDto);
+        } catch (NotFoundBookInfoException e) {
+            log.error("책 정보를 찾지 못했습니다.");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
 
         return BaseResponseDto.builder()
@@ -53,8 +61,8 @@ public class BookInfoController {
     }
 
     @PostMapping
-    public BaseResponseDto list(@Valid @RequestBody ReqBookListDto requestBookInfoDto, Errors errors) {
-        log.debug("책 목록 조회");
+    public BaseResponseDto search(@Valid @RequestBody ReqBookSearchDto reqBookSearchDto, Errors errors) {
+        log.debug("BookInfoController.search() 책 정보 검색 API 호출");
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -70,13 +78,13 @@ public class BookInfoController {
                 responseData.put("msg", "global error");
             }
         } else {
-            ResBookListDto resBookListDto = bookInfoService.findResponseBookListDtosByRequest(requestBookInfoDto);
+            ResBookListDto resBookListDto = bookInfoService.findResBookSearchDto(reqBookSearchDto);
 
             if (resBookListDto == null) {
                 status = HttpStatus.NO_CONTENT.value();
-                responseData.put("msg", "잘못된 요청입니다.");
+                responseData.put("msg", "검색된 책이 없습니다.");
             } else {
-                status =  HttpStatus.OK.value();
+                status = HttpStatus.OK.value();
                 responseData.put("totalCnt", resBookListDto.getTotalCnt());
                 responseData.put("currentPage", resBookListDto.getCurrentPage());
                 responseData.put("totalPage", resBookListDto.getTotalPage());
@@ -89,4 +97,5 @@ public class BookInfoController {
                 .data(responseData)
                 .build();
     }
+    
 }

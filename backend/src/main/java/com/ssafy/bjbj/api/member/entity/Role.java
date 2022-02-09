@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.member.entity;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
+
     MEMBER(ROLES.MEMBER, "멤버권한"),
     ADMIN(ROLES.ADMIN, "관리자권한");
 

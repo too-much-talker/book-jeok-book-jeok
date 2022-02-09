@@ -1,9 +1,8 @@
 package com.ssafy.bjbj.api.bookinfo.repository;
 
-import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookListDto;
+import com.ssafy.bjbj.api.bookinfo.dto.request.ReqBookSearchDto;
 import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoSmallDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookListDto;
-import com.ssafy.bjbj.api.bookinfo.dto.response.ResponseBookInfoDto;
+import com.ssafy.bjbj.api.bookinfo.dto.response.ResBookInfoDto;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.entity.BookReview;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -17,9 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -39,42 +39,38 @@ public class BookInfoRepositoryTest {
     @Autowired
     private EntityManager em;
 
-    private BookInfo bookInfo1;
+    private BookInfo bookInfo1, bookInfo2;
 
-    private BookInfo bookInfo2;
+    private Member member1, member2;
 
-    private Member member1;
-    private Member member2;
-
-    private BookReview bookReview1;
-    private BookReview bookReview2;
+    private BookReview bookReview1, bookReview2;
 
     @BeforeEach
     public void setUp() {
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
 
         member1 = Member.builder()
-                .email("bjbj@bjbj.com")
-                .password("test1234")
-                .name("홍길동")
-                .nickname("nickname")
-                .phoneNumber("010-1234-5789")
+                .email("test1@test.com")
+                .password("password1")
+                .name("name1")
+                .nickname("nickname1")
+                .phoneNumber("010-0000-0001")
                 .role(Role.MEMBER)
                 .exp(0)
                 .point(100)
                 .build();
 
         member2 = Member.builder()
-                .email("bjbj123@bjbj.com")
-                .password("test1234")
-                .name("홍길동")
-                .nickname("hhhhhh")
-                .phoneNumber("010-9876-5789")
+                .email("test2@test.com")
+                .password("password2")
+                .name("name2")
+                .nickname("nickname2")
+                .phoneNumber("010-0000-0002")
                 .role(Role.MEMBER)
                 .exp(0)
                 .point(100)
                 .build();
-
-        String date = "2022-12-20T12:30:00";
 
         String isbn = "isbn";
         String title = "title";
@@ -86,7 +82,8 @@ public class BookInfoRepositoryTest {
         Integer categoryId = 101;
         String categoryName = "categoryName";
         String publisher = "publisher";
-        LocalDateTime publicationDate = LocalDateTime.parse(date);
+        LocalDate date = LocalDate.now();
+        LocalDateTime publicationDate = LocalDateTime.of(date, LocalTime.now());
 
         bookInfo1 = BookInfo.builder()
                 .isbn(isbn)
@@ -113,16 +110,14 @@ public class BookInfoRepositoryTest {
                 .categoryId(categoryId)
                 .categoryName(categoryName + "2")
                 .publisher(publisher + "2")
-                .publicationDate(LocalDateTime.parse("2023-02-20T12:30:00"))
+                .publicationDate(LocalDateTime.of(date.plusDays(1), LocalTime.now()))
                 .build();
-
     }
 
     @DisplayName("응답용 책 정보 Dto를 seq로 조회하는 repository 테스트")
     @Test
     public void findBookInfoBySeq() {
-
-        em.persist(bookInfo1);
+        bookInfoRepository.save(bookInfo1);
         memberRepository.save(member1);
         bookReview1 = BookReview.builder()
                 .bookInfo(bookInfoRepository.findBySeq(bookInfo1.getSeq()))
@@ -146,7 +141,7 @@ public class BookInfoRepositoryTest {
         em.flush();
         em.clear();
 
-        ResponseBookInfoDto savedBookInfo = bookInfoRepository.findResponseBookInfoDtoBySeq(bookInfo1.getSeq());
+        ResBookInfoDto savedBookInfo = bookInfoRepository.findResBookInfoDtoBySeq(bookInfo1.getSeq());
 
         assertThat(bookInfo1.getSeq()).isEqualTo(savedBookInfo.getSeq());
         assertThat(bookInfo1.getIsbn()).isEqualTo(savedBookInfo.getIsbn());
@@ -159,15 +154,13 @@ public class BookInfoRepositoryTest {
         assertThat(bookInfo1.getCategoryId()).isEqualTo(savedBookInfo.getCategoryId());
         assertThat(bookInfo1.getCategoryName()).isEqualTo(savedBookInfo.getCategoryName());
         assertThat(bookInfo1.getPublisher()).isEqualTo(savedBookInfo.getPublisher());
-        assertThat(bookInfo1.getPublicationDate()).isEqualTo(savedBookInfo.getPublicationDate());
-        assertThat(savedBookInfo.getStarRating()).isEqualTo((4.0 + 5.0) / 2);
+        assertThat(bookInfo1.getPublicationDate().toLocalDate()).isEqualTo(savedBookInfo.getPublicationDate());
+        assertThat(savedBookInfo.getStarRating()).isEqualTo((bookReview1.getStarRating() + bookReview2.getStarRating()) / 2.0);
     }
 
     @DisplayName("책 정보 Dto List를 request에 맞게 조회하는 repository 테스트")
     @Test
     public void findListByRequest() throws InterruptedException {
-        bookReviewRepository.deleteAll();
-
         bookInfoRepository.save(bookInfo1);
         bookInfoRepository.save(bookInfo2);
         memberRepository.save(member1);
@@ -182,11 +175,10 @@ public class BookInfoRepositoryTest {
         em.flush();
         em.clear();
 
-        List<ResBookInfoSmallDto> resBookListDto1 = bookInfoRepository.findListByRequest(new ReqBookListDto(1, 10, "title", "2", "latest"));
+        List<ResBookInfoSmallDto> resBookListDto1 = bookInfoRepository.findListByRequest(new ReqBookSearchDto(1, 10, "title", "2", "latest"));
         assertThat(resBookListDto1.get(0).getSeq()).isEqualTo(bookInfo2.getSeq());
 
-        List<ResBookInfoSmallDto> resBookListDto2 = bookInfoRepository.findListByRequest(new ReqBookListDto(1, 10, "title", "", "star"));
+        List<ResBookInfoSmallDto> resBookListDto2 = bookInfoRepository.findListByRequest(new ReqBookSearchDto(1, 10, "title", "", "star"));
         assertThat(resBookListDto2.get(0).getSeq()).isEqualTo(bookInfo1.getSeq());
-
     }
 }

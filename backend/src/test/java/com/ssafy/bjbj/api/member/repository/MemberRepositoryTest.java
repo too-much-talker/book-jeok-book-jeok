@@ -6,6 +6,7 @@ import com.ssafy.bjbj.api.member.entity.Activity;
 import com.ssafy.bjbj.api.member.entity.ActivityType;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,15 @@ class MemberRepositoryTest {
     private MemberRepository memberRepository;
 
     @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
     private EntityManager em;
+
+    @BeforeEach
+    public void setUp() {
+        memberRepository.deleteAll();
+    }
 
     @DisplayName("이메일 중복 확인 테스트")
     @Test
@@ -159,7 +168,7 @@ class MemberRepositoryTest {
                 .point(point)
                 .build();
 
-        em.persist(member);
+        memberRepository.save(member);
         em.flush();
         em.clear();
 
@@ -186,7 +195,7 @@ class MemberRepositoryTest {
                 .point(100)
                 .build();
 
-        em.persist(member);
+        memberRepository.save(member);
         em.flush();
         em.clear();
 
@@ -211,13 +220,13 @@ class MemberRepositoryTest {
                 .exp(0)
                 .point(100)
                 .build();
-        em.persist(member);
+        memberRepository.save(member);
 
         // long -> Long 자동 형변환
         for (long seq = 105L; seq > 100L; seq--) {
             // "2022-01-01 ~ 2022-01-05 날짜별 활동 1개
             LocalDateTime parseDateTime = LocalDateTime.parse("2022-01-0" + String.valueOf(seq - 100L) + "T12:30:00");
-            em.persist(Activity.builder()
+            activityRepository.save(Activity.builder()
                     .seq(seq)
                     .activityType(ActivityType.BOOKLOG_CREATE)
                     .time(parseDateTime)
@@ -227,7 +236,7 @@ class MemberRepositoryTest {
 
         // 2021-12-20 3개 활동
         for (long seq = 100L; seq >= 98L; seq--) {
-            em.persist(Activity.builder()
+            activityRepository.save(Activity.builder()
                     .seq(seq)
                     .activityType(ActivityType.CHALLENGE_AUTH)
                     .time(LocalDateTime.parse("2021-12-20T09:00:00"))

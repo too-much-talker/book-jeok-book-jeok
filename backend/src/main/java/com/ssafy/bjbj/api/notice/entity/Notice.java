@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @Getter
@@ -42,8 +43,8 @@ public class Notice extends BaseLastModifiedEntity {
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @JoinColumn(name = "notice_seq")
-    @OneToMany
+//    @JoinColumn(name = "notice_seq")
+    @OneToMany(mappedBy = "notice", cascade = ALL)
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
 }

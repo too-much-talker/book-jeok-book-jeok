@@ -1,7 +1,7 @@
 .grass:empty{
   display: inline-block;
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 3px;
   margin: 1px;
   font-size: small;

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -65,13 +66,13 @@ public class Challenge extends BaseLastModifiedEntity {
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @JoinColumn(name = "challenge_seq")
-    @OneToMany
+//    @JoinColumn(name = "challenge_seq")
+    @OneToMany(mappedBy = "challenge", cascade = ALL)
     private List<ChallengeAuth> challengeAuths = new ArrayList<>();
 
     // 챌린지에 참여한 사람들
-    @JoinColumn(name = "challenge_seq")
-    @OneToMany
+//    @JoinColumn(name = "challenge_seq")
+    @OneToMany(mappedBy = "challenge", cascade = ALL)
     private List<ChallengeMember> challengeMembers = new ArrayList<>();
 
 }

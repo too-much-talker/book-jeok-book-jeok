@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@ToString(of = {"originFileName", "encodedFileName", "savedPath", "isDeleted"})
+@ToString(of = {"rootSeq", "originFileName", "encodedFileName", "savedPath", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_file_info")
 @Entity
@@ -45,5 +45,9 @@ public class FileInfo extends BaseLastModifiedEntity {
 
     public void setRootSeq(Long rootSeq) {
         this.rootSeq = rootSeq;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

@@ -182,4 +182,35 @@ public class BooklogRepositoryImpl implements BooklogRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public Integer countOpenBooklogByBookInfoSeq(Long bookInfoSeq) {
+        return queryFactory
+                .select(booklog.count().intValue())
+                .from(booklog)
+                .where(booklog.bookInfo.seq.eq(bookInfoSeq)
+                        .and(booklog.isOpen.isTrue())
+                        .and(booklog.isDeleted.isFalse()))
+                .fetchOne();
+    }
+
+    @Override
+    public List<OpenBooklogByBookInfoDto> findOpenBooklogByBookInfoDtos(Long bookInfoSeq, Pageable pageable) {
+        return queryFactory
+                .select(new QOpenBooklogByBookInfoDto(
+                        booklog.seq,
+                        booklog.title,
+                        booklog.content,
+                        booklog.createdDate,
+                        booklog.isOpen,
+                        booklog.bookInfo.largeImgUrl
+                ))
+                .from(booklog)
+                .join(booklog.bookInfo, bookInfo)
+                .where(booklog.isOpen.isTrue().and(booklog.isDeleted.isFalse()))
+                .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .orderBy(booklog.createdDate.desc())
+                .fetch();
+    }
+
 }
