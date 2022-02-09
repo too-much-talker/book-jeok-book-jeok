@@ -178,17 +178,29 @@ const UserTable = (props) => {
     </Form1>
   );
 };
-const ExpPoint = styled.div`
-  .ep{
-    font-size: .3rem;
-  }
-`;
+
 const UserExpPoint = (props) => {
+  const ExpPoint = styled.div`
+    font-size: 0.5rem;
+  `;
+  const Point = styled.div`
+    display: inline-block;
+    margin-left: 70px;
+  `;
+  const Exp = styled.div`
+    display: inline-block;
+  `;
   return (
-    <ExpPoint>
-      <br></br>
-      <p className="ep">경험치 {props.exp} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  포인트 {props.point}</p>
-    </ExpPoint>
+      <ExpPoint>
+        <br></br>
+        <br></br>
+        <Exp>
+          <a>경험치 {props.exp}</a>
+        </Exp>
+        <Point>
+          <a>포인트 {props.point}</a>
+        </Point>
+      </ExpPoint>
   );
 };
 
