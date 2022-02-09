@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import heart from "../../../res/img/heart_black.png";
+import React from "react";
 
 const Card = styled.div`
   width: 30rem;
