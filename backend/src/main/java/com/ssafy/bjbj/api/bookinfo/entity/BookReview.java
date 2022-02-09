@@ -55,4 +55,5 @@ public class BookReview extends BaseLastModifiedEntity {
         this.summary = summary;
         this.isDeleted = isDeleted;
     }
+
 }

@@ -16,6 +16,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Getter
 @ToString(of = {"seq", "email", "password", "name", "nickname", "exp", "point", "role", "isDeleted"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -63,64 +65,64 @@ public class Member extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<Booklog> booklogs = new ArrayList<>();
     
     // 내가 쓴 책 리뷰들
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<BookReview> bookReviews = new ArrayList<>();
     
     // 내가 like한 북로그들
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<Like> likes = new ArrayList<>();
 
     // 나를 구독한 사람들
-    @OneToMany(mappedBy = "toMember")
+    @OneToMany(mappedBy = "toMember", cascade = ALL)
     private List<Subscribe> fromMembers = new ArrayList<>();
 
     // 내가 구독한 사람들
-    @OneToMany(mappedBy = "fromMember")
+    @OneToMany(mappedBy = "fromMember", cascade = ALL)
     private List<Subscribe> toMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<Activity> activities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<Notice> notices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
     // 내가 개설한 독서모임들
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ReadingGroup> readingGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ReadingGroupBoard> readingGroupBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ReadingGroupBoardComment> readingGroupBoardComments = new ArrayList<>();
 
     // 내가 들어간 독서모임들
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ReadingGroupMember> joinedReadingGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ExpHistory> expHistories = new ArrayList<>();
 
     // challenge part
     // 내가 개설한 챌린지들
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<Challenge> challenges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ChallengeAuth> challengeAuths = new ArrayList<>();
 
     // 내가 참여한 챌린지들
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<ChallengeMember> joinedChallenges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = ALL)
     private List<PointHistory> pointHistories = new ArrayList<>();
 
     public void changeMember(String password, String name, String nickname, String phoneNumber) {

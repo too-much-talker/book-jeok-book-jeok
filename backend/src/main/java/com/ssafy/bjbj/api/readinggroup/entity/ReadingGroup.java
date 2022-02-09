@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -63,17 +64,17 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     @ManyToOne(fetch = LAZY)
     private Member member;
 
-    @JoinColumn(name = "reading_group_seq")
-    @OneToMany
+//    @JoinColumn(name = "reading_group_seq")
+    @OneToMany(mappedBy = "readingGroup", cascade = ALL)
     private List<ReadingGroupBoard> readingGroupBoards = new ArrayList<>();
 
-    @JoinColumn(name = "reading_group_seq")
-    @OneToMany
+//    @JoinColumn(name = "reading_group_seq")
+    @OneToMany(mappedBy = "readingGroup", cascade = ALL)
     private List<ReadingGroupDate> readingGroupDates = new ArrayList<>();
 
     // 독서모임에 속한 멤버들
-    @JoinColumn(name = "reading_group_seq")
-    @OneToMany
+//    @JoinColumn(name = "reading_group_seq")
+    @OneToMany(mappedBy = "readingGroup", cascade = ALL)
     private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
 
     @Builder

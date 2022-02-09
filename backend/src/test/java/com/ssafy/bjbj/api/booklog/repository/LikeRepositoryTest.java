@@ -43,24 +43,25 @@ public class LikeRepositoryTest {
 
     private BookInfo bookInfo1;
 
-    private Booklog booklog1;
-    private Booklog booklog2;
+    private Booklog booklog1, booklog2;
 
     @BeforeEach
     public void setUp() {
-        String email = "setupEmail@bjbj.com";
-        member1 = memberRepository.save(Member.builder()
-                .email(email)
-                .password("password")
-                .name("name")
-                .nickname("setUpNickname")
-                .phoneNumber("010-0000-0000")
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
+
+        member1 = Member.builder()
+                .email("test1@test.com")
+                .password("password1")
+                .name("name1")
+                .nickname("nickname1")
+                .phoneNumber("010-0000-0001")
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
-                .build());
+                .build();
 
-        bookInfo1 = bookInfoRepository.save(BookInfo.builder()
+        bookInfo1 = BookInfo.builder()
                 .isbn("isbn")
                 .title("제목")
                 .author("저자")
@@ -72,9 +73,9 @@ public class LikeRepositoryTest {
                 .categoryName("카테고리 이름")
                 .publisher("출판사")
                 .publicationDate(LocalDateTime.now())
-                .build());
+                .build();
 
-        booklog1 = booklogRepository.save(Booklog.builder()
+        booklog1 = Booklog.builder()
                 .title("제목1")
                 .content("내용1")
                 .summary("한줄평1")
@@ -84,9 +85,9 @@ public class LikeRepositoryTest {
                 .views(0)
                 .member(member1)
                 .bookInfo(bookInfo1)
-                .build());
+                .build();
 
-        booklog2 = booklogRepository.save(Booklog.builder()
+        booklog2 = Booklog.builder()
                 .title("제목2")
                 .content("내용2")
                 .summary("한줄평2")
@@ -96,12 +97,16 @@ public class LikeRepositoryTest {
                 .views(0)
                 .member(member1)
                 .bookInfo(bookInfo1)
-                .build());
+                .build();
     }
 
     @DisplayName("Like 엔티티 조회 테스트")
     @Test
     public void likeEntityFindTest() {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+        booklogRepository.save(booklog1);
+
         Like findLike = likeRepository.findByBooklogSeqAndMemberSeq(booklog1.getSeq(), member1.getSeq());
         assertThat(findLike).isNull();
 
@@ -123,6 +128,11 @@ public class LikeRepositoryTest {
     @DisplayName("내가 좋아요한 북로그 개수 테스트")
     @Test
     public void likeBooklogCountTest() {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+        booklogRepository.save(booklog1);
+        booklogRepository.save(booklog2);
+
         // 북로그 2개 좋아요
         Like like1 = Like.builder()
                 .booklog(booklog1)

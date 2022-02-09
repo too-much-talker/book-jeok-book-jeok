@@ -38,4 +38,5 @@ public class ResReadingGroupArticleDto {
         this.createDate = createDate.toLocalDate();
         this.views = views;
     }
+
 }

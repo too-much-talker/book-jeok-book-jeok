@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.readinggroup.repository;
 
+import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.bookinfo.repository.BookReviewRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
@@ -38,7 +39,7 @@ public class ReadingGroupBoardRepositoryTests {
     private ReadingGroupBoardRepository readingGroupBoardRepository;
 
     @Autowired
-    private BookReviewRepository bookReviewRepository;
+    private BookInfoRepository bookInfoRepository;
 
     @Autowired
     private EntityManager em;
@@ -48,20 +49,10 @@ public class ReadingGroupBoardRepositoryTests {
 
     @BeforeEach
     public void setUp() throws InterruptedException {
-//        readingGroupBoardRepository.deleteAll();
-//        em.flush();
-//        em.clear();
-//        readingGroupRepository.deleteAll();
-//        em.flush();
-//        em.clear();
-//        bookReviewRepository.deleteAll();
-//        em.flush();
-//        em.clear();
-//        memberRepository.deleteAll();
-//        em.flush();
-//        em.clear();
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
 
-        member1 = memberRepository.save(Member.builder()
+        member1 = Member.builder()
                 .email("member1@bjbj.com")
                 .password("password")
                 .name("name")
@@ -70,9 +61,9 @@ public class ReadingGroupBoardRepositoryTests {
                 .exp(0)
                 .point(100)
                 .role(Role.MEMBER)
-                .build());
+                .build();
 
-        readingGroup1 = readingGroupRepository.save(ReadingGroup.builder()
+        readingGroup1 = ReadingGroup.builder()
                 .title("title")
                 .content("test")
                 .views(0)
@@ -85,12 +76,14 @@ public class ReadingGroupBoardRepositoryTests {
                 .readingGroupType(ReadingGroupType.CASUAL)
                 .isDeleted(false)
                 .member(member1)
-                .build());
+                .build();
     }
 
     @DisplayName("독서모임 게시판 조회 테스트")
     @Test
     public void getReadingGroupBoardListTest() {
+        memberRepository.save(member1);
+        readingGroupRepository.save(readingGroup1);
 
         Pageable pageable = PageRequest.of(1, 10);
         List<ResReadingGroupArticleDto> readingGroupBoardDtos1 = readingGroupBoardRepository.findReadingGroupDtos(readingGroup1.getSeq(), pageable);
@@ -128,7 +121,6 @@ public class ReadingGroupBoardRepositoryTests {
         assertThat(readingGroupBoardDtos.get(0).getReadingGroupBoardSeq()).isEqualTo(readingGroupBoard3.getSeq());
         assertThat(readingGroupBoardDtos.get(1).getReadingGroupBoardSeq()).isEqualTo(readingGroupBoard2.getSeq());
         assertThat(readingGroupBoardDtos.get(2).getReadingGroupBoardSeq()).isEqualTo(readingGroupBoard1.getSeq());
-
     }
 
 }
