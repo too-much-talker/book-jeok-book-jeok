@@ -3,10 +3,7 @@ package com.ssafy.bjbj.api.booklog.repository;
 import com.ssafy.bjbj.api.bookinfo.entity.BookInfo;
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.booklog.dto.request.ReqBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.LikeBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.MyBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.OpenBooklogDto;
-import com.ssafy.bjbj.api.booklog.dto.response.SearchBooklogDto;
+import com.ssafy.bjbj.api.booklog.dto.response.*;
 import com.ssafy.bjbj.api.booklog.entity.Booklog;
 import com.ssafy.bjbj.api.booklog.entity.Like;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -461,12 +458,12 @@ class BooklogRepositoryTest {
 
     @DisplayName("검색된 북로그 개수 조회 테스트")
     @Test
-    public void searchBooklogCountTest() throws InterruptedException {
+    public void searchBooklogCountTest() {
         memberRepository.save(member1);
         bookInfoRepository.save(bookInfo1);
 
         String keyword = "북로그";
-        String writer = "member1";
+        String writer = member1.getNickname();
 
         Integer count = booklogRepository.countSearchBooklogByKeyword(keyword, writer);
         assertThat(count).isEqualTo(0);
@@ -484,7 +481,6 @@ class BooklogRepositoryTest {
                 .build());
         em.flush();
         em.clear();
-        Thread.sleep(1000);
 
         // 비공개 북로그 1개 등록한 후 공개 북로그 조회 -> 0개
         count = booklogRepository.countSearchBooklogByKeyword(keyword, writer);
@@ -505,7 +501,6 @@ class BooklogRepositoryTest {
                 .build());
         em.flush();
         em.clear();
-        Thread.sleep(1000);
 
         // 공개 북로그 1개 추가 등록 후 공개 북로그 조회 -> 1개
         count = booklogRepository.countSearchBooklogByKeyword(keyword, null);
@@ -629,6 +624,72 @@ class BooklogRepositoryTest {
         List<LikeBooklogDto> find2 = booklogRepository.findLikeBooklogDtos(pageable, member1.getSeq());
         assertThat(find2.size()).isEqualTo(1);
         assertThat(find2.get(0).getBooklogSeq()).isEqualTo(booklog2.getSeq());
+    }
+
+    @DisplayName("책으로 북로그 개수 조회 테스트")
+    @Test
+    public void countOpenBooklogByBookInfoTest() {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+
+        Integer count = booklogRepository.countOpenBooklogByBookInfoSeq(bookInfo1.getSeq());
+        assertThat(count).isEqualTo(0);
+
+        booklogRepository.save(Booklog.builder()
+                .title("ㅇㅇㅇㅇ북로그ㅇㅇ 제목1")
+                .content(null)
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(false) // 비공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        em.flush();
+        em.clear();
+
+        // 비공개 북로그 1개 등록한 후 공개 북로그 조회 -> 0개
+        count = booklogRepository.countOpenBooklogByBookInfoSeq(bookInfo1.getSeq());
+        assertThat(count).isEqualTo(0);
+        em.flush();
+        em.clear();
+
+        booklogRepository.save(Booklog.builder()
+                .title("제목2")
+                .content("ㅋㅋㅋㅋ북로그ㅋㅋㅋㅋ")
+                .summary(null)
+                .starRating(null)
+                .readDate(null)
+                .isOpen(true) // 공개
+                .views(0)
+                .member(member1)
+                .bookInfo(bookInfo1)
+                .build());
+        em.flush();
+        em.clear();
+
+        // 공개 북로그 1개 추가 등록 후 공개 북로그 조회 -> 1개
+        count = booklogRepository.countOpenBooklogByBookInfoSeq(bookInfo1.getSeq());
+        assertThat(count).isEqualTo(1);
+    }
+
+    @DisplayName("책으로 북로그 목록 조회 테스트")
+    @Test
+    public void getOpenBooklogByBookInfoTest() throws InterruptedException {
+        memberRepository.save(member1);
+        bookInfoRepository.save(bookInfo1);
+
+        booklogRepository.save(booklog1);
+        Thread.sleep(1000);
+        booklogRepository.save(booklog2);
+
+        Pageable pageable = PageRequest.of(1, 10);
+
+        List<OpenBooklogByBookInfoDto> find1 = booklogRepository.findOpenBooklogByBookInfoDtos(bookInfo1.getSeq(), pageable);
+        assertThat(find1.size()).isEqualTo(2);
+        assertThat(find1.get(0).getBooklogSeq()).isEqualTo(booklog2.getSeq());
+        assertThat(find1.get(1).getBooklogSeq()).isEqualTo(booklog1.getSeq());
     }
 
 

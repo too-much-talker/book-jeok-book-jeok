@@ -490,4 +490,35 @@ public class BooklogController {
                 .build();
     }
 
+    @GetMapping("/bookinfos/{bookInfoSeq}")
+    public BaseResponseDto listByBookInfo(@PathVariable Long bookInfoSeq, Pageable pageable) {
+        log.debug("BooklogController.listByBookInfo() 책으로 북로그 목록 조회 API 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResOpenBooklogPageByBookInfoDto resOpenBooklogPageByBookInfoDto = booklogService.getResOpenBooklogPageByBookInfoDto(bookInfoSeq, pageable);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "책으로 북로그 목록 조회 성공");
+            responseData.put("totalCnt", resOpenBooklogPageByBookInfoDto.getTotalCnt());
+            responseData.put("currentPage", resOpenBooklogPageByBookInfoDto.getCurrentPage());
+            responseData.put("totalPage", resOpenBooklogPageByBookInfoDto.getTotalPage());
+            responseData.put("booklogs", resOpenBooklogPageByBookInfoDto.getOpenBooklogByBookInfoDtos());
+        } catch (Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.error("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }
