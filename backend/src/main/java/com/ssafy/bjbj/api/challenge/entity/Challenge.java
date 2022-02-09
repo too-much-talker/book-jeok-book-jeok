@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.challenge.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.common.entity.Status;
+import com.ssafy.bjbj.common.enums.Status;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.AccessLevel;
 import lombok.Getter;

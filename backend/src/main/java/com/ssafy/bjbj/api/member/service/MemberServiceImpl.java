@@ -55,8 +55,6 @@ public class MemberServiceImpl implements MemberService {
                 .name(reqMemberDto.getName())
                 .nickname(reqMemberDto.getNickname())
                 .phoneNumber(reqMemberDto.getPhoneNumber())
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build());
     }

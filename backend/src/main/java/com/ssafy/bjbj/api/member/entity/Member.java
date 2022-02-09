@@ -133,15 +133,15 @@ public class Member extends BaseLastModifiedEntity {
     }
 
     @Builder
-    public Member(String email, String password, String name, String nickname, String phoneNumber, Role role, Integer point, Integer exp) {
+    public Member(String email, String password, String name, String nickname, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.role = role;
-        this.point = point;
-        this.exp = exp;
+        this.point = 100;
+        this.exp = 0;
     }
 
 }

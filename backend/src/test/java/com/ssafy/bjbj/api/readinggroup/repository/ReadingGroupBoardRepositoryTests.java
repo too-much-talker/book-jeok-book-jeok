@@ -1,15 +1,14 @@
 package com.ssafy.bjbj.api.readinggroup.repository;
 
 import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
-import com.ssafy.bjbj.api.bookinfo.repository.BookReviewRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupArticleDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
-import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupType;
-import com.ssafy.bjbj.common.entity.Status;
+import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
+import com.ssafy.bjbj.common.enums.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,23 +57,18 @@ public class ReadingGroupBoardRepositoryTests {
                 .name("name")
                 .nickname("member1")
                 .phoneNumber("010-9999-1111")
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build();
 
         readingGroup1 = ReadingGroup.builder()
                 .title("title")
                 .content("test")
-                .views(0)
                 .limitLevel(1)
                 .maxMember(10)
                 .deadline(LocalDateTime.parse("2023-12-20T12:30:00"))
-                .status(Status.PRE)
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.parse("2023-12-20T12:30:00"))
                 .readingGroupType(ReadingGroupType.CASUAL)
-                .isDeleted(false)
                 .member(member1)
                 .build();
     }
