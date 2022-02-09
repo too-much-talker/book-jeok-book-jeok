@@ -53,8 +53,6 @@ class MemberRepositoryTest {
                 .name("홍길동")
                 .nickname("hong")
                 .phoneNumber("010-1234-5678")
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build());
 
@@ -80,8 +78,6 @@ class MemberRepositoryTest {
                 .name("홍길동")
                 .nickname(nickname)
                 .phoneNumber("010-1234-5678")
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build());
 
@@ -102,8 +98,6 @@ class MemberRepositoryTest {
                 .name("홍길동")
                 .nickname("hong")
                 .phoneNumber("010-1234-5678")
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build();
 
@@ -143,8 +137,6 @@ class MemberRepositoryTest {
                 .nickname("hong")
                 .phoneNumber("010-1234-5789")
                 .role(Role.MEMBER)
-                .exp(0)
-                .point(100)
                 .build());
 
         // 회원 가입 후
@@ -156,7 +148,7 @@ class MemberRepositoryTest {
     @Test
     public void findPointBySeq() {
         // 회원가입
-        Integer point = 500;
+        Integer point = 100;
         Member member = Member.builder()
                 .email("bjbj@bjbj.com")
                 .password("test1234")
@@ -164,8 +156,6 @@ class MemberRepositoryTest {
                 .nickname("hong")
                 .phoneNumber("010-1234-5789")
                 .role(Role.MEMBER)
-                .exp(0)
-                .point(point)
                 .build();
 
         memberRepository.save(member);
@@ -183,7 +173,7 @@ class MemberRepositoryTest {
     @Test
     public void findExpBySeq() {
         // 회원가입
-        Integer exp = 1000;
+        Integer exp = 0;
         Member member = Member.builder()
                 .email("bjbj@bjbj.com")
                 .password("test1234")
@@ -191,8 +181,6 @@ class MemberRepositoryTest {
                 .nickname("hong")
                 .phoneNumber("010-1234-5789")
                 .role(Role.MEMBER)
-                .exp(exp)
-                .point(100)
                 .build();
 
         memberRepository.save(member);
@@ -217,8 +205,6 @@ class MemberRepositoryTest {
                 .nickname("hong")
                 .phoneNumber("010-1234-5789")
                 .role(Role.MEMBER)
-                .exp(0)
-                .point(100)
                 .build();
         memberRepository.save(member);
 
