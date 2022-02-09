@@ -1,14 +1,20 @@
 import MeetingPresenter from "./MeetingPresenter";
 import "./index.css";
+import React from "react";
+import styled from "styled-components";
+
+const MeetingBox = styled.div`
+  all: none;
+`;
 
 function MeetingContainer() {
   return (
-    <div>
+    <MeetingBox>
       <header className="App-header">
         <img className="App-logo" alt="logo" />
         <img className="React-logo" alt="logo" />
       </header>
-      <div id="title">
+      {/* <div id="title">
         <a
           href="http://www.openvidu.io/"
           target="_blank"
@@ -16,10 +22,9 @@ function MeetingContainer() {
         >
           <img className="mainLogo" alt="logo" />
         </a>
-      </div>
-      <div>hi</div>
+      </div> */}
       <MeetingPresenter />{" "}
-    </div>
+    </MeetingBox>
   );
 }
 
