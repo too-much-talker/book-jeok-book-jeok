@@ -35,4 +35,6 @@ public interface MemberService {
 
     boolean unsubscribeMember(Long fromMemberSeq, Long toMemberSeq);
 
+    boolean hasPhoneNumber(String phoneNumber);
+
 }

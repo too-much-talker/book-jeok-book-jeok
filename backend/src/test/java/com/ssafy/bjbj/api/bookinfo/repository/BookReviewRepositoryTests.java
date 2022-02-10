@@ -57,8 +57,6 @@ public class BookReviewRepositoryTests {
                 .nickname("nickname1")
                 .phoneNumber("010-0000-0001")
                 .role(Role.MEMBER)
-                .exp(0)
-                .point(100)
                 .build();
 
         member2 = Member.builder()
@@ -68,8 +66,6 @@ public class BookReviewRepositoryTests {
                 .nickname("nickname2")
                 .phoneNumber("010-0000-0002")
                 .role(Role.MEMBER)
-                .exp(0)
-                .point(100)
                 .build();
 
         String isbn = "isbn";

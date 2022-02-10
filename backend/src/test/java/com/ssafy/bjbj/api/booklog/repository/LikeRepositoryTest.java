@@ -56,8 +56,6 @@ public class LikeRepositoryTest {
                 .name("name1")
                 .nickname("nickname1")
                 .phoneNumber("010-0000-0001")
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build();
 

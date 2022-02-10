@@ -1,7 +1,8 @@
 package com.ssafy.bjbj.api.readinggroup.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.common.entity.Status;
+import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
+import com.ssafy.bjbj.common.enums.Status;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.*;
 
@@ -32,9 +33,6 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     private String content;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
-    private Integer views;
-
-    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Integer limitLevel;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
@@ -42,10 +40,6 @@ public class ReadingGroup extends BaseLastModifiedEntity {
 
     @Column(nullable = false)
     private LocalDateTime deadline;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
 
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -56,6 +50,13 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReadingGroupType readingGroupType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    private Integer views;
 
     @Column(nullable = false)
     private boolean isDeleted;
@@ -78,18 +79,18 @@ public class ReadingGroup extends BaseLastModifiedEntity {
     private List<ReadingGroupMember> readingGroupMembers = new ArrayList<>();
 
     @Builder
-    public ReadingGroup(String title, String content, Integer views, Integer limitLevel, Integer maxMember, LocalDateTime deadline, Status status, LocalDateTime startDate, LocalDateTime endDate, ReadingGroupType readingGroupType, boolean isDeleted, Member member) {
+    public ReadingGroup(String title, String content, Integer limitLevel, Integer maxMember, LocalDateTime deadline, LocalDateTime startDate, LocalDateTime endDate, ReadingGroupType readingGroupType, Member member) {
         this.title = title;
         this.content = content;
-        this.views = views;
         this.limitLevel = limitLevel;
         this.maxMember = maxMember;
         this.deadline = deadline;
-        this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
         this.readingGroupType = readingGroupType;
-        this.isDeleted = isDeleted;
+        this.status = Status.PRE;
+        this.views = 0;
+        this.isDeleted = false;
         this.member = member;
     }
 

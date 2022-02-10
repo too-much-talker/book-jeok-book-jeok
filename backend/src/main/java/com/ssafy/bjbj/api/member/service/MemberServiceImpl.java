@@ -55,8 +55,6 @@ public class MemberServiceImpl implements MemberService {
                 .name(reqMemberDto.getName())
                 .nickname(reqMemberDto.getNickname())
                 .phoneNumber(reqMemberDto.getPhoneNumber())
-                .exp(0)
-                .point(100)
                 .role(Role.MEMBER)
                 .build());
     }
@@ -145,5 +143,10 @@ public class MemberServiceImpl implements MemberService {
 
         return false;
     }
-    
+
+    @Override
+    public boolean hasPhoneNumber(String phoneNumber) {
+        return memberRepository.existsByPhoneNumber(phoneNumber);
+    }
+
 }
