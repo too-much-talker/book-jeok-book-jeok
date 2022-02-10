@@ -29,7 +29,7 @@ function ModifyArticleContainer(){
         axios
         .put(
             //url수정해야함
-          url + `/api/v1/reading-group/${boardSeq}/${articleSeq}`,
+          url + `/api/v1/reading-group/${readingGoupSeq}/${articleSeq}`,
           {
               
           },
