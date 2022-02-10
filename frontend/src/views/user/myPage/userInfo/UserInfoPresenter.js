@@ -180,23 +180,25 @@ const UserTable = (props) => {
 };
 
 const UserExpPoint = (props) => {
+  const ExpPoint = styled.div`
+    font-size: 0.5rem;
+  `;
+  const Point = styled.div`
+    display: inline-block;
+    margin-left: 70px;
+  `;
+  const Exp = styled.div`
+    display: inline-block;
+  `;
   return (
-    <div>
-      {props.users.length > 0 ? (
-        props.users.map((user) => {
-          const { id, exp, point } = user;
-          return (
-            <div key={id}>
-              <p>
-                {exp} {point}
-              </p>
-            </div>
-          );
-        })
-      ) : (
-        <tr></tr>
-      )}
-    </div>
+      <ExpPoint>
+        <Exp>
+          경험치 {props.exp}
+        </Exp>
+        <Point>
+          포인트 {props.point}
+        </Point>
+      </ExpPoint>
   );
 };
 

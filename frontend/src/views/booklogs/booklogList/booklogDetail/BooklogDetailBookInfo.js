@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { bookInfoDetail } from "../../../../common/api/bookInfo";
+import React from "react";
 
 const Info = styled.div`
   display: inline-block;

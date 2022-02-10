@@ -6,6 +6,7 @@ import img4 from "../../res/img/img4.jpg";
 import img5 from "../../res/img/img5.jpg";
 import img6 from "../../res/img/img6.jpg";
 import img7 from "../../res/img/img7.png";
+import React from "react";
 
 const pongAnimation = keyframes`
 //  0% {

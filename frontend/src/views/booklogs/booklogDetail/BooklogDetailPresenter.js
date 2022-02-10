@@ -2,33 +2,35 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Toggle from "../booklogRegister/Toggle";
 import StarRating from "../booklogRegister/StarRating";
+
 const Wrapper = styled.div`
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    .summary {
-      margin-bottom: 0;
-    }
-  `;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  .summary {
+    margin-bottom: 0;
+  }
+`;
 
-  const Wrapper2 = styled.div`
-    text-align: left;
-    padding-left: 20rem;
-  `;
+const Wrapper2 = styled.div`
+  text-align: left;
+  padding-left: 20rem;
+`;
 
-  const Info = styled.div`
-    display: inline-block;
-    padding-left: 5rem;
-  `;
+const Info = styled.div`
+  display: inline-block;
+  padding-left: 5rem;
+`;
 
-  const Table = styled.div`
-    align: center;
-  `;
-  const ToggleWrapper = styled.div `
-    padding-left: 20rem;
-  `;
-  
+const Table = styled.div`
+  align: center;
+`;
+
+const ToggleWrapper = styled.div`
+  padding-left: 20rem;
+`;
+
 function DetailForm({
   isEditing,
   isOpen,
@@ -44,7 +46,7 @@ function DetailForm({
   titleHandler,
   enteredTitle,
   contentHandler,
-  enteredContent
+  enteredContent,
 }) {
   const UtilButton = styled.div`
     display: flex;
@@ -53,7 +55,6 @@ function DetailForm({
       margin-left: 1rem;
     }
   `;
-  
 
   const Desc = styled.div`
     text-align: left;
