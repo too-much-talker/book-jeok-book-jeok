@@ -94,4 +94,8 @@ public class ReadingGroup extends BaseLastModifiedEntity {
         this.member = member;
     }
 
+    public void incrementViews() {
+        this.views++;
+    }
+
 }

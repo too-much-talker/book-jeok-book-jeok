@@ -1,19 +1,19 @@
 package com.ssafy.bjbj.api.readinggroup.controller;
 
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupDetailDto;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -86,5 +86,38 @@ public class ReadingGroupController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("/{readingGroupSeq}")
+    public BaseResponseDto getDetail(@PathVariable Long readingGroupSeq) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResReadingGroupDetailDto resReadingGroupDetailDto = readingGroupService.getResDto(readingGroupSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서 모임 모집 포스팅 상세페이지 조회 API 호출 성공");
+            responseData.put("readingGroupDetail", resReadingGroupDetailDto);
+        } catch (NotFoundReadingGroupException e) {
+            log.error("독서 모임 엔티티 조회 실패");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
 
 }
