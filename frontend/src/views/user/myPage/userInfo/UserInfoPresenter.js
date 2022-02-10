@@ -192,13 +192,11 @@ const UserExpPoint = (props) => {
   `;
   return (
       <ExpPoint>
-        <br></br>
-        <br></br>
         <Exp>
-          <a>경험치 {props.exp}</a>
+          경험치 {props.exp}
         </Exp>
         <Point>
-          <a>포인트 {props.point}</a>
+          포인트 {props.point}
         </Point>
       </ExpPoint>
   );
