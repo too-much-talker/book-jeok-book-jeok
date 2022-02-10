@@ -25,6 +25,12 @@ import "./common/css/index.css";
 import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRegisterContainer";
 import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetailContainer";
 
+import BoardMainContainer from "./views/reading-group/Board/BoardMainContainer";
+import ArticleDetailContainer from "./views/reading-group/Board/ArticleDetailContainer";
+import RegisterArticleContainer from "./views/reading-group/Board/RegisterArticleContainer";
+import ModifyArticleContainer from "./views/reading-group/Board/ModifyArticleContainer";
+
+
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
   const state = store.getState();
@@ -93,6 +99,10 @@ render(
                 path="/booklogdetail"
                 element={<BooklogDetailContainer />}
               />
+              <Route path="/board/:seq" element={<BoardMainContainer />} />
+              <Route path="/articledetail/:seq" element={<ArticleDetailContainer />} />
+              <Route path="/article/write/:seq" element={<RegisterArticleContainer />} />
+              <Route path="/article/modify/:boardSeq/:articleSeq" element={<ModifyArticleContainer />} />
             </Routes>
           </Wrapper>
         </Body>
