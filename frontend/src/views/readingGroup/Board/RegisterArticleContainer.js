@@ -30,17 +30,12 @@ function RegisterArticleContainer(){
         console.log(files);
         
         let reqReadingGroupBoard = {
-            readingGroupSeq:1208,
+            readingGroupSeq:readingGroupSeq,
             title: title,
             content: content
         }; 
       
         formData.append("reqReadingGroupBoard", new Blob([JSON.stringify(reqReadingGroupBoard)], {type: "application/json"}))
-
-        // formData.append('reqReadingGroupBoard', reqReadingGroupBoard);
-        // formData.append('readingGroupSeq',readingGroupSeq);
-        // formData.append('title',title);
-        // formData.append('content',content);
 
         axios.post(url + `/api/v1/reading-groups/boards`, formData, {
             headers: { 
