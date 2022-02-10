@@ -27,10 +27,9 @@ import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetail
 import ReadingGroup from "./views/readingGroup/index";
 import MeetingContainer from "./views/readingGroup/meeting/MeetingContainer";
 
-import BoardMainContainer from "./views/reading-group/Board/BoardMainContainer";
-import ArticleDetailContainer from "./views/reading-group/Board/ArticleDetailContainer";
-import RegisterArticleContainer from "./views/reading-group/Board/RegisterArticleContainer";
-import ModifyArticleContainer from "./views/reading-group/Board/ModifyArticleContainer";
+import BoardMainContainer from "./views/readingGroup/Board/BoardMainContainer";
+import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticleContainer";
+import ModifyArticleContainer from "./views/readingGroup/Board/ModifyArticleContainer";
 
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
@@ -102,7 +101,6 @@ render(
               />
 
               <Route path="/board/:seq" element={<BoardMainContainer />} />
-              <Route path="/articledetail/:seq" element={<ArticleDetailContainer />} />
               <Route path="/article/write/:seq" element={<RegisterArticleContainer />} />
               <Route path="/article/modify/:boardSeq/:articleSeq" element={<ModifyArticleContainer />} />
 
