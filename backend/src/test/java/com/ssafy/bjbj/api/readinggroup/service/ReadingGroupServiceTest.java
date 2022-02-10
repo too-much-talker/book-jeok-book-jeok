@@ -9,6 +9,7 @@ import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupDetailDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import com.ssafy.bjbj.common.enums.Day;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +91,8 @@ class ReadingGroupServiceTest {
         em.clear();
 
         // 저장된 독서 모임 모집 포스팅 가져오기
-        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(savedReadingGroup.getSeq());
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(savedReadingGroup.getSeq())
+                .orElseThrow(() -> new NotFoundReadingGroupException("올바르지 않은 요청입니다."));
 
         // 독서 모임 모집 포스팅 정보 검증
         assertThat(findReadingGroup.getTitle()).isEqualTo(reqReadingGroupDto1.getTitle());
