@@ -5,17 +5,28 @@ const Title= styled.input``;
 const Content = styled.input``;
 const Image= styled.input.attrs(props => ({
     type: "file",
-    id:"file-id"
+    id:"files",
   }))``;
+
+const Image2 = styled.div`
+position:relative;
+`;
+const Message= styled.div``;
+
 const SubmitBtn = styled.button``;
-function RegisterArticlePresenter({title, content,files,handleTitle,handleContent,handleFiles,modifySubmit}){
+function RegisterArticlePresenter({title,content,file,handleTitle,handleContent,handleFile,modifySubmit}){
  
     return(
     // <Form>
       <>
     <Title onChange={handleTitle} value={title}></Title>
     <Content onChange={handleContent} value={content}></Content>
-    <Image onChange={handleFiles}></Image>
+    <Message>바꿀 사진을 선택해주세요.</Message>
+    <Image onChange={handleFile}></Image>
+    <Image2>
+        <img src={file} height="50%" width="50%"></img>
+      </Image2>
+
     <SubmitBtn onClick={modifySubmit}>수정 완료</SubmitBtn>
     </>
     // </Form>);
