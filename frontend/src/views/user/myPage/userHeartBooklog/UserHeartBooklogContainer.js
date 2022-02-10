@@ -3,16 +3,11 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import BookLogCard from "../userBooklog/BookLogCard";
-import Pagination from "react-js-pagination";
+
+import UserHeartBooklogPresenter from "./UserHeartBooklogPresenter";
 
 const url = "https://i6a305.p.ssafy.io:8443";
-const BookLog = styled.div`
-  width: 100%;
-  text-align: center;
-`;
-const Button = styled.div`
-  margin-left: 700px;
-`;
+
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
@@ -33,8 +28,8 @@ function UserHeartBooklogContainer() {
       url + `/api/v1/booklogs/likes?page=${page}&size=10`,
       {
         headers: {
-          Authorization: `Bearer ` + jwtToken
-        }
+          Authorization: `Bearer ` + jwtToken,
+        },
       }
     );
     const bookList = books.data.data.booklogs;
@@ -59,29 +54,12 @@ function UserHeartBooklogContainer() {
     setPage(event);
   };
   return (
-    <div>
-      <h2>하트 누른 북로그</h2>
-      <br></br>
-      <div>
-        <Link to="/booklogregister">
-          <Button>
-            {/* <button>저장</button> */}
-          </Button>
-          <div></div>
-        </Link>
-        <br></br>
-        <BookLog>{context}</BookLog>
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={10}
-          totalItemsCount={totalCnt}
-          pageRangeDisplayed={5}
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={handlePageChange}
-        />
-      </div>
-    </div>
+    <UserHeartBooklogPresenter
+      context={context}
+      page={page}
+      totalCnt={totalCnt}
+      handlePageChange={handlePageChange}
+    />
   );
 }
 export default UserHeartBooklogContainer;
