@@ -9,11 +9,12 @@ function ModifyArticleContainer(){
     let useParam=useParams();
     const url = "https://i6a305.p.ssafy.io:8443";
 
-    const [readingGoupSeq, setReadingGoupSeq]=useState(useParam.boardSeq);
+    const [readingGroupSeq, setReadingGroupSeq]=useState(useParam.boardSeq);
     const [articleSeq, setArticleSeq]= useState(useParam.articleSeq);
     const [title,setTitle]= useState();
     const [content,setContent]=useState();
     const [file, setFile]= useState();
+    const [imagePath, setImagePath]= useState();
 
     useEffect(() => {
       getArticle();
@@ -48,7 +49,7 @@ function ModifyArticleContainer(){
           console.log(response);
           setTitle(response.data.data.readingGroupArticle.title);
           setContent(response.data.data.readingGroupArticle.content);
-          setFile("https://i6a305.p.ssafy.io:8443/"+response.data.data.imagePaths);
+          setImagePath("https://i6a305.p.ssafy.io:8443/"+response.data.data.imagePaths);
         })
         .catch(function (error) {
             console.log(error);
@@ -57,32 +58,33 @@ function ModifyArticleContainer(){
 
 
     function modifySubmit(){
-        axios
-        .put(
-            //url수정해야함
-          url + `/api/v1/reading-group/${readingGoupSeq}/${articleSeq}`,
-          {
-              
-          },
-          {
-            headers: {
-              Authorization: `Bearer ` + jwtToken,
-            },
-          }
-        )
-        .then(function (response) {
-          console.log(response);
-          alert(response.data.data.msg);
-          document.location.href = `/detail/${useParam.seq}`;
-        })
-        .catch(function (error) {
-          console.log(error);
-          alert("수정 중 문제가 발생하였습니다.");
-        });
+      let formData = new FormData();
+      formData.append('files', file);
+      let reqReadingGroupBoard = {
+          readingGroupSeq:readingGroupSeq,
+          title: title,
+          content: content
+      }; 
+      formData.append("reqReadingGroupBoard", new Blob([JSON.stringify(reqReadingGroupBoard)], {type: "application/json"}))
+
+      axios.put(url + `/api/v1/reading-groups/boards/${articleSeq}`, formData, {
+        headers: { 
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${jwtToken}` 
+        },
+    }).then(function (response) {
+            console.log(response.data.data);
+            alert("수정이 완료되었습니다.")
+            document.location.href = `/board/${readingGroupSeq}`;
+    })  
+    .catch(function (error) {
+        console.log(error);
+    });
 
     }
     return(
-        <ModifyArticlePresenter title={title} content={content} file={file}handleTitle={handleTitle} handleContent={handleContent} handleFile={handleFile} modifySubmit={modifySubmit}></ModifyArticlePresenter>
+        <ModifyArticlePresenter imagePath={imagePath}title={title} content={content} file={file}handleTitle={handleTitle} handleContent={handleContent} handleFile={handleFile} modifySubmit={modifySubmit}></ModifyArticlePresenter>
     );
 }
 export default ModifyArticleContainer;

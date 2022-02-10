@@ -14,7 +14,7 @@ position:relative;
 const Message= styled.div``;
 
 const SubmitBtn = styled.button``;
-function RegisterArticlePresenter({title,content,file,handleTitle,handleContent,handleFile,modifySubmit}){
+function RegisterArticlePresenter({imagePath,title,content,file,handleTitle,handleContent,handleFile,modifySubmit}){
  
     return(
     // <Form>
@@ -24,7 +24,7 @@ function RegisterArticlePresenter({title,content,file,handleTitle,handleContent,
     <Message>바꿀 사진을 선택해주세요.</Message>
     <Image onChange={handleFile}></Image>
     <Image2>
-        <img src={file} height="50%" width="50%"></img>
+        <img src={imagePath} height="50%" width="50%"></img>
       </Image2>
 
     <SubmitBtn onClick={modifySubmit}>수정 완료</SubmitBtn>
