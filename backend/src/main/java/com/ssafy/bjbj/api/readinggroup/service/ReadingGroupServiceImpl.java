@@ -1,19 +1,20 @@
 package com.ssafy.bjbj.api.readinggroup.service;
 
+import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupDateRepository;
+import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupMemberRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
-import com.ssafy.bjbj.common.enums.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,10 +34,14 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
 
     private final ReadingGroupDateRepository readingGroupDateRepository;
 
+    private final ReadingGroupMemberRepository readingGroupMemberRepository;
+
     @Transactional
     @Override
     public ReadingGroup register(ReqReadingGroupDto reqReadingGroupDto, Long memberSeq) {
         String time = "T00:00:00";
+
+        Member findMember = memberRepository.findBySeq(memberSeq);
 
         /**
          * 독서 모임 저장
@@ -50,7 +55,7 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 .startDate(LocalDateTime.parse(reqReadingGroupDto.getStartDate() + time))
                 .endDate(LocalDateTime.parse(reqReadingGroupDto.getEndDate() + time))
                 .readingGroupType(ReadingGroupType.valueOf(reqReadingGroupDto.getReadingGroupType().toUpperCase()))
-                .member(memberRepository.findBySeq(memberSeq))
+                .member(findMember)
                 .build());
 
         /**
@@ -71,6 +76,14 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 }
             }
         }
+
+        /**
+         * 독서 모임 회원 저장
+         */
+        readingGroupMemberRepository.save(ReadingGroupMember.builder()
+                .readingGroup(savedReadingGroup)
+                .member(findMember)
+                .build());
 
         return savedReadingGroup;
     }

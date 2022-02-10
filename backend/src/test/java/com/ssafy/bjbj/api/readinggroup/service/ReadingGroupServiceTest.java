@@ -7,6 +7,7 @@ import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -128,6 +129,13 @@ class ReadingGroupServiceTest {
             String savedDay = readingGroupDate.getConferenceDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase();
             assertThat(reqDays).contains(savedDay);
         }
+
+        /**
+         * 독서 모임 회원 검증
+         */
+        List<ReadingGroupMember> readingGroupMembers = findReadingGroup.getReadingGroupMembers();
+        assertThat(readingGroupMembers.size()).isEqualTo(1);
+        assertThat(readingGroupMembers.get(0).getMember().getSeq()).isEqualTo(member1.getSeq());
     }
 
 }
