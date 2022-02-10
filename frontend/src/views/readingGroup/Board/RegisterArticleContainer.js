@@ -50,6 +50,7 @@ function RegisterArticleContainer(){
             },
         }).then(function (response) {
             if(response.data.status===201){
+                console.log(response.data.data);
                 alert("게시글이 작성되었습니다.")
                 document.location.href = `/board/${readingGroupSeq}`;
             }

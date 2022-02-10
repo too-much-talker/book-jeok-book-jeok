@@ -1,9 +1,10 @@
 import BoardMainPresenter from "./BoardMainPresenter"
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 function BoardMainContainer(){
-
+    let useParam=useParams();
     //독서모임 게시판 번호
-    const [readingGroupSeq,setReadingGroupSeq]= useState();
+    const [readingGroupSeq,setReadingGroupSeq]= useState(useParam.seq);
     
     function gotoRegister(){
         
