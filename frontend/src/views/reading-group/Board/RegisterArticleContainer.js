@@ -50,14 +50,6 @@ function RegisterArticleContainer(){
             console.log(error);
         });
     }
-
-
-    // http.post(`${url}/api/v1/reading-groups/boards`, form, {
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data',
-    //         Authorization: `Bearer ${jwtToken}`,
-    //       },
-    //     })
     return(<RegisterArticlePresenter onCreate={onCreate} handleTitle={handleTitle} handleContent={handleContent} handleImage={handleImage}></RegisterArticlePresenter>);
 }
 export default RegisterArticleContainer;
