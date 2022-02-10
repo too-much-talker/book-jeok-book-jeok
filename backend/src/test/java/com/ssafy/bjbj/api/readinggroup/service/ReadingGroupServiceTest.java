@@ -158,7 +158,7 @@ class ReadingGroupServiceTest {
         assertThat(resDto1.getContent()).isEqualTo(reqReadingGroupDto1.getContent());
         assertThat(resDto1.getMinLevel()).isEqualTo(reqReadingGroupDto1.getLimitLevel());
         assertThat(resDto1.getMaxNumOfMember()).isEqualTo(reqReadingGroupDto1.getMaxMember());
-        assertThat(resDto1.getViews()).isEqualTo(savedReadingGroup.getViews());
+        assertThat(resDto1.getViews()).isEqualTo(savedReadingGroup.getViews() + 1);
         assertThat(resDto1.getStatus()).isEqualTo(savedReadingGroup.getStatus());
         assertThat(resDto1.getDeadline()).isEqualTo(reqReadingGroupDto1.getDeadline());
         assertThat(resDto1.getStartDate()).isEqualTo(reqReadingGroupDto1.getStartDate());
