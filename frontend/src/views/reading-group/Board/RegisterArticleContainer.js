@@ -27,20 +27,25 @@ function RegisterArticleContainer(){
     function onCreate(){
         let formData = new FormData();
         formData.append('files', files);
+        console.log(files);
+        
         let reqReadingGroupBoard = {
-            readingGroupSeq:readingGroupSeq,
+            readingGroupSeq:1208,
             title: title,
             content: content
         }; 
+      
+        formData.append("reqReadingGroupBoard", new Blob([JSON.stringify(reqReadingGroupBoard)], {type: "application/json"}))
 
-        formData.append('reqReadingGroupBoard', reqReadingGroupBoard);
+        // formData.append('reqReadingGroupBoard', reqReadingGroupBoard);
         // formData.append('readingGroupSeq',readingGroupSeq);
         // formData.append('title',title);
         // formData.append('content',content);
 
         axios.post(url + `/api/v1/reading-groups/boards`, formData, {
             headers: { 
-                'Content-Type': 'multipart/form-data', 
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${jwtToken}` 
             },
         }).then(function (response) {
