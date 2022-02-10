@@ -13,9 +13,8 @@ const Grass = (props) => {
   };
 
   let color;
-  const description = (
-    <div>{`${props.count} contributions on ${props.date}`}</div>
-  );
+
+  const description = <div>{`${props.count} booklogs on ${props.date}`}</div>;
   if (props.count === 0) {
     color = style.zero;
   } else if (props.count >= 1 && props.count <= 3) {

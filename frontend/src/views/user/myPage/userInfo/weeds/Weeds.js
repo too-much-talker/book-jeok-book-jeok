@@ -4,7 +4,6 @@ import styled from "styled-components";
 import React from "react";
 
 const StyledWeeds = styled.div`
-  margin: 3rem;
   width: 16rem;
   height: 24rem;
 `;
