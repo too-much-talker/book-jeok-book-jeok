@@ -48,8 +48,6 @@ function ArticleDetailContainer(){
               console.log(error);
             }); 
     }
-
-    console.log(file);
     return(
         <>
             <ArticleDetailPresenter file={file} comments={comments} title={title} content={content} nickname={nickname} createdDate={createdDate} views={views}></ArticleDetailPresenter>
