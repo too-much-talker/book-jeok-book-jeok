@@ -13,7 +13,7 @@ function RegisterArticleContainer(){
     const [title, setTitle]= useState();
     const [content,setContent]= useState();
     const [files, setFiles]= useState();
-
+    console.log(readingGroupSeq);
     function handleTitle(event){
         setTitle(event.target.value);
     }
@@ -44,12 +44,9 @@ function RegisterArticleContainer(){
                 Authorization: `Bearer ${jwtToken}` 
             },
         }).then(function (response) {
-            if(response.data.status===201){
-                console.log(response.data.data);
+                console.log(response.data);
                 alert("게시글이 작성되었습니다.")
-                document.location.href = `/board/${readingGroupSeq}`;
-            }
-            console.log(response);
+                //document.location.href = `/board/${readingGroupSeq}`;
         })  
         .catch(function (error) {
             console.log(error);
