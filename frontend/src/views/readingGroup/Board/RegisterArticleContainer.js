@@ -49,6 +49,10 @@ function RegisterArticleContainer(){
                 Authorization: `Bearer ${jwtToken}` 
             },
         }).then(function (response) {
+            if(response.data.status===201){
+                alert("게시글이 작성되었습니다.")
+                document.location.href = `/board/${readingGroupSeq}`;
+            }
             console.log(response);
         })  
         .catch(function (error) {
