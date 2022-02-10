@@ -46,4 +46,5 @@ public class ReadingGroupBoardRepositoryImpl implements ReadingGroupBoardReposit
                 .orderBy(readingGroupBoard.seq.desc())
                 .fetch();
     }
+
 }

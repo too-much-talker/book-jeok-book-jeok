@@ -22,7 +22,6 @@ public class FileHandler {
         }
 
         String absolutePath = new File("").getAbsolutePath() + File.separator;
-
         String path ="images" + File.separator + LocalDate.now();
         File file = new File(path);
 
@@ -31,9 +30,7 @@ public class FileHandler {
         }
 
         for (MultipartFile multipartFile : multipartFiles) {
-
             if (!multipartFile.isEmpty()) {
-
                 String originalFilename = multipartFile.getOriginalFilename();
                 int indexOf = originalFilename.lastIndexOf(".");
                 String encodedFileName = UUID.randomUUID() + originalFilename.substring(indexOf);
@@ -42,14 +39,12 @@ public class FileHandler {
                         .originFileName(originalFilename)
                         .encodedFileName(encodedFileName)
                         .savedPath(path)
-                        .isDeleted(false)
                         .build();
 
                 fileInfos.add(fileInfo);
 
                 file = new File(absolutePath + path);
                 multipartFile.transferTo(new File(file, encodedFileName));
-
             }
         }
 
