@@ -5,17 +5,21 @@ import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupArticleDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardPageDto;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
+import com.ssafy.bjbj.common.service.file.FileInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -30,20 +34,28 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
     private final ReadingGroupBoardRepository readingGroupBoardRepository;
 
+    private final FileInfoService fileInfoService;
 
     @Transactional
     @Override
-    public Long register(ReqReadingGroupBoardDto reqReadingGroupBoardDto, Long memberSeq) {
+    public Long register(ReqReadingGroupBoardDto reqReadingGroupBoardDto, List<MultipartFile> files, Long memberSeq) throws IOException {
+        Member findMember = memberRepository.findBySeq(memberSeq);
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq());
 
-        Member member = memberRepository.findBySeq(memberSeq);
-
+        /**
+         * 독서 모임 게시글 저장
+         */
         ReadingGroupBoard savedReadingGroupBoard = readingGroupBoardRepository.save(ReadingGroupBoard.builder()
                 .title(reqReadingGroupBoardDto.getTitle())
                 .content(reqReadingGroupBoardDto.getContent())
-                .views(0)
-                .member(member)
-                .readingGroup(readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq()))
+                .member(findMember)
+                .readingGroup(findReadingGroup)
                 .build());
+
+        /**
+         * 파일 저장
+         */
+        fileInfoService.register(savedReadingGroupBoard.getSeq(), files);
 
         return savedReadingGroupBoard.getSeq();
     }
