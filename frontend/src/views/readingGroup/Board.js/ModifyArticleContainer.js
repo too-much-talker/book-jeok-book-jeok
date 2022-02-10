@@ -11,8 +11,8 @@ function ModifyArticleContainer(){
 
     const [readingGoupSeq, setReadingGoupSeq]=useState(useParam.boardSeq);
     const [articleSeq, setArticleSeq]= useState(useParam.articleSeq);
-    const [title,setTitle]= useState();
-    const [content,setContent]=useState();
+    const [title,setTitle]= useState("dd");
+    const [content,setContent]=useState("dd");
     const [files, setFiles]= useState();
 
     function handleTitle(e){
@@ -26,10 +26,32 @@ function ModifyArticleContainer(){
     }
 
     function modifySubmit(){
+        axios
+        .put(
+            //url수정해야함
+          url + `/api/v1/reading-group/${boardSeq}/${articleSeq}`,
+          {
+              
+          },
+          {
+            headers: {
+              Authorization: `Bearer ` + jwtToken,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log(response);
+          alert(response.data.data.msg);
+          document.location.href = `/detail/${useParam.seq}`;
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("수정 중 문제가 발생하였습니다.");
+        });
 
     }
     return(
-        <ModifyArticlePresenter handleTitle={handleTitle} handleContent={handleContent} handleFiles={handleFiles} modifySubmit={modifySubmit}></ModifyArticlePresenter>
+        <ModifyArticlePresenter title={title} content={content} files={files}handleTitle={handleTitle} handleContent={handleContent} handleFiles={handleFiles} modifySubmit={modifySubmit}></ModifyArticlePresenter>
     );
 }
 export default ModifyArticleContainer;
