@@ -30,8 +30,8 @@ function Sidebar() {
   const menus = [
     { name: "나의 정보수정", path: "/mypage" },
     { name: "나의 북로그", path: "/mypage/mybooklog" },
+    { name: "하트 누른 북로그", path: "/mypage/myheartbooklog" },
     { name: "나의 독서모임", path: "/mypage/mybookclub" },
-    { name: "나의 챌린지", path: "/mypage/mychallenge" },
   ];
   const getUserInfo = async () => {
     const response = await axios.get(url + `/api/v1/members/me`, {
