@@ -26,7 +26,11 @@ import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRe
 import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetailContainer";
 import ReadingGroup from "./views/readingGroup/index";
 import MeetingContainer from "./views/readingGroup/meeting/MeetingContainer";
+<<<<<<< HEAD
 import ModifyArticleContainer from "./views/readingGroup/Board.js/ModifyArticleContainer";
+=======
+import ArticleDetailContainer from "./views/readingGroup/Board/ArticleDetailContainer";
+>>>>>>> 42c7383490aa5183f9192f48b9a86abc27140ba5
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
   const state = store.getState();
@@ -99,6 +103,8 @@ render(
                 {/* <Route path="detail" /> */}
               </Route>
               <Route path="/article/modify/:boardSeq/:articleSeq" element={<ModifyArticleContainer />} />
+              <Route path="/articledetail/:seq" element={<ArticleDetailContainer />} />
+
             </Routes>
           </Wrapper>
         </Body>
