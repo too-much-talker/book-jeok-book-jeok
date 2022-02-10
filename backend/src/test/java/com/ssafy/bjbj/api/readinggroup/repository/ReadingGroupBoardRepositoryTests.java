@@ -86,7 +86,6 @@ public class ReadingGroupBoardRepositoryTests {
         ReadingGroupBoard readingGroupBoard1 = readingGroupBoardRepository.save(ReadingGroupBoard.builder()
                 .title("title1")
                 .content("content1")
-                .views(0)
                 .member(member1)
                 .readingGroup(readingGroup1)
                 .build());
@@ -94,7 +93,6 @@ public class ReadingGroupBoardRepositoryTests {
         ReadingGroupBoard readingGroupBoard2 = readingGroupBoardRepository.save(ReadingGroupBoard.builder()
                 .title("title2")
                 .content("content2")
-                .views(0)
                 .member(member1)
                 .readingGroup(readingGroup1)
                 .build());
@@ -102,7 +100,6 @@ public class ReadingGroupBoardRepositoryTests {
         ReadingGroupBoard readingGroupBoard3 = readingGroupBoardRepository.save(ReadingGroupBoard.builder()
                 .title("title3")
                 .content("content3")
-                .views(0)
                 .member(member1)
                 .readingGroup(readingGroup1)
                 .build());
