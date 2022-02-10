@@ -8,6 +8,7 @@ import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardPageDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
@@ -40,7 +41,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
     @Override
     public Long register(ReqReadingGroupBoardDto reqReadingGroupBoardDto, List<MultipartFile> files, Long memberSeq) throws IOException {
         Member findMember = memberRepository.findBySeq(memberSeq);
-        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq());
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq())
+                .orElseThrow(() -> new NotFoundReadingGroupException("올바르지 않은 요청입니다."));
 
         /**
          * 독서 모임 게시글 저장
@@ -145,4 +147,5 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
             readingGroupBoard.delete();
         }
     }
+
 }

@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface ReadingGroupRepository extends JpaRepository<ReadingGroup, Long> {
 
     @Query("SELECT rg FROM ReadingGroup rg WHERE rg.seq = :seq")
-    ReadingGroup findBySeq(@Param("seq") Long seq);
+    Optional<ReadingGroup> findBySeq(@Param("seq") Long seq);
 
 }

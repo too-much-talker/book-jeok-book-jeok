@@ -96,10 +96,8 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
     @Transactional
     @Override
     public ResReadingGroupDetailDto getResDto(Long readingGroupSeq) {
-        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(readingGroupSeq);
-        if (findReadingGroup == null) {
-            throw new NotFoundReadingGroupException("올바르지 않은 요청입니다.");
-        }
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(readingGroupSeq)
+                .orElseThrow(() -> new NotFoundReadingGroupException("올바르지 않은 요청입니다."));
 
         /**
          * 조회수 증가
