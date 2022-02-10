@@ -1,6 +1,7 @@
 import BooklogCard from "./BooklogCard";
 import BooklogNavi from "./BooklogNavi";
 import styled from "styled-components";
+import React from "react";
 
 const BooklogListWrapper = styled.div`
   width: 80vw;

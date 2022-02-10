@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import SearchedBook from "./SearchedBook";
 import Pagination from "react-js-pagination";
 import styled from "styled-components";
+import React from "react";
 
 const url = "https://i6a305.p.ssafy.io:8443";
 
@@ -30,7 +31,7 @@ const SearchBook = (props) => {
       limit: 12,
       searchCategory: "title",
       searchKeyword: enteredText,
-      orderCategory: "review"
+      orderCategory: "review",
     });
     const bookList = books.data.data.bookList;
     setTotalCnt(books.data.data.totalCnt);

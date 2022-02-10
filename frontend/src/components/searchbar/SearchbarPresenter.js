@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import icon from "../../res/img/search.png";
+import React from "react";
 
 const SearchBlock = styled.div`
   // position: absolute;

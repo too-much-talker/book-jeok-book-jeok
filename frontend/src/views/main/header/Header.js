@@ -3,6 +3,7 @@ import styled from "styled-components";
 import logo from "../../../res/img/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import React from "react";
 
 const HeaderWrapper = styled.div`
   width: 1170px;

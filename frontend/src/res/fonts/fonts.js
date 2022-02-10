@@ -1,4 +1,4 @@
-src/styles/fonts/fonts.js
+src / styles / fonts / fonts.js;
 
 import { createGlobalStyle } from "styled-components";
 import MontHeavyDemo from "./Mont-HeavyDEMO.woff";
@@ -10,5 +10,5 @@ export default createGlobalStyle`
         url('./fonts/noto-sans-kr.ttf') format('woff2');
     /* 이런식으로 weight를 지정해서 사용할 수도 있다!*/
     font-weight: 400;
-} 
+}
 `;

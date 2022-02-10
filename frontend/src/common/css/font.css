@@ -1,0 +1,18 @@
+/* @font-face {
+  font-family: "NotoSanKR";
+  font-weight: 100;
+  src: url("../../res/fonts/AnyConv.com__NotoSansKR-Regular.eot")
+    format("embedded-opentype");
+} */
+
+@font-face {
+  font-family: "Chung";
+  font-weight: 100;
+  src: url("../../res/fonts/Chung.ttf");
+}
+
+@font-face {
+  font-family: "Gown";
+  font-weight: 100;
+  src: url("../../res/fonts/Gown.ttf");
+}

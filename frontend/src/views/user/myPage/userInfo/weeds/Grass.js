@@ -1,6 +1,7 @@
 import { useState } from "react";
 import style from "./Grass.module.css";
 import styled from "styled-components";
+import React from "react";
 
 const Grass = (props) => {
   const [isEntered, setIsEntered] = useState(false);
@@ -12,26 +13,30 @@ const Grass = (props) => {
   };
 
   let color;
+
   const description = <div>{`${props.count} booklogs on ${props.date}`}</div>;
-  if(props.count===0){
+  if (props.count === 0) {
     color = style.zero;
-  }
-  else if(props.count>=1 && props.count<=3){
+  } else if (props.count >= 1 && props.count <= 3) {
     color = style.one;
-  }
-  else if(props.count<=6){
+  } else if (props.count <= 6) {
     color = style.two;
-  }
-  else if(props.count<=10){
+  } else if (props.count <= 10) {
     color = style.three;
-  }
-  else {
+  } else {
     color = style.four;
   }
-  const floater = isEntered ? style.able : style.disable
-  return <div className={style.wrapper} onMouseLeave={mouseLeaveHandler}>
-    <div className={`${style.floater} ${floater}`}>{isEntered && description}</div>
-  <p className={`${style.grass} ${color}`} onMouseEnter={mouseEnterHandler} ></p>
-  </div>
+  const floater = isEntered ? style.able : style.disable;
+  return (
+    <div className={style.wrapper} onMouseLeave={mouseLeaveHandler}>
+      <div className={`${style.floater} ${floater}`}>
+        {isEntered && description}
+      </div>
+      <p
+        className={`${style.grass} ${color}`}
+        onMouseEnter={mouseEnterHandler}
+      ></p>
+    </div>
+  );
 };
 export default Grass;

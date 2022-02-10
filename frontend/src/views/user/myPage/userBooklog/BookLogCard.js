@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import React from "react";
 
 const Card = styled.div`
   font-size: 1.2rem;
@@ -28,7 +29,7 @@ const Date = styled.div`
 `;
 
 const Title = styled.h6`
-    color: black;
+  color: black;
 `;
 
 const Private = styled.div`
@@ -72,16 +73,16 @@ function BooklogCard(props) {
   );
   return (
     <Card>
-        <Title>{title}</Title>
-        <Img src={imgUrl} alt="book img"></Img>
-        <Date>{createdDate}</Date>
-        <Private
-          active={!open}
-          onMouseEnter={mouseEnterHandler}
-          onMouseLeave={mouseLeaveHandler}
-        >
-          {isEntered && description}
-        </Private>
+      <Title>{title}</Title>
+      <Img src={imgUrl} alt="book img"></Img>
+      <Date>{createdDate}</Date>
+      <Private
+        active={!open}
+        onMouseEnter={mouseEnterHandler}
+        onMouseLeave={mouseLeaveHandler}
+      >
+        {isEntered && description}
+      </Private>
     </Card>
   );
 }
