@@ -32,10 +32,6 @@ import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticle
 import ModifyArticleContainer from "./views/readingGroup/Board/ModifyArticleContainer";
 
 import ArticleDetailContainer from "./views/readingGroup/Board/ArticleDetailContainer";
-<<<<<<< HEAD
-import PostingRegisterContainer from "./views/readingGroup/Posting/PostingRegisterContainer"
-=======
->>>>>>> e6bd893d49daa9ee9ec8ecc2acf661567431d82f
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
