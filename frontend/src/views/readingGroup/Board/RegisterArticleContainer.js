@@ -85,7 +85,7 @@ function RegisterArticleContainer() {
       .then(function (response) {
         console.log(response.data);
         alert("게시글이 작성되었습니다.");
-        document.location.href = `/board/${readingGroupSeq}`;
+        //document.location.href = `/board/${readingGroupSeq}`;
       })
       .catch(function (error) {
         console.log(error);
