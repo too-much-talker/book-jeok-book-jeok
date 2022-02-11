@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import axios from "axios";
 import OpenViduSession from "openvidu-react";
 import "./meeting.css";
+import styled from "styled-components";
+
+const MeetingEntrance = styled.div`
+  border: solid 2px;
+`;
 
 class MeetingPresenter extends Component {
   constructor(props) {
@@ -73,7 +78,7 @@ class MeetingPresenter extends Component {
     return (
       <div>
         {this.state.session === undefined ? (
-          <div id="join">
+          <MeetingEntrance id="join">
             <div id="join-dialog">
               <h1> Join a video session </h1>
               <form onSubmit={this.joinSession}>
@@ -102,7 +107,7 @@ class MeetingPresenter extends Component {
                 </p>
               </form>
             </div>
-          </div>
+          </MeetingEntrance>
         ) : (
           <div id="session">
             <OpenViduSession

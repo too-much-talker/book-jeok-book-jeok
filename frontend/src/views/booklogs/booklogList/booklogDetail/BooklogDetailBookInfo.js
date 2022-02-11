@@ -3,13 +3,19 @@ import styled from "styled-components";
 import { bookInfoDetail } from "../../../../common/api/bookInfo";
 import React from "react";
 
+const Img = styled.img`
+  width: 10rem;
+`;
+
 const Info = styled.div`
   display: inline-block;
   padding-left: 5rem;
+  font-size: 1rem;
 `;
 
 const Table = styled.div`
   align: center;
+  border-spacing: 0 1rem;
 `;
 
 function BooklogDetailBookInfo({ booklog }) {
@@ -46,7 +52,7 @@ function BooklogDetailBookInfo({ booklog }) {
         <p>Loading...</p>
       ) : (
         <>
-          <img src={bookInfo.largeImgUrl} alt={bookInfo.title}></img>
+          <Img src={bookInfo.largeImgUrl} alt={bookInfo.title}></Img>
           <Info>
             <Table>
               <tbody>

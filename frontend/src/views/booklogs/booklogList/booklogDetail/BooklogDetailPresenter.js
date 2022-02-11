@@ -30,11 +30,11 @@ const Writer = styled.span`
 const Like = styled.span`
   margin-right: 1.5rem;
   text-align: left;
-  font-size: 1.6rem;
+  font-size: 1.1rem;
 `;
 
 const Icon = styled.img`
-  width: 1.5rem;
+  width: 1.2rem;
   text-align: left;
   margin-right: 0.3rem;
 `;
@@ -98,7 +98,7 @@ function DetailForm({ isLike, likes, onClickHeart, booklog }) {
         </BooklogInfo>
         <hr />
         <div>
-          <h5>{booklog.title}</h5>
+          <h3>{booklog.title}</h3>
           <br></br>
           <p>{booklog.content}</p>
         </div>

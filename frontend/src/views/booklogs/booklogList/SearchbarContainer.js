@@ -30,7 +30,7 @@ function SearchNavContainer() {
       input === null ||
       input === ""
     ) {
-      alert("검색어와 옵션을 선택해주세요");
+      alert("옵션 선택 & 검색어를 입력 해주세요");
     } else {
       navigate(`/booklogs/list/search?${option}=${input}`);
     }
