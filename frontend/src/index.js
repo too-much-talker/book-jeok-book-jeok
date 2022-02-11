@@ -108,10 +108,6 @@ render(
               </Route>
 
               <Route path="/articledetail/:seq" element={<ArticleDetailContainer />} />
-              <Route
-                path="/postingregister"
-                element={<PostingRegisterContainer />}
-              />
             </Routes>
           </Wrapper>
         </Body>
