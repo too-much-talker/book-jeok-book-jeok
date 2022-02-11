@@ -10,7 +10,9 @@ const Wrapper = styled.div`
 
 const Info = styled.div`
   display: inline-block;
-  padding-left: 5rem;
+  padding-left: 4rem;
+  text-align: left;
+  margin-bottom: 50px;
 `;
 
 const Wrapper2 = styled.div`
@@ -23,14 +25,13 @@ const Wrapper2 = styled.div`
   border: 1px solid #cccccc;
   padding-top: 40px;
   padding-bottom: 40px;
+  margin-top: 40px;
 `;
 const Button = styled.div`
-  margin-left: 600px;
+  margin-left: 700px;
 `;
 
 const url = "https://i6a305.p.ssafy.io:8443";
-
-
 
 function PostingRegisterPresenter({
   onTypeButtonHandler,
@@ -47,71 +48,81 @@ function PostingRegisterPresenter({
   submitHandler,
   imgUrl,
 }) {
-  
   return (
     <Wrapper>
       <img
         src={imgUrl}
-        height="150px"
-        width="200px"
+        height="170px"
+        width="250px"
+        style={{ borderRadius: "30px", marginTop: "30px" }}
       ></img>
       <Info>
-        <h5>모임의 성격을 알려주세요!</h5>
-        <h6>선택된 키워드에 맞게 자동으로 이미지가 생성됩니다.</h6>
+        <h2>모임의 성격을 알려주세요 !</h2>
+        <h5>선택된 키워드에 맞게 자동으로 이미지가 생성됩니다.</h5>
         <input
-          id="casual"
-          value="casual"
+          id="discuss"
+          value="discuss"
           name="readingGroupType"
           type="radio"
           onChange={onTypeButtonHandler}
         />{" "}
         토론형
         <input
-          id="professional"
-          value="professional"
-          name="readingGroupType"
+          id="seminar"
+          value="seminar"
+          name="seminar"
           type="radio"
           onChange={onTypeButtonHandler}
           style={{ marginLeft: 20 }}
         />{" "}
         세미나형
         <input
-          id="friendly"
-          value="friendly"
+          id="study"
+          value="study"
           name="readingGroupType"
           type="radio"
           onChange={onTypeButtonHandler}
           style={{ marginLeft: 20 }}
         />{" "}
         스터디형
+        <input
+          id="free"
+          value="free"
+          name="readingGroupType"
+          type="radio"
+          onChange={onTypeButtonHandler}
+          style={{ marginLeft: 20 }}
+        />{" "}
+        자유형
       </Info>
+      <br></br>
       <hr></hr>
       <Wrapper2>
-        <label>독서모임 제목</label>
+        <h5>독서모임 제목</h5>
         <input
-          size="82"
+          size="105"
           onChange={onTitleChange}
           value={title}
           type="text"
           name="title"
           placeholder="제목을 입력해주세요."
         />
-        <br></br>
-        <label>독서모임 내용</label>
+        <h5>독서모임 내용</h5>
         <textarea
-          style={{ resize: "none", height: "100px", width: "600px" }}
+          style={{ resize: "none", height: "100px", width: "765px" }}
           onChange={onContentChange}
           value={content}
           name="context"
           placeholder="텍스트를 입력해주세요."
         />
         <br></br>
-        <label>독서모임 기간</label>
+        <h5 style={{ display: "inline-block" }}>독서모임 기간</h5>
         <input
           type="date"
           id="startDate"
           name="startDate"
           onChange={onStartDateChange}
+          style={{ display: "inline-block", marginLeft: "30px" }}
         />{" "}
         부터
         <input
@@ -184,9 +195,8 @@ function PostingRegisterPresenter({
           onChange={onDayChange}
           style={{ marginLeft: 20 }}
         />{" "}
-        일
-        <br></br>
-        <label>최대인원</label>
+        일<br></br>
+        <h5 style={{ display: "inline-block", marginRight:"30px"}}>참가 최대 인원</h5>
         <select name="maxMember" onChange={onMaximumChange}>
           <option value={3}>3명</option>
           <option value={4}>4명</option>
@@ -198,7 +208,7 @@ function PostingRegisterPresenter({
           <option value={10}>10명</option>
         </select>
         <br></br>
-        <label>모집 마감 날짜</label>
+        <h5 style={{ display: "inline-block", marginRight:"30px"}}>모집 마감 날짜</h5>
         <input
           type="date"
           id="deadline"
@@ -206,7 +216,7 @@ function PostingRegisterPresenter({
           onChange={onDeadLineChange}
         />
         <br></br>
-        <label>신청 자격 점수</label>
+        <h5 style={{ display: "inline-block" , marginRight:"30px"}}>신청 자격 점수</h5>
         <select name="limitLevel" onChange={onLevelChange}>
           <option value={1}>1점</option>
           <option value={2}>2점</option>

@@ -19,12 +19,14 @@ function PostingRegisterContainer() {
   let imgUrl;
   if(readingGroupType==="none"){
     imgUrl = "https://img.freepik.com/free-vector/faq-frequently-asked-questions-with-team-people-and-sign-symbol-with-modern-isometric-style_82472-243.jpg?size=626&ext=jpg";
-  }else if(readingGroupType==="casual"){
+  }else if(readingGroupType==="discuss"){
     imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000317.jpg";
-  }else if(readingGroupType==="professional"){
+  }else if(readingGroupType==="seminar"){
     imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000076.jpg";
-  }else{
+  }else if(readingGroupType==="study"){
     imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001759.jpg";
+  }else{
+    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001996.jpg";
   }
   const onTypeButtonHandler = (event) => {
     setReadingGroupType(event.target.id);
