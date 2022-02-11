@@ -65,7 +65,7 @@ function PostingRegisterPresenter({
           type="radio"
           onChange={onTypeButtonHandler}
         />{" "}
-        일상적인
+        토론형
         <input
           id="professional"
           value="professional"
@@ -74,38 +74,10 @@ function PostingRegisterPresenter({
           onChange={onTypeButtonHandler}
           style={{ marginLeft: 20 }}
         />{" "}
-        전문적인
+        세미나형
         <input
           id="friendly"
           value="friendly"
-          name="readingGroupType"
-          type="radio"
-          onChange={onTypeButtonHandler}
-          style={{ marginLeft: 20 }}
-        />{" "}
-        친근한
-        <br>
-        </br>
-        <input
-          id="discuss"
-          value="discuss"
-          name="readingGroupType"
-          type="radio"
-          onChange={onTypeButtonHandler}
-        />{" "}
-        토론형
-        <input
-          id="seminar"
-          value="seminar"
-          name="readingGroupType"
-          type="radio"
-          onChange={onTypeButtonHandler}
-          style={{ marginLeft: 20 }}
-        />{" "}
-        세미나형
-        <input
-          id="study"
-          value="study"
           name="readingGroupType"
           type="radio"
           onChange={onTypeButtonHandler}
