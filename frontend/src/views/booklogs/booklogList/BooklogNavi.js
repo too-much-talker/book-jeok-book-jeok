@@ -4,9 +4,8 @@ import React from "react";
 
 const TabWrapper = styled.div`
   margin: 1rem;
-  margin-top: 2rem;
+  margin-top: 5rem;
   text-align: left;
-  margin-left: 8rem;
 `;
 
 const Tab = styled.span`

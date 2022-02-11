@@ -15,8 +15,6 @@ const BooklogListBody = styled.div`
 `;
 
 const CardBox = styled.div`
-  width: 100rem;
-  height: 100%;
   background: green;
   margin: 0 auto;
 `;
