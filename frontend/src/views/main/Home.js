@@ -35,6 +35,7 @@ const Welcome = styled.h2`
   margin-top: 15rem;
   margin-left: 5rem;
   display: inline-block;
+  font-size: 2rem;
 `;
 
 const HomeWrapper = styled.div`
@@ -47,8 +48,8 @@ const Img = styled.img.attrs({
 })`
   width: 250px;
   height: 250px;
-  top: 25rem;
-  right: 8rem;
+  top: 15rem;
+  right: 5rem;
   border-radius: 50%;
   background: black;
   display: inline-block;
@@ -62,8 +63,8 @@ const Img2 = styled(Img).attrs({
 })`
   width: 100px;
   height: 100px;
-  top: 20rem;
-  right: 35rem;
+  top: 10rem;
+  right: 25rem;
   animation: ${pongAnimation} 0.5s linear;
 `;
 
@@ -73,7 +74,7 @@ const Img3 = styled(Img2).attrs({
   width: 140px;
   height: 140px;
   top: 5rem;
-  right: 8rem;
+  right: 2rem;
   animation: ${pongAnimation} 1s linear;
 `;
 
@@ -82,8 +83,8 @@ const Img4 = styled(Img2).attrs({
 })`
   width: 100px;
   height: 100px;
-  top: 45rem;
-  right: 40rem;
+  top: 20rem;
+  right: 35rem;
   animation: ${pongAnimation} 1s linear;
 `;
 
@@ -92,8 +93,8 @@ const Img5 = styled(Img2).attrs({
 })`
   width: 100px;
   height: 100px;
-  top: 15rem;
-  right: 2rem;
+  top: 12rem;
+  right: 0rem;
   animation: ${pongAnimation} 0.6s linear;
 `;
 
@@ -102,7 +103,7 @@ const Img6 = styled(Img2).attrs({
 })`
   width: 80px;
   height: 80px;
-  top: 40rem;
+  top: 30rem;
   right: 0rem;
   animation: ${pongAnimation} 1s linear;
 `;
@@ -112,8 +113,8 @@ const Img7 = styled(Img2).attrs({
 })`
   width: 80px;
   height: 80px;
-  top: 38rem;
-  right: 50rem;
+  top: 30rem;
+  right: 26rem;
   animation: ${pongAnimation} 0.5s linear;
 `;
 

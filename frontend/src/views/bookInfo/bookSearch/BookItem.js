@@ -7,10 +7,16 @@ const Block = styled.div`
   position: relative;
   width: 100%;
   margin-bottom: 50px;
+  margin: 15px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Image = styled.div``;
-const Content = styled.div``;
+const Content = styled.div`
+  font-size: 15px;
+`;
 
 const Contents = styled.div`
   position: relative;
@@ -33,7 +39,7 @@ function BookItem({
     <>
       <Block>
         <Image>
-          <img src={largeImgUrl} height="250" width="180"></img>
+          <img src={largeImgUrl} height="220" width="160"></img>
         </Image>
         <Contents>
           <Content>제목:{title}</Content>

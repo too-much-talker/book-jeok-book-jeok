@@ -12,7 +12,13 @@
 }
 
 @font-face {
-  font-family: "Gown";
+  font-family: "SUIT-Light";
   font-weight: 100;
-  src: url("../../res/fonts/Gown.ttf");
+  src: url("../../res/fonts/SUIT-Light.ttf");
+}
+
+@font-face {
+  font-family: "SUIT-Regular";
+  font-weight: 100;
+  src: url("../../res/fonts/SUIT-Regular.ttf");
 }

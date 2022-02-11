@@ -3,20 +3,30 @@ import { Link } from "react-router-dom";
 import React from "react";
 
 const Form = styled.form`
-  margin-top: 8rem;
+  margin-top: 5rem;
 `;
 
 const Input = styled.input`
   display: block;
   margin: 0 auto;
-  width: 20rem;
-  border: 0;
+  width: 15rem;
+  height: 2rem;
+  border-width: 0 0 2px;
   margin-top: 1rem;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const Button = styled.button`
   margin-top: 3rem;
-  width: 20rem;
+  width: 8rem;
+  height: 2.2rem;
+  background: white;
+  border-radius: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 function LoginPresenter({ onIdChange, onPwChange, onSubmit }) {
