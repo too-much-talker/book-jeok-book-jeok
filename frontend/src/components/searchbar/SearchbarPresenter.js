@@ -4,7 +4,7 @@ import React from "react";
 
 const SearchBlock = styled.div`
   // position: absolute;
-  width: 100%;
+  width: 70%;
   height: 60px;
   text-align: center;
   display: inline-block;
@@ -12,7 +12,7 @@ const SearchBlock = styled.div`
 
 const SearchWapper = styled.span`
   border-bottom: solid 2px;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
 `;
 
 const SelectBox = styled.select`
@@ -31,18 +31,17 @@ const SearchInput = styled.input`
   //border-bottom-width: 1; // SearchWrapper 안쓸거면 얘로 변경.
   border-bottom-width: 0;
 
-  width: 50rem;
+  width: 70%;
   // height: 50px;
   :focus {
     outline: none;
   }
-  font-size: 1.7rem;
 `;
 
 const SearchIcon = styled.img.attrs({
   src: icon,
 })`
-  width: 2.5rem;
+  width: 1.5rem;
   &:hover {
     cursor: pointer;
   }

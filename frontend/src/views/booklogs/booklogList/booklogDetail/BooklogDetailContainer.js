@@ -38,9 +38,25 @@ function BooklogDetailContainer() {
         if (response.data.status === 200) {
           setBooklog(response.data.data.booklog);
           setLikes(response.data.data.booklog.likes);
+          isLikeBooklog(
+            params.booklogSeq,
+            {
+              headers: {
+                Authorization: `Bearer ` + jwtToken,
+              },
+            },
+            (response) => {
+              if (response.data.status === 200)
+                setIsLike(response.data.data.isLike);
+              else alert("에러가 발생했습니다.");
+            },
+            (error) => {
+              alert("에러가 발생했습니다.");
+            }
+          );
         } else if (response.data.status === 403) {
           alert("로그인 후 사용 가능합니다.");
-          navigate("-1");
+          navigate("/login");
         } else {
           alert("접근이 불가능한 페이지입니다.");
           navigate("/");
@@ -55,23 +71,7 @@ function BooklogDetailContainer() {
   }, [params]);
 
   // 북로그 like 세팅
-  useEffect(() => {
-    isLikeBooklog(
-      params.booklogSeq,
-      {
-        headers: {
-          Authorization: `Bearer ` + jwtToken,
-        },
-      },
-      (response) => {
-        if (response.data.status === 200) setIsLike(response.data.data.isLike);
-        else alert("에러가 발생했습니다.");
-      },
-      (error) => {
-        alert("에러가 발생했습니다.");
-      }
-    );
-  }, [isLike]);
+  useEffect(() => {}, [isLike]);
 
   // 북로그 like 변경
   function onClickHeart() {
