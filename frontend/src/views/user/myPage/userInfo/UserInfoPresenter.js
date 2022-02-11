@@ -10,17 +10,18 @@ import {
 } from "../../validCheck/ValidCheck";
 
 const Form2 = styled.div`
-  margin-left: 15rem;
+  margin-left: 12rem;
   text-align: left;
+  font-size: large;
 `;
 
 const Form1 = styled.div`
-  margin-left: 15rem;
+  margin-left: 10rem;
   padding-top: 5rem;
   padding-bottom: 5rem;
   border-radius: 3rem;
-  border: 1px solid #cccccc;
-  width: 550px;
+  border: 2px solid #cccccc;
+  width: 600px;
 `;
 const EditUserForm = (props) => {
   // useEffect(() => {
@@ -84,6 +85,7 @@ const EditUserForm = (props) => {
     <Form1>
       <Form2>
         <label>이름</label>
+        <br></br>
         <input
           type="text"
           value={props.name}
@@ -91,7 +93,10 @@ const EditUserForm = (props) => {
           onChange={props.nameChange}
           onBlur={nameBlurHandler}
         />
+        <br></br>
+        <br></br>
         <label>비밀번호</label>
+        <br></br>
         <input
           type="password"
           // value={props.password}
@@ -99,7 +104,11 @@ const EditUserForm = (props) => {
           onChange={props.passwordChange}
           onBlur={passwordBlurHandler}
         />
+
+        <br></br>
+        <br></br>
         <label>비밀번호확인</label>
+        <br></br>
         <input
           type="password"
           // value={props.passwordConfirm}
@@ -107,7 +116,10 @@ const EditUserForm = (props) => {
           onChange={props.passwordConfirmChange}
           onBlur={passwordConfirmBlurHandler}
         />
+        <br></br>
+        <br></br>
         <label>이메일</label>
+        <br></br>
         <input
           type="text"
           value={props.email}
@@ -117,7 +129,10 @@ const EditUserForm = (props) => {
         />
         {/* <input className="u-full-width" type="text" value={user.email} name="email" onChange={handleChange} onBlur={props.checkEmail}/> */}
         <button onClick={props.checkId}>중복확인</button>
+        <br></br>
+        <br></br>
         <label>닉네임</label>
+        <br></br>
         <input
           type="text"
           value={props.nickname}
@@ -172,7 +187,7 @@ const UserTable = (props) => {
         <p>010-5023-9161</p> */}
         <br></br>
         <br></br>
-        <button onClick={props.editUser}>수정하기</button>
+        <button onClick={props.editUser} style={{marginRight: "30px"}}>수정하기</button>
         <button>탈퇴하기</button>
       </Form2>
     </Form1>
@@ -185,10 +200,11 @@ const UserExpPoint = (props) => {
   `;
   const Point = styled.div`
     display: inline-block;
-    margin-left: 70px;
+    margin-left: 50px;
   `;
   const Exp = styled.div`
     display: inline-block;
+    margin-left: 30px;
   `;
   return (
       <ExpPoint>

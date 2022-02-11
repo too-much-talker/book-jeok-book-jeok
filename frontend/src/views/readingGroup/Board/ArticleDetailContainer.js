@@ -48,9 +48,33 @@ function ArticleDetailContainer(){
               console.log(error);
             }); 
     }
+
+    function goModify(){
+
+    }
+    function goDelete() {
+        console.log("ddd");
+        axios
+          .delete(url + `/api/v1/reading-groups/boards/${useParam.seq}`, {
+            headers: {
+              Authorization: `Bearer ` + jwtToken,
+            },
+          })
+          .then(function (response) {
+            console.log(response);
+            alert(response.data.data);
+            //목록으로 이동
+            //document.location.href = `/detail/${useParam.seq}`;
+          })
+          .catch(function (error) {
+            console.log(error);
+            alert("삭제 중 문제가 발생하였습니다.");
+          });
+      }
+
     return(
         <>
-            <ArticleDetailPresenter file={file} comments={comments} title={title} content={content} nickname={nickname} createdDate={createdDate} views={views}></ArticleDetailPresenter>
+            <ArticleDetailPresenter goDelete={goDelete} goModify={goModify}file={file} comments={comments} title={title} content={content} nickname={nickname} createdDate={createdDate} views={views}></ArticleDetailPresenter>
         </>
     );
 }
