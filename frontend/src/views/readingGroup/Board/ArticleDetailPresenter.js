@@ -42,13 +42,15 @@ height:55%;
 const Image = styled.div`
 position:relative;
 `;
+const Buttons= styled.div``;
+const Btn= styled.button``;
 
 // const Comments= styled.div`
 // position:relative;
 // height:31%;
 // background:blue;
 // `;
-function ArticleDetailPresenter({file,comments,title, content,nickname, createdDate, views}){
+function ArticleDetailPresenter({goDelete,goModify,file,comments,title, content,nickname, createdDate, views}){
    
     
     return(
@@ -67,6 +69,7 @@ function ArticleDetailPresenter({file,comments,title, content,nickname, createdD
                 </Image>
                 <Content>{content}</Content>
             </Contents>
+         
             
             <Comment>
                 {comments && comments.map(comment=>(
@@ -79,6 +82,10 @@ function ArticleDetailPresenter({file,comments,title, content,nickname, createdD
                 ))}
             </Comment>
         </Article>
+        <Buttons>
+                <Btn onClick={goModify}>수정</Btn>
+                <Btn onClick={goDelete}>삭제</Btn>
+            </Buttons>
 
     </Block>);
 }
