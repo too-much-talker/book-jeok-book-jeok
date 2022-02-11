@@ -8,19 +8,20 @@ const BookLog = styled.div`
   text-align: center;
 `;
 const Register = styled.div`
-  text-align: right;
+  /* text-align: right; */
+  align-items: right;
+  margin-left: 700px;
 `;
 const Header = styled.div`
   display: flex;
-  justify-content: space-between;
-  span {
-    margin-left: 8rem;
-  }
+  margin-left: 70px;
   label {
     display: inline-block;
   }
 `;
-
+const Title = styled.div`
+  margin-left: 170px;
+  `
 function UserBooklogList({
   isOpen,
   checkBoxHandler,
@@ -32,7 +33,9 @@ function UserBooklogList({
 ) {
   return (
     <div>
-      <h2>나의 북로그</h2>
+      <Title>
+      <h1>나의 북로그</h1>
+      </Title>
       <br></br>
       <div>
         <Link to="/booklogregister">
@@ -41,10 +44,10 @@ function UserBooklogList({
           </Register>
         </Link>
         <Header>
-          <span>
+
             <label>공개된 북로그만 보기</label>
             <input value={isOpen} onChange={checkBoxHandler} type="checkbox" />
-          </span>
+
         </Header>
         <br></br>
         <BookLog>{context}</BookLog>

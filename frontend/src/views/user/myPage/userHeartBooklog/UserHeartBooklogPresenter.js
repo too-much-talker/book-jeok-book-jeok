@@ -14,7 +14,9 @@ const BookLog = styled.div`
 const Button = styled.div`
   margin-left: 700px;
 `;
-
+const Title = styled.div`
+  margin-left: 150px;
+  `
 function UserHeartBooklogPresenter({
   context,
   page,
@@ -23,7 +25,9 @@ function UserHeartBooklogPresenter({
 }) {
   return (
     <div>
-      <h2>하트 누른 북로그</h2>
+      <Title>
+      <h1>하트 누른 북로그</h1>
+      </Title>
       <br></br>
       <div>
         <Link to="/booklogregister">
