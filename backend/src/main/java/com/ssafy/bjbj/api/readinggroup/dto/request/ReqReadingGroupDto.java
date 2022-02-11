@@ -1,7 +1,7 @@
 package com.ssafy.bjbj.api.readinggroup.dto.request;
 
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
-import com.ssafy.bjbj.common.enums.Days;
+import com.ssafy.bjbj.common.enums.Day;
 import com.ssafy.bjbj.common.validator.EnumListValidator;
 import com.ssafy.bjbj.common.validator.EnumValidator;
 import lombok.Builder;
@@ -40,7 +40,7 @@ public class ReqReadingGroupDto {
     @EnumValidator(enumClass = ReadingGroupType.class, ignoreCase = true, message = "독서 모임 분위기 타입을 올바르게 설정해주세요.")
     private String readingGroupType;
 
-    @EnumListValidator(enumClass = Days.class, ignoreCase = true, message = "요일을 올바르게 설정해주세요.")
+    @EnumListValidator(enumClass = Day.class, ignoreCase = true, message = "요일을 올바르게 설정해주세요.")
     private List<String> days;
 
     @Builder

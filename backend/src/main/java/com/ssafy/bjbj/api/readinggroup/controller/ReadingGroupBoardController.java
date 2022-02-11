@@ -9,16 +9,19 @@ import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import com.ssafy.bjbj.common.service.file.FileInfoService;
+import com.ssafy.bjbj.common.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,28 +40,49 @@ public class ReadingGroupBoardController {
     @PostMapping
     public BaseResponseDto register(
             @Valid @RequestPart(value = "reqReadingGroupBoard") ReqReadingGroupBoardDto reqReadingGroupBoardDto,
+            Errors errors,
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
             Authentication authentication) throws Exception {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
-        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        System.out.println("files = " + files);
 
-        try {
-            Long rootSeq = readingGroupBoardService.register(reqReadingGroupBoardDto, memberSeq);
+        if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+            }
+        } else {
+            Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+            try {
+                Long readingGroupBoardSeq = readingGroupBoardService.register(reqReadingGroupBoardDto, files, memberSeq);
 
-            fileInfoService.registerFileInfo(rootSeq, files);
+                status = HttpStatus.CREATED.value();
+                responseData.put("msg", "독서모임 게시글 작성하였습니다.");
+                responseData.put("readingGroupBoardSeq", readingGroupBoardSeq);
+            } catch (IOException e) {
+                log.error("파일 저장 싪패");
+                e.printStackTrace();
 
-            status = HttpStatus.CREATED.value();
-            responseData.put("msg", "독서모임 게시글 포스팅을 작성하였습니다.");
-            responseData.put("readingGroupBoardSeq", rootSeq);
-        } catch (Exception e) {
-            e.printStackTrace();
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "요청을 수행할 수 없습니다.");
+            } catch (Exception e) {
+                log.error("서버 에러 발생");
+                e.printStackTrace();
 
-            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            responseData.put("msg", "요청을 수행할 수 없습니다.");
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "요청을 수행할 수 없습니다.");
+            }
         }
+
         return BaseResponseDto.builder()
                 .status(status)
                 .data(responseData)
@@ -149,7 +173,7 @@ public class ReadingGroupBoardController {
         try {
             ResReadingGroupArticleDto resReadingGroupArticleDto = readingGroupBoardService.updateReadingGroupArticleBySeq(readingGroupArticleSeq, memberSeq, reqReadingGroupBoardDto);
 
-            fileInfoService.updateFileInfo(readingGroupArticleSeq, files);
+            fileInfoService.update(readingGroupArticleSeq, files);
             List<String> fileInfoPaths = fileInfoService.findAllFileInfoByReadingGroupBoardSeq(readingGroupArticleSeq);
 
             status = HttpStatus.OK.value();
@@ -188,7 +212,7 @@ public class ReadingGroupBoardController {
         try {
             readingGroupBoardService.deleteReadingGroupArticle(readingGroupArticleSeq, memberSeq);
 
-            fileInfoService.deleteFileInfo(readingGroupArticleSeq, memberSeq);
+            fileInfoService.delete(readingGroupArticleSeq, memberSeq);
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "독서모임 게시글을 삭제하였습니다");

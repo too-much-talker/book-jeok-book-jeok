@@ -25,13 +25,12 @@ public class FileInfoServiceImpl implements FileInfoService{
 
     @Transactional
     @Override
-    public void registerFileInfo(Long rootSeq, List<MultipartFile> files) throws IOException {
+    public void register(Long rootSeq, List<MultipartFile> files) throws IOException {
         List<FileInfo> fileInfos = fileHandler.parseFileInfo(files);
 
         if (!fileInfos.isEmpty()) {
             for (FileInfo fileInfo : fileInfos) {
                 fileInfo.setRootSeq(rootSeq);
-                System.out.println("fileInfo = " + fileInfo);
                 fileInfoRepository.save(fileInfo);
             }
         }
@@ -40,7 +39,6 @@ public class FileInfoServiceImpl implements FileInfoService{
     @Override
     public List<String> findAllFileInfoByReadingGroupBoardSeq(Long rootSeq) {
         List<FileInfo> fileInfos = fileInfoRepository.findAllByRootSeq(rootSeq);
-        System.out.println("fileInfos = " + fileInfos);
 
         List<String> paths = new ArrayList<>();
 
@@ -57,7 +55,7 @@ public class FileInfoServiceImpl implements FileInfoService{
 
     @Transactional
     @Override
-    public void updateFileInfo(Long rootSeq, List<MultipartFile> files) throws IOException {
+    public void update(Long rootSeq, List<MultipartFile> files) throws IOException {
 
         List<FileInfo> fileInfos = fileInfoRepository.findAllByRootSeq(rootSeq);
 
@@ -85,7 +83,7 @@ public class FileInfoServiceImpl implements FileInfoService{
 
     @Transactional
     @Override
-    public void deleteFileInfo(Long rootSeq, Long memberSeq) {
+    public void delete(Long rootSeq, Long memberSeq) {
 
         List<FileInfo> fileInfos = fileInfoRepository.findAllByRootSeq(rootSeq);
 
@@ -101,4 +99,5 @@ public class FileInfoServiceImpl implements FileInfoService{
             }
         }
     }
+
 }

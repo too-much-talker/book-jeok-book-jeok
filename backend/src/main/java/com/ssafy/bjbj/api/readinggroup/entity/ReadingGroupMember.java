@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.readinggroup.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,11 @@ public class ReadingGroupMember {
     @ManyToOne(fetch = LAZY)
     @Id
     private Member member;
+
+    @Builder
+    public ReadingGroupMember(ReadingGroup readingGroup, Member member) {
+        this.readingGroup = readingGroup;
+        this.member = member;
+    }
 
 }
