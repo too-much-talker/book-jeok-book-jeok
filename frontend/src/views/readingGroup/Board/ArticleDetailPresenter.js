@@ -18,19 +18,20 @@ const Article = styled.div`
 `;
 const Head = styled.div`
   position: relative;
-  height: 12%;
+  height: 10%;
   font-size: 30px;
   margin-left: 3%;
 `;
 const Title = styled.div`
   position: relative;
-  margin-top: 1.5%;
+  margin-top: 2%;
   font-size: 90%;
   text-align: left;
 `;
 const Rest = styled.div`
   margin-top: 1%;
   display: flex;
+  font-size: 70%;
 `;
 
 const Writer = styled.div`
@@ -85,7 +86,7 @@ const CommentBtn = styled.button`
 const Wrap = styled.div`
   position: relative;
   width: 70%;
-  height: 50%;
+  height: 40%;
   margin: auto;
   padding-bottom: 70px;
   margin-top: 15px;
@@ -112,7 +113,7 @@ const Wrap = styled.div`
 const SlickItems = styled.div`
   position: relative;
   margin-left: 2%;
-  height: 400px;
+  height: 300px;
   img {
     max-width: 100%;
     height: 100%;

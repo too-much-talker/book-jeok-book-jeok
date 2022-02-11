@@ -56,10 +56,8 @@ function RegisterArticleContainer() {
     let formData = new FormData();
     // formData.append("files", files);
     // console.log(files);
-    postfiles.file.map((eachfile) => (
-      formData.append("files", eachfile)
-    ))
-    
+    postfiles.file.map((eachfile) => formData.append("files", eachfile));
+
     let reqReadingGroupBoard = {
       readingGroupSeq: readingGroupSeq,
       title: title,
@@ -73,7 +71,6 @@ function RegisterArticleContainer() {
       })
     );
 
-
     axios
       .post(url + `/api/v1/reading-groups/boards`, formData, {
         headers: {
@@ -85,7 +82,7 @@ function RegisterArticleContainer() {
       .then(function (response) {
         console.log(response.data);
         alert("게시글이 작성되었습니다.");
-        //document.location.href = `/board/${readingGroupSeq}`;
+        document.location.href = `/board/${readingGroupSeq}`;
       })
       .catch(function (error) {
         console.log(error);
