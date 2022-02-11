@@ -23,8 +23,14 @@ function PostingRegisterContainer() {
     imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001996.jpg";
   }else if(readingGroupType==="professional"){
     imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001246.jpg";
-  }else{
+  }else if(readingGroupType === "friendly"){
     imgUrl = "https://vrthumb.imagetoday.co.kr/2021/01/12/td00920002700.jpg";
+  }else if(readingGroupType === "discuss"){
+    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000317.jpg";
+  }else if(readingGroupType === "seminar"){
+    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000076.jpg";
+  }else{
+    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001759.jpg";
   }
   const onTypeButtonHandler = (event) => {
     setReadingGroupType(event.target.id);

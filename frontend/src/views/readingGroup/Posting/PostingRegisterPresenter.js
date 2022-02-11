@@ -84,6 +84,34 @@ function PostingRegisterPresenter({
           style={{ marginLeft: 20 }}
         />{" "}
         친근한
+        <br>
+        </br>
+        <input
+          id="discuss"
+          value="discuss"
+          name="readingGroupType"
+          type="radio"
+          onChange={onTypeButtonHandler}
+        />{" "}
+        토론형
+        <input
+          id="seminar"
+          value="seminar"
+          name="readingGroupType"
+          type="radio"
+          onChange={onTypeButtonHandler}
+          style={{ marginLeft: 20 }}
+        />{" "}
+        세미나형
+        <input
+          id="study"
+          value="study"
+          name="readingGroupType"
+          type="radio"
+          onChange={onTypeButtonHandler}
+          style={{ marginLeft: 20 }}
+        />{" "}
+        스터디형
       </Info>
       <hr></hr>
       <Wrapper2>
