@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { checkPassword } from "../validCheck/ValidCheck";
 const SignupTemplateBlock = styled.div`
-  width: 950px;
-  height: 550px;
+  width: 750px;
+  height: 600px;
   position: relative; /* 추후 박스 하단에 추가 버튼을 위치시키기 */
   border-radius: 16px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
@@ -14,9 +14,9 @@ const SignupTemplateBlock = styled.div`
 `;
 
 const SignupHeadBlock = styled.div`
-  padding-top: 10px;
-  padding-bottom: 14px;
-  margin-bottom: 2%;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-bottom: 1%;
   border-bottom: 1px solid black;
   h1 {
     font-size: 26px;
@@ -40,15 +40,56 @@ const InputItem = styled.div`
   height: 10%;
   width: 100%;
   display: flex;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
+`;
+const PwdItem = styled.div`
+  height: 19%;
+  width: 100%;
+  display: flex;
+  // background: Red;
+`;
+const NicknameItem = styled.div`
+  height: 19%;
+  width: 100%;
+  display: flex;
 `;
 const Label = styled.div`
-  width: 13%;
+  width: 17%;
   margin-right: 1%;
 `;
+
 const Input = styled.input`
-  width: 75%;
+  width: 68%;
   margin-right: 1%;
+`;
+
+const PwdInputs = styled.div`
+  width: 68%;
+  margin-right: 1%;
+`;
+const NicknameInputs = styled.div`
+  width: 68%;
+  margin-right: 1%;
+`;
+const PwdMsg = styled.div`
+  font-size: 13px;
+`;
+const NicknameMsg = styled.div`
+  font-size: 13px;
+`;
+const PwdInput = styled.input`
+  width: 100%;
+  margin-right: 1%;
+  height: 45%;
+`;
+const NicknameInput = styled.input`
+  width: 100%;
+  height: 45%;
+`;
+const NicknameBtn = styled.button`
+  margin-top: 2.4%;
+  margin-left: 1.1%;
+  height: 52%;
 `;
 const DuplicateBtn = styled.button``;
 const SignupFormBlock = styled.div`
@@ -101,14 +142,20 @@ function Signup({
           ></Input>
           <DuplicateBtn onClick={checkId}>중복확인</DuplicateBtn>
         </InputItem>
-        <InputItem>
+        <PwdItem>
           <Label>비밀번호</Label>
-          <Input
-            type="password"
-            onChange={onPasswordHandler}
-            placeholder="비밀번호를 입력해주세요 (영어 소문자, 대문자, 숫자, 특수 문자 4종류 중에 2종류를 포함. 8자 이상 12자 이하)"
-          ></Input>
-        </InputItem>
+          <PwdInputs>
+            <PwdMsg>
+              영어 소문자, 대문자, 숫자, 특수 문자 4종류 중에 2종류를 포함. 8자
+              이상 12자 이하
+            </PwdMsg>
+            <PwdInput
+              type="password"
+              onChange={onPasswordHandler}
+              placeholder="비밀번호를 입력해주세요"
+            ></PwdInput>
+          </PwdInputs>
+        </PwdItem>
         <InputItem>
           <Label>비밀번호 확인</Label>
           <Input
@@ -125,14 +172,20 @@ function Signup({
             onBlur={checkNameLength}
           ></Input>
         </InputItem>
-        <InputItem>
+        <NicknameItem>
           <Label>닉네임</Label>
-          <Input
-            placeholder="닉네임을 입력해주세요 (닉네임은 한글로만 혹은 영어로만 이루어져야 합니다.)"
-            onChange={onNicknameHandler}
-          ></Input>
-          <DuplicateBtn onClick={checkNickname}>중복확인</DuplicateBtn>
-        </InputItem>
+          <NicknameInputs>
+            <NicknameMsg>
+              닉네임은 한글로만 혹은 영어로만 이루어져야 합니다.
+            </NicknameMsg>
+            <NicknameInput
+              placeholder="닉네임을 입력해주세요 "
+              onChange={onNicknameHandler}
+            ></NicknameInput>
+          </NicknameInputs>
+          <NicknameBtn onClick={checkNickname}>중복확인</NicknameBtn>
+        </NicknameItem>
+
         <InputItem>
           <Label>휴대폰번호</Label>
           <Input
