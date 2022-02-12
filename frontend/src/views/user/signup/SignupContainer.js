@@ -1,5 +1,5 @@
 import Signup from "./SignupPresenter";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   checkId,
@@ -8,7 +8,7 @@ import {
   checkNameLength,
   checkPhoneNumber,
   checkPhoneDuplicate,
-  checkPassword
+  checkPassword,
 } from "../validCheck/ValidCheck";
 
 function SignupContainer() {
@@ -18,7 +18,7 @@ function SignupContainer() {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [checkValid, setCheckValid]= useState(true);
+  const [checkValid, setCheckValid] = useState(true);
   const url = "https://i6a305.p.ssafy.io:8443";
 
   const onEmailHandler = (event) => {
@@ -53,8 +53,7 @@ function SignupContainer() {
     checkNickname(nickname, url);
   }
   function CheckPassword() {
-    checkPassword(password, email, nickname, name,checkValidHandler);
-    
+    checkPassword(password, email, nickname, name, checkValidHandler);
   }
   function CheckNameLength() {
     checkNameLength(name);
@@ -63,18 +62,18 @@ function SignupContainer() {
     checkPhoneNumber(phoneNumber);
   }
 
-  function CheckPhoneDuplicate(){
-    checkPhoneDuplicate(phoneNumber,url);
+  function CheckPhoneDuplicate() {
+    checkPhoneDuplicate(phoneNumber, url);
   }
-  
-  function checkPasswordConfim(password, passwordConfirm){
+
+  function checkPasswordConfim(password, passwordConfirm) {
     if (password !== passwordConfirm) {
       return false;
     }
     return true;
   }
 
-  function checkValidHandler(param){
+  function checkValidHandler(param) {
     setCheckValid(param);
   }
 
@@ -90,18 +89,15 @@ function SignupContainer() {
       alert("입력하지 않은 정보가 있습니다. 확인해주세요.");
     } else {
       console.log(checkValid);
-      if (
-        checkValid===true
-      ) {
+      if (checkValid === true) {
         console.log(email, password, name, nickname, phoneNumber);
         axios
-          .post(url + `/api/v1/members`, 
-          {
+          .post(url + `/api/v1/members`, {
             email: email,
             password: password,
             name: name,
             nickname: nickname,
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
           })
           .then(function (response) {
             console.log(response);
@@ -125,7 +121,7 @@ function SignupContainer() {
     }
   };
 
-  return ( 
+  return (
     <>
       <Signup
         onEmailHandler={onEmailHandler}

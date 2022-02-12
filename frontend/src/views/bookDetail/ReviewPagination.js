@@ -6,46 +6,45 @@ display: flex;
 justify-content: center;  } 
 `;
 const PageLists = styled.ul`
-display: flex; 
-list-style: none; padding: 0;
+  display: flex;
+  list-style: none;
+  padding: 0;
 `;
 const PageNumber = styled.li`
-display: inline-block; 
-width: 30px; 
-height: 30px; 
-border: 1px solid #e2e2e2; 
-display: flex; 
-justify-content: center; 
-align-items: center; 
-font-size: 1rem;
-&: first-child {
-  border-radius: 5px 0 0 5px;
-}
-&: last-child {
-  border-radius: 0 5px 5px 0;
-}
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #e2e2e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  &: first-child {
+    border-radius: 5px 0 0 5px;
+  }
+  &: last-child {
+    border-radius: 0 5px 5px 0;
+  }
 
-&.active{
-  background-color: #337ab7;
-}
-
+  &.active {
+    background-color: #337ab7;
+  }
 `;
 const PageButton = styled.button`
   cursor: pointer;
-  color: ${props => props.theme.uiColorOrange};
+  color: ${(props) => props.theme.uiColorOrange};
   margin: 0 0.3rem;
   padding: 0;
   border: none;
-  text-decoration: none; 
-  color: #337ab7; 
-  &:hover{
+  text-decoration: none;
+  color: #337ab7;
+  &:hover {
     color: blue;
   }
-  &.active{
+  &.active {
     color: blue;
   }
 `;
-
 
 // function changeColor(){
 //   alert(PageButton.background);
@@ -64,12 +63,11 @@ function ReviewPagination({ postPerPage, totalPosts, paginate }) {
   return (
     <Wrapper>
       <PageLists>
-        {pageNumbers.map(number => (
+        {pageNumbers.map((number) => (
           <PageNumber key={number}>
             <PageButton onClick={() => paginate(number)}>{number}</PageButton>
             {/* <PageButton onClick={() => {paginate(number);changeColor();
     }}>{number}</PageButton> */}
-
           </PageNumber>
         ))}
       </PageLists>
