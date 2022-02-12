@@ -50,6 +50,7 @@ function PostingDetailPresenter({
   else{
     group.readingGroupType = "자유형"
   }
+
   return (
     <Wrapper>
       <Wrapper2>
@@ -62,8 +63,8 @@ function PostingDetailPresenter({
             <button onClick={cancelSubcription}>신청취소</button>
           </Button>
         )}
-        <h2>독서모임 포스팅 자세히보기</h2>
-        <h5>관심있는 모임이라면 우측 상단의 신청하기 버튼을 눌러주세요.</h5>
+        {/* <h2>독서모임 포스팅 자세히보기</h2> */}
+        <h2>관심있는 모임이라면, 우측의 신청하기 버튼을 눌러주세요 !</h2>
         <HR>
           <hr></hr>
         </HR>
@@ -88,15 +89,15 @@ function PostingDetailPresenter({
           </tr>
           
           <tr>
-            <td>독서모임 참여조건</td>
+            <td>독서모임 참여 조건</td>
             <td>최소 레벨 {group.minLevel} 이상</td>
           </tr>
           <tr>
-            <td>모집 마감일</td>
+            <td>독서모임 모집 마감</td>
             <td>{group.deadline}</td>
           </tr>
           <tr>
-            <td>독서모임 신청명단</td>
+            <td>독서모임 신청 명단</td>
             <td>{group.participants}</td>
           </tr>
           <tr>
@@ -107,9 +108,8 @@ function PostingDetailPresenter({
             <td>독서모임 생성자</td>
             <td>{group.writer}</td>
           </tr>
-
         </table>
-        {/* <Label>
+                  {/* <Label>
           <label>상태</label>
           <p>{group.status}</p>
         </Label> */}

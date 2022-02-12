@@ -70,7 +70,7 @@ function PostingRegisterPresenter({
         <input
           id="seminar"
           value="seminar"
-          name="seminar"
+          name="readingGroupType"
           type="radio"
           onChange={onTypeButtonHandler}
           style={{ marginLeft: 20 }}
