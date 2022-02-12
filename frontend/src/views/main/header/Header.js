@@ -3,7 +3,9 @@ import styled from "styled-components";
 import logo from "../../../res/img/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../../common/reducers/modules/auth";
 
 const HeaderWrapper = styled.div`
   width: 1170px;
@@ -31,6 +33,29 @@ function Header() {
   // const { jwtToken, memberInfo } = useSelector((state) => state.authReducer);
   // console.log(jwtToken, memberInfo);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
+  const dispatch = useDispatch();
+
+  const memberInfo = useSelector((state) => state.authReducer.memberInfo);
+
+  useEffect(() => {
+    if (
+      (jwtToken === null || jwtToken === undefined || jwtToken === "") &&
+      (memberInfo !== null || memberInfo !== undefined || memberInfo !== "")
+    ) {
+      dispatch(
+        setUserInfo({
+          memberInfo: {
+            seq: "",
+            email: "",
+            password: "",
+            name: "",
+            nickname: "",
+          },
+          jwtToken: "",
+        })
+      );
+    }
+  }, []);
 
   return (
     <HeaderRoot>
