@@ -158,16 +158,19 @@ function UserInfoContainer() {
         console.log(error);
       });
   };
-
+  
+  const Title = styled.div`
+  margin-left: 150px;
+  `
   return (
     <div className="container">
-      <div className="title">
-        <h2>나의 정보수정</h2>
+      <Title>
+        <h1>나의 정보수정</h1>
         {/* <hr></hr>
         <Profile src={profile}></Profile> */}
         <br></br>
         <br></br>
-      </div>
+      </Title>
       <div className="usertable">
         {!editing ? (
           <div>
