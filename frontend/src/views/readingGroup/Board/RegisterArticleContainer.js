@@ -56,10 +56,8 @@ function RegisterArticleContainer() {
     let formData = new FormData();
     // formData.append("files", files);
     // console.log(files);
-    postfiles.file.map((eachfile) => (
-      formData.append("files", eachfile)
-    ))
-    
+    postfiles.file.map((eachfile) => formData.append("files", eachfile));
+
     let reqReadingGroupBoard = {
       readingGroupSeq: readingGroupSeq,
       title: title,
@@ -72,7 +70,6 @@ function RegisterArticleContainer() {
         type: "application/json",
       })
     );
-
 
     axios
       .post(url + `/api/v1/reading-groups/boards`, formData, {
