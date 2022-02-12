@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.readinggroup.controller;
 
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupDetailDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupListPageDto;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupMemberException;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupMemberService;
@@ -11,6 +12,7 @@ import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -99,7 +101,7 @@ public class ReadingGroupController {
         Map<String, Object> responseData = new HashMap<>();
 
         try {
-            ResReadingGroupDetailDto resReadingGroupDetailDto = readingGroupService.getResDto(readingGroupSeq);
+            ResReadingGroupDetailDto resReadingGroupDetailDto = readingGroupService.getResReadingGroupDetailDto(readingGroupSeq);
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "독서 모임 모집 포스팅 상세페이지 조회 API 호출 성공");
@@ -132,6 +134,7 @@ public class ReadingGroupController {
      * @return {
      *     201 -> msg
      *     400 -> msg
+     *     409 -> msg
      *     500 -> msg
      * }
      */
@@ -218,6 +221,39 @@ public class ReadingGroupController {
                 status = HttpStatus.INTERNAL_SERVER_ERROR.value();
                 responseData.put("msg", e.getMessage());
             }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    /**
+     * 독서 모임 목록 페이지 정보를 반환합니다.
+     *
+     * @param pageable : 페이지네이션
+     * @return ResReadingGroupListPageDto
+     */
+    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
+    @GetMapping
+    public BaseResponseDto list(Pageable pageable) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResReadingGroupListPageDto resReadingGroupListPageDto = readingGroupService.getReadingGroupListPageDto(pageable);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서 모임 모집 포스팅 목록 조회 성공");
+            responseData.put("readingGroups", resReadingGroupListPageDto);
+        } catch (Exception e) {
+            log.error("서버 장애 발생");
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", e.getMessage());
         }
 
         return BaseResponseDto.builder()

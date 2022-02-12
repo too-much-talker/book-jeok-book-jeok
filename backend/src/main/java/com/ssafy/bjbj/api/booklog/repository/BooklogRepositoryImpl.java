@@ -206,7 +206,7 @@ public class BooklogRepositoryImpl implements BooklogRepositoryCustom {
                 ))
                 .from(booklog)
                 .join(booklog.bookInfo, bookInfo)
-                .where(booklog.isOpen.isTrue().and(booklog.isDeleted.isFalse()))
+                .where(booklog.bookInfo.seq.eq(bookInfoSeq).and(booklog.isOpen.isTrue().and(booklog.isDeleted.isFalse())))
                 .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
                 .limit(pageable.getPageSize())
                 .orderBy(booklog.createdDate.desc())

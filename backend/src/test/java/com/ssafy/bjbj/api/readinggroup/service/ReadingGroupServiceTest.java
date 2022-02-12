@@ -152,7 +152,7 @@ class ReadingGroupServiceTest {
         em.flush();
         em.clear();
 
-        ResReadingGroupDetailDto resDto1 = readingGroupService.getResDto(savedReadingGroup.getSeq());
+        ResReadingGroupDetailDto resDto1 = readingGroupService.getResReadingGroupDetailDto(savedReadingGroup.getSeq());
 
         assertThat(resDto1.getReadingGroupSeq()).isEqualTo(savedReadingGroup.getSeq());
         assertThat(resDto1.getWriter()).isEqualTo(savedReadingGroup.getMember().getNickname());
