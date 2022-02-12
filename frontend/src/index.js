@@ -96,16 +96,27 @@ render(
               />
 
               <Route path="/board/:seq" element={<BoardMainContainer />} />
-              <Route path="/article/write/:seq" element={<RegisterArticleContainer />} />
-              <Route path="/article/modify/:boardSeq/:articleSeq" element={<ModifyArticleContainer />} />
+              <Route
+                path="/article/write/:seq"
+                element={<RegisterArticleContainer />}
+              />
+              <Route
+                path="/article/modify/:boardSeq/:articleSeq"
+                element={<ModifyArticleContainer />}
+              />
 
               <Route path="/readinggroup/*" element={<ReadingGroup />}>
                 <Route index element={<MeetingContainer />} />
                 {/* <Route path="detail" /> */}
               </Route>
-
-              <Route path="/articledetail/:seq" element={<ArticleDetailContainer />} />
-              <Route path="/postingregister" element={<PostingRegisterContainer />} />
+              <Route
+                path="/article/detail/:boardSeq/:articleSeq"
+                element={<ArticleDetailContainer />}
+              />
+              <Route
+                path="/postingregister"
+                element={<PostingRegisterContainer />}
+              />
             </Routes>
           </Wrapper>
         </Body>
