@@ -11,6 +11,7 @@ import com.ssafy.bjbj.api.booklog.service.LikeService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
+import com.ssafy.bjbj.common.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
     public BaseResponseDto register(@Valid @RequestBody ReqBooklogDto reqBooklogDto, Errors errors, Authentication authentication) {
-        log.debug("BooklogController.register() 북로그 작성 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -87,7 +88,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PutMapping("/{booklogSeq}")
     public BaseResponseDto update(@PathVariable Long booklogSeq, @Valid @RequestBody ReqBooklogDto reqBooklogDto, Errors errors, Authentication authentication) {
-        log.debug("BooklogController.modify() 북로그 수정 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -137,7 +138,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{booklogSeq}")
     public BaseResponseDto remove(@PathVariable Long booklogSeq, Authentication authentication) {
-        log.debug("BooklogController.remove() 북로그 삭제 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -174,7 +175,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PatchMapping("/{booklogSeq}")
     public BaseResponseDto changeIsOpen(@PathVariable Long booklogSeq, @RequestBody Boolean open, Authentication authentication) {
-        log.debug("BooklogController.changeIsOpen() 북로그 공개여부 변경 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -211,7 +212,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping("/{booklogSeq}/like")
     public BaseResponseDto like(@PathVariable Long booklogSeq, Authentication authentication) {
-        log.debug("BooklogController.like() 북로그 좋아요(하트) API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -248,7 +249,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{booklogSeq}/like")
     public BaseResponseDto unLike(@PathVariable Long booklogSeq, Authentication authentication) {
-        log.debug("BooklogController.unLike() 북로그 좋아요(하트) 취소 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -285,7 +286,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/{booklogSeq}")
     public BaseResponseDto get(@PathVariable Long booklogSeq, Authentication authentication) {
-        log.debug("BooklogController.getBooklog() 북로그 조회 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -322,7 +323,7 @@ public class BooklogController {
 
     @GetMapping
     public BaseResponseDto list(Pageable pageable) {
-        log.debug("BooklogController.list() 공개 북로그 목록 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -354,7 +355,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/me")
     public BaseResponseDto myBooklogList(@RequestParam boolean all, Pageable pageable, Authentication authentication) {
-        log.debug("BooklogController.myBooklogList() 나의 북로그 목록 조회 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -389,7 +390,7 @@ public class BooklogController {
     public BaseResponseDto search(Pageable pageable,
                                   @RequestParam(required = false) String keyword,
                                   @RequestParam(required = false) String writer) {
-        log.debug("BooklogController.searchBooklogList() 북로그 검색 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -430,7 +431,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/likes")
     public BaseResponseDto likeBooklogList(Pageable pageable, Authentication authentication) {
-        log.debug("BooklogController.likeBooklogLIst() 좋아요를 누른 북로그 목록 조회 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -463,7 +464,7 @@ public class BooklogController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/{booklogSeq}/like")
     public BaseResponseDto isLike(@PathVariable Long booklogSeq, Authentication authentication) {
-        log.debug("BooklogController.isLike() 북로그 좋아요 조회 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -492,7 +493,7 @@ public class BooklogController {
 
     @GetMapping("/bookinfos/{bookInfoSeq}")
     public BaseResponseDto listByBookInfo(@PathVariable Long bookInfoSeq, Pageable pageable) {
-        log.debug("BooklogController.listByBookInfo() 책으로 북로그 목록 조회 API 호출");
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
