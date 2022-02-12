@@ -108,6 +108,7 @@ render(
 
               <Route path="/readinggroup/*" element={<ReadingGroup />}>
                 <Route index element={<MeetingContainer />} />
+                <Route path="groupDetail/:meetingSeq" />
                 {/* <Route path="detail" /> */}
               </Route>
               <Route
