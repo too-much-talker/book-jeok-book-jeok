@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Slider from "react-slick";
 
 // const Form= styled.form.attrs(props => ({
 //   method:"post",
