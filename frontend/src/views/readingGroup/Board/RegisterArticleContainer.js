@@ -36,6 +36,7 @@ function RegisterArticleContainer() {
       setButton(true);
     } else {
       setButton(false);
+      console.log(e.target.files.length);
       const filesInArr = Array.from(e.target.files);
 
       reader.onloadend = () => {
@@ -53,6 +54,8 @@ function RegisterArticleContainer() {
 
   function onCreate() {
     let formData = new FormData();
+    // formData.append("files", files);
+    // console.log(files);
     postfiles.file.map((eachfile) => formData.append("files", eachfile));
 
     let reqReadingGroupBoard = {
