@@ -39,7 +39,7 @@ function ArticleDetailContainer() {
 
   function getArticle() {
     axios
-      .get(url + `/api/v1/reading-groups/boards/${useParam.seq}`, {
+      .get(url + `/api/v1/reading-groups/boards/${useParam.articleSeq}`, {
         headers: {
           Authorization: `Bearer ` + jwtToken,
         },
@@ -69,18 +69,17 @@ function ArticleDetailContainer() {
   function goModify() {}
 
   function goDelete() {
-    console.log("ddd");
     axios
-      .delete(url + `/api/v1/reading-groups/boards/${useParam.seq}`, {
+      .delete(url + `/api/v1/reading-groups/boards/${useParam.articleSeq}`, {
         headers: {
           Authorization: `Bearer ` + jwtToken,
         },
       })
       .then(function (response) {
-        console.log(response);
-        alert(response.data.data);
+        console.log(response.data.data.msg);
+        alert(response.data.data.msg);
         //목록으로 이동
-        //document.location.href = `/detail/${useParam.seq}`;
+        document.location.href = `/board/${useParam.boardSeq}`;
       })
       .catch(function (error) {
         console.log(error);
