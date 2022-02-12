@@ -32,6 +32,7 @@ import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticle
 import ModifyArticleContainer from "./views/readingGroup/Board/ModifyArticleContainer";
 
 import ArticleDetailContainer from "./views/readingGroup/Board/ArticleDetailContainer";
+import PostingRegisterContainer from "./views/readingGroup/Posting/PostingRegisterContainer";
 
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
@@ -108,10 +109,13 @@ render(
                 <Route index element={<MeetingContainer />} />
                 {/* <Route path="detail" /> */}
               </Route>
-
               <Route
                 path="/article/detail/:boardSeq/:articleSeq"
                 element={<ArticleDetailContainer />}
+              />
+              <Route
+                path="/postingregister"
+                element={<PostingRegisterContainer />}
               />
             </Routes>
           </Wrapper>
