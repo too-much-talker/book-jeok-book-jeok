@@ -19,6 +19,7 @@ function ArticleDetailContainer() {
   const [comments, setComments] = useState();
   const [file, setFile] = useState();
   const [disabled, setDisabled] = useState(true);
+  const [commentOpen, setCommentOpen] = useState(false);
 
   const settings = {
     dots: true,
@@ -86,6 +87,14 @@ function ArticleDetailContainer() {
         alert("삭제 중 문제가 발생하였습니다.");
       });
   }
+
+  function handleCommentOpen() {
+    setCommentOpen(true);
+    console.log(commentOpen);
+  }
+  function handleCommentClose() {
+    setCommentOpen(false);
+  }
   return (
     <>
       <ArticleDetailPresenter
@@ -100,6 +109,10 @@ function ArticleDetailContainer() {
         nickname={nickname}
         createdDate={createdDate}
         views={views}
+        handleCommentOpen={handleCommentOpen}
+        handleCommentClose={handleCommentClose}
+        commentOpen={commentOpen}
+        setCommentOpen={setCommentOpen}
       ></ArticleDetailPresenter>
     </>
   );

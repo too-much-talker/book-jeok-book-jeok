@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import Comment from "./Comment";
+import CommentContainer from "./CommentContainer";
 import React from "react";
 import { useCallback, useRef } from "react";
 import Slick from "react-slick";
@@ -139,6 +140,10 @@ function ArticleDetailPresenter({
   nickname,
   createdDate,
   views,
+  handleCommentOpen,
+  handleCommentClose,
+  commentOpen,
+  setCommentOpen,
 }) {
   return (
     <Block>
@@ -175,7 +180,12 @@ function ArticleDetailPresenter({
             </Slick>
           </Wrap>
           <Line></Line>
-          <CommentBtn>댓글 보기</CommentBtn>
+          <CommentBtn onClick={handleCommentOpen}>댓글 보기</CommentBtn>
+          <CommentContainer
+            isOpen={commentOpen}
+            onCancel={handleCommentClose}
+          ></CommentContainer>
+
           <Content>{content}</Content>
         </Contents>
 
