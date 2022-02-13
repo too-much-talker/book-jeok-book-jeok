@@ -93,17 +93,15 @@ const Message = styled.div`
   font-size: 12px;
 `;
 const Message1 = styled.div`
-  margin-left: 55px;
+  margin-left: 50px;
   margin-bottom: 10px;
 `;
 
 const Wrap = styled.div`
-  // background: blue;
   position: relative;
   width: 310px;
   height: 230px;
   padding-bottom: 40px;
-  margin-left: 8px;
   margin-top: 10px;
   margin-bottom: 15px;
   overflow: hidden;
@@ -127,8 +125,7 @@ const Wrap = styled.div`
 
 const SlickItems = styled.div`
   position: relative;
-  margin-left: 2%;
-  height: 200px;
+
   // background: yellow;
   img {
     max-width: 100%;
