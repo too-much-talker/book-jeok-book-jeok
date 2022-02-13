@@ -20,4 +20,6 @@ public interface ReadingGroupService {
 
     void modify(Long readingGroupSeq, ReqReadingGroupDto reqReadingGroupDto, Long memberSeq);
 
+    void removeOne(Long readingGroupSeq, Long memberSeq);
+
 }

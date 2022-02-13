@@ -112,4 +112,8 @@ public class ReadingGroup extends BaseLastModifiedEntity {
         this.readingGroupType = ReadingGroupType.valueOf(reqReadingGroupDto.getReadingGroupType().toUpperCase());
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
 }
