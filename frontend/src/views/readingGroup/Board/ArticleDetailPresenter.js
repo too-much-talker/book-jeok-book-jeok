@@ -143,6 +143,7 @@ function ArticleDetailPresenter({
   handleCommentOpen,
   handleCommentClose,
   commentOpen,
+  articleSeq,
 }) {
   console.log(file);
   return (
@@ -182,6 +183,7 @@ function ArticleDetailPresenter({
           <Line></Line>
           <CommentBtn onClick={handleCommentOpen}>댓글 보기</CommentBtn>
           <CommentContainer
+            articleSeq={articleSeq}
             isOpen={commentOpen}
             onCancel={handleCommentClose}
           ></CommentContainer>

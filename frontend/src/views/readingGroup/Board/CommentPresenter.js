@@ -28,11 +28,12 @@ const WriteBlock = styled.div`
   width: 100%;
   display: flex;
 `;
-const WriteInput = styled.input`
+const WriteInput = styled.textarea`
   position: relative;
   border: 1px solid black;
   width: 90%;
   height: 100%;
+  resize: none;
   margin-right: 10px;
 `;
 const BtnBlock = styled.div`
@@ -61,7 +62,7 @@ const CommentList = styled.div`
 `;
 
 const CommentPresenter = (props) => {
-  const { isOpen, onCancel, register } = props;
+  const { content, handleContent, isOpen, onCancel, register } = props;
 
   const handleClose = () => {
     onCancel();
@@ -103,7 +104,7 @@ const CommentPresenter = (props) => {
           <ExitBtn onClick={handleClose}>X</ExitBtn>
         </Head>
         <WriteBlock>
-          <WriteInput></WriteInput>
+          <WriteInput value={content} onChange={handleContent}></WriteInput>
           <BtnBlock>
             <Blank></Blank>
             <WriteBtn onClick={register}>등록</WriteBtn>
