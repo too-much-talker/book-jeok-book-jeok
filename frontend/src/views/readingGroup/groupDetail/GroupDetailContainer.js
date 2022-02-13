@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import Sidebar from "./components/Sidebar";
 import GroupInfo from "./components/GroupInfo";
-import BoardMainContainer from "./components/BoardMainContainer";
+import BoardMainContainer from "./components/Board/BoardMainContainer";
 import ArticleDetailContainer from "../Board/ArticleDetailContainer";
 import ModifyArticleContainer from "../Board/ModifyArticleContainer";
 const Wrapper = styled.div`

@@ -2,7 +2,7 @@ import BoardMainPresenter from "./BoardMainPresenter";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import ArticleDetailContainer from "../../Board/ArticleDetailContainer";
+import ArticleDetailContainer from "../../../Board/ArticleDetailContainer";
 
 function BoardMainContainer({
   handleSetSelected,
