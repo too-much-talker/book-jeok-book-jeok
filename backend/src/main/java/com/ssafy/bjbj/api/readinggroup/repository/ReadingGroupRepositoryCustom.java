@@ -16,4 +16,6 @@ public interface ReadingGroupRepositoryCustom {
 
     long updateStatusPreToIng(int minNumOfMembers);
 
+    long updateStatusPreToFail();
+
 }

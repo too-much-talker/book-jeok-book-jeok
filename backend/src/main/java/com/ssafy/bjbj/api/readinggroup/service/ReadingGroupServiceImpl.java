@@ -177,7 +177,7 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
     @Override
     public long chagneStatusPreToIng() {
         int minNumOfMembers = 2;
-        return readingGroupRepository.updateStatusPreToIng(minNumOfMembers);
+        return readingGroupRepository.updateStatusPreToIng(minNumOfMembers) + readingGroupRepository.updateStatusPreToFail();
     }
 
 }
