@@ -16,4 +16,11 @@ async function checkGoMeeting(readingGroupSeq, header, success, fail) {
     .catch(fail);
 }
 
-export { getGroupDetail, checkGoMeeting };
+async function deleteGroup(readingGroupSeq, header, success, fail) {
+  await api
+    .delete(`/api/v1/reading-groups/${readingGroupSeq}`, header)
+    .then(success)
+    .catch(fail);
+}
+
+export { getGroupDetail, checkGoMeeting, deleteGroup };

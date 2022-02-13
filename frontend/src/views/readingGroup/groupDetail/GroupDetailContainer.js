@@ -9,6 +9,7 @@ import BoardMainContainer from "./components/Board/BoardMainContainer";
 import {
   getGroupDetail,
   checkGoMeeting,
+  deleteGroup,
 } from "../../../common/api/readingGroup";
 import ArticleDetailContainer from "../Board/ArticleDetailContainer";
 import ModifyArticleContainer from "../Board/ModifyArticleContainer";
@@ -65,7 +66,7 @@ function GrouDetailContainer() {
         },
       },
       (response) => {
-        if (response.data.status === 200) {
+        if (response.status === 200) {
           navigate(`/readinggroup/meeting/${params.meetingSeq}`);
         } else {
           alert("독서 모임 일자가 아닙니다.");
@@ -100,7 +101,7 @@ function GrouDetailContainer() {
         },
       },
       (response) => {
-        if (response.data.status === 200) {
+        if (response.status === 200) {
           setGroupInfo(response.data.data.readingGroupDetail);
           setIsLoading(false);
         } else {
@@ -117,6 +118,27 @@ function GrouDetailContainer() {
 
   const onDelete = () => {
     // 모임 삭제 비동기통신
+    deleteGroup(
+      params.meetingSeq,
+      {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      },
+      (response) => {
+        if (response.status === 200) {
+          alert("삭제 되었습니다.");
+          navigate(`/mypage/mybookclub`);
+        } else {
+          alert("독서 모임 삭제가 불가합니다.");
+          console.log(response);
+        }
+      },
+      (error) => {
+        console.log("오류가 발생했습니다.");
+        navigate("/");
+      }
+    );
   };
 
   const printBoard = () => {
@@ -148,7 +170,7 @@ function GrouDetailContainer() {
             onClickBoard={printBoard}
             onClickInfo={printInfo}
           />
-          {userNickname === groupInfo.leaderNickname && (
+          {userNickname === groupInfo.writer && (
             <ButtonMenu>
               <Delete onClick={onDelete}>독서 모임 삭제</Delete>
             </ButtonMenu>
