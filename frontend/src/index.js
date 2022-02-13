@@ -26,11 +26,18 @@ import BooklogRegisterContainer from "./views/booklogs/booklogRegister/BooklogRe
 import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetailContainer";
 import ReadingGroup from "./views/readingGroup/index";
 import MeetingContainer from "./views/readingGroup/meeting/MeetingContainer";
-<<<<<<< HEAD
-import ModifyArticleContainer from "./views/readingGroup/Board.js/ModifyArticleContainer";
-=======
+
+import ModifyArticleContainer from "./views/readingGroup/Board/ModifyArticleContainer";
+
+// import ModifyArticleContainer from "./views/readingGroup/Board.js/ModifyArticleContainer";
 import ArticleDetailContainer from "./views/readingGroup/Board/ArticleDetailContainer";
->>>>>>> 42c7383490aa5183f9192f48b9a86abc27140ba5
+
+import BoardMainContainer from "./views/readingGroup/Board/BoardMainContainer";
+import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticleContainer";
+
+import PostingRegisterContainer from "./views/readingGroup/Posting/PostingRegisterContainer";
+import PostingDetailContainer from "./views/readingGroup/Posting/PostingDetailContainer";
+
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
   const state = store.getState();
@@ -41,22 +48,15 @@ const unsubscribe = store.subscribe(listener);
 const persistor = persistStore(store);
 
 const Body = styled.body`
-  // background: skyblue;
   text-align: center; // 수평 가운데 정렬
   width: 100vw;
   height: 100%;
-  // margin: 0 auto;
-  font-family: "Gown";
+  font-family: "SUIT-Light";
 `;
 
 // box 2개를 감싸는 Wrapper를 하나 더 만듦.
 const Wrapper = styled.div`
-  // overflow: auto; // 크기를 줄이면 스크롤 생김.(텍스트나 박스 크기는 그대로 유지)
-  //  border: solid 1px red;
   width: 1080px;
-  // height: 100vh; // 이부분을 주석 풀면 아래까지 그리드가 내려옴
-  // display: inline-block; // Body-ScrollWrapper 수평 가운데 정렬
-  // margin-top: 10vh;
   margin: 0 auto;
 `;
 
@@ -98,13 +98,36 @@ render(
                 path="/booklogdetail"
                 element={<BooklogDetailContainer />}
               />
+
+              <Route path="/board/:seq" element={<BoardMainContainer />} />
+              <Route
+                path="/article/write/:seq"
+                element={<RegisterArticleContainer />}
+              />
+
               <Route path="/readinggroup/*" element={<ReadingGroup />}>
                 <Route index element={<MeetingContainer />} />
+                <Route path="groupDetail/:meetingSeq" />
                 {/* <Route path="detail" /> */}
               </Route>
-              <Route path="/article/modify/:boardSeq/:articleSeq" element={<ModifyArticleContainer />} />
-              <Route path="/articledetail/:seq" element={<ArticleDetailContainer />} />
 
+              <Route
+                path="/article/modify/:boardSeq/:articleSeq"
+                element={<ModifyArticleContainer />}
+              />
+
+              <Route
+                path="/article/detail/:boardSeq/:articleSeq"
+                element={<ArticleDetailContainer />}
+              />
+              <Route
+                path="/postingregister"
+                element={<PostingRegisterContainer />}
+              />
+              <Route
+                path="/postingdetail"
+                element={<PostingDetailContainer />}
+              />
             </Routes>
           </Wrapper>
         </Body>

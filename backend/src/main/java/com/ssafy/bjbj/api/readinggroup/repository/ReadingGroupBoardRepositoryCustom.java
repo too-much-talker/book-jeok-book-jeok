@@ -10,4 +10,5 @@ public interface ReadingGroupBoardRepositoryCustom {
     Integer countReadingGroupBoard(Long readingGroupSeq);
 
     List<ResReadingGroupArticleDto> findReadingGroupDtos(Long readingGroupSeq, Pageable pageable);
+
 }

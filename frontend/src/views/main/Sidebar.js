@@ -21,6 +21,7 @@ const Menu = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 20px;
+  font-size: 1.6rem;
 `;
 function Sidebar() {
   const [activities, setActivities] = useState([]);
@@ -64,6 +65,8 @@ function Sidebar() {
           );
         })}
       </Menu>
+      <br></br>
+      <br></br>
       <UserExpPoint exp={exp} point={point} />
       <Weeds datas={activities} />
     </Side>

@@ -3,15 +3,21 @@ package com.ssafy.bjbj.api.readinggroup.service;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ReadingGroupMiniDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupDetailDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupListPageDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupDateRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupMemberRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
+import com.ssafy.bjbj.common.enums.Day;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +27,8 @@ import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -86,6 +94,65 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 .build());
 
         return savedReadingGroup;
+    }
+
+    @Transactional
+    @Override
+    public ResReadingGroupDetailDto getResReadingGroupDetailDto(Long readingGroupSeq) {
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(readingGroupSeq)
+                .orElseThrow(() -> new NotFoundReadingGroupException("올바르지 않은 요청입니다."));
+
+        /**
+         * 조회수 증가
+         */
+        findReadingGroup.incrementViews();
+
+        /**
+         * 참여자 닉네임 세팅
+         */
+        List<String> participants = findReadingGroup.getReadingGroupMembers()
+                .stream().map(readingGroupMember -> readingGroupMember.getMember().getNickname())
+                .collect(Collectors.toList());
+
+        /**
+         * 요일 정보 세팅
+         */
+        Set<Day> days = findReadingGroup.getReadingGroupDates()
+                .stream().map(readingGroupDate -> Day.valueOf(readingGroupDate.getConferenceDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US).toUpperCase()))
+                .collect(Collectors.toSet());
+
+        return ResReadingGroupDetailDto
+                .builder()
+                .readingGroupSeq(findReadingGroup.getSeq())
+                .writer(findReadingGroup.getMember().getNickname())
+                .title(findReadingGroup.getTitle())
+                .content(findReadingGroup.getContent())
+                .minLevel(findReadingGroup.getLimitLevel())
+                .maxNumOfMember(findReadingGroup.getMaxMember())
+                .views(findReadingGroup.getViews())
+                .status(findReadingGroup.getStatus())
+                .deadline(findReadingGroup.getDeadline().toLocalDate())
+                .startDate(findReadingGroup.getStartDate().toLocalDate())
+                .endDate(findReadingGroup.getEndDate().toLocalDate())
+                .readingGroupType(findReadingGroup.getReadingGroupType())
+                .createdDate(findReadingGroup.getCreatedDate().toLocalDate())
+                .participants(participants)
+                .days(days)
+                .build();
+    }
+
+    @Override
+    public ResReadingGroupListPageDto getReadingGroupListPageDto(Pageable pageable) {
+        Integer totalCnt = readingGroupRepository.countReadingGroup();
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<ReadingGroupMiniDto> readingGroupMiniDtos = readingGroupRepository.findReadingGroupMiniDtos(pageable);
+
+        return ResReadingGroupListPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .readingGroupMiniDtos(readingGroupMiniDtos)
+                .build();
     }
 
 }

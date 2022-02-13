@@ -1,6 +1,6 @@
 package com.ssafy.bjbj.common.enums;
 
-public enum Days {
+public enum Day {
 
     MON, TUE, WED, THU, FRI, SAT, SUN;
 

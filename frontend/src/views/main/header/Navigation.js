@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const NaviBlock = styled.nav`
   height: 70px;
-  // background: yellow;
-  font-size: 1.8rem; // 메뉴 크기
+  font-size: 1.3rem; // 메뉴 크기
 `;
 
 const LoginButton = styled.button`
@@ -16,7 +15,11 @@ const LoginButton = styled.button`
   padding: 1rem;
   padding-top: 0;
   padding-bottom: 0;
-  font-size: 1.5rem;
+  background: black;
+  color: white;
+  border-radius: 20px;
+  height: 2rem;
+  cursor: pointer;
 `;
 
 const UL = styled.ul`
@@ -40,11 +43,12 @@ const StyledLink = styled(Link)`
   color: black;
 `;
 
-
-const links = ["/booklogs/list/like", "/", "/search", "/", "/","/mypage"];
+const links = ["/booklogs/list/like", "/", "/search", "/", "/", "/mypage"];
 
 function Navigation({ isLogin }) {
-  const menus = isLogin ? ["북로그", "독서모임", "책정보", "챌린지", "공지", "마이페이지"] : ["북로그", "독서모임", "책정보", "챌린지", "공지"];
+  const menus = isLogin
+    ? ["북로그", "독서모임", "책정보", "챌린지", "공지", "마이페이지"]
+    : ["북로그", "독서모임", "책정보", "챌린지", "공지"];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -56,8 +56,9 @@ function checkNickname(nickname, url) {
         if (response.data.status === 200) {
           alert("이미 존재하는 닉네임입니다.");
           return false;
-        }
-        if (response.data.status === 204) {
+        } else if (response.data.status === 400) {
+          alert("닉네임 형식을 확인해주세요.");
+        } else if (response.data.status === 204) {
           alert("사용 가능한 닉네임입니다.");
           return true;
         }
@@ -68,8 +69,7 @@ function checkNickname(nickname, url) {
   }
 }
 
-
-function checkPassword(password, email, nickname, name,checkValidHandler) {
+function checkPassword(password, email, nickname, name, checkValidHandler) {
   const id = email.split("@")[0];
 
   if (!/^[a-zA-Z0-9!@#$%\^&*()]{8,12}$/.test(password)) {
@@ -91,30 +91,25 @@ function checkPassword(password, email, nickname, name,checkValidHandler) {
     //4가지 중 2가지 들어가야함.
     checkValidHandler(false);
     alert("4가지 중 2가지");
-  }
-  else if (!/^[a-zA-Z0-9!@#$%\^&*()]{8,12}$/.test(password)) {
+  } else if (!/^[a-zA-Z0-9!@#$%\^&*()]{8,12}$/.test(password)) {
     //숫자,영문자,특수문자 조합으로 8~12자리를 사용하는지 확인
     checkValidHandler(false);
     alert("숫자,영문자,특수문자(!@#$%^&*()) 조합으로 8~12자리");
-  }
-  else if (password.search(id) > -1) {
+  } else if (password.search(id) > -1) {
     checkValidHandler(false);
     alert("비번에 아이디 포함");
-  }
-  else if (password.search(name) > -1) {
+  } else if (password.search(name) > -1) {
     checkValidHandler(false);
     alert("비번에 이름 포함");
-  }
-  else if (password.search(nickname) > -1) {
+  } else if (password.search(nickname) > -1) {
     checkValidHandler(false);
     alert("비번에 닉네임 포함됨");
-  }
-  else{
+  } else {
     checkValidHandler(true);
   }
 }
 
-function checkPasswordConfim(password, passwordConfirm){
+function checkPasswordConfim(password, passwordConfirm) {
   if (password !== passwordConfirm) {
     return false;
   }
@@ -150,28 +145,30 @@ function checkNameLength(name) {
 function checkPhoneNumber(phoneNumber) {
   const regExp = /^[0-9]{3}-[0-9]{3,4}-[0-9]{3,4}$/;
   if (regExp.test(phoneNumber) === false) {
-    alert("휴대폰 번호를 다시 확인해주세요");
+    alert("휴대폰 번호 형식을 다시 확인해주세요");
     return false;
   }
-
   return true;
 }
 
-function checkPhoneDuplicate(phoneNumber,url){
+function checkPhoneDuplicate(phoneNumber, url) {
   axios
-  .get()
-  .then(function (response) {
-    if (response.data.status === 204) {
-      alert("사용 가능한 휴대폰 번호입니다.");
-      return true;
-    } else if (response.data.status === 200) {
-      alert("이미 존재하는 휴대폰 번호입니다.");
-      return false;
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+    .get(url + `/api/v1/members/phone/${phoneNumber}/exist`)
+    .then(function (response) {
+      if (response.data.status === 204) {
+        alert("사용 가능한 휴대폰 번호입니다.");
+        return true;
+      } else if (response.data.status === 200) {
+        alert("이미 존재하는 휴대폰 번호입니다.");
+        return false;
+      } else if (response.data.status === 400) {
+        alert("휴대폰 번호 형식을 다시 확인해주세요");
+        return false;
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
 export {
@@ -183,5 +180,4 @@ export {
   checkPhoneNumber,
   checkPhoneDuplicate,
   checkPasswordConfim,
-
 };

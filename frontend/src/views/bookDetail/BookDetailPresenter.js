@@ -78,7 +78,7 @@ const BookInfoDetail = styled.div``;
 const BookReview = styled.div`
   position: relative;
   width: 95%;
-  height: 50%;
+  height: 55%;
 `;
 const ReviewHeader = styled.div`
   position: relative;
@@ -95,7 +95,7 @@ const ReviewTitle = styled.div`
 const REVIEWS = styled.div`
   margin-top: 1%;
   width: 100%;
-  height: 80%;
+  height: 75%;
 `;
 
 const Blank = styled.div`

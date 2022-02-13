@@ -6,21 +6,20 @@ import SearchNavContainer from "./SearchNavContainer";
 import React from "react";
 
 const ResultBlock = styled.div`
-  position: relative;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: white;
-  width: 100%;
+  width: 80%;
   height: 60px;
-  border-top: 2px solid black;
+  // border-top: 2px solid black;
   margin-top: 3%;
+  margin: 0 auto;
+  font-weight: bold;
 `;
 
 const ResultText = styled.div`
   position: absolute;
   margin-left: 3%;
   margin-top: 1%;
-  font-size: 30px;
+  font-size: 22px;
 `;
 
 const BestSellerBlock = styled.div`
@@ -28,16 +27,17 @@ const BestSellerBlock = styled.div`
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  // background:red;
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
 `;
 
 const Book = styled.div`
-  width: 25%;
+  // width: 25%;
 `;
 function SearchMainPresenter({ goDetail, bestSellers }) {
   return (
     <>
+      <h2>책 정보</h2>
       <SearchNavContainer keyword={""}></SearchNavContainer>
       <ResultBlock>
         <ResultText>현재 베스트셀러는?</ResultText>

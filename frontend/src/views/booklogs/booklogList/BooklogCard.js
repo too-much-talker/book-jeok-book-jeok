@@ -4,14 +4,14 @@ import heart from "../../../res/img/heart_black.png";
 import React from "react";
 
 const Card = styled.div`
-  width: 30rem;
-  height: 18rem;
+  width: 19rem;
+  height: 12rem;
   float: left;
   margin: 0.8rem;
   padding: 0.7rem;
   border-radius: 5%;
   box-shadow: 4px 5px 7px 2px lightgrey;
-  font-size: 1.4rem;
+  font-size: 1rem;
   // display: inline-block;
 `;
 
@@ -44,6 +44,7 @@ const Date = styled.div`
   width: 100%;
   text-align: left;
   border-top: solid 1px;
+  font-size: 0.8rem;
 `;
 
 const Like = styled.span`
@@ -52,7 +53,7 @@ const Like = styled.span`
 `;
 
 const Heart = styled.img`
-  width: 1rem;
+  width: 0.8rem;
   text-align: left;
 `;
 
@@ -65,17 +66,20 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 0.5rem;
+  font-size: 0.9rem;
 `;
 
 const Title = styled.h6`
   margin: 0.2rem;
   margin-top: 0.6rem;
   font-weight: bold;
+  font-size: 1.2rem;
 `;
 
 const Content = styled.div`
   height: 48%;
   text-align: left;
+  font-size: 0.9rem;
 `;
 
 function cutText(content, size) {
