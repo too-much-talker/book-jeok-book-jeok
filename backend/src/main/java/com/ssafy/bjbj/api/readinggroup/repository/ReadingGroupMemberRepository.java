@@ -9,4 +9,6 @@ public interface ReadingGroupMemberRepository extends JpaRepository<ReadingGroup
 
     Optional<ReadingGroupMember> findByReadingGroupSeqAndMemberSeq(Long readingGroupSeq, Long memberSeq);
 
+    boolean existsByReadingGroupSeqAndMemberSeq(Long readingGroupSeq, Long memberSeq);
+
 }

@@ -262,4 +262,50 @@ public class ReadingGroupController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
+    @GetMapping("/{readingGroupSeq}/isMeetToday")
+    public BaseResponseDto isMeetToday(@PathVariable Long readingGroupSeq, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            boolean isMeetToday = readingGroupService.isMeetToday(readingGroupSeq, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서 모임 진행 여부 확인 성공");
+            responseData.put("isMeetToday", isMeetToday);
+        } catch (NotFoundReadingGroupException e) {
+            log.error("독서 모임 조회 실패");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (IllegalStateException e) {
+            log.error("종료된 독서 모임 조회");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (NotFoundReadingGroupMemberException e) {
+            log.error("독서 모임 회원 조회 실패");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 장애 발생");
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", e.getMessage());
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }
