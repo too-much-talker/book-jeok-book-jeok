@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ReadingGroupMiniDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
+import com.ssafy.bjbj.common.enums.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,6 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.*;
 import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroup.*;
@@ -85,6 +85,17 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
                 .selectFrom(readingGroup)
                 .where(readingGroup.seq.eq(seq).and(readingGroup.endDate.after(LocalDateTime.now().minusDays(1L))))
                 .fetchOne();
+    }
+
+    @Override
+    public long updateStatusPreToIng(int minNumOfMembers) {
+        return queryFactory
+                .update(readingGroup)
+                .set(readingGroup.status, Status.ING)
+                .where(readingGroup.deadline.before(LocalDateTime.now().minusDays(1L))
+                        .and(readingGroup.status.eq(Status.PRE))
+                        .and(readingGroup.readingGroupMembers.size().goe(minNumOfMembers)))
+                .execute();
     }
 
 }
