@@ -6,8 +6,10 @@ import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardCommentD
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoardComment;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupBoardCommentException;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardCommentRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,5 +61,21 @@ public class ReadingGroupBoardCommentServiceImpl implements ReadingGroupBoardCom
     @Override
     public Integer countReadingGroupBoardComments(Long readingGroupArticleSeq) {
         return readingGroupBoardCommentRepository.countReadingGroupBoardCommentsByReadingGroupBoard(readingGroupArticleSeq);
+    }
+
+    @Transactional
+    @Override
+    public void deleteReadingGroupBoardComment(Long readingGroupBoardCommentSeq, Long memberSeq) {
+        ReadingGroupBoardComment readingGroupBoardComment = readingGroupBoardCommentRepository.findBySeq(readingGroupBoardCommentSeq);
+
+        if (readingGroupBoardComment == null) {
+            throw new NotFoundReadingGroupBoardCommentException("올바르지 않은 요청입니다.");
+        } else if (!readingGroupBoardComment.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        } else if (readingGroupBoardComment.isDeleted()) {
+            throw new NotFoundReadingGroupBoardCommentException("올바르지 않은 요청입니다.");
+        } else {
+            readingGroupBoardComment.delete();
+        }
     }
 }
