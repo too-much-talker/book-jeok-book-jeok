@@ -2,10 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
 
-// const Form= styled.form.attrs(props => ({
-//   method:"post",
-//    enctype:"multipart/form-data"
-// }))``;
 const Block = styled.div`
   height: 100vh;
 `;
@@ -53,9 +49,8 @@ const ContentBlock = styled.div`
 //   height: 100%;
 // `;
 const Content = styled.textarea`
-  margin-left: 3.2%;
+  margin-left: 3%;
   width: 90%;
-  width: 100%;
   height: 100%;
   resize: none;
   font-family: bold;
