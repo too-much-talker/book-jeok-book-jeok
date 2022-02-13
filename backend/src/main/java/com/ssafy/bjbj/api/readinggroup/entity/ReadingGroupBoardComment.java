@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.readinggroup.entity;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
 import lombok.*;
@@ -34,6 +35,7 @@ public class ReadingGroupBoardComment extends BaseLastModifiedEntity {
     @ManyToOne(fetch = LAZY)
     private ReadingGroupBoard readingGroupBoard;
 
+    @QueryProjection
     @Builder
     public ReadingGroupBoardComment(String content, boolean isDeleted, Member member, ReadingGroupBoard readingGroupBoard) {
         this.content = content;
