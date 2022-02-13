@@ -111,6 +111,43 @@ public class ReadingGroupBoardCommentController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @PutMapping("/{readingGroupBoardCommentSeq}")
+    public BaseResponseDto updateComment(@PathVariable Long readingGroupBoardCommentSeq, Authentication authentication,
+                                         @Valid @RequestBody ReqReadingGroupBoardCommentDto reqReadingGroupBoardCommentDto, Errors errors) {
+        log.debug("ReadingGroupBoardComment.getListComments() 독서모임 게시판 댓글 수정 API");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+
+        try {
+            ResReadingGroupBoardCommentDto resReadingGroupBoardCommentDto = readingGroupBoardCommentService.updateReadingGroupBoardComment(readingGroupBoardCommentSeq, reqReadingGroupBoardCommentDto, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서모임 게시판 댓글을 수정하였습니다.");
+            responseData.put("readingGroupBoardComment", resReadingGroupBoardCommentDto);
+        } catch (NotFoundReadingGroupBoardCommentException | NotEqualMemberException e) {
+            log.error("삭제할 독서모임 게시글 조회 실패 or 작성자와 유저가 다른 회원");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("[Error] Exception error");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @DeleteMapping("/{readingGroupBoardCommentSeq}")
     public BaseResponseDto deleteComment(@PathVariable Long readingGroupBoardCommentSeq, Authentication authentication) {
         log.debug("ReadingGroupBoardComment.getListComments() 독서모임 게시판 댓글 삭제 API");

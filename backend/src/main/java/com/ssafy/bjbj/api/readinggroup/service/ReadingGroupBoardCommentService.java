@@ -13,5 +13,7 @@ public interface ReadingGroupBoardCommentService {
 
     Integer countReadingGroupBoardComments(Long readingGroupArticleSeq);
 
+    ResReadingGroupBoardCommentDto updateReadingGroupBoardComment(Long readingGroupBoardCommentSeq, ReqReadingGroupBoardCommentDto reqReadingGroupBoardCommentDto, Long memberSeq);
+
     void deleteReadingGroupBoardComment(Long readingGroupBoardComment, Long memberSeq);
 }

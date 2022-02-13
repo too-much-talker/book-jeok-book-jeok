@@ -44,6 +44,10 @@ public class ReadingGroupBoardComment extends BaseLastModifiedEntity {
         this.readingGroupBoard = readingGroupBoard;
     }
 
+    public void changeReadingGroupBoardComment(String content) {
+        this.content = content;
+    }
+
     public void delete() {
         this.isDeleted = true;
     }

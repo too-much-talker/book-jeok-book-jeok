@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -34,7 +35,7 @@ public class ReadingGroupBoardCommentServiceImpl implements ReadingGroupBoardCom
     public Long registerComment(ReqReadingGroupBoardCommentDto reqReadingGroupBoardCommentDto, Long memberSeq) {
         ReadingGroupBoard readingGroupArticle = readingGroupBoardRepository.findBySeq(reqReadingGroupBoardCommentDto.getReadingGroupArticleSeq());
 
-        if (readingGroupArticle == null) {
+        if (readingGroupArticle == null || readingGroupArticle.isDeleted()) {
             throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
         }
         ReadingGroupBoardComment readingGroupBoardComment = readingGroupBoardCommentRepository.save(ReadingGroupBoardComment.builder()
@@ -51,7 +52,7 @@ public class ReadingGroupBoardCommentServiceImpl implements ReadingGroupBoardCom
     public List<ResReadingGroupBoardCommentDto> findReadingGroupBoardCommentDtos(Long readingGroupArticleSeq) {
         ReadingGroupBoard readingGroupArticle = readingGroupBoardRepository.findBySeq(readingGroupArticleSeq);
 
-        if (readingGroupArticle == null) {
+        if (readingGroupArticle == null || readingGroupArticle.isDeleted()) {
             throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
         }
 
@@ -61,6 +62,29 @@ public class ReadingGroupBoardCommentServiceImpl implements ReadingGroupBoardCom
     @Override
     public Integer countReadingGroupBoardComments(Long readingGroupArticleSeq) {
         return readingGroupBoardCommentRepository.countReadingGroupBoardCommentsByReadingGroupBoard(readingGroupArticleSeq);
+    }
+
+    @Transactional
+    @Override
+    public ResReadingGroupBoardCommentDto updateReadingGroupBoardComment(Long readingGroupBoardCommentSeq, ReqReadingGroupBoardCommentDto reqReadingGroupBoardCommentDto, Long memberSeq) {
+
+        ReadingGroupBoardComment readingGroupBoardComment = readingGroupBoardCommentRepository.findBySeq(readingGroupBoardCommentSeq);
+
+        if (readingGroupBoardComment == null || readingGroupBoardComment.isDeleted()) {
+            throw new NotFoundReadingGroupBoardCommentException("올바르지 않은 요청입니다");
+        } else if (!readingGroupBoardComment.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다");
+        } else {
+            readingGroupBoardComment.changeReadingGroupBoardComment(reqReadingGroupBoardCommentDto.getContent());
+        }
+
+        return ResReadingGroupBoardCommentDto.builder()
+                .readingGroupBoardCommentSeq(readingGroupBoardCommentSeq)
+                .content(readingGroupBoardComment.getContent())
+                .memberNickname(readingGroupBoardComment.getMember().getNickname())
+                .createdDate(readingGroupBoardComment.getCreatedDate())
+                .modifiedDate(LocalDateTime.now())
+                .build();
     }
 
     @Transactional
