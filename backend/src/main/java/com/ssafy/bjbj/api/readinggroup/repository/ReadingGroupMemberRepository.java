@@ -11,4 +11,6 @@ public interface ReadingGroupMemberRepository extends JpaRepository<ReadingGroup
 
     boolean existsByReadingGroupSeqAndMemberSeq(Long readingGroupSeq, Long memberSeq);
 
+    void deleteAllByReadingGroupSeq(Long readingGroupSeq);
+
 }

@@ -11,4 +11,6 @@ public interface ReadingGroupBoardRepositoryCustom {
 
     List<ResReadingGroupArticleDto> findReadingGroupDtos(Long readingGroupSeq, Pageable pageable);
 
+    long deleteAllByReadingGroupSeq(Long readingGroupSeq);
+
 }

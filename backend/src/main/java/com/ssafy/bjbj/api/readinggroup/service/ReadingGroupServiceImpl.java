@@ -12,9 +12,7 @@ import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupMemberException;
-import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupDateRepository;
-import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupMemberRepository;
-import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
+import com.ssafy.bjbj.api.readinggroup.repository.*;
 import com.ssafy.bjbj.common.enums.Day;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +43,10 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
     private final ReadingGroupDateRepository readingGroupDateRepository;
 
     private final ReadingGroupMemberRepository readingGroupMemberRepository;
+
+    private final ReadingGroupBoardRepository readingGroupBoardRepository;
+
+    private final ReadingGroupBoardCommentRepository readingGroupBoardCommentRepository;
 
     @Transactional
     @Override
@@ -206,6 +208,43 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 }
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public void removeOne(Long readingGroupSeq, Long memberSeq) {
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(readingGroupSeq)
+                .orElseThrow(() -> new NotFoundReadingGroupException("존재하지 않는 독서 모임입니다."));
+
+        if (!findReadingGroup.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않은 요청입니다.");
+        }
+
+        /**
+         * 독서 모임 삭제
+         */
+        findReadingGroup.delete();
+
+        /**
+         * 독서 모임 회원 삭제
+         */
+        readingGroupMemberRepository.deleteAllByReadingGroupSeq(readingGroupSeq);
+
+        /**
+         * 독서 모임 날짜 삭제
+         */
+        readingGroupDateRepository.deleteAllByReadingGroupSeq(readingGroupSeq);
+
+        /**
+         * 독서 모임 게시글 삭제
+         * isDeleted -> true
+         */
+        readingGroupBoardRepository.deleteAllByReadingGroupSeq(readingGroupSeq);
+
+        /**
+         * 독서 모임 게시글 댓글 삭제
+         */
+        readingGroupBoardCommentRepository.deleteAllByReadingGroupSeq(readingGroupSeq);
     }
 
 }

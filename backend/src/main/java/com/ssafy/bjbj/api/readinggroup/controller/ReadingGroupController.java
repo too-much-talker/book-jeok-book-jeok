@@ -376,4 +376,44 @@ public class ReadingGroupController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
+    @DeleteMapping("/{readingGroupSeq}")
+    public BaseResponseDto deleteOne(@PathVariable Long readingGroupSeq, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            readingGroupService.removeOne(readingGroupSeq, memberSeq);
+
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "독서 모임을 삭제하였습니다.");
+        } catch (NotFoundReadingGroupException e) {
+            log.error("존재하지 않은 독서 모임 조회");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (NotEqualMemberException e) {
+            log.error("독서 모임의 개설자가 아닌 자가 요청");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
 }

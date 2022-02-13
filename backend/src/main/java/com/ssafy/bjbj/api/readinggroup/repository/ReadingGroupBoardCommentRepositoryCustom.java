@@ -9,4 +9,7 @@ public interface ReadingGroupBoardCommentRepositoryCustom {
     Integer countReadingGroupBoardCommentsByReadingGroupBoard(Long readingGroupArticleSeq);
 
     List<ResReadingGroupBoardCommentDto> findReadingGroupBoardCommentByReadingGroupBoardSeq(Long readingGroupArticleSeq);
+
+    long deleteAllByReadingGroupSeq(Long readingGroupSeq);
+
 }

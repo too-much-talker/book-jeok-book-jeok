@@ -1,13 +1,16 @@
 package com.ssafy.bjbj.api.readinggroup.repository;
 
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.readinggroup.dto.response.QResReadingGroupBoardCommentDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardCommentDto;
+import com.ssafy.bjbj.api.readinggroup.entity.QReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.entity.QReadingGroupBoardComment;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroupBoard.*;
 import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroupBoardComment.*;
 
 public class ReadingGroupBoardCommentRepositoryImpl implements ReadingGroupBoardCommentRepositoryCustom {
@@ -42,4 +45,19 @@ public class ReadingGroupBoardCommentRepositoryImpl implements ReadingGroupBoard
                 .orderBy(readingGroupBoardComment.createdDate.desc())
                 .fetch();
     }
+
+    @Override
+    public long deleteAllByReadingGroupSeq(Long readingGroupSeq) {
+        return queryFactory
+                .update(readingGroupBoardComment)
+                .set(readingGroupBoardComment.isDeleted, true)
+                .where(readingGroupBoardComment.readingGroupBoard.seq.in(
+                        JPAExpressions
+                                .select(readingGroupBoard.seq)
+                                .from(readingGroupBoard)
+                                .where(readingGroupBoard.readingGroup.seq.eq(readingGroupSeq))
+                ))
+                .execute();
+    }
+
 }
