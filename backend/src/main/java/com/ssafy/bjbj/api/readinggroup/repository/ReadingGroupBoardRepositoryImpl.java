@@ -23,10 +23,10 @@ public class ReadingGroupBoardRepositoryImpl implements ReadingGroupBoardReposit
     public Integer countReadingGroupBoard(Long readingGroupSeq) {
         return queryFactory.select(readingGroupBoard.count().intValue())
                 .from(readingGroupBoard)
-                .where(readingGroupBoard.readingGroup.seq.eq(readingGroupSeq))
+                .where(readingGroupBoard.readingGroup.seq.eq(readingGroupSeq).and(readingGroupBoard.isDeleted.eq(false)))
                 .fetchOne();
     }
-
+    
     @Override
     public List<ResReadingGroupArticleDto> findReadingGroupDtos(Long readingGroupSeq, Pageable pageable) {
         return queryFactory.select(new QResReadingGroupArticleDto(

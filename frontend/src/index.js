@@ -27,7 +27,7 @@ import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetail
 import ReadingGroup from "./views/readingGroup/index";
 import MeetingContainer from "./views/readingGroup/meeting/MeetingContainer";
 
-import BoardMainContainer from "./views/readingGroup/Board/BoardMainContainer";
+// import BoardMainContainer from "./views/readingGroup/Board/BoardMainContainer";
 import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticleContainer";
 import ModifyArticleContainer from "./views/readingGroup/Board/ModifyArticleContainer";
 
@@ -95,8 +95,8 @@ render(
                 path="/booklogdetail"
                 element={<BooklogDetailContainer />}
               />
-
-              <Route path="/board/:seq" element={<BoardMainContainer />} />
+              {/* 
+              <Route path="/board/:seq" element={<BoardMainContainer />} /> */}
               <Route
                 path="/article/write/:seq"
                 element={<RegisterArticleContainer />}
