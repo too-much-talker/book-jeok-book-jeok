@@ -9,17 +9,21 @@ const url = "https://i6a305.p.ssafy.io:8443";
 function PostingDetailContainer() {
   const location = useLocation();
   const readingGroupSeq = location.state.logSeq;
+  console.log(readingGroupSeq);
   const userInfo = useSelector((state) => state.authReducer).memberInfo;
   const [group, setGroup] = useState({});
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   let isParticipated;
   const getPage = async () => {
-    console.log('asdasdasd');
-    const response = await axios.get(url + `/api/v1/reading-groups/${readingGroupSeq}`, {
-      headers: {
-        Authorization: `Bearer ` + jwtToken,
-      },
-    });
+    console.log("asdasdasd");
+    const response = await axios.get(
+      url + `/api/v1/reading-groups/${readingGroupSeq}`,
+      {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      }
+    );
     setGroup(response.data.data.readingGroupDetail);
   };
   const subscriptionGroup = async () => {
@@ -51,7 +55,7 @@ function PostingDetailContainer() {
     isParticipated = group.participants.includes(userInfo.nickname);
   }
   return (
-    <PostingDetailPresenter 
+    <PostingDetailPresenter
       isParticipated={isParticipated}
       group={group}
       subscriptionGroup={subscriptionGroup}
