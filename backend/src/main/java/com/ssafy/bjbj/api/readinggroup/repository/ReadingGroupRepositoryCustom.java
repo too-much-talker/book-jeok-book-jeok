@@ -14,4 +14,8 @@ public interface ReadingGroupRepositoryCustom {
 
     ReadingGroup findNotEndReadingGroupBySeq(Long seq);
 
+    long updateStatusPreToIng(int minNumOfMembers);
+
+    long updateStatusPreToFail();
+
 }

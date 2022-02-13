@@ -173,4 +173,11 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
         return readingGroupDateRepository.existsByReadingGroupSeqAndConferenceDate(readingGroupSeq, LocalDateTime.of(LocalDate.now(), LocalTime.parse("00:00:00")));
     }
 
+    @Transactional
+    @Override
+    public long chagneStatusPreToIng() {
+        int minNumOfMembers = 2;
+        return readingGroupRepository.updateStatusPreToIng(minNumOfMembers) + readingGroupRepository.updateStatusPreToFail();
+    }
+
 }
