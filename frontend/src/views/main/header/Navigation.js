@@ -43,7 +43,7 @@ const StyledLink = styled(Link)`
   color: black;
 `;
 
-const links = ["/booklogs/list/like", "/", "/search", "/", "/", "/mypage"];
+const links = ["/booklogs/list/like", "/postinglist", "/search", "/", "/", "/mypage"];
 
 function Navigation({ isLogin }) {
   const menus = isLogin
