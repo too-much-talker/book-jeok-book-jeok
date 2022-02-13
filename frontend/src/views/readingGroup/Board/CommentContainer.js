@@ -4,26 +4,44 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import React from "react";
 
-function CommentContainer({ articleSeq, isOpen, onCancel }) {
+function CommentContainer({ articleSeq }) {
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
   const [content, setContent] = useState();
-  const [comments, setComments] = useState();
   const [totalCnt, setTotalCnt] = useState(0);
+  const [page, setPage] = useState(1);
+
+  const [comments, setComments] = useState([
+    {
+      nickname: "",
+      createdDate: "",
+      content: "",
+    },
+    {
+      nickname: "",
+      createdDate: "",
+      content: "",
+    },
+  ]);
+
   function handleContent(event) {
     setContent(event.target.value);
     console.log(content);
   }
-  const handleClose = () => {
-    onCancel();
-  };
 
   useEffect(() => {
     getComment();
   }, []);
 
+  function paginate(pagenumber) {
+    setPage(pagenumber);
+  }
+
+  const indexOfLastPost = page * 5;
+  const indexOfFirstPost = indexOfLastPost - 5;
+  const currentComments = comments.slice(indexOfFirstPost, indexOfLastPost);
   function getComment() {
     axios
       .get(url + `/api/v1/reading-groups/comments/list/${articleSeq}`, {
@@ -63,13 +81,12 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
   }
   return (
     <CommentPresenter
+      paginate={paginate}
       totalCnt={totalCnt}
-      comments={comments}
+      currentComments={currentComments}
       content={content}
       handleContent={handleContent}
       register={register}
-      isOpen={isOpen}
-      onCancel={onCancel}
     ></CommentPresenter>
   );
 }

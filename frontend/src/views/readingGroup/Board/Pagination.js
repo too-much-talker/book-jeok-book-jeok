@@ -25,6 +25,10 @@ const PageNumber = styled.li`
   &: last-child {
     border-radius: 0 5px 5px 0;
   }
+
+  &.active {
+    background-color: #337ab7;
+  }
 `;
 const PageButton = styled.button`
   background: white;
@@ -35,21 +39,12 @@ const PageButton = styled.button`
   border: none;
   text-decoration: none;
   color: #337ab7;
-  &:hover {
-    color: blue;
-  }
   &.active {
     color: blue;
   }
 `;
 
-// function changeColor(){
-//   alert(PageButton.background);
-//   if(PageButton.background==="white"){
-//     alert("아님");
-//   }
-// }
-function ReviewPagination({ postPerPage, totalPosts, paginate }) {
+function Pagination({ postPerPage, totalPosts, paginate }) {
   const pageNumbers = [];
   // 페이지 넘버를 설정하기 위해 페이지당 포스트 개수와 총 포스트 개수를 가져온다.
   // index 를 1로 설정하고, index 가 (총 포스트개수 / 페이지당 포스트 개수) 보다 크지 않을때까지 i값을 올린다.
@@ -63,12 +58,10 @@ function ReviewPagination({ postPerPage, totalPosts, paginate }) {
         {pageNumbers.map((number) => (
           <PageNumber key={number}>
             <PageButton onClick={() => paginate(number)}>{number}</PageButton>
-            {/* <PageButton onClick={() => {paginate(number);changeColor();
-    }}>{number}</PageButton> */}
           </PageNumber>
         ))}
       </PageLists>
     </Wrapper>
   );
 }
-export default ReviewPagination;
+export default Pagination;

@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 import Comment from "./Comment";
 import styled from "styled-components";
+import Pagination from "./Pagination";
+const Block = styled.div`
+  margin-left: 3%;
+`;
 const Head = styled.div`
+  position: relative;
   display: flex;
-  height: 6%;
+  margin-top: 2%;
+  margin-bottom: %;
 `;
 const Title = styled.div`
   position: relative;
@@ -13,13 +19,7 @@ const Title = styled.div`
   width: 95%;
   text-align: left;
   margin-left: 1%;
-`;
-const ExitBtn = styled.div`
-  position: relative;
-  border: 1px solid black;
-  width: 4%;
-  height: 70%;
-  border-radius: 20px;
+  margin-bottom: 1%;
 `;
 
 const WriteBlock = styled.div`
@@ -30,105 +30,51 @@ const WriteBlock = styled.div`
 `;
 const WriteInput = styled.textarea`
   position: relative;
-  border: 1px solid black;
-  width: 90%;
+  border: 1px solid #e5e5e5;
+  width: 85%;
   height: 100%;
   resize: none;
   margin-right: 10px;
+  margin-left: 1%;
 `;
-const BtnBlock = styled.div`
-  height: 100%;
-  width: 8%;
-  position: relative;
-`;
-const Blank = styled.div`
-  position: relative;
-  height: 70%;
-`;
-
 const WriteBtn = styled.button`
   position: relative;
-  height: 40%;
-  width: 100%;
+  height: 30px;
+  width: 7%;
   border-radius: 10px;
   border: 1px solid black;
   background: black;
   color: white;
 `;
-const State = styled.div`
-  margin-top: 20px;
-  border-bottom: 1px solid black;
-  text-align: left;
-  margin-left: 5px;
-  height: 5%;
-`;
-
 const CommentList = styled.div`
   height: 75%;
   margin-top: 3%;
 `;
+const Comments = styled.div``;
 
 const CommentPresenter = (props) => {
   const {
+    paginate,
     totalCnt,
-    comments,
+    currentComments,
     content,
     handleContent,
-    isOpen,
-    onCancel,
     register,
   } = props;
 
-  const handleClose = () => {
-    onCancel();
-  };
-
   return (
-    <>
-      <ReactModal
-        isOpen={isOpen}
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.75)",
-          },
-          content: {
-            width: "50%",
-            height: "80%",
-            position: "relative",
-            top: "50%",
-            left: " 50%",
-            transform: "translate(-50%, -50%)",
-            border: "1px solid #eee",
-            borderRadius: "15px",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            outline: "none",
-            padding: "20px",
-            textAlign: "center",
-          },
-        }}
-      >
-        <Head>
-          <Title>댓글</Title>
-          <ExitBtn onClick={handleClose}>X</ExitBtn>
-        </Head>
-        <WriteBlock>
-          <WriteInput value={content} onChange={handleContent}></WriteInput>
-          <BtnBlock>
-            <Blank></Blank>
-            <WriteBtn onClick={register}>등록</WriteBtn>
-          </BtnBlock>
-        </WriteBlock>
-        <State>총 {totalCnt} 건</State>
+    <Block>
+      <Head>
+        <Title>댓글</Title>
+      </Head>
+      <WriteBlock>
+        <WriteInput value={content} onChange={handleContent}></WriteInput>
+        <WriteBtn onClick={register}>등록</WriteBtn>
+      </WriteBlock>
+      <Comments>
         <CommentList>
-          {comments &&
-            comments.map((comment) => (
+          {currentComments &&
+            currentComments.map((comment) => (
               <Comment
                 nickname={comment.memberNickname}
                 createdDate={comment.modifiedDate}
@@ -136,8 +82,9 @@ const CommentPresenter = (props) => {
               ></Comment>
             ))}
         </CommentList>
-      </ReactModal>
-    </>
+        <Pagination postPerPage={5} totalPosts={totalCnt} paginate={paginate} />
+      </Comments>
+    </Block>
   );
 };
 

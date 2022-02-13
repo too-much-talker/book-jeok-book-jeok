@@ -46,48 +46,46 @@ function BoardMainPresenter({
   gotoRegister,
 }) {
   return (
-    <>
-      <Block>
-        <Head>
-          <Title>독서 모임 게시판</Title>
-          <RegisterArticle onClick={gotoRegister}>글쓰기</RegisterArticle>
-        </Head>
-        <Articles>
-          {articles &&
-            articles[0].memberSeq !== "" &&
-            articles[0].memberSeq !== null &&
-            articles[0].memberSeq !== undefined &&
-            articles.length > 0 &&
-            articles.map((article) => (
-              // <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
-              <Article
-                onClick={() => {
-                  printDetail();
-                  handleSetSelected(article.readingGroupBoardSeq);
-                }}
-              >
-                <ArticleItem
-                  readingGroupBoardSeq={article.readingGroupBoardSeq}
-                  title={article.title}
-                  nickname={article.nickname}
-                  createDate={article.createDate}
-                  content={article.content}
-                  views={article.views}
-                ></ArticleItem>
-              </Article>
-            ))}
-          <Pagination
-            activePage={page}
-            itemsCountPerPage={10}
-            totalItemsCount={totalCnt}
-            pageRangeDisplayed={5}
-            prevPageText={"‹"}
-            nextPageText={"›"}
-            onChange={handlePageChange}
-          />
-        </Articles>
-      </Block>
-    </>
+    <Block>
+      <Head>
+        <Title>독서 모임 게시판</Title>
+        <RegisterArticle onClick={gotoRegister}>글쓰기</RegisterArticle>
+      </Head>
+      <Articles>
+        {articles &&
+          articles[0].memberSeq !== "" &&
+          articles[0].memberSeq !== null &&
+          articles[0].memberSeq !== undefined &&
+          articles.length > 0 &&
+          articles.map((article) => (
+            // <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
+            <Article
+              onClick={() => {
+                printDetail();
+                handleSetSelected(article.readingGroupBoardSeq);
+              }}
+            >
+              <ArticleItem
+                readingGroupBoardSeq={article.readingGroupBoardSeq}
+                title={article.title}
+                nickname={article.nickname}
+                createDate={article.createDate}
+                content={article.content}
+                views={article.views}
+              ></ArticleItem>
+            </Article>
+          ))}
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={10}
+          totalItemsCount={totalCnt}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={handlePageChange}
+        />
+      </Articles>
+    </Block>
   );
 }
 

@@ -72,7 +72,6 @@ const Content = styled.div`
   text-align: left;
   margin-top: 15px;
   position: relative;
-  height: 60%;
   margin-left: 3%;
   margin-right: 3%;
   margin-bottom: 15px;
@@ -89,7 +88,7 @@ const Wrap = styled.div`
   width: 70%;
   height: 40%;
   margin: auto;
-  padding-bottom: 70px;
+  padding-bottom: 35px;
   margin-top: 15px;
   margin-bottom: 15px;
   overflow: hidden;
@@ -155,7 +154,6 @@ function ArticleDetailPresenter({
             <Writer>{nickname}</Writer>
             <Date>{createdDate}</Date>
             <Views> 조회수 : {views}</Views>
-
             <Buttons>
               <Btn onClick={goModify} disabled={disabled}>
                 수정
@@ -180,27 +178,10 @@ function ArticleDetailPresenter({
                 ))}
             </Slick>
           </Wrap>
-          <Line></Line>
-          <CommentBtn onClick={handleCommentOpen}>댓글 보기</CommentBtn>
-          <CommentContainer
-            articleSeq={articleSeq}
-            isOpen={commentOpen}
-            onCancel={handleCommentClose}
-          ></CommentContainer>
-
           <Content>{content}</Content>
+          <Line></Line>
+          <CommentContainer articleSeq={articleSeq}></CommentContainer>
         </Contents>
-
-        <Comment>
-          {comments &&
-            comments.map((comment) => (
-              <Comment
-                nickname={comment.nickname}
-                createdDate={comment.createdDate}
-                content={comment.content}
-              ></Comment>
-            ))}
-        </Comment>
       </Article>
     </Block>
   );
