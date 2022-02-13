@@ -18,4 +18,6 @@ public interface ReadingGroupService {
 
     long chagneStatusPreToIng();
 
+    void modify(Long readingGroupSeq, ReqReadingGroupDto reqReadingGroupDto, Long memberSeq);
+
 }
