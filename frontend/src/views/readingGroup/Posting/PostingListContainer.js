@@ -4,6 +4,12 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
 import PostingListPresenter from "./PostingListPresenter";
+import img_none from "../../../res/img/img_none.webp"
+import img_discuss from "../../../res/img/img_discuss.jpg"
+import img_seminar from "../../../res/img/img_seminar.jpg"
+import img_study from "../../../res/img/img_study.jpg"
+import img_free from "../../../res/img/img_free.jpg"
+
 const Postinginfo = styled.div`
   display: flex;
   border: 1px solid #cccccc;
@@ -40,11 +46,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Button1 = styled.div`
-  margin-left: 730px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-`;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
 
@@ -83,16 +85,18 @@ function PostingListContainer() {
     getList();
   }, [page]);
   const groupList = groups.map((group) => {
-    let imgUrl;
-    if (group.readingGroupType === "discuss") {
-      imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000317.jpg";
-    } else if (group.readingGroupType === "seminar") {
-      imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000076.jpg";
-    } else if (group.readingGroupType === "study") {
-      imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001759.jpg";
-    } else {
-      imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001996.jpg";
-    }
+    let img;
+  if(group.readingGroupType==="none"){
+    img  = img_none;
+  }else if(group.readingGroupType==="discuss"){
+    img = img_discuss;
+  }else if(group.readingGroupType==="seminar"){
+    img = img_seminar;
+  }else if(group.readingGroupType==="study"){
+    img = img_study;
+  }else{
+    img = img_free;
+  }
     if(group.readingGroupType==="seminar"){
       group.readingGroupType = "세미나형"
     }
@@ -113,7 +117,7 @@ function PostingListContainer() {
       >
         <Postinginfo>
           <img
-            src={imgUrl}
+            src={img}
             height="150px"
             width="200px"
             style={{ borderRadius: "30px" }}
