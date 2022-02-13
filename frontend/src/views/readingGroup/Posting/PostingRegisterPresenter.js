@@ -46,12 +46,12 @@ function PostingRegisterPresenter({
   onDeadLineChange,
   onLevelChange,
   submitHandler,
-  imgUrl,
+  img,
 }) {
   return (
     <Wrapper>
       <img
-        src={imgUrl}
+        src={img}
         height="170px"
         width="250px"
         style={{ borderRadius: "30px", marginTop: "30px" }}
@@ -216,58 +216,58 @@ function PostingRegisterPresenter({
           onChange={onDeadLineChange}
         />
         <br></br>
-        <h5 style={{ display: "inline-block" , marginRight:"30px"}}>신청 자격 점수</h5>
+        <h5 style={{ display: "inline-block" , marginRight:"30px"}}>신청 자격 레벨</h5>
         <select name="limitLevel" onChange={onLevelChange}>
-          <option value={1}>1점</option>
-          <option value={2}>2점</option>
-          <option value={3}>3점</option>
-          <option value={4}>4점</option>
-          <option value={5}>5점</option>
-          <option value={6}>6점</option>
-          <option value={7}>7점</option>
-          <option value={8}>8점</option>
-          <option value={9}>9점</option>
-          <option value={10}>10점</option>
-          <option value={11}>11점</option>
-          <option value={12}>12점</option>
-          <option value={13}>13점</option>
-          <option value={14}>14점</option>
-          <option value={15}>15점</option>
-          <option value={16}>16점</option>
-          <option value={17}>17점</option>
-          <option value={18}>18점</option>
-          <option value={19}>19점</option>
-          <option value={20}>20점</option>
-          <option value={21}>21점</option>
-          <option value={22}>22점</option>
-          <option value={23}>23점</option>
-          <option value={24}>24점</option>
-          <option value={25}>25점</option>
-          <option value={26}>26점</option>
-          <option value={27}>27점</option>
-          <option value={28}>28점</option>
-          <option value={29}>29점</option>
-          <option value={30}>30점</option>
-          <option value={31}>31점</option>
-          <option value={32}>32점</option>
-          <option value={33}>33점</option>
-          <option value={34}>34점</option>
-          <option value={35}>35점</option>
-          <option value={36}>36점</option>
-          <option value={37}>37점</option>
-          <option value={38}>38점</option>
-          <option value={39}>39점</option>
-          <option value={40}>40점</option>
-          <option value={41}>41점</option>
-          <option value={42}>42점</option>
-          <option value={43}>43점</option>
-          <option value={44}>44점</option>
-          <option value={45}>45점</option>
-          <option value={46}>46점</option>
-          <option value={47}>47점</option>
-          <option value={48}>48점</option>
-          <option value={49}>49점</option>
-          <option value={50}>50점</option>
+          <option value={1}>1 레벨</option>
+          <option value={2}>2 레벨</option>
+          <option value={3}>3 레벨</option>
+          <option value={4}>4 레벨</option>
+          <option value={5}>5 레벨</option>
+          <option value={6}>6 레벨</option>
+          <option value={7}>7 레벨</option>
+          <option value={8}>8 레벨</option>
+          <option value={9}>9 레벨</option>
+          <option value={10}>10 레벨</option>
+          <option value={11}>11 레벨</option>
+          <option value={12}>12 레벨</option>
+          <option value={13}>13 레벨</option>
+          <option value={14}>14 레벨</option>
+          <option value={15}>15 레벨</option>
+          <option value={16}>16 레벨</option>
+          <option value={17}>17 레벨</option>
+          <option value={18}>18 레벨</option>
+          <option value={19}>19 레벨</option>
+          <option value={20}>20 레벨</option>
+          <option value={21}>21 레벨</option>
+          <option value={22}>22 레벨</option>
+          <option value={23}>23 레벨</option>
+          <option value={24}>24 레벨</option>
+          <option value={25}>25 레벨</option>
+          <option value={26}>26 레벨</option>
+          <option value={27}>27 레벨</option>
+          <option value={28}>28 레벨</option>
+          <option value={29}>29 레벨</option>
+          <option value={30}>30 레벨</option>
+          <option value={31}>31 레벨</option>
+          <option value={32}>32 레벨</option>
+          <option value={33}>33 레벨</option>
+          <option value={34}>34 레벨</option>
+          <option value={35}>35 레벨</option>
+          <option value={36}>36 레벨</option>
+          <option value={37}>37 레벨</option>
+          <option value={38}>38 레벨</option>
+          <option value={39}>39 레벨</option>
+          <option value={40}>40 레벨</option>
+          <option value={41}>41 레벨</option>
+          <option value={42}>42 레벨</option>
+          <option value={43}>43 레벨</option>
+          <option value={44}>44 레벨</option>
+          <option value={45}>45 레벨</option>
+          <option value={46}>46 레벨</option>
+          <option value={47}>47 레벨</option>
+          <option value={48}>48 레벨</option>
+          <option value={49}>49 레벨</option>
+          <option value={50}>50 레벨</option>
         </select>
         <Button>
           <button onClick={submitHandler}>저장</button>

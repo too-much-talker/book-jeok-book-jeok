@@ -2,6 +2,11 @@ import React, { Children, useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PostingRegisterPresenter from "./PostingRegisterPresenter";
+import img_none from "../../../res/img/img_none.webp"
+import img_discuss from "../../../res/img/img_discuss.jpg"
+import img_seminar from "../../../res/img/img_seminar.jpg"
+import img_study from "../../../res/img/img_study.jpg"
+import img_free from "../../../res/img/img_free.jpg"
 
 const url = "https://i6a305.p.ssafy.io:8443";
 
@@ -16,17 +21,17 @@ function PostingRegisterContainer() {
   const [limitLevel, setLimitLevel] = useState(1);
   const [readingGroupType, setReadingGroupType] = useState("none");
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-  let imgUrl;
+  let img;
   if(readingGroupType==="none"){
-    imgUrl = "https://img.freepik.com/free-vector/faq-frequently-asked-questions-with-team-people-and-sign-symbol-with-modern-isometric-style_82472-243.jpg?size=626&ext=jpg";
+    img  = img_none;
   }else if(readingGroupType==="discuss"){
-    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000317.jpg";
+    img = img_discuss;
   }else if(readingGroupType==="seminar"){
-    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920000076.jpg";
+    img = img_seminar;
   }else if(readingGroupType==="study"){
-    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001759.jpg";
+    img = img_study;
   }else{
-    imgUrl = "https://vrthumb.imagetoday.co.kr/2020/11/24/td00920001996.jpg";
+    img = img_free;
   }
   const onTypeButtonHandler = (event) => {
     setReadingGroupType(event.target.id);
@@ -132,7 +137,7 @@ function PostingRegisterContainer() {
       onDeadLineChange={onDeadLineChange}
       onLevelChange={onLevelChange}
       submitHandler={submitHandler}
-      imgUrl={imgUrl}
+      img={img}
     />
   );
 }
