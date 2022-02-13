@@ -5,7 +5,9 @@ import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import Sidebar from "./components/Sidebar";
 import GroupInfo from "./components/GroupInfo";
-import BoardMainContainer from "./components/BoardMainContainer";
+import BoardMainContainer from "./components/Board/BoardMainContainer";
+import ArticleDetailContainer from "../Board/ArticleDetailContainer";
+import ModifyArticleContainer from "../Board/ModifyArticleContainer";
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
@@ -77,6 +79,16 @@ function GrouDetailContainer() {
     setTab("info");
   };
 
+  const printDetail = () => {
+    setTab("detail");
+  };
+  const printModify = () => {
+    setTab("modify");
+  };
+  function handleSetSelected(param) {
+    setSelectedSeq(param);
+  }
+  const [selectedSeq, setSelectedSeq] = useState();
   return (
     <>
       {isLoading ? (
@@ -95,7 +107,28 @@ function GrouDetailContainer() {
           )}
           {tab === "info" ? <GroupInfo groupInfo={groupInfo} /> : <div></div>}
           {tab === "board" ? (
-            <BoardMainContainer readingGroupSeq={readingGroupSeq} />
+            <BoardMainContainer
+              handleSetSelected={handleSetSelected}
+              printDetail={printDetail}
+              tab={tab}
+              readingGroupSeq={readingGroupSeq}
+            />
+          ) : (
+            <div></div>
+          )}
+          {tab === "detail" ? (
+            <ArticleDetailContainer
+              handleSetSelected={handleSetSelected}
+              printModify={printModify}
+              articleSeq={selectedSeq}
+            ></ArticleDetailContainer>
+          ) : (
+            <div></div>
+          )}
+          {tab === "modify" ? (
+            <ModifyArticleContainer
+              articleSeq={selectedSeq}
+            ></ModifyArticleContainer>
           ) : (
             <div></div>
           )}

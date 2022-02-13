@@ -36,12 +36,14 @@ const Articles = styled.div`
 `;
 const Article = styled.div``;
 function BoardMainPresenter({
-  handlePageChange,
+  printDetail,
+  handleSetSelected,
   page,
   totalCnt,
+  goArticle,
+  handlePageChange,
   articles,
   gotoRegister,
-  goArticle,
 }) {
   return (
     <>
@@ -50,7 +52,6 @@ function BoardMainPresenter({
           <Title>독서 모임 게시판</Title>
           <RegisterArticle onClick={gotoRegister}>글쓰기</RegisterArticle>
         </Head>
-
         <Articles>
           {articles &&
             articles[0].memberSeq !== "" &&
@@ -58,7 +59,13 @@ function BoardMainPresenter({
             articles[0].memberSeq !== undefined &&
             articles.length > 0 &&
             articles.map((article) => (
-              <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
+              // <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
+              <Article
+                onClick={() => {
+                  printDetail();
+                  handleSetSelected(article.readingGroupBoardSeq);
+                }}
+              >
                 <ArticleItem
                   readingGroupBoardSeq={article.readingGroupBoardSeq}
                   title={article.title}
@@ -71,7 +78,7 @@ function BoardMainPresenter({
             ))}
           <Pagination
             activePage={page}
-            itemsCountPerPage={12}
+            itemsCountPerPage={10}
             totalItemsCount={totalCnt}
             pageRangeDisplayed={5}
             prevPageText={"‹"}

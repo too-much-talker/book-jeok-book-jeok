@@ -2,10 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
 
-// const Form= styled.form.attrs(props => ({
-//   method:"post",
-//    enctype:"multipart/form-data"
-// }))``;
 const Block = styled.div`
   height: 100vh;
 `;
@@ -23,11 +19,18 @@ const TitleBlock = styled.div`
   width: 80%;
   margin-left: 10%;
   text-align: left;
+  display: flex;
 `;
 const Title = styled.input`
   position: relative;
   margin-left: 3%;
   width: 90%;
+  height: 100%;
+`;
+const Label = styled.div`
+  position: relative;
+  // background: blue;
+  width: 4%;
   height: 100%;
 `;
 const ContentBlock = styled.div`
@@ -36,13 +39,22 @@ const ContentBlock = styled.div`
   height: 30%;
   width: 80%;
   margin-left: 10%;
+  display: flex;
   text-align: left;
 `;
-const Content = styled.input`
-  position: relative;
+// const Content = styled.input`
+//   position: relative;
+//   margin-left: 3%;
+//   width: 90%;
+//   height: 100%;
+// `;
+const Content = styled.textarea`
   margin-left: 3%;
   width: 90%;
   height: 100%;
+  resize: none;
+  font-family: bold;
+  // background: Red;
 `;
 const Image = styled.div`
   position: relative;
@@ -86,14 +98,14 @@ function RegisterArticlePresenter({
     <Block>
       <Article>
         <TitleBlock>
-          <label>제목</label>
+          <Label>제목</Label>
           <Title
             onChange={handleTitle}
             placeholder="제목을 입력해주세요"
           ></Title>
         </TitleBlock>
         <ContentBlock>
-          <label>내용</label>
+          <Label>내용</Label>
           <Content
             onChange={handleContent}
             placeholder="내용을 입력해주세요"
