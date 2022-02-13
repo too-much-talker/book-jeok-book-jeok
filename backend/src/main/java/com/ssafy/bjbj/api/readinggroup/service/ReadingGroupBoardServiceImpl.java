@@ -62,6 +62,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
         return savedReadingGroupBoard.getSeq();
     }
 
+    @Transactional
     @Override
     public ResReadingGroupArticleDto findReadingGroupArticleBySeq(Long readingGroupArticleSeq, Long memberSeq) {
         ReadingGroupBoard readingGroupBoard = readingGroupBoardRepository.findBySeq(readingGroupArticleSeq);
