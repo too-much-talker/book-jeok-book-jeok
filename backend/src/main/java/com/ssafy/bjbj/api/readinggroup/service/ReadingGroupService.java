@@ -16,4 +16,6 @@ public interface ReadingGroupService {
 
     boolean isMeetToday(Long readingGroupSeq, Long memberSeq);
 
+    long chagneStatusPreToIng();
+
 }

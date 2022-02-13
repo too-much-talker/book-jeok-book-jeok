@@ -244,6 +244,7 @@ public class ReadingGroupController {
         Map<String, Object> responseData = new HashMap<>();
 
         try {
+            readingGroupService.chagneStatusPreToIng();
             ResReadingGroupListPageDto resReadingGroupListPageDto = readingGroupService.getReadingGroupListPageDto(pageable);
 
             status = HttpStatus.OK.value();
