@@ -14,4 +14,6 @@ public interface ReadingGroupService {
 
     ResReadingGroupListPageDto getReadingGroupListPageDto(Pageable pageable);
 
+    boolean isMeetToday(Long readingGroupSeq, Long memberSeq);
+
 }

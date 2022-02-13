@@ -20,13 +20,13 @@ public class ReadingGroupMiniDto {
 
     private ReadingGroupType readingGroupType;
 
-    @JsonFormat(pattern = "YYYY-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime deadline;
 
-    @JsonFormat(pattern = "YYYY-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime startDate;
 
-    @JsonFormat(pattern = "YYYY-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime endDate;
 
     private List<Long> participantSeqs;

@@ -68,7 +68,7 @@ public class ReadingGroupBoardRepositoryTests {
                 .deadline(LocalDateTime.parse("2023-12-20T12:30:00"))
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.parse("2023-12-20T12:30:00"))
-                .readingGroupType(ReadingGroupType.CASUAL)
+                .readingGroupType(ReadingGroupType.FREE)
                 .member(member1)
                 .build();
     }

@@ -75,7 +75,7 @@ class ReadingGroupServiceTest {
                 .deadline("2022-02-28")
                 .startDate("2022-03-01")
                 .endDate("2022-03-31")
-                .readingGroupType("CASUAL")
+                .readingGroupType("FREE")
                 .days(Arrays.asList("MON", "TUE"))
                 .build();
     }
