@@ -98,4 +98,15 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
                 .execute();
     }
 
+    @Override
+    public long updateStatusPreToFail() {
+        return queryFactory
+                .update(readingGroup)
+                .set(readingGroup.status, Status.ING)
+                .where(readingGroup.deadline.before(LocalDateTime.now().minusDays(1L))
+                        .and(readingGroup.status.eq(Status.PRE))
+                        .and(readingGroup.readingGroupMembers.size().eq(1)))
+                .execute();
+    }
+
 }
