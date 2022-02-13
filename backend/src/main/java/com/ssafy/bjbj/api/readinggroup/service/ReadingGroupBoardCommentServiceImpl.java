@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.readinggroup.service;
 
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardCommentDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardCommentDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoardComment;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -40,5 +43,21 @@ public class ReadingGroupBoardCommentServiceImpl implements ReadingGroupBoardCom
                 .build());
 
         return readingGroupBoardComment.getSeq();
+    }
+
+    @Override
+    public List<ResReadingGroupBoardCommentDto> findReadingGroupBoardCommentDtos(Long readingGroupArticleSeq) {
+        ReadingGroupBoard readingGroupArticle = readingGroupBoardRepository.findBySeq(readingGroupArticleSeq);
+
+        if (readingGroupArticle == null) {
+            throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
+        }
+
+        return readingGroupBoardCommentRepository.findReadingGroupBoardCommentByReadingGroupBoardSeq(readingGroupArticleSeq);
+    }
+
+    @Override
+    public Integer countReadingGroupBoardComments(Long readingGroupArticleSeq) {
+        return readingGroupBoardCommentRepository.countReadingGroupBoardCommentsByReadingGroupBoard(readingGroupArticleSeq);
     }
 }
