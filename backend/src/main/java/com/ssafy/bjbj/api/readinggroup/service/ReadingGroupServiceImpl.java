@@ -11,6 +11,7 @@ import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupMemberException;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupDateRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupMemberRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
@@ -153,6 +154,23 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 .currentPage(pageable.getPageNumber())
                 .readingGroupMiniDtos(readingGroupMiniDtos)
                 .build();
+    }
+
+    @Override
+    public boolean isMeetToday(Long readingGroupSeq, Long memberSeq) {
+        if (!readingGroupRepository.existsBySeq(readingGroupSeq)) {
+            throw new NotFoundReadingGroupException("존재하지 않는 독서모임입니다.");
+        }
+
+        if (!readingGroupMemberRepository.existsByReadingGroupSeqAndMemberSeq(readingGroupSeq, memberSeq)) {
+            throw new NotFoundReadingGroupMemberException("참여한 독서 모임이 아닙니다.");
+        }
+
+        if (readingGroupRepository.findNotEndReadingGroupBySeq(readingGroupSeq) == null) {
+            throw new IllegalStateException("이미 종료된 독서모임입니다.");
+        }
+
+        return readingGroupDateRepository.existsByReadingGroupSeqAndConferenceDate(readingGroupSeq, LocalDateTime.of(LocalDate.now(), LocalTime.parse("00:00:00")));
     }
 
 }

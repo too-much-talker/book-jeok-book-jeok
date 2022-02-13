@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.readinggroup.controller;
 
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardCommentDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardCommentDto;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupBoardCommentService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
@@ -11,13 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -67,6 +66,41 @@ public class ReadingGroupBoardCommentController {
                 status = HttpStatus.INTERNAL_SERVER_ERROR.value();
                 responseData.put("msg", "요청을 수행할 수 없습니다.");
             }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("/list/{readingGroupArticleSeq}")
+    public BaseResponseDto getListComments(@PathVariable Long readingGroupArticleSeq) {
+        log.debug("ReadingGroupBoardComment.getListComments() 독서모임 게시판 댓글 목록 조회 API");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            Integer commentCount = readingGroupBoardCommentService.countReadingGroupBoardComments(readingGroupArticleSeq);
+            List<ResReadingGroupBoardCommentDto> readingGroupBoardCommentDtos = readingGroupBoardCommentService.findReadingGroupBoardCommentDtos(readingGroupArticleSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "독서모임 게시글 댓글 목록을 불러왔습니다.");
+            responseData.put("commentCount", commentCount);
+            responseData.put("comments", readingGroupBoardCommentDtos);
+        } catch (NotFoundReadingGroupArticleException e) {
+            log.error("해당 게시글 조회 실패");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
 
         return BaseResponseDto.builder()

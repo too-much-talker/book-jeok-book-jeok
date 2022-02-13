@@ -12,4 +12,6 @@ public interface ReadingGroupRepository extends JpaRepository<ReadingGroup, Long
     @Query("SELECT rg FROM ReadingGroup rg WHERE rg.seq = :seq")
     Optional<ReadingGroup> findBySeq(@Param("seq") Long seq);
 
+    boolean existsBySeq(Long seq);
+
 }

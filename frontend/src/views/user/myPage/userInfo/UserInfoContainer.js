@@ -26,6 +26,16 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 function UserInfoContainer() {
+  const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (jwtToken === null || jwtToken === undefined || jwtToken === "") {
+      navigate("/login");
+      alert("로그인 후 이용 가능합니다.");
+    }
+  }, [jwtToken]);
+
   const fistuser = useSelector((state) => state.authReducer).memberInfo;
   const [user, setUser] = useState(fistuser);
   const [enteredEmail, setEnterdEmail] = useState(user.email);
@@ -59,21 +69,21 @@ function UserInfoContainer() {
     setEnteredPhone(event.target.value);
   };
 
-  const navigate = useNavigate();
-
   const logOut = () => {
-    dispatch(setUserInfo({
-      memberInfo: {
-        seq: "",
-        email: "",
-        password: "",
-        name: "",
-        nickname: "",
-      },
-      jwtToken: "",
-    }));
+    dispatch(
+      setUserInfo({
+        memberInfo: {
+          seq: "",
+          email: "",
+          password: "",
+          name: "",
+          nickname: "",
+        },
+        jwtToken: "",
+      })
+    );
     sessionStorage.removeItem("jwtToken");
-    alert("다시 로그인 해주세요.")
+    alert("다시 로그인 해주세요.");
     navigate("/login");
   };
   const deleteUser = (id) => {
@@ -97,7 +107,6 @@ function UserInfoContainer() {
     setUser(newUser);
     setEditing(false);
     logOut();
-    
   };
   function validId(event) {
     event.preventDefault();
@@ -127,8 +136,6 @@ function UserInfoContainer() {
   function validPhoneNumber() {
     return checkPhoneNumber(enteredPhone);
   }
-  const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-
 
   const onModify = () => {
     axios
@@ -158,10 +165,10 @@ function UserInfoContainer() {
         console.log(error);
       });
   };
-  
+
   const Title = styled.div`
-  margin-left: 150px;
-  `
+    margin-left: 150px;
+  `;
   return (
     <div className="container">
       <Title>

@@ -3,14 +3,17 @@ package com.ssafy.bjbj.api.readinggroup.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ReadingGroupMiniDto;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.*;
 import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroup.*;
@@ -74,6 +77,14 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
         } else {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public ReadingGroup findNotEndReadingGroupBySeq(Long seq) {
+        return queryFactory
+                .selectFrom(readingGroup)
+                .where(readingGroup.seq.eq(seq).and(readingGroup.endDate.after(LocalDateTime.now().minusDays(1L))))
+                .fetchOne();
     }
 
 }
