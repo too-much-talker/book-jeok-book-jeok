@@ -16,6 +16,7 @@ import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupDateRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupMemberRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import com.ssafy.bjbj.common.enums.Day;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -70,21 +71,7 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
         /**
          * 독서 모임 날짜 저장
          */
-        LocalDate startDate = LocalDate.parse(reqReadingGroupDto.getStartDate());
-        LocalDate endDate = LocalDate.parse(reqReadingGroupDto.getEndDate());
-        List<String> days = reqReadingGroupDto.getDays();
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1L)) {
-            String baseDay = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
-            for (String day : days) {
-                if (day.equalsIgnoreCase(baseDay)) {
-                    readingGroupDateRepository.save(ReadingGroupDate.builder()
-                            .conferenceDate(LocalDateTime.of(date, LocalTime.parse("00:00:00")))
-                            .readingGroup(savedReadingGroup)
-                            .build());
-                    break;
-                }
-            }
-        }
+        registerReadingGroupDate(reqReadingGroupDto, savedReadingGroup);
 
         /**
          * 독서 모임 회원 저장
@@ -178,6 +165,47 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
     public long chagneStatusPreToIng() {
         int minNumOfMembers = 2;
         return readingGroupRepository.updateStatusPreToIng(minNumOfMembers) + readingGroupRepository.updateStatusPreToFail();
+    }
+
+    @Transactional
+    @Override
+    public void modify(Long readingGroupSeq, ReqReadingGroupDto reqReadingGroupDto, Long memberSeq) {
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(readingGroupSeq)
+                .orElseThrow(() -> new NotFoundReadingGroupException("존재하지 않는 독서 모임입니다."));
+
+        if (!findReadingGroup.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("올바르지 않운 요청입니다.");
+        }
+
+        // 독서 모임 데이터 수정
+        findReadingGroup.change(reqReadingGroupDto);
+
+        // 기존의 독서 모임 날짜 삭제
+        readingGroupDateRepository.deleteAllByReadingGroupSeq(readingGroupSeq);
+
+        /**
+         * 독서 모임 날짜 저장
+         */
+        registerReadingGroupDate(reqReadingGroupDto, findReadingGroup);
+
+    }
+
+    private void registerReadingGroupDate(ReqReadingGroupDto reqReadingGroupDto, ReadingGroup readingGroup) {
+        LocalDate startDate = LocalDate.parse(reqReadingGroupDto.getStartDate());
+        LocalDate endDate = LocalDate.parse(reqReadingGroupDto.getEndDate());
+        List<String> days = reqReadingGroupDto.getDays();
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1L)) {
+            String baseDay = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.US);
+            for (String day : days) {
+                if (day.equalsIgnoreCase(baseDay)) {
+                    readingGroupDateRepository.save(ReadingGroupDate.builder()
+                            .conferenceDate(LocalDateTime.of(date, LocalTime.parse("00:00:00")))
+                            .readingGroup(readingGroup)
+                            .build());
+                    break;
+                }
+            }
+        }
     }
 
 }

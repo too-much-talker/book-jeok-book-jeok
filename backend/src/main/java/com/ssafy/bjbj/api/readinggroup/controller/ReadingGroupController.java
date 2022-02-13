@@ -9,6 +9,7 @@ import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupMemberService;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import com.ssafy.bjbj.common.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +38,7 @@ public class ReadingGroupController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @PostMapping
     public BaseResponseDto register(@Valid @RequestBody ReqReadingGroupDto reqReadingGroupDto, Errors errors, Authentication authentication) {
-        log.debug("ReadingGroupController.register() 독서 모임 모집 포스팅 작성 API 호출");
-
-        System.out.println("reqReadingGroupDto = " + reqReadingGroupDto);
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
@@ -301,6 +300,74 @@ public class ReadingGroupController {
 
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
             responseData.put("msg", e.getMessage());
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER', 'ROLE_ADMIN')")
+    @PutMapping("/{readingGroupSeq}")
+    public BaseResponseDto modify(@PathVariable Long readingGroupSeq, @Valid @RequestBody ReqReadingGroupDto reqReadingGroupDto, Errors errors, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+            }
+        } else {
+            String deadline = reqReadingGroupDto.getDeadline();
+            String startDate = reqReadingGroupDto.getStartDate();
+            String startDatePlusSixDays = LocalDate.parse(startDate).plusDays(6L).toString();
+            String endDate = reqReadingGroupDto.getEndDate();
+            if (deadline.compareTo(startDate) < 0 && startDatePlusSixDays.compareTo(endDate) <= 0) {
+                Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+                try {
+                    readingGroupService.modify(readingGroupSeq, reqReadingGroupDto, memberSeq);
+
+                    status = HttpStatus.OK.value();
+                    responseData.put("msg", "독서 모임 모집 포스팅을 수정하였습니다.");
+                    responseData.put("readingGroupSeq", readingGroupSeq);
+                } catch (NotFoundReadingGroupException e) {
+                    log.error("존재하지 않은 독서 모임 조회");
+                    e.printStackTrace();
+
+                    status = HttpStatus.BAD_REQUEST.value();
+                    responseData.put("msg", e.getMessage());
+                } catch (NotEqualMemberException e) {
+                    log.error("독서 모임의 개설자가 아닌 자가 요청");
+                    e.printStackTrace();
+
+                    status = HttpStatus.BAD_REQUEST.value();
+                    responseData.put("msg", e.getMessage());
+                } catch (Exception e) {
+                    log.error("서버 에러 발생");
+                    e.printStackTrace();
+
+                    status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                    responseData.put("msg", "요청을 수행할 수 없습니다.");
+                }
+            } else {
+                /**
+                 * 마감일이 시작일보다 빨라야 하고, 시작일 + 6days 일자가 종료일보다 빠르거나 같아야 한다.
+                 * deadline : 2021-12-31
+                 * startDate : 2022-01-01
+                 * endDate : 2022-01-07
+                 */
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", "올바르지 않은 요청입니다.");
+            }
         }
 
         return BaseResponseDto.builder()

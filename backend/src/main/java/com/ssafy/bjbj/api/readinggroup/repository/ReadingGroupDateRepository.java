@@ -9,4 +9,6 @@ public interface ReadingGroupDateRepository extends JpaRepository<ReadingGroupDa
 
     boolean existsByReadingGroupSeqAndConferenceDate(Long readingGroup_seq, LocalDateTime conferenceDate);
 
+    void deleteAllByReadingGroupSeq(Long readingGroupSeq);
+
 }

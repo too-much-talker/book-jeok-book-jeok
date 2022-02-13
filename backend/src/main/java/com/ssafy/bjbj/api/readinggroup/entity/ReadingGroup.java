@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.readinggroup.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
 import com.ssafy.bjbj.common.enums.Status;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
@@ -96,6 +97,19 @@ public class ReadingGroup extends BaseLastModifiedEntity {
 
     public void incrementViews() {
         this.views++;
+    }
+
+    public void change(ReqReadingGroupDto reqReadingGroupDto) {
+        String time = "T00:00:00";
+
+        this.title = reqReadingGroupDto.getTitle();
+        this.content = reqReadingGroupDto.getContent();
+        this.limitLevel = reqReadingGroupDto.getLimitLevel();
+        this.maxMember = reqReadingGroupDto.getMaxMember();
+        this.deadline = LocalDateTime.parse(reqReadingGroupDto.getDeadline() + time);
+        this.startDate = LocalDateTime.parse(reqReadingGroupDto.getStartDate() + time);
+        this.endDate = LocalDateTime.parse(reqReadingGroupDto.getEndDate() + time);
+        this.readingGroupType = ReadingGroupType.valueOf(reqReadingGroupDto.getReadingGroupType().toUpperCase());
     }
 
 }
