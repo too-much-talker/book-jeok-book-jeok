@@ -6,7 +6,7 @@ import ArticleDetailPresenter from "./ArticleDetailPresenter";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 
-function ArticleDetailContainer() {
+function ArticleDetailContainer({ printModify, articleSeq }) {
   const user = useSelector((state) => state.authReducer);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   const url = "https://i6a305.p.ssafy.io:8443";
@@ -40,7 +40,7 @@ function ArticleDetailContainer() {
 
   function getArticle() {
     axios
-      .get(url + `/api/v1/reading-groups/boards/${useParam.articleSeq}`, {
+      .get(url + `/api/v1/reading-groups/boards/${articleSeq}`, {
         headers: {
           Authorization: `Bearer ` + jwtToken,
         },
@@ -68,12 +68,12 @@ function ArticleDetailContainer() {
   }
 
   function goModify() {
-    document.location.href = `/article/modify/${useParam.boardSeq}/${useParam.articleSeq}`;
+    printModify();
   }
 
   function goDelete() {
     axios
-      .delete(url + `/api/v1/reading-groups/boards/${useParam.articleSeq}`, {
+      .delete(url + `/api/v1/reading-groups/boards/${articleSeq}`, {
         headers: {
           Authorization: `Bearer ` + jwtToken,
         },
@@ -82,7 +82,7 @@ function ArticleDetailContainer() {
         console.log(response.data.data.msg);
         alert(response.data.data.msg);
         //목록으로 이동
-        document.location.href = `/readinggroup/detail/${useParam.boardSeq}`;
+        document.location.href = `/readinggroup/detail/${useParam.meetingSeq}`;
       })
       .catch(function (error) {
         console.log(error);

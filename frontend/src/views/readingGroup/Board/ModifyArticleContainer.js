@@ -3,13 +3,13 @@ import axios from "axios";
 import React, { useState, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-function ModifyArticleContainer() {
+function ModifyArticleContainer({ articleSeq }) {
   const user = useSelector((state) => state.authReducer);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   const url = "https://i6a305.p.ssafy.io:8443";
   let useParam = useParams();
   const [readingGroupSeq, setReadingGroupSeq] = useState(useParam.boardSeq);
-  const [articleSeq, setArticleSeq] = useState(useParam.articleSeq);
+  //const [articleSeq, setArticleSeq] = useState(useParam.articleSeq);
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
   const [files, setFiles] = useState();
@@ -112,7 +112,7 @@ function ModifyArticleContainer() {
       .then(function (response) {
         console.log(response.data);
         alert("수정되었습니다.");
-        document.location.href = `/readinggroup/detail/${readingGroupSeq}`;
+        document.location.href = `/readinggroup/detail/${useParam.meetingSeq}`;
       })
       .catch(function (error) {
         console.log(error);

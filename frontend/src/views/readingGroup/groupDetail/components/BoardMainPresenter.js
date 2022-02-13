@@ -36,12 +36,14 @@ const Articles = styled.div`
 `;
 const Article = styled.div``;
 function BoardMainPresenter({
-  handlePageChange,
+  printDetail,
+  handleSetSelected,
   page,
   totalCnt,
+  goArticle,
+  handlePageChange,
   articles,
   gotoRegister,
-  goArticle,
 }) {
   return (
     <>
@@ -57,7 +59,13 @@ function BoardMainPresenter({
             articles[0].memberSeq !== undefined &&
             articles.length > 0 &&
             articles.map((article) => (
-              <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
+              // <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
+              <Article
+                onClick={() => {
+                  printDetail();
+                  handleSetSelected(article.readingGroupBoardSeq);
+                }}
+              >
                 <ArticleItem
                   readingGroupBoardSeq={article.readingGroupBoardSeq}
                   title={article.title}

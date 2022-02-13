@@ -11,11 +11,11 @@ const Block = styled.div`
   height: 100vh;
 `;
 const Article = styled.div`
+  text-align: right;
   position: relative;
-  width: 100%;
+  margin-left: 20%;
+  width: 80%;
   height: 100%;
-  border: 1px solid black;
-  border-radius: 20px;
 `;
 const Head = styled.div`
   position: relative;
@@ -79,8 +79,8 @@ const Content = styled.div`
 `;
 const CommentBtn = styled.button`
   position: relative;
-  margin-left: 3%;
-  margin-right: 90%;
+  margin-left: 2%;
+  margin-right: 89%;
   margin-top: 15px;
 `;
 
@@ -143,8 +143,8 @@ function ArticleDetailPresenter({
   handleCommentOpen,
   handleCommentClose,
   commentOpen,
-  setCommentOpen,
 }) {
+  console.log(file);
   return (
     <Block>
       <Article>

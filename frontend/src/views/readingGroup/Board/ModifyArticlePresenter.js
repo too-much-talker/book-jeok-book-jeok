@@ -9,10 +9,10 @@ const Block = styled.div`
 `;
 const Article = styled.div`
   position: relative;
-  width: 100%;
+  margin-left: 20%;
+  width: 80%;
   height: 97%;
-  border: 1px solid black;
-  border-radius: 20px;
+  // background: red;
 `;
 const TitleBlock = styled.div`
   margin-top: 5%;
@@ -32,7 +32,7 @@ const Title = styled.input`
 const Label = styled.div`
   position: relative;
   // background: blue;
-  width: 4%;
+  width: 5 %;
   height: 100%;
 `;
 const ContentBlock = styled.div`
@@ -44,12 +44,6 @@ const ContentBlock = styled.div`
   display: flex;
   text-align: left;
 `;
-// const Content = styled.input`
-//   position: relative;
-//   margin-left: 3%;
-//   width: 90%;
-//   height: 100%;
-// `;
 const Content = styled.textarea`
   margin-left: 3%;
   width: 90%;
@@ -68,8 +62,9 @@ const ImageBlock = styled.div`
 `;
 const Image = styled.div`
   margin-top: 1.5%;
-  margin-left: 3%;
-  width: 350px;
+  margin-left: 10px;
+  width: 300px;
+  // background: blue;
 `;
 const Inputs = styled.div`
   //   background: blue;
@@ -103,8 +98,9 @@ const Message1 = styled.div`
 `;
 
 const Wrap = styled.div`
+  // background: blue;
   position: relative;
-  width: 400px;
+  width: 310px;
   height: 230px;
   padding-bottom: 40px;
   margin-left: 8px;
@@ -133,6 +129,7 @@ const SlickItems = styled.div`
   position: relative;
   margin-left: 2%;
   height: 200px;
+  // background: yellow;
   img {
     max-width: 100%;
     height: 100%;
@@ -193,7 +190,7 @@ function ModifyArticlePresenter({
             </Message>
             <Preview>
               {postfiles.file !== null ? (
-                <img src={postfiles.previewURL} width="310px" height="180px" />
+                <img src={postfiles.previewURL} width="300px" height="180px" />
               ) : null}
             </Preview>
           </Image>
