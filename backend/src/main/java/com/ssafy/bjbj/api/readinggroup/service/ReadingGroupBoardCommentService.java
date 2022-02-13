@@ -12,6 +12,4 @@ public interface ReadingGroupBoardCommentService {
     List<ResReadingGroupBoardCommentDto> findReadingGroupBoardCommentDtos(Long readingGroupArticleSeq);
 
     Integer countReadingGroupBoardComments(Long readingGroupArticleSeq);
-
-    void deleteReadingGroupBoardComment(Long readingGroupBoardComment, Long memberSeq);
 }
