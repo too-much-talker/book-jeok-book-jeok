@@ -80,7 +80,7 @@ function ArticleDetailContainer() {
         console.log(response.data.data.msg);
         alert(response.data.data.msg);
         //목록으로 이동
-        document.location.href = `/board/${useParam.boardSeq}`;
+        document.location.href = `/readinggroup/detail/${useParam.boardSeq}`;
       })
       .catch(function (error) {
         console.log(error);

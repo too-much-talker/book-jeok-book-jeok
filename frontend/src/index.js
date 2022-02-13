@@ -27,14 +27,11 @@ import BooklogDetailContainer from "./views/booklogs/booklogDetail/BooklogDetail
 import ReadingGroup from "./views/readingGroup/index";
 import MeetingContainer from "./views/readingGroup/meeting/MeetingContainer";
 
+// import BoardMainContainer from "./views/readingGroup/Board/BoardMainContainer";
+import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticleContainer";
 import ModifyArticleContainer from "./views/readingGroup/Board/ModifyArticleContainer";
 
-// import ModifyArticleContainer from "./views/readingGroup/Board.js/ModifyArticleContainer";
 import ArticleDetailContainer from "./views/readingGroup/Board/ArticleDetailContainer";
-
-import BoardMainContainer from "./views/readingGroup/Board/BoardMainContainer";
-import RegisterArticleContainer from "./views/readingGroup/Board/RegisterArticleContainer";
-
 import PostingRegisterContainer from "./views/readingGroup/Posting/PostingRegisterContainer";
 import PostingDetailContainer from "./views/readingGroup/Posting/PostingDetailContainer";
 
@@ -98,11 +95,15 @@ render(
                 path="/booklogdetail"
                 element={<BooklogDetailContainer />}
               />
-
-              <Route path="/board/:seq" element={<BoardMainContainer />} />
+              {/* 
+              <Route path="/board/:seq" element={<BoardMainContainer />} /> */}
               <Route
                 path="/article/write/:seq"
                 element={<RegisterArticleContainer />}
+              />
+              <Route
+                path="/article/modify/:boardSeq/:articleSeq"
+                element={<ModifyArticleContainer />}
               />
 
               <Route path="/readinggroup/*" element={<ReadingGroup />}>
@@ -110,12 +111,6 @@ render(
                 <Route path="groupDetail/:meetingSeq" />
                 {/* <Route path="detail" /> */}
               </Route>
-
-              <Route
-                path="/article/modify/:boardSeq/:articleSeq"
-                element={<ModifyArticleContainer />}
-              />
-
               <Route
                 path="/article/detail/:boardSeq/:articleSeq"
                 element={<ArticleDetailContainer />}
