@@ -56,8 +56,9 @@ function checkNickname(nickname, url) {
         if (response.data.status === 200) {
           alert("이미 존재하는 닉네임입니다.");
           return false;
-        }
-        if (response.data.status === 204) {
+        } else if (response.data.status === 400) {
+          alert("닉네임 형식을 확인해주세요.");
+        } else if (response.data.status === 204) {
           alert("사용 가능한 닉네임입니다.");
           return true;
         }
