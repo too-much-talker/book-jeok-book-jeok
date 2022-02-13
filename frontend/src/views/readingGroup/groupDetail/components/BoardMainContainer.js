@@ -35,7 +35,7 @@ function BoardMainContainer({ readingGroupSeq }) {
         },
       })
       .then(function (response) {
-        console.log(response);
+        console.log(response.data.data.totalCnt);
         setArticles(response.data.data.readingGroupBoards);
         setTotalCnt(response.data.data.totalCnt);
       })

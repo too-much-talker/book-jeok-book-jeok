@@ -67,7 +67,9 @@ function ArticleDetailContainer() {
       });
   }
 
-  function goModify() {}
+  function goModify() {
+    document.location.href = `/article/modify/${useParam.boardSeq}/${useParam.articleSeq}`;
+  }
 
   function goDelete() {
     axios

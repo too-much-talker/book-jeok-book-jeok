@@ -50,7 +50,6 @@ function BoardMainPresenter({
           <Title>독서 모임 게시판</Title>
           <RegisterArticle onClick={gotoRegister}>글쓰기</RegisterArticle>
         </Head>
-
         <Articles>
           {articles &&
             articles[0].memberSeq !== "" &&
@@ -71,7 +70,7 @@ function BoardMainPresenter({
             ))}
           <Pagination
             activePage={page}
-            itemsCountPerPage={12}
+            itemsCountPerPage={10}
             totalItemsCount={totalCnt}
             pageRangeDisplayed={5}
             prevPageText={"‹"}
