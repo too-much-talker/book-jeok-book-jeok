@@ -54,10 +54,15 @@ const NicknameItem = styled.div`
   display: flex;
 `;
 const Label = styled.div`
+  padding-top: 5px;
   width: 17%;
   margin-right: 1%;
 `;
-
+const PwdLabel = styled.div`
+  padding-top: 18px;
+  width: 17%;
+  margin-right: 1%;
+`;
 const Input = styled.input`
   width: 68%;
   margin-right: 1%;
@@ -143,7 +148,7 @@ function Signup({
           <DuplicateBtn onClick={checkId}>중복확인</DuplicateBtn>
         </InputItem>
         <PwdItem>
-          <Label>비밀번호</Label>
+          <PwdLabel>비밀번호</PwdLabel>
           <PwdInputs>
             <PwdMsg>
               영어 소문자, 대문자, 숫자, 특수 문자 4종류 중에 2종류를 포함. 8자
@@ -173,7 +178,7 @@ function Signup({
           ></Input>
         </InputItem>
         <NicknameItem>
-          <Label>닉네임</Label>
+          <PwdLabel>닉네임</PwdLabel>
           <NicknameInputs>
             <NicknameMsg>
               닉네임은 한글로만 혹은 영어로만 이루어져야 합니다.

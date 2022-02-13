@@ -2,15 +2,14 @@ import BoardMainPresenter from "./BoardMainPresenter";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-function BoardMainContainer() {
+
+function BoardMainContainer({ readingGroupSeq }) {
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-  //console.log(user);
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
-  //독서모임 게시판 번호
-  const [readingGroupSeq, setReadingGroupSeq] = useState(useParam.seq);
   const [page, setPage] = useState(1);
   const [articles, setArticles] = useState();
+  const [totalCnt, setTotalCnt] = useState();
   useEffect(() => {
     getBoardList();
     console.log("컴포넌트가 화면에 나타남");
@@ -38,6 +37,7 @@ function BoardMainContainer() {
       .then(function (response) {
         console.log(response);
         setArticles(response.data.data.readingGroupBoards);
+        setTotalCnt(response.data.data.totalCnt);
       })
 
       .catch(function (error) {
@@ -50,9 +50,16 @@ function BoardMainContainer() {
   function goArticle(readingGroupBoardSeq) {
     document.location.href = `/article/detail/${readingGroupSeq}/${readingGroupBoardSeq}`;
   }
+  function handlePageChange(event) {
+    setPage(event);
+  }
+
   return (
     <BoardMainPresenter
+      page={page}
+      totalCnt={totalCnt}
       goArticle={goArticle}
+      handlePageChange={handlePageChange}
       articles={articles}
       gotoRegister={gotoRegister}
     ></BoardMainPresenter>

@@ -5,11 +5,11 @@ import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import Sidebar from "./components/Sidebar";
 import GroupInfo from "./components/GroupInfo";
-
+import BoardMainContainer from "./components/BoardMainContainer";
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
-  margin-top: 100px;
+  margin-top: 20px;
 `;
 
 const ButtonMenu = styled.div`
@@ -32,6 +32,7 @@ function GrouDetailContainer() {
   const params = useParams();
   const [groupInfo, setGroupInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [readingGroupSeq, setReadingGroupSeq] = useState(params.meetingSeq);
   const navigate = useNavigate();
   const userNickname = useSelector(
     (state) => state.authReducer.memberInfo.nickname
@@ -92,10 +93,11 @@ function GrouDetailContainer() {
               <Delete onClick={onDelete}>독서 모임 삭제</Delete>
             </ButtonMenu>
           )}
-          {tab === "info" ? (
-            <GroupInfo groupInfo={groupInfo} />
+          {tab === "info" ? <GroupInfo groupInfo={groupInfo} /> : <div></div>}
+          {tab === "board" ? (
+            <BoardMainContainer readingGroupSeq={readingGroupSeq} />
           ) : (
-            <div>게시판</div>
+            <div></div>
           )}
         </Wrapper>
       )}
