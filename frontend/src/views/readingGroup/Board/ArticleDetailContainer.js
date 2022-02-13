@@ -100,6 +100,7 @@ function ArticleDetailContainer({ printModify, articleSeq }) {
   return (
     <>
       <ArticleDetailPresenter
+        articleSeq={articleSeq}
         disabled={disabled}
         settings={settings}
         goDelete={goDelete}
