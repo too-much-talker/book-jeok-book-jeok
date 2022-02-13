@@ -10,6 +10,8 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
   const [content, setContent] = useState();
+  const [comments, setComments] = useState();
+  const [totalCnt, setTotalCnt] = useState(0);
   function handleContent(event) {
     setContent(event.target.value);
     console.log(content);
@@ -17,6 +19,27 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
   const handleClose = () => {
     onCancel();
   };
+
+  useEffect(() => {
+    getComment();
+  }, []);
+
+  function getComment() {
+    axios
+      .get(url + `/api/v1/reading-groups/comments/list/${articleSeq}`, {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data.data);
+        setComments(response.data.data.comments);
+        setTotalCnt(response.data.data.commentCount);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   function register() {
     axios
@@ -31,7 +54,7 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
       )
       .then(function (response) {
         console.log(response);
-        alert("댓글이 작성되었습니다.");
+        getComment();
         setContent("");
       })
       .catch(function (error) {
@@ -40,6 +63,8 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
   }
   return (
     <CommentPresenter
+      totalCnt={totalCnt}
+      comments={comments}
       content={content}
       handleContent={handleContent}
       register={register}

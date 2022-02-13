@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
-
+import Comment from "./Comment";
 import styled from "styled-components";
 const Head = styled.div`
   display: flex;
@@ -55,6 +55,13 @@ const WriteBtn = styled.button`
   background: black;
   color: white;
 `;
+const State = styled.div`
+  margin-top: 20px;
+  border-bottom: 1px solid black;
+  text-align: left;
+  margin-left: 5px;
+  height: 5%;
+`;
 
 const CommentList = styled.div`
   height: 75%;
@@ -62,7 +69,15 @@ const CommentList = styled.div`
 `;
 
 const CommentPresenter = (props) => {
-  const { content, handleContent, isOpen, onCancel, register } = props;
+  const {
+    totalCnt,
+    comments,
+    content,
+    handleContent,
+    isOpen,
+    onCancel,
+    register,
+  } = props;
 
   const handleClose = () => {
     onCancel();
@@ -110,7 +125,17 @@ const CommentPresenter = (props) => {
             <WriteBtn onClick={register}>등록</WriteBtn>
           </BtnBlock>
         </WriteBlock>
-        <CommentList></CommentList>
+        <State>총 {totalCnt} 건</State>
+        <CommentList>
+          {comments &&
+            comments.map((comment) => (
+              <Comment
+                nickname={comment.memberNickname}
+                createdDate={comment.modifiedDate}
+                content={comment.content}
+              ></Comment>
+            ))}
+        </CommentList>
       </ReactModal>
     </>
   );
