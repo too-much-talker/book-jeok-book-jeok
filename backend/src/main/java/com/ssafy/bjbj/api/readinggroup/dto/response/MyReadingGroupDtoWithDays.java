@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import java.util.Set;
 
-@ToString(of = {"readingGroupSeq", "title", "status", "readingGroupType", "days"})
+@ToString(of = {"readingGroupSeq", "title", "status", "readingGroupType", "isReviewed", "days"})
 @NoArgsConstructor
 @Getter
 public class MyReadingGroupDtoWithDays {
@@ -23,14 +23,17 @@ public class MyReadingGroupDtoWithDays {
 
     private ReadingGroupType readingGroupType;
 
+    private boolean isReviewed;
+
     private Set<Day> days;
 
     @Builder
-    public MyReadingGroupDtoWithDays(Long readingGroupSeq, String title, Status status, ReadingGroupType readingGroupType, Set<Day> days) {
+    public MyReadingGroupDtoWithDays(Long readingGroupSeq, String title, Status status, ReadingGroupType readingGroupType, boolean isReviewed, Set<Day> days) {
         this.readingGroupSeq = readingGroupSeq;
         this.title = title;
         this.status = status;
         this.readingGroupType = readingGroupType;
+        this.isReviewed = isReviewed;
         this.days = days;
     }
 
