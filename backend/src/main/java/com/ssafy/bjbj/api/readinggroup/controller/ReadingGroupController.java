@@ -4,6 +4,9 @@ import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResMyReadingGroupPageDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupDetailDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupListPageDto;
+import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupReview;
+import com.ssafy.bjbj.api.readinggroup.exception.AlreadyReviewedReadingGroupMemberException;
+import com.ssafy.bjbj.api.readinggroup.exception.NotAcceptReviewOwnSelfException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupMemberException;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupMemberService;
@@ -451,4 +454,62 @@ public class ReadingGroupController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @PostMapping("/{readingGroupSeq}/review")
+    public BaseResponseDto review(@PathVariable Long readingGroupSeq, @Valid @RequestBody Map<String, ReadingGroupReview> reviews, Errors errors, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+
+        if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+            }
+        } else {
+            try {
+                readingGroupService.reviewReadingGroupMember(readingGroupSeq, reviews, memberSeq);
+
+                status = HttpStatus.OK.value();
+                responseData.put("msg", "리뷰 성공");
+            } catch (NotFoundReadingGroupMemberException e) {
+                log.error("독서 모임 회원 조회 실패");
+                e.printStackTrace();
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (AlreadyReviewedReadingGroupMemberException e) {
+                log.error("독서 모임 리뷰 중복 작성 불가");
+                e.printStackTrace();
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (NotAcceptReviewOwnSelfException e) {
+                log.error("회원 자신 리뷰 불가");
+                e.printStackTrace();
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (Exception e) {
+                log.error("서버 에러 발생");
+                e.printStackTrace();
+
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "요청을 수행할 수 없습니다.");
+            }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
 }

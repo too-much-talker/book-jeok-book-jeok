@@ -7,7 +7,10 @@ import com.ssafy.bjbj.api.readinggroup.dto.response.*;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
+import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupReview;
 import com.ssafy.bjbj.api.readinggroup.enums.ReadingGroupType;
+import com.ssafy.bjbj.api.readinggroup.exception.AlreadyReviewedReadingGroupMemberException;
+import com.ssafy.bjbj.api.readinggroup.exception.NotAcceptReviewOwnSelfException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupMemberException;
 import com.ssafy.bjbj.api.readinggroup.repository.*;
@@ -23,10 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -264,6 +264,7 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                     .title(findMyReadingGroupDto.getTitle())
                     .status(findMyReadingGroupDto.getStatus())
                     .readingGroupType(findMyReadingGroupDto.getReadingGroupType())
+                    .isReviewed(findMyReadingGroupDto.isReviewed())
                     .days(days)
                     .build());
         }
@@ -274,6 +275,42 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 .currentPage(pageable.getPageNumber())
                 .myReadingGroupDtos(myReadingGroupDtoWithDays)
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public void reviewReadingGroupMember(Long readingGroupSeq, Map<String, ReadingGroupReview> reviews, Long memberSeq) {
+        // 1. is Reviewed true로 변경
+        ReadingGroupMember readingGroupMember = readingGroupMemberRepository.findByReadingGroupSeqAndMemberSeq(readingGroupSeq, memberSeq)
+                .orElseThrow(() -> new NotFoundReadingGroupMemberException("올바르지 않은 요청입니다."));
+        if (readingGroupMember.isReviewed()) {
+            throw new AlreadyReviewedReadingGroupMemberException("이미 해당 독서 모임에 대한 리뷰를 완료한 사용자입니다.");
+        }
+        readingGroupMember.review();
+
+        // 2. list의 길이만큼 돌면서 list 내의 회원 경험치 증감
+        for (String reviewedMemberSeqString : reviews.keySet()) {
+            // reviewedMemberSeq가 readingGroup에 없으면 에러
+            readingGroupMemberRepository.findByReadingGroupSeqAndMemberSeq(readingGroupSeq, memberSeq)
+                    .orElseThrow(() -> new NotFoundReadingGroupMemberException("올바르지 않은 요청입니다."));
+
+            Long reviewedMemberSeq = Long.valueOf(reviewedMemberSeqString);
+            if (Objects.equals(memberSeq, reviewedMemberSeq)) {
+                throw new NotAcceptReviewOwnSelfException("올바르지 않은 요청입니다.");
+            }
+
+            Member reviewedMember = memberRepository.findBySeq(reviewedMemberSeq);
+
+            if (reviews.get(reviewedMemberSeqString).equals(ReadingGroupReview.GOOD)) {
+                reviewedMember.incrementExp(1);
+            } else {
+                reviewedMember.decrementExp(1);
+            }
+        }
+
+        // 3. memberSeq의 경험치 +20 (완주)
+        Member reviewingMember = memberRepository.findBySeq(memberSeq);
+        reviewingMember.incrementExp(20);
     }
 
 }

@@ -37,4 +37,8 @@ public class ReadingGroupMember {
         this.isReviewed = isReviewed;
     }
 
+    public void review() {
+        this.isReviewed = true;
+    }
+
 }
