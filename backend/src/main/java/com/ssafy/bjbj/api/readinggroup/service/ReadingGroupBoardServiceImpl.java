@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -86,6 +87,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
                 .content(readingGroupBoard.getContent())
                 .nickname(readingGroupBoard.getMember().getNickname())
                 .createDate(readingGroupBoard.getCreatedDate())
+                .modifiedDate(readingGroupBoard.getLastModifiedDate())
                 .views(readingGroupBoard.getViews())
                 .build();
 
@@ -109,7 +111,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
     @Transactional
     @Override
     public ResReadingGroupArticleDto updateReadingGroupArticleBySeq(Long readingGroupArticleSeq, Long memberSeq, ReqReadingGroupBoardDto reqReadingGroupBoardDto) {
-
+        ReadingGroup findReadingGroup = readingGroupRepository.findBySeq(reqReadingGroupBoardDto.getReadingGroupSeq())
+                .orElseThrow(() -> new NotFoundReadingGroupException("올바르지 않은 요청입니다."));
         ReadingGroupBoard readingGroupBoard = readingGroupBoardRepository.findBySeq(readingGroupArticleSeq);
 
         if (readingGroupBoard == null || readingGroupBoard.isDeleted()) {
@@ -122,12 +125,13 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
         return ResReadingGroupArticleDto.builder()
                 .memberSeq(readingGroupBoard.getMember().getSeq())
-                .readingGroupSeq(reqReadingGroupBoardDto.getReadingGroupSeq())
+                .readingGroupSeq(findReadingGroup.getSeq())
                 .readingGroupBoardSeq(readingGroupArticleSeq)
                 .title(readingGroupBoard.getTitle())
                 .content(readingGroupBoard.getContent())
                 .nickname(readingGroupBoard.getMember().getNickname())
                 .createDate(readingGroupBoard.getCreatedDate())
+                .modifiedDate(LocalDateTime.now())
                 .views(readingGroupBoard.getViews())
                 .build();
     }

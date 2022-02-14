@@ -17,7 +17,7 @@ public class FileHandler {
 
         List<FileInfo> fileInfos = new ArrayList<>();
 
-        if (multipartFiles.isEmpty()) {
+        if (multipartFiles == null) {
             return fileInfos;
         }
 

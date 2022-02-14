@@ -37,6 +37,7 @@ public class ReadingGroupBoardRepositoryImpl implements ReadingGroupBoardReposit
                         readingGroupBoard.content,
                         readingGroupBoard.member.nickname,
                         readingGroupBoard.createdDate,
+                        readingGroupBoard.lastModifiedDate,
                         readingGroupBoard.views))
                 .from(readingGroupBoard)
                 .where(readingGroupBoard.readingGroup.seq.eq(readingGroupSeq)
