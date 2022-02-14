@@ -4,6 +4,7 @@ import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupArticleDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardPageDto;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
+import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
 import com.ssafy.bjbj.api.readinggroup.service.ReadingGroupBoardService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
@@ -180,7 +181,7 @@ public class ReadingGroupBoardController {
             responseData.put("msg", "독서모임 게시글을 수정했습니다.");
             responseData.put("readingGroupArticle", resReadingGroupArticleDto);
             responseData.put("imagePaths", fileInfoPaths);
-        } catch (NotFoundReadingGroupArticleException | NotEqualMemberException e) {
+        } catch (NotFoundReadingGroupArticleException | NotEqualMemberException | NotFoundReadingGroupException e) {
             log.error("삭제할 독서모임 게시글 조회 실패");
 
             status = HttpStatus.BAD_REQUEST.value();
