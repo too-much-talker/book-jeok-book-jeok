@@ -12,6 +12,7 @@ import com.ssafy.bjbj.api.bookinfo.repository.BookInfoRepository;
 import com.ssafy.bjbj.api.bookinfo.repository.BookReviewRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.service.ActivityService;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -32,6 +35,8 @@ public class BookReviewServiceImpl implements BookReviewService {
     private final BookInfoRepository bookInfoRepository;
 
     private final MemberRepository memberRepository;
+
+    private final ActivityService activityService;
 
     @Override
     public BookReview findBookReviewByBookSeq(Long bookReviewSeq) {
@@ -59,6 +64,7 @@ public class BookReviewServiceImpl implements BookReviewService {
         }
 
         bookReview.delete();
+        activityService.createNewActivity(bookReview.getSeq(), bookReview.getMember(), BOOK_REVIEW_DELETE, bookReview.getLastModifiedDate());
     }
 
     @Transactional
@@ -84,7 +90,7 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .isDeleted(false)
                 .build());
 
-        return ResBookReviewByMemberDto.builder()
+        ResBookReviewByMemberDto resBookReviewByMemberDto = ResBookReviewByMemberDto.builder()
                 .bookReviewSeq(savedBookReview.getSeq())
                 .bookInfoSeq(savedBookReview.getBookInfo().getSeq())
                 .memberSeq(savedBookReview.getMember().getSeq())
@@ -95,6 +101,10 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .summary(savedBookReview.getSummary())
                 .createdDate(savedBookReview.getCreatedDate())
                 .build();
+
+        activityService.createNewActivity(savedBookReview.getSeq(), member, BOOK_REVIEW_CREATE, savedBookReview.getCreatedDate());
+
+        return resBookReviewByMemberDto;
     }
 
     @Transactional
@@ -109,7 +119,7 @@ public class BookReviewServiceImpl implements BookReviewService {
 
         bookReview.changeBookReview(reqBookReviewDto.getStarRating(), reqBookReviewDto.getSummary());
 
-        return ResModifiedBookReviewDto.builder()
+        ResModifiedBookReviewDto resModifiedBookReviewDto = ResModifiedBookReviewDto.builder()
                 .bookReviewSeq(bookReview.getSeq())
                 .bookInfoSeq(bookReview.getBookInfo().getSeq())
                 .memberSeq(bookReview.getMember().getSeq())
@@ -119,6 +129,10 @@ public class BookReviewServiceImpl implements BookReviewService {
                 .createdDate(bookReview.getCreatedDate())
                 .modifiedDate(LocalDateTime.now())
                 .build();
+
+        activityService.createNewActivity(bookReview.getSeq(), bookReview.getMember(), BOOK_REVIEW_UPDATE, bookReview.getLastModifiedDate());
+
+        return resModifiedBookReviewDto;
     }
 
     @Override
