@@ -60,4 +60,11 @@ public class ReadingGroupBoardCommentRepositoryImpl implements ReadingGroupBoard
                 .execute();
     }
 
+    @Override
+    public long deleteAllByMemberSeq(Long memberSeq) {
+        return queryFactory.update(readingGroupBoardComment)
+                .set(readingGroupBoardComment.isDeleted, true)
+                .where(readingGroupBoardComment.member.seq.eq(memberSeq).and(readingGroupBoardComment.isDeleted.isFalse()))
+                .execute();
+    }
 }

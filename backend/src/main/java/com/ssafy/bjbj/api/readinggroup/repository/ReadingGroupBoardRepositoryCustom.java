@@ -13,4 +13,5 @@ public interface ReadingGroupBoardRepositoryCustom {
 
     long deleteAllByReadingGroupSeq(Long readingGroupSeq);
 
+    long deleteAllByMemberSeq(Long memberSeq);
 }

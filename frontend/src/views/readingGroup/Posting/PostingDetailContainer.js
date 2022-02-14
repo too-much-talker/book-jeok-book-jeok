@@ -14,8 +14,10 @@ function PostingDetailContainer() {
   const [group, setGroup] = useState({});
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   let isParticipated;
+  const [minLevel, setMinLevel] = useState(1);
+  const [writer, setWriter] = useState();
+
   const getPage = async () => {
-    console.log("asdasdasd");
     const response = await axios.get(
       url + `/api/v1/reading-groups/${readingGroupSeq}`,
       {
@@ -24,38 +26,81 @@ function PostingDetailContainer() {
         },
       }
     );
+    console.log(response.data.data);
+    setMinLevel(response.data.data.readingGroupDetail.minLevel);
     setGroup(response.data.data.readingGroupDetail);
+    setWriter(response.data.data.readingGroupDetail.writer);
   };
-  const subscriptionGroup = async () => {
-    const response = await axios.post(
-      url + `/api/v1/reading-groups/${readingGroupSeq}/members`,
-      {
-        headers: {
-          Authorization: `Bearer ` + jwtToken,
-        },
-      }
-    );
-    console.log(response);
-  };
-  const cancelSubcription = async () => {
-    const response = await axios.delete(
-      url + `/api/v1/reading-groups/${readingGroupSeq}/members/${userInfo.seq}`,
-      {
-        headers: {
-          Authorization: `Bearer ` + jwtToken,
-        },
-      }
-    );
-    console.log(response);
-  };
+
+  function subscriptionGroup() {
+    if (minLevel <= userInfo.level) {
+      axios
+        .post(
+          url + `/api/v1/reading-groups/${readingGroupSeq}/members`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ` + jwtToken,
+            },
+          }
+        )
+        .then(function (response) {
+          alert(response.data.data.msg);
+          getPage();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      alert(`최소 레벨 ${minLevel}이상 신청 가능합니다.`);
+    }
+  }
+
+  function cancelSubcription() {
+    axios
+      .delete(
+        url +
+          `/api/v1/reading-groups/${readingGroupSeq}/members/${userInfo.seq}`,
+        {
+          headers: {
+            Authorization: `Bearer ` + jwtToken,
+          },
+        }
+      )
+      .then(function (response) {
+        alert(response.data.data.msg);
+        getPage();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  // const cancelSubcription = async () => {
+  //   console.log(jwtToken);
+  //   const response = await axios.delete(
+  //     url + `/api/v1/reading-groups/${readingGroupSeq}/members/${userInfo.seq}`,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ` + jwtToken,
+  //       },
+  //     }
+  //   );
+  //   console.log(jwtToken);
+  //   console.log(response);
+  // };
+
   useEffect(() => {
     getPage();
   }, []);
+
   if (group.participants) {
     isParticipated = group.participants.includes(userInfo.nickname);
   }
+
   return (
     <PostingDetailPresenter
+      userInfo={userInfo}
+      writer={writer}
       isParticipated={isParticipated}
       group={group}
       subscriptionGroup={subscriptionGroup}

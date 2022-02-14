@@ -89,4 +89,11 @@ public class BookReviewRepositoryImpl implements BookReviewRepositoryCustom {
                 .fetchOne();
     }
 
+    @Override
+    public long deleteAllByMemberSeq(Long memberSeq) {
+        return queryFactory.update(bookReview)
+                .set(bookReview.isDeleted, true)
+                .where(bookReview.member.seq.eq(memberSeq).and(bookReview.isDeleted.isFalse()))
+                .execute();
+    }
 }

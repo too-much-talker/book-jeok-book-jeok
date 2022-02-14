@@ -1,6 +1,11 @@
 package com.ssafy.bjbj.api.member.service;
 
+import com.ssafy.bjbj.api.bookinfo.repository.BookReviewRepository;
+import com.ssafy.bjbj.api.booklog.entity.Like;
+import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
+import com.ssafy.bjbj.api.booklog.repository.LikeRepository;
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqLoginMemberDto;
 import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -8,6 +13,13 @@ import com.ssafy.bjbj.api.member.entity.Role;
 import com.ssafy.bjbj.api.member.entity.Subscribe;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.member.repository.SubscribeRepository;
+import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
+import com.ssafy.bjbj.api.readinggroup.exception.NotAcceptResignException;
+import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardCommentRepository;
+import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
+import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupMemberRepository;
+import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +39,20 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final SubscribeRepository subscribeRepository;
+
+    private final BooklogRepository booklogRepository;
+
+    private final BookReviewRepository bookReviewRepository;
+
+    private final ReadingGroupRepository readingGroupRepository;
+
+    private final ReadingGroupBoardRepository readingGroupBoardRepository;
+
+    private final ReadingGroupBoardCommentRepository readingGroupBoardCommentRepository;
+
+    private final LikeRepository likeRepository;
+
+    private final ReadingGroupMemberRepository readingGroupMemberRepository;
 
     @Override
     public boolean hasEmail(String email) {
@@ -103,6 +129,8 @@ public class MemberServiceImpl implements MemberService {
         return true;
     }
 
+    @Transactional
+    @Override
     public boolean subscribeMember(Long fromMemberSeq, Long toMemberSeq) {
 
         Member fromMember = memberRepository.findMemberBySeq(fromMemberSeq);
@@ -149,4 +177,31 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByPhoneNumber(phoneNumber);
     }
 
+    @Transactional
+    @Override
+    public void resignMember(ReqLoginMemberDto reqLoginMemberDto, Long memberSeq) {
+        Member member = memberRepository.findMemberBySeq(memberSeq);
+
+        if (member == null || member.isDeleted()) {
+            throw new NotEqualMemberException("잘못된 요청입니다.");
+        } else if (!member.getEmail().equals(reqLoginMemberDto.getEmail()) || !passwordEncoder.matches(reqLoginMemberDto.getPassword(), member.getPassword())) {
+            throw new NotEqualMemberException("잘못된 요청입니다.");
+        }
+
+        boolean isReadingGroup = readingGroupRepository.existReadingGroupByMemberSeq(memberSeq);
+        if (!isReadingGroup) {
+            throw new NotAcceptResignException("개설한 독서모임을 삭제해 주세요.");
+        }
+
+        booklogRepository.deleteBooklogByMemberSeq(memberSeq);
+        bookReviewRepository.deleteAllByMemberSeq(memberSeq);
+        readingGroupBoardRepository.deleteAllByMemberSeq(memberSeq);
+        readingGroupBoardCommentRepository.deleteAllByMemberSeq(memberSeq);
+
+        subscribeRepository.deleteAllByFromMemberSeq(memberSeq);
+        likeRepository.deleteAllByMemberSeq(memberSeq);
+        readingGroupMemberRepository.deleteAllByMemberSeq(memberSeq);
+
+        member.delete();
+    }
 }

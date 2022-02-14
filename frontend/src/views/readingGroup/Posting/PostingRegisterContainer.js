@@ -2,11 +2,11 @@ import React, { Children, useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import PostingRegisterPresenter from "./PostingRegisterPresenter";
-import img_none from "../../../res/img/img_none.webp"
-import img_discuss from "../../../res/img/img_discuss.jpg"
-import img_seminar from "../../../res/img/img_seminar.jpg"
-import img_study from "../../../res/img/img_study.jpg"
-import img_free from "../../../res/img/img_free.jpg"
+import img_none from "../../../res/img/img_none.webp";
+import img_discuss from "../../../res/img/img_discuss.jpg";
+import img_seminar from "../../../res/img/img_seminar.jpg";
+import img_study from "../../../res/img/img_study.jpg";
+import img_free from "../../../res/img/img_free.jpg";
 
 const url = "https://i6a305.p.ssafy.io:8443";
 
@@ -22,15 +22,15 @@ function PostingRegisterContainer() {
   const [readingGroupType, setReadingGroupType] = useState("none");
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   let img;
-  if(readingGroupType==="none"){
-    img  = img_none;
-  }else if(readingGroupType==="discuss"){
+  if (readingGroupType === "none") {
+    img = img_none;
+  } else if (readingGroupType === "discuss") {
     img = img_discuss;
-  }else if(readingGroupType==="seminar"){
+  } else if (readingGroupType === "seminar") {
     img = img_seminar;
-  }else if(readingGroupType==="study"){
+  } else if (readingGroupType === "study") {
     img = img_study;
-  }else{
+  } else {
     img = img_free;
   }
   const onTypeButtonHandler = (event) => {
@@ -82,9 +82,8 @@ function PostingRegisterContainer() {
     } else if (startDate + 6 > endDate) {
       alert("독서모임 기간을 다시 설정해주세요.");
     } else {
-      try{
-        const response = await axios
-        .post(
+      try {
+        const response = await axios.post(
           url + `/api/v1/reading-groups`,
           {
             title,
@@ -103,23 +102,26 @@ function PostingRegisterContainer() {
             },
           }
         );
-        if(response.status === 200)
+        console.log(response);
+        if (response.data.status === 201) {
           alert(response.data.data.msg);
-      }catch(e){
-        console.log(e)
+          document.location.href = "/postinglist";
+        }
+      } catch (e) {
+        console.log(e);
         alert("입력 내용을 확인해주세요.");
       }
-      
-        // .then(function (response) {
-        //   console.log(response);
-        //   if (response.status === 200) {
-        //     alert(response.data.data.msg);
-        //     // document.location.href = "/postinglist";
-        //   }
-        //   if (response.status === 500) {
-        //     alert("입력 내용을 확인해주세요.");
-        //   }
-        // });
+
+      // .then(function (response) {
+      //   console.log(response);
+      //   if (response.status === 200) {
+      //     alert(response.data.data.msg);
+      //     // document.location.href = "/postinglist";
+      //   }
+      //   if (response.status === 500) {
+      //     alert("입력 내용을 확인해주세요.");
+      //   }
+      // });
     }
   };
 

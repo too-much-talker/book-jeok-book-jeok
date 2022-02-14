@@ -18,4 +18,5 @@ public interface BookReviewRepositoryCustom {
 
     BookReview findLatestBookReviewByBookInfoAndMember(Long bookInfoSeq, Long memberSeq);
 
+    long deleteAllByMemberSeq(Long memberSeq);
 }
