@@ -100,7 +100,27 @@ function Comment({
         console.log(error);
       });
   }
-  function goDelete() {}
+
+  function goDelete() {
+    axios
+      .delete(url + `/api/v1/reading-groups/comments/${commentSeq}`, {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      })
+      .then(function (response) {
+        {
+          getComment();
+        }
+        setStatus("detail");
+        console.log(response.data.data.msg);
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("삭제 중 문제가 발생하였습니다.");
+      });
+  }
+
   function printModify() {
     setStatus("modify");
   }
