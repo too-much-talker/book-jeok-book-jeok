@@ -10,6 +10,7 @@ import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupBoard;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupArticleException;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
+import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardCommentRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupBoardRepository;
 import com.ssafy.bjbj.api.readinggroup.repository.ReadingGroupRepository;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
@@ -42,6 +43,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
     private final FileInfoService fileInfoService;
 
     private final ActivityService activityService;
+
+    private final ReadingGroupBoardCommentRepository readingGroupBoardCommentRepository;
 
     @Transactional
     @Override
@@ -162,6 +165,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
             throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
         } else {
             readingGroupBoard.delete();
+            readingGroupBoardCommentRepository.deleteAllByReadingGroupSeq(readingGroupArticleSeq);
             activityService.createNewActivity(readingGroupBoard.getSeq(), readingGroupBoard.getMember(), READING_GROUP_BOARD_DELETE, readingGroupBoard.getLastModifiedDate());
             readingGroupBoard.getMember().decrementExp(1);
         }
