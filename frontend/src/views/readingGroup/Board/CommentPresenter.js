@@ -54,12 +54,16 @@ const Comments = styled.div``;
 
 const CommentPresenter = (props) => {
   const {
+    url,
+    user,
     paginate,
     totalCnt,
     currentComments,
     content,
     handleContent,
     register,
+    articleSeq,
+    getComment,
   } = props;
 
   return (
@@ -76,9 +80,14 @@ const CommentPresenter = (props) => {
           {currentComments &&
             currentComments.map((comment) => (
               <Comment
+                articleSeq={articleSeq}
+                commentSeq={comment.readingGroupBoardCommentSeq}
+                url={url}
+                user={user}
                 nickname={comment.memberNickname}
                 createdDate={comment.modifiedDate}
                 content={comment.content}
+                getComment={getComment}
               ></Comment>
             ))}
         </CommentList>
