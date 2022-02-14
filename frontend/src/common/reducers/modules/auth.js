@@ -8,6 +8,8 @@ export const setUserInfo = (info) => ({
     password: info.memberInfo.password,
     name: info.memberInfo.name,
     nickname: info.memberInfo.nickname,
+    level: info.memberInfo.level,
+    point: info.memberInfo.point,
   },
   jwtToken: info.jwtToken,
 });
