@@ -134,7 +134,7 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
 
     @Override
     public List<MyReadingGroupDto> findMyReadingGroupDtosByMemberSeq(Pageable pageable, Long memberSeq) {
-        List<MyReadingGroupDto> totalData = queryFactory.from(readingGroup)
+        List<MyReadingGroupDto> totalData = queryFactory.from(readingGroup, readingGroupMember)
                 .join(readingGroup.readingGroupDates, readingGroupDate)
                 .join(readingGroup.readingGroupMembers, readingGroupMember)
                 .where(readingGroup.isDeleted.isFalse().and(readingGroupMember.member.seq.eq(memberSeq)))
@@ -145,6 +145,7 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
                                 readingGroup.title,
                                 readingGroup.status,
                                 readingGroup.readingGroupType,
+                                readingGroupMember.isReviewed,
                                 list(readingGroupDate.conferenceDate).as("readingGroupDates")
                         ))));
 

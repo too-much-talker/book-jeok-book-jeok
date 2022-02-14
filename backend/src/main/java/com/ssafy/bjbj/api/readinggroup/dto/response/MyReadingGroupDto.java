@@ -11,7 +11,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@ToString(of = {"readingGroupSeq", "title", "status", "readingGroupType", "readingGroupDates"})
+@ToString(of = {"readingGroupSeq", "title", "status", "readingGroupType", "isReviewed", "readingGroupDates"})
 @NoArgsConstructor
 @Getter
 public class MyReadingGroupDto {
@@ -24,14 +24,18 @@ public class MyReadingGroupDto {
 
     private ReadingGroupType readingGroupType;
 
+    private boolean isReviewed;
+
     private List<LocalDateTime> readingGroupDates;
 
     @QueryProjection
-    public MyReadingGroupDto(Long readingGroupSeq, String title, Status status, ReadingGroupType readingGroupType, List<LocalDateTime> readingGroupDates) {
+    public MyReadingGroupDto(Long readingGroupSeq, String title, Status status, ReadingGroupType readingGroupType, boolean isReviewed, List<LocalDateTime> readingGroupDates) {
         this.readingGroupSeq = readingGroupSeq;
         this.title = title;
         this.status = status;
         this.readingGroupType = readingGroupType;
+        this.isReviewed = isReviewed;
         this.readingGroupDates = readingGroupDates;
     }
+
 }
