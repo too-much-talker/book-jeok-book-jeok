@@ -3,7 +3,7 @@ package com.ssafy.bjbj.api.member.repository;
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Activity;
-import com.ssafy.bjbj.api.member.entity.ActivityType;
+import com.ssafy.bjbj.api.member.enums.ActivityType;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.entity.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -213,7 +213,7 @@ class MemberRepositoryTest {
             // "2022-01-01 ~ 2022-01-05 날짜별 활동 1개
             LocalDateTime parseDateTime = LocalDateTime.parse("2022-01-0" + String.valueOf(seq - 100L) + "T12:30:00");
             activityRepository.save(Activity.builder()
-                    .seq(seq)
+                    .referSeq(seq)
                     .activityType(ActivityType.BOOKLOG_CREATE)
                     .time(parseDateTime)
                     .member(member)
@@ -223,8 +223,8 @@ class MemberRepositoryTest {
         // 2021-12-20 3개 활동
         for (long seq = 100L; seq >= 98L; seq--) {
             activityRepository.save(Activity.builder()
-                    .seq(seq)
-                    .activityType(ActivityType.CHALLENGE_AUTH)
+                    .referSeq(seq)
+                    .activityType(ActivityType.BOOKLOG_CREATE)
                     .time(LocalDateTime.parse("2021-12-20T09:00:00"))
                     .member(member)
                     .build());

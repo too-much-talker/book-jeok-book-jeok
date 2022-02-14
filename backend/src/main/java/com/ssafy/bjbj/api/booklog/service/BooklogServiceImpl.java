@@ -9,8 +9,11 @@ import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
 import com.ssafy.bjbj.api.booklog.repository.LikeRepository;
+import com.ssafy.bjbj.api.member.entity.Activity;
 import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.repository.ActivityRepository;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.service.ActivityService;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +21,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -35,6 +41,10 @@ public class BooklogServiceImpl implements BooklogService {
 
     private final LikeRepository likeRepository;
 
+    private final ActivityService activityService;
+
+    private final EntityManager em;
+
     @Transactional
     @Override
     public Booklog register(ReqBooklogDto reqBooklogDto) {
@@ -48,7 +58,7 @@ public class BooklogServiceImpl implements BooklogService {
         LocalDateTime readDate = reqBooklogDto.getReadDate() == null ?
                 null : LocalDateTime.parse(reqBooklogDto.getReadDate() + "T00:00:00");
 
-        return booklogRepository.save(Booklog.builder()
+        Booklog savedBooklog = booklogRepository.save(Booklog.builder()
                 .title(reqBooklogDto.getTitle())
                 .content(reqBooklogDto.getContent())
                 .summary(reqBooklogDto.getSummary())
@@ -59,6 +69,10 @@ public class BooklogServiceImpl implements BooklogService {
                 .member(member)
                 .bookInfo(bookInfo)
                 .build());
+
+        activityService.createNewActivity(savedBooklog.getSeq(), member, BOOKLOG_CREATE, savedBooklog.getCreatedDate());
+
+        return savedBooklog;
     }
 
     @Transactional
@@ -70,6 +84,9 @@ public class BooklogServiceImpl implements BooklogService {
         }
 
         savedBooklog.changeBooklog(reqBooklogDto);
+
+        activityService.createNewActivity(savedBooklog.getSeq(), savedBooklog.getMember(), BOOKLOG_UPDATE, savedBooklog.getLastModifiedDate());
+
         return savedBooklog;
     }
 
@@ -84,6 +101,7 @@ public class BooklogServiceImpl implements BooklogService {
             throw new NotEqualMemberException("올바르지 않은 요청입니다.");
         } else {
             findBooklog.delete();
+            activityService.createNewActivity(findBooklog.getSeq(), findBooklog.getMember(), BOOKLOG_DELETE, findBooklog.getLastModifiedDate());
         }
     }
 
@@ -98,6 +116,7 @@ public class BooklogServiceImpl implements BooklogService {
             throw new NotEqualMemberException("올바르지 않은 요청입니다.");
         } else {
             findBooklog.changeIsOpen(isOpen);
+            activityService.createNewActivity(findBooklog.getSeq(), findBooklog.getMember(), BOOKLOG_DELETE, findBooklog.getLastModifiedDate());
         }
     }
 
