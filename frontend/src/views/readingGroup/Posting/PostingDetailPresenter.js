@@ -30,7 +30,7 @@ const Button = styled.button`
   height: 30px;
   padding-left: 10px;
   padding-right: 10px;
-  background: #d4f4fa;
+  background: #faeee0;
   border-radius: 10px;
   color: #4c4c4c;
   font-size: 12px;
@@ -57,15 +57,32 @@ function PostingDetailPresenter({
   cancelSubcription,
   writer,
 }) {
-  if (group.readingGroupType === "seminar") {
-    group.readingGroupType = "세미나형";
-  } else if (group.readingGroupType === "discuss") {
-    group.readingGroupType = "토론형";
-  } else if (group.readingGroupType === "study") {
-    group.readingGroupType = "스터디형";
-  } else {
-    group.readingGroupType = "자유형";
+  console.log(group);
+  const [readingGroupType, setReadingGroupType] = useState();
+  // if (group.readingGroupType === "SEMINAR") {
+  //   group.readingGroupType = "세미나형";
+  // } else if (group.readingGroupType === "DISCUSS") {
+  //   group.readingGroupType = "토론형";
+  // } else if (group.readingGroupType === "STUDY") {
+  //   group.readingGroupType = "스터디형";
+  // } else {
+  //   group.readingGroupType = "자유형";
+  // }
+  function selectType() {
+    console.log(group);
+    if (readingGroupType === "SEMINAR") {
+      setReadingGroupType("세미나형");
+    } else if (readingGroupType === "DISCUSS") {
+      setReadingGroupType("토론형");
+    } else if (readingGroupType === "STUDY") {
+      setReadingGroupType("스터디형");
+    } else {
+      setReadingGroupType("자유형");
+    }
   }
+  useEffect(() => {
+    selectType();
+  }, []);
   let korDays;
   if (group.days) {
     korDays = group.days.map((day) => {
@@ -123,7 +140,10 @@ function PostingDetailPresenter({
           </tr>
           <tr>
             <td>독서모임 성격</td>
-            <td>{group.readingGroupType}의 분위기</td>
+            {group.readingGroupType === "STUDY" && <td>스터디형의 분위기</td>}
+            {group.readingGroupType === "DISCUSS" && <td>토론형의 분위기</td>}
+            {group.readingGroupType === "SEMINAR" && <td>세미나형의 분위기</td>}
+            {group.readingGroupType === "FREE" && <td>자유형의 분위기</td>}
           </tr>
 
           <tr>
