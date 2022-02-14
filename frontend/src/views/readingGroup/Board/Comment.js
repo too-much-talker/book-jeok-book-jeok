@@ -29,7 +29,12 @@ const ContentInput = styled.input``;
 const Block = styled.div`
   display: flex;
 `;
-const SubmitBtn = styled.button``;
+const SubmitBtn = styled.button`
+  border: none;
+  font-size: 12px;
+  margin-left: 10px;
+  color: #5e5e5e;
+`;
 const More = styled.div`
   width: 11%;
   height: 25px;
