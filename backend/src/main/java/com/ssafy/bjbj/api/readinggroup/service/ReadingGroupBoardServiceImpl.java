@@ -2,6 +2,7 @@ package com.ssafy.bjbj.api.readinggroup.service;
 
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.service.ActivityService;
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupBoardDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupArticleDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupBoardPageDto;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
+
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
@@ -37,6 +40,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
     private final ReadingGroupBoardRepository readingGroupBoardRepository;
 
     private final FileInfoService fileInfoService;
+
+    private final ActivityService activityService;
 
     @Transactional
     @Override
@@ -59,6 +64,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
          * 파일 저장
          */
         fileInfoService.register(savedReadingGroupBoard.getSeq(), files);
+
+        activityService.createNewActivity(savedReadingGroupBoard.getSeq(), findMember, READING_GROUP_BOARD_CREATE, savedReadingGroupBoard.getCreatedDate());
 
         return savedReadingGroupBoard.getSeq();
     }
@@ -121,19 +128,22 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
             throw new NotEqualMemberException("올바르지 않은 요청입니다");
         } else {
             readingGroupBoard.changeReadingGroupArticle(reqReadingGroupBoardDto.getTitle(), reqReadingGroupBoardDto.getContent());
-        }
+            ResReadingGroupArticleDto resReadingGroupArticleDto = ResReadingGroupArticleDto.builder()
+                    .memberSeq(readingGroupBoard.getMember().getSeq())
+                    .readingGroupSeq(findReadingGroup.getSeq())
+                    .readingGroupBoardSeq(readingGroupArticleSeq)
+                    .title(readingGroupBoard.getTitle())
+                    .content(readingGroupBoard.getContent())
+                    .nickname(readingGroupBoard.getMember().getNickname())
+                    .createDate(readingGroupBoard.getCreatedDate())
+                    .modifiedDate(LocalDateTime.now())
+                    .views(readingGroupBoard.getViews())
+                    .build();
 
-        return ResReadingGroupArticleDto.builder()
-                .memberSeq(readingGroupBoard.getMember().getSeq())
-                .readingGroupSeq(findReadingGroup.getSeq())
-                .readingGroupBoardSeq(readingGroupArticleSeq)
-                .title(readingGroupBoard.getTitle())
-                .content(readingGroupBoard.getContent())
-                .nickname(readingGroupBoard.getMember().getNickname())
-                .createDate(readingGroupBoard.getCreatedDate())
-                .modifiedDate(LocalDateTime.now())
-                .views(readingGroupBoard.getViews())
-                .build();
+            activityService.createNewActivity(readingGroupBoard.getSeq(), readingGroupBoard.getMember(), READING_GROUP_BOARD_UPDATE, readingGroupBoard.getLastModifiedDate());
+
+            return resReadingGroupArticleDto;
+        }
     }
 
     @Transactional
@@ -150,6 +160,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
             throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
         } else {
             readingGroupBoard.delete();
+            activityService.createNewActivity(readingGroupBoard.getSeq(), readingGroupBoard.getMember(), READING_GROUP_BOARD_DELETE, readingGroupBoard.getLastModifiedDate());
         }
     }
 

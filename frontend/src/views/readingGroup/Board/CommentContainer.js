@@ -3,10 +3,10 @@ import CommentPresenter from "./CommentPresenter";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import React from "react";
-
+import { useSelector } from "react-redux";
 function CommentContainer({ articleSeq }) {
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-
+  const user = useSelector((state) => state.authReducer);
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
   const [content, setContent] = useState();
@@ -79,8 +79,13 @@ function CommentContainer({ articleSeq }) {
         console.log(error);
       });
   }
+
   return (
     <CommentPresenter
+      articleSeq={articleSeq}
+      getComment={getComment}
+      url={url}
+      user={user}
       paginate={paginate}
       totalCnt={totalCnt}
       currentComments={currentComments}

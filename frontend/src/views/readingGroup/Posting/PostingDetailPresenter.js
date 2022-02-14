@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -24,8 +24,17 @@ const Wrapper2 = styled.div`
   padding-bottom: 40px;
 `;
 
-const Button = styled.div`
-  margin-left: 750px;
+const Button = styled.button`
+  margin-left: 720px;
+  border: 0;
+  height: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: #faeee0;
+  border-radius: 10px;
+  color: #4c4c4c;
+  font-size: 12px;
+  font-weight: bold;
 `;
 
 const HR = styled.div`
@@ -37,25 +46,43 @@ const Items = styled.div`
   margin: 0 0.2rem;
   padding: 0 0.4rem;
   border: 1px solid #777;
-
   border-radius: 1.5rem;
   text-align: center;
 `;
 function PostingDetailPresenter({
+  userInfo,
   group,
   isParticipated,
   subscriptionGroup,
   cancelSubcription,
+  writer,
 }) {
-  if (group.readingGroupType === "seminar") {
-    group.readingGroupType = "세미나형";
-  } else if (group.readingGroupType === "discuss") {
-    group.readingGroupType = "토론형";
-  } else if (group.readingGroupType === "study") {
-    group.readingGroupType = "스터디형";
-  } else {
-    group.readingGroupType = "자유형";
+  console.log(group);
+  const [readingGroupType, setReadingGroupType] = useState();
+  // if (group.readingGroupType === "SEMINAR") {
+  //   group.readingGroupType = "세미나형";
+  // } else if (group.readingGroupType === "DISCUSS") {
+  //   group.readingGroupType = "토론형";
+  // } else if (group.readingGroupType === "STUDY") {
+  //   group.readingGroupType = "스터디형";
+  // } else {
+  //   group.readingGroupType = "자유형";
+  // }
+  function selectType() {
+    console.log(group);
+    if (readingGroupType === "SEMINAR") {
+      setReadingGroupType("세미나형");
+    } else if (readingGroupType === "DISCUSS") {
+      setReadingGroupType("토론형");
+    } else if (readingGroupType === "STUDY") {
+      setReadingGroupType("스터디형");
+    } else {
+      setReadingGroupType("자유형");
+    }
   }
+  useEffect(() => {
+    selectType();
+  }, []);
   let korDays;
   if (group.days) {
     korDays = group.days.map((day) => {
@@ -68,31 +95,28 @@ function PostingDetailPresenter({
       else return { days: "일요일", value: 7 };
     });
   }
-  if(korDays){
-  korDays.sort(function (a, b) {
-    return a.value - b.value;
-  });}
+  if (korDays) {
+    korDays.sort(function (a, b) {
+      return a.value - b.value;
+    });
+  }
   if (korDays) {
     korDays = korDays.map((day) => {
-      return <Items key={day.days}>{day.days}</Items>
+      return <Items key={day.days}>{day.days}</Items>;
     });
   } else {
     korDays = [];
   }
 
-  
-
   return (
     <Wrapper>
       <Wrapper2>
-        {!isParticipated ? (
-          <Button>
-            <button onClick={subscriptionGroup}>신청하기</button>
-          </Button>
+        {userInfo.nickname === writer ? (
+          <Button>내가 개설한 독서모임</Button>
+        ) : !isParticipated ? (
+          <Button onClick={subscriptionGroup}>신청하기</Button>
         ) : (
-          <Button>
-            <button onClick={cancelSubcription}>신청취소</button>
-          </Button>
+          <Button onClick={cancelSubcription}>신청취소</Button>
         )}
         {/* <h2>독서모임 포스팅 자세히보기</h2> */}
         <h2>관심있는 모임이라면 우측 상단의 신청하기 버튼을 눌러주세요.</h2>
@@ -116,7 +140,10 @@ function PostingDetailPresenter({
           </tr>
           <tr>
             <td>독서모임 성격</td>
-            <td>{group.readingGroupType}의 분위기</td>
+            {group.readingGroupType === "STUDY" && <td>스터디형의 분위기</td>}
+            {group.readingGroupType === "DISCUSS" && <td>토론형의 분위기</td>}
+            {group.readingGroupType === "SEMINAR" && <td>세미나형의 분위기</td>}
+            {group.readingGroupType === "FREE" && <td>자유형의 분위기</td>}
           </tr>
 
           <tr>

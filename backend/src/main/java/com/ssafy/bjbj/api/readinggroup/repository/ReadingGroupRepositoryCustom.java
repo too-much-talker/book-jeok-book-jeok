@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.readinggroup.repository;
 
+import com.ssafy.bjbj.api.readinggroup.dto.response.MyReadingGroupDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ReadingGroupMiniDto;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import org.springframework.data.domain.Pageable;
@@ -18,5 +19,13 @@ public interface ReadingGroupRepositoryCustom {
 
     long updateStatusPreToFail();
 
+
     boolean existReadingGroupByMemberSeq(Long memberSeq);
+
+    long updateStatusIngToEnd();
+
+    Integer countMyReadingGroupByMemberSeq(Long memberSeq);
+
+    List<MyReadingGroupDto> findMyReadingGroupDtosByMemberSeq(Pageable pageable, Long memberSeq);
+
 }
