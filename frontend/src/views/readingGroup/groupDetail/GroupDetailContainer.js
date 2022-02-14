@@ -82,17 +82,6 @@ function GrouDetailContainer() {
   const [tab, setTab] = useState("info");
 
   useEffect(() => {
-    // setGroupInfo({
-    //   members: ["형다은", "김수민", "김경석", "김은선", "이재경"],
-    //   content: "독서 모임 내용",
-    //   title: "독서 모임 제목",
-    //   startDate: "2022.02.01",
-    //   endDate: "2022.02.28",
-    //   weeks: ["월요일", "화요일", "수요일"],
-    //   leaderNickname: "bbjjjjj",
-    //   isStart: false,
-    // });
-
     getGroupDetail(
       params.meetingSeq,
       {
@@ -175,32 +164,24 @@ function GrouDetailContainer() {
               <Delete onClick={onDelete}>독서 모임 삭제</Delete>
             </ButtonMenu>
           )}
-          {tab === "info" ? <GroupInfo groupInfo={groupInfo} /> : <div></div>}
-          {tab === "board" ? (
+          {tab === "info" && <GroupInfo groupInfo={groupInfo} />}
+          {tab === "board" && (
             <BoardMainContainer
               handleSetSelected={handleSetSelected}
               printDetail={printDetail}
               tab={tab}
               readingGroupSeq={readingGroupSeq}
             />
-          ) : (
-            <div></div>
           )}
-          {tab === "detail" ? (
+          {tab === "detail" && (
             <ArticleDetailContainer
               handleSetSelected={handleSetSelected}
               printModify={printModify}
               articleSeq={selectedSeq}
-            ></ArticleDetailContainer>
-          ) : (
-            <div></div>
+            />
           )}
-          {tab === "modify" ? (
-            <ModifyArticleContainer
-              articleSeq={selectedSeq}
-            ></ModifyArticleContainer>
-          ) : (
-            <div></div>
+          {tab === "modify" && (
+            <ModifyArticleContainer articleSeq={selectedSeq} />
           )}
         </Wrapper>
       )}
