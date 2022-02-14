@@ -67,6 +67,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
         activityService.createNewActivity(savedReadingGroupBoard.getSeq(), findMember, READING_GROUP_BOARD_CREATE, savedReadingGroupBoard.getCreatedDate());
 
+        findMember.decrementExp(1);
+
         return savedReadingGroupBoard.getSeq();
     }
 
@@ -161,6 +163,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
         } else {
             readingGroupBoard.delete();
             activityService.createNewActivity(readingGroupBoard.getSeq(), readingGroupBoard.getMember(), READING_GROUP_BOARD_DELETE, readingGroupBoard.getLastModifiedDate());
+            readingGroupBoard.getMember().decrementExp(1);
         }
     }
 

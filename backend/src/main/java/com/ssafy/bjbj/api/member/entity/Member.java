@@ -144,6 +144,28 @@ public class Member extends BaseLastModifiedEntity {
         this.exp = 0;
     }
 
+    public void incrementPoint(int point) {
+        this.point += point;
+    }
+
+    public void decrementPoint(int point) {
+        this.point -= point;
+        if (this.point < 0) {
+            this.point = 0;
+        }
+    }
+
+    public void incrementExp(int exp) {
+        this.exp += exp;
+    }
+
+    public void decrementExp(int exp) {
+        this.exp -= exp;
+        if (this.exp < 0) {
+            this.exp = 0;
+        }
+    }
+
     public void delete() {
         this.isDeleted = true;
     }

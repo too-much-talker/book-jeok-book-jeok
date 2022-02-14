@@ -43,6 +43,8 @@ public class LikeServiceImpl implements LikeService {
                     .booklog(booklog)
                     .member(member)
                     .build());
+
+            booklog.getMember().incrementPoint(1);
         } else {
             throw new DuplicateLikeException("요청을 수행할 수 없습니다.");
         }
@@ -56,6 +58,7 @@ public class LikeServiceImpl implements LikeService {
             throw new NotFoundLikeException("올바르지 않은 요청입니다.");
         } else if (findLike.getMember().getSeq().equals(memberSeq)) {
             likeRepository.delete(findLike);
+            findLike.getBooklog().getMember().decrementPoint(1);
         } else {
             throw new NotEqualMemberException("올바르지 않은 요청입니다.");
         }

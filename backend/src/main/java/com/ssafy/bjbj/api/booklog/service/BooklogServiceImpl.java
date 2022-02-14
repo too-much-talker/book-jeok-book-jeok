@@ -9,9 +9,7 @@ import com.ssafy.bjbj.api.bookinfo.exception.NotFoundBookInfoException;
 import com.ssafy.bjbj.api.booklog.exception.NotFoundBooklogException;
 import com.ssafy.bjbj.api.booklog.repository.BooklogRepository;
 import com.ssafy.bjbj.api.booklog.repository.LikeRepository;
-import com.ssafy.bjbj.api.member.entity.Activity;
 import com.ssafy.bjbj.api.member.entity.Member;
-import com.ssafy.bjbj.api.member.repository.ActivityRepository;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.member.service.ActivityService;
 import com.ssafy.bjbj.common.exception.NotEqualMemberException;
@@ -72,6 +70,8 @@ public class BooklogServiceImpl implements BooklogService {
 
         activityService.createNewActivity(savedBooklog.getSeq(), member, BOOKLOG_CREATE, savedBooklog.getCreatedDate());
 
+        member.incrementExp(1);
+
         return savedBooklog;
     }
 
@@ -102,6 +102,7 @@ public class BooklogServiceImpl implements BooklogService {
         } else {
             findBooklog.delete();
             activityService.createNewActivity(findBooklog.getSeq(), findBooklog.getMember(), BOOKLOG_DELETE, findBooklog.getLastModifiedDate());
+            findBooklog.getMember().decrementExp(1);
         }
     }
 
