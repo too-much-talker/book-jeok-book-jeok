@@ -69,6 +69,11 @@ public class ReadingGroupBoardController {
                 status = HttpStatus.CREATED.value();
                 responseData.put("msg", "독서모임 게시글 작성하였습니다.");
                 responseData.put("readingGroupBoardSeq", readingGroupBoardSeq);
+            } catch (NotFoundReadingGroupException e) {
+                log.error("ReadingGroup이 없는 경우");
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
             } catch (IOException e) {
                 log.error("파일 저장 싪패");
                 e.printStackTrace();
