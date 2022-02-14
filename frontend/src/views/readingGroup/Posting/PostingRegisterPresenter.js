@@ -122,7 +122,10 @@ function PostingRegisterPresenter({
           id="startDate"
           name="startDate"
           onChange={onStartDateChange}
-          style={{ display: "inline-block", marginLeft: "30px" }}
+          style={{
+            display: "inline-block",
+            marginLeft: "30px",
+          }}
         />{" "}
         부터
         <input
@@ -131,8 +134,11 @@ function PostingRegisterPresenter({
           name="endDate"
           style={{ marginLeft: 20 }}
           onChange={onEndDateChange}
-        />{" "}
-        까지
+        />
+        까지{" "}
+        <div style={{ fontSize: "13px", marginTop: "-20px" }}>
+          시작일 + 6일 일자가 종료일보다 빠르거나 같아야 합니다.
+        </div>
         <br></br>
         <input
           id="mon"
@@ -196,7 +202,9 @@ function PostingRegisterPresenter({
           style={{ marginLeft: 20 }}
         />{" "}
         일<br></br>
-        <h5 style={{ display: "inline-block", marginRight:"30px"}}>참가 최대 인원</h5>
+        <h5 style={{ display: "inline-block", marginRight: "30px" }}>
+          참가 최대 인원
+        </h5>
         <select name="maxMember" onChange={onMaximumChange}>
           <option value={3}>3명</option>
           <option value={4}>4명</option>
@@ -208,7 +216,9 @@ function PostingRegisterPresenter({
           <option value={10}>10명</option>
         </select>
         <br></br>
-        <h5 style={{ display: "inline-block", marginRight:"30px"}}>모집 마감 날짜</h5>
+        <h5 style={{ display: "inline-block", marginRight: "30px" }}>
+          모집 마감 날짜
+        </h5>
         <input
           type="date"
           id="deadline"
@@ -216,7 +226,9 @@ function PostingRegisterPresenter({
           onChange={onDeadLineChange}
         />
         <br></br>
-        <h5 style={{ display: "inline-block" , marginRight:"30px"}}>신청 자격 레벨</h5>
+        <h5 style={{ display: "inline-block", marginRight: "30px" }}>
+          신청 자격 레벨
+        </h5>
         <select name="limitLevel" onChange={onLevelChange}>
           <option value={1}>1 레벨</option>
           <option value={2}>2 레벨</option>

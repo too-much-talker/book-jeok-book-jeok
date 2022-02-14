@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination";
 import PostingListPresenter from "./PostingListPresenter";
-import img_none from "../../../res/img/img_none.webp"
-import img_discuss from "../../../res/img/img_discuss.jpg"
-import img_seminar from "../../../res/img/img_seminar.jpg"
-import img_study from "../../../res/img/img_study.jpg"
-import img_free from "../../../res/img/img_free.jpg"
+import img_none from "../../../res/img/img_none.webp";
+import img_discuss from "../../../res/img/img_discuss.jpg";
+import img_seminar from "../../../res/img/img_seminar.jpg";
+import img_study from "../../../res/img/img_study.jpg";
+import img_free from "../../../res/img/img_free.jpg";
 
 const Postinginfo = styled.div`
   display: flex;
@@ -46,7 +46,6 @@ const Wrapper = styled.div`
   }
 `;
 
-
 const StyledLink = styled(Link)`
   text-decoration: none;
 
@@ -65,6 +64,7 @@ function PostingListContainer() {
   const [page, setPage] = useState(1);
   const [groups, setGroups] = useState([]);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
+
   const getList = async () => {
     const response = await axios.get(
       url + `/api/v1/reading-groups?size=5&page=${page}`,
@@ -78,37 +78,40 @@ function PostingListContainer() {
     setTotalCnt(response.data.data.readingGroups.totalCnt);
     setGroups(response.data.data.readingGroups.readingGroupMiniDtos);
   };
+
   const handlePageChange = (page) => {
     setPage(page);
   };
+
   useEffect(() => {
     getList();
   }, [page]);
+
   const groupList = groups.map((group) => {
     let img;
-  if(group.readingGroupType==="none"){
-    img  = img_none;
-  }else if(group.readingGroupType==="discuss"){
-    img = img_discuss;
-  }else if(group.readingGroupType==="seminar"){
-    img = img_seminar;
-  }else if(group.readingGroupType==="study"){
-    img = img_study;
-  }else{
-    img = img_free;
-  }
-    if(group.readingGroupType==="seminar"){
-      group.readingGroupType = "세미나형"
+    console.log(group.readingGroupType);
+    if (group.readingGroupType === "none") {
+      img = img_none;
+    } else if (group.readingGroupType === "DISCUSS") {
+      img = img_discuss;
+    } else if (group.readingGroupType === "SEMINAR") {
+      img = img_seminar;
+    } else if (group.readingGroupType === "STUDY") {
+      img = img_study;
+    } else {
+      img = img_free;
     }
-    else if(group.readingGroupType==="discuss"){
-      group.readingGroupType = "토론형"
+
+    if (group.readingGroupType === "SEMINAR") {
+      group.readingGroupType = "세미나형";
+    } else if (group.readingGroupType === "DISCUSS") {
+      group.readingGroupType = "토론형";
+    } else if (group.readingGroupType === "STUDY") {
+      group.readingGroupType = "스터디형";
+    } else {
+      group.readingGroupType = "자유형";
     }
-    else if(group.readingGroupType === "study"){
-      group.readingGroupType = "스터디형"
-    }
-    else{
-      group.readingGroupType = "자유형"
-    }
+
     return (
       <StyledLink
         to="/postingdetail"
@@ -153,11 +156,11 @@ function PostingListContainer() {
     );
   });
   return (
-    <PostingListPresenter 
-    groupList={groupList}
-    page={page}
-    totalCnt={totalCnt}
-    handlePageChange={handlePageChange}
+    <PostingListPresenter
+      groupList={groupList}
+      page={page}
+      totalCnt={totalCnt}
+      handlePageChange={handlePageChange}
     />
   );
 }

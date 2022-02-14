@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.member.entity;
 
+import com.ssafy.bjbj.api.member.enums.ActivityType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,8 +16,12 @@ import static javax.persistence.FetchType.*;
 public class Activity {
 
     @Column(name = "activity_seq", columnDefinition = "BIGINT UNSIGNED")
+    @GeneratedValue
     @Id
     private Long seq;
+
+    @Column(nullable = false)
+    private Long referSeq;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,12 +38,16 @@ public class Activity {
     private Member member;
 
     @Builder
-    public Activity(Long seq, ActivityType activityType, LocalDateTime time, boolean isDeleted, Member member) {
-        this.seq = seq;
+    public Activity(Long referSeq, ActivityType activityType, LocalDateTime time, Member member) {
+        this.referSeq = referSeq;
         this.activityType = activityType;
         this.time = time;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
         this.member = member;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 
 }

@@ -27,10 +27,14 @@ public class ReadingGroupMember {
     @Id
     private Member member;
 
+    @Column(nullable = false)
+    private boolean isReviewed;
+
     @Builder
-    public ReadingGroupMember(ReadingGroup readingGroup, Member member) {
+    public ReadingGroupMember(ReadingGroup readingGroup, Member member, boolean isReviewed) {
         this.readingGroup = readingGroup;
         this.member = member;
+        this.isReviewed = isReviewed;
     }
 
 }

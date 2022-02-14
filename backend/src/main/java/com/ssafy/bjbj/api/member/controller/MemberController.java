@@ -4,8 +4,10 @@ import com.ssafy.bjbj.api.member.dto.request.ReqLoginMemberDto;
 import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.service.MemberService;
+import com.ssafy.bjbj.api.readinggroup.exception.NotAcceptResignException;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import com.ssafy.bjbj.common.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -369,4 +371,54 @@ public class MemberController {
         return responseData;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @DeleteMapping("/resign")
+    public BaseResponseDto resign(@Valid @RequestBody ReqLoginMemberDto reqLoginMemberDto, Errors errors, Authentication authentication) {
+        log.debug("MemberController.resign() 호출");
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+
+        if (errors.hasErrors()) {
+            status = HttpStatus.BAD_REQUEST.value();
+            if (errors.hasFieldErrors()) {
+                // field error
+                responseData.put("field", errors.getFieldError().getField());
+                responseData.put("msg", errors.getFieldError().getDefaultMessage());
+            } else {
+                // global error
+                responseData.put("msg", "global error");
+            }
+        } else {
+            try {
+                memberService.resignMember(reqLoginMemberDto, memberSeq);
+
+                status = HttpStatus.NO_CONTENT.value();
+                responseData.put("msg", "회원탈퇴 성공했습니다.");
+            } catch (NotAcceptResignException e) {
+                e.printStackTrace();
+
+                status = HttpStatus.ACCEPTED.value();
+                responseData.put("msg", "개설한 독서모임을 삭제해 주세요.");
+            } catch (NotEqualMemberException e) {
+                e.printStackTrace();
+
+                status = HttpStatus.BAD_REQUEST.value();
+                responseData.put("msg", e.getMessage());
+            } catch (Exception e) {
+                log.error("서버 에러 발생");
+                e.printStackTrace();
+
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                responseData.put("msg", "요청을 수행할 수 없습니다.");
+            }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
 }

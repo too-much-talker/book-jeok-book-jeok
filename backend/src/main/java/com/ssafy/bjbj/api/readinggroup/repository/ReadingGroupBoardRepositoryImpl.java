@@ -57,4 +57,11 @@ public class ReadingGroupBoardRepositoryImpl implements ReadingGroupBoardReposit
                 .execute();
     }
 
+    @Override
+    public long deleteAllByMemberSeq(Long memberSeq) {
+        return queryFactory.update(readingGroupBoard)
+                .set(readingGroupBoard.isDeleted, true)
+                .where(readingGroupBoard.member.seq.eq(memberSeq).and(readingGroupBoard.isDeleted.isFalse()))
+                .execute();
+    }
 }

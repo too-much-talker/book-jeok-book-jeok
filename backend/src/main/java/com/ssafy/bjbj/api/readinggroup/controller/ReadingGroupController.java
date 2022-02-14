@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.readinggroup.controller;
 
 import com.ssafy.bjbj.api.readinggroup.dto.request.ReqReadingGroupDto;
+import com.ssafy.bjbj.api.readinggroup.dto.response.ResMyReadingGroupPageDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupDetailDto;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ResReadingGroupListPageDto;
 import com.ssafy.bjbj.api.readinggroup.exception.NotFoundReadingGroupException;
@@ -243,7 +244,7 @@ public class ReadingGroupController {
         Map<String, Object> responseData = new HashMap<>();
 
         try {
-            readingGroupService.chagneStatusPreToIng();
+            readingGroupService.changeReadingGroupStatus();
             ResReadingGroupListPageDto resReadingGroupListPageDto = readingGroupService.getReadingGroupListPageDto(pageable);
 
             status = HttpStatus.OK.value();
@@ -404,6 +405,40 @@ public class ReadingGroupController {
             responseData.put("msg", e.getMessage());
         } catch (Exception e) {
             log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("/me")
+    public BaseResponseDto myReadingGroupList(Pageable pageable, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status =null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try{
+            readingGroupService.changeReadingGroupStatus();
+            ResMyReadingGroupPageDto resMyReadingGroupPageDto = readingGroupService.getResMyReadingGroupPageDto(pageable, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "나의 독서 모임 조회 성공");
+            responseData.put("totalCnt", resMyReadingGroupPageDto.getTotalCnt());
+            responseData.put("currentPage", resMyReadingGroupPageDto.getCurrentPage());
+            responseData.put("totalPage", resMyReadingGroupPageDto.getTotalPage());
+            responseData.put("readingGroups", resMyReadingGroupPageDto.getMyReadingGroupDtos());
+        }catch(Exception e) {
+            // Server error : Database Connection Fail, etc..
+            log.debug("[Error] Exception error");
             e.printStackTrace();
 
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();

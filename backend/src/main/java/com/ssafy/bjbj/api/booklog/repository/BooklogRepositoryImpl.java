@@ -213,4 +213,11 @@ public class BooklogRepositoryImpl implements BooklogRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public long deleteBooklogByMemberSeq(Long memberSeq) {
+        return queryFactory.update(booklog)
+                .set(booklog.isDeleted, true)
+                .where(booklog.member.seq.eq(memberSeq).and(booklog.isDeleted.isFalse()))
+                .execute();
+    }
 }

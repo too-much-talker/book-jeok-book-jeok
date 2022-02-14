@@ -4,6 +4,7 @@ import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ReadingGroupDateRepository extends JpaRepository<ReadingGroupDate, Long> {
 

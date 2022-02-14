@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.member.service;
 
 import com.ssafy.bjbj.api.member.dto.ActivityCountDto;
+import com.ssafy.bjbj.api.member.dto.request.ReqLoginMemberDto;
 import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.dto.response.ResLoginMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -36,5 +37,7 @@ public interface MemberService {
     boolean unsubscribeMember(Long fromMemberSeq, Long toMemberSeq);
 
     boolean hasPhoneNumber(String phoneNumber);
+
+    void resignMember(ReqLoginMemberDto reqLoginMemberDto, Long memberSeq);
 
 }
