@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.readinggroup.repository;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroupMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReadingGroupMemberRepository extends JpaRepository<ReadingGroupMember, Long> {
@@ -13,4 +14,7 @@ public interface ReadingGroupMemberRepository extends JpaRepository<ReadingGroup
 
     void deleteAllByReadingGroupSeq(Long readingGroupSeq);
 
+    List<ReadingGroupMember> findReadingGroupMembersByMemberSeq(Long memberSeq);
+
+    void deleteAllByMemberSeq(Long memberSeq);
 }

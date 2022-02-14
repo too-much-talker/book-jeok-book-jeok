@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.readinggroup.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.readinggroup.dto.response.ReadingGroupMiniDto;
+import com.ssafy.bjbj.api.readinggroup.entity.QReadingGroup;
 import com.ssafy.bjbj.api.readinggroup.entity.ReadingGroup;
 import com.ssafy.bjbj.common.enums.Status;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +15,11 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.*;
 import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroup.*;
+import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroup.readingGroup;
 import static com.ssafy.bjbj.api.readinggroup.entity.QReadingGroupMember.*;
 
 @Slf4j
@@ -109,4 +112,16 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
                 .execute();
     }
 
+    @Override
+    public boolean existReadingGroupByMemberSeq(Long memberSeq) {
+        ReadingGroup readingGroup = queryFactory.selectFrom(QReadingGroup.readingGroup)
+                .where(QReadingGroup.readingGroup.member.seq.eq(memberSeq).and(QReadingGroup.readingGroup.status.in(Status.PRE, Status.ING)))
+                .fetchOne();
+
+        if (readingGroup == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

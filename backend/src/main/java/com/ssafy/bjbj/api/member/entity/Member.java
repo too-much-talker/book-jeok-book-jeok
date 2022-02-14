@@ -144,4 +144,8 @@ public class Member extends BaseLastModifiedEntity {
         this.exp = 0;
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
 }

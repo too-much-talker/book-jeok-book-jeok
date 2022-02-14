@@ -25,4 +25,6 @@ public interface BooklogRepositoryCustom {
 
     List<OpenBooklogByBookInfoDto> findOpenBooklogByBookInfoDtos(Long bookInfoSeq, Pageable pageable);
 
+    long deleteBooklogByMemberSeq(Long memberSeq);
+
 }

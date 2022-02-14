@@ -18,4 +18,5 @@ public interface ReadingGroupRepositoryCustom {
 
     long updateStatusPreToFail();
 
+    boolean existReadingGroupByMemberSeq(Long memberSeq);
 }
