@@ -4,19 +4,60 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import React from "react";
 
-function CommentContainer({ articleSeq, isOpen, onCancel }) {
+function CommentContainer({ articleSeq }) {
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
   const [content, setContent] = useState();
+  const [totalCnt, setTotalCnt] = useState(0);
+  const [page, setPage] = useState(1);
+
+  const [comments, setComments] = useState([
+    {
+      nickname: "",
+      createdDate: "",
+      content: "",
+    },
+    {
+      nickname: "",
+      createdDate: "",
+      content: "",
+    },
+  ]);
+
   function handleContent(event) {
     setContent(event.target.value);
     console.log(content);
   }
-  const handleClose = () => {
-    onCancel();
-  };
+
+  useEffect(() => {
+    getComment();
+  }, []);
+
+  function paginate(pagenumber) {
+    setPage(pagenumber);
+  }
+
+  const indexOfLastPost = page * 5;
+  const indexOfFirstPost = indexOfLastPost - 5;
+  const currentComments = comments.slice(indexOfFirstPost, indexOfLastPost);
+  function getComment() {
+    axios
+      .get(url + `/api/v1/reading-groups/comments/list/${articleSeq}`, {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data.data);
+        setComments(response.data.data.comments);
+        setTotalCnt(response.data.data.commentCount);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   function register() {
     axios
@@ -31,7 +72,7 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
       )
       .then(function (response) {
         console.log(response);
-        alert("댓글이 작성되었습니다.");
+        getComment();
         setContent("");
       })
       .catch(function (error) {
@@ -40,11 +81,12 @@ function CommentContainer({ articleSeq, isOpen, onCancel }) {
   }
   return (
     <CommentPresenter
+      paginate={paginate}
+      totalCnt={totalCnt}
+      currentComments={currentComments}
       content={content}
       handleContent={handleContent}
       register={register}
-      isOpen={isOpen}
-      onCancel={onCancel}
     ></CommentPresenter>
   );
 }
