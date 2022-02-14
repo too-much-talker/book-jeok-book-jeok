@@ -164,8 +164,8 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
         } else if (readingGroupBoard.isDeleted()) {
             throw new NotFoundReadingGroupArticleException("올바르지 않은 요청입니다.");
         } else {
+            readingGroupBoardCommentRepository.deleteAllByReadingGroupBoardSeq(readingGroupArticleSeq);
             readingGroupBoard.delete();
-            readingGroupBoardCommentRepository.deleteAllByReadingGroupSeq(readingGroupArticleSeq);
             activityService.createNewActivity(readingGroupBoard.getSeq(), readingGroupBoard.getMember(), READING_GROUP_BOARD_DELETE, readingGroupBoard.getLastModifiedDate());
             readingGroupBoard.getMember().decrementExp(1);
         }
