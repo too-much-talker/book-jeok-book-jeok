@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.challenge.controller;
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResMyChallengeListPageDto;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
 import com.ssafy.bjbj.api.challenge.service.ChallengeService;
@@ -118,7 +119,7 @@ public class ChallengeController {
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
-    @GetMapping("{challengeSeq}")
+    @GetMapping("/{challengeSeq}")
     public BaseResponseDto detail(@PathVariable Long challengeSeq) {
         log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
@@ -153,14 +154,22 @@ public class ChallengeController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
     @GetMapping("/me")
-    public BaseResponseDto myChallenges(@RequestParam boolean end) {
+    public BaseResponseDto myChallenges(@RequestParam boolean end, Pageable pageable, Authentication authentication) {
         log.info("Called API: {}", LogUtil.getClassAndMethodName());
 
         Integer status = null;
         Map<String, Object> responseData = new HashMap<>();
 
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
         try {
+            ResMyChallengeListPageDto resMyChallengeListPageDto = challengeService.getResMyChallengeListPageDto(end, pageable, memberSeq);
 
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "나의 챌린지 목록 조회 성공");
+            responseData.put("totalCnt", resMyChallengeListPageDto.getTotalCnt());
+            responseData.put("currentPage", resMyChallengeListPageDto.getCurrentPage());
+            responseData.put("totalPage", resMyChallengeListPageDto.getTotalPage());
+            responseData.put("myChallenges", resMyChallengeListPageDto.getMyChallengeDtos());
         } catch (Exception e) {
             log.error("서버 에러 발생");
             e.printStackTrace();
