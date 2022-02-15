@@ -4,12 +4,15 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.challenge.dto.response.ChallengeMiniDto;
 import com.ssafy.bjbj.api.challenge.dto.response.QChallengeMiniDto;
+import com.ssafy.bjbj.api.challenge.dto.response.QResChallengeDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.common.enums.Status;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.bjbj.api.challenge.entity.QChallenge.*;
 import static com.ssafy.bjbj.api.challenge.entity.QChallengeMember.*;
@@ -40,6 +43,7 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
     public List<ChallengeMiniDto> findChallengeMiniDtos(boolean isAll, Pageable pageable) {
         JPAQuery<ChallengeMiniDto> query = queryFactory
                 .select(new QChallengeMiniDto(
+                        challenge.seq,
                         challenge.title,
                         challenge.deadline,
                         challenge.challengeMembers.size().intValue()))
@@ -54,6 +58,23 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
         }
 
         return query.fetch();
+    }
+
+    @Override
+    public Optional<ResChallengeDto> findResChallengeDto(Long challengeSeq) {
+        return Optional.ofNullable(queryFactory
+                .select(new QResChallengeDto(
+                        challenge.seq,
+                        challenge.title,
+                        challenge.content,
+                        challenge.startDate,
+                        challenge.endDate,
+                        challenge.deadline,
+                        challenge.reward,
+                        challenge.maxMember))
+                .from(challenge)
+                .where(challenge.seq.eq(challengeSeq).and(challenge.isDeleted.isFalse()))
+                .fetchOne());
     }
 
 }

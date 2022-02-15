@@ -1,7 +1,9 @@
 package com.ssafy.bjbj.api.challenge.controller;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.service.ChallengeService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
@@ -100,6 +102,40 @@ public class ChallengeController {
             responseData.put("currentPage", resChallengeListPageDto.getCurrentPage());
             responseData.put("totalPage", resChallengeListPageDto.getTotalPage());
             responseData.put("challengeMiniDtos", resChallengeListPageDto.getChallengeMiniDtos());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MEMBER')")
+    @GetMapping("{challengeSeq}")
+    public BaseResponseDto detail(@PathVariable Long challengeSeq) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResChallengeDto resChallengeDto = challengeService.getResChallengeDto(challengeSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "챌린지 모집 포스팅 상세페이지 조회 성공");
+            responseData.put("challengeInfo", resChallengeDto);
+        } catch (NotFoundChallengeException e) {
+            log.error("존재하지 않는 챌린지를 조회하였습니다.");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
         } catch (Exception e) {
             log.error("서버 에러 발생");
             e.printStackTrace();

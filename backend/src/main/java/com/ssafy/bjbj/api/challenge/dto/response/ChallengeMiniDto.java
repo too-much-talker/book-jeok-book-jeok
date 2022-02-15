@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 public class ChallengeMiniDto {
 
+    private Long challengeSeq;
+
     private String title;
 
     private LocalDate deadline;
@@ -18,7 +20,8 @@ public class ChallengeMiniDto {
     private int participantCount;
 
     @QueryProjection
-    public ChallengeMiniDto(String title, LocalDateTime deadline, int participantCount) {
+    public ChallengeMiniDto(Long challengeSeq, String title, LocalDateTime deadline, int participantCount) {
+        this.challengeSeq = challengeSeq;
         this.title = title;
         this.deadline = deadline.toLocalDate();
         this.participantCount = participantCount;
