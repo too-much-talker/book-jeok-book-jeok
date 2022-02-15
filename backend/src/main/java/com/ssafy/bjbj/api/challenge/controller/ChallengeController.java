@@ -1,20 +1,19 @@
 package com.ssafy.bjbj.api.challenge.controller;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
 import com.ssafy.bjbj.api.challenge.service.ChallengeService;
 import com.ssafy.bjbj.common.auth.CustomUserDetails;
 import com.ssafy.bjbj.common.dto.BaseResponseDto;
 import com.ssafy.bjbj.common.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -77,6 +76,36 @@ public class ChallengeController {
                 status = HttpStatus.BAD_REQUEST.value();
                 responseData.put("msg", "날짜가 올바르지 않습니다.");
             }
+        }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @GetMapping
+    public BaseResponseDto list(@RequestParam boolean all, Pageable pageable) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        try {
+            ResChallengeListPageDto resChallengeListPageDto = challengeService.getResChallengeListPageDto(all, pageable);
+
+            status = HttpStatus.OK.value();;
+            responseData.put("msg", "챌린지 모집 포스팅 목록 조회 성공");
+            responseData.put("totalCnt", resChallengeListPageDto.getTotalCnt());
+            responseData.put("currentPage", resChallengeListPageDto.getCurrentPage());
+            responseData.put("totalPage", resChallengeListPageDto.getTotalPage());
+            responseData.put("challengeMiniDtos", resChallengeListPageDto.getChallengeMiniDtos());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
         }
 
         return BaseResponseDto.builder()
