@@ -2,9 +2,11 @@ package com.ssafy.bjbj.api.challenge.service;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ChallengeMiniDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
+import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeMemberRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -55,6 +57,12 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .currentPage(pageable.getPageNumber())
                 .challengeMiniDtos(challengeMiniDtos)
                 .build();
+    }
+
+    @Override
+    public ResChallengeDto getResChallengeDto(Long challengeSeq) {
+        return challengeRepository.findResChallengeDto(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
     }
 
 }
