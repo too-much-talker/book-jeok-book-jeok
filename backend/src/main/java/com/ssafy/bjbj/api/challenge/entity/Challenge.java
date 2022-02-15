@@ -117,4 +117,8 @@ public class Challenge extends BaseLastModifiedEntity {
                 .build();
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
 }

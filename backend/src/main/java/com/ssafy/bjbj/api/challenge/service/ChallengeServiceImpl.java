@@ -70,7 +70,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public ResChallengeDto getResChallengeDto(Long challengeSeq) {
-        Challenge findChallenge = challengeRepository.findBySeq(challengeSeq)
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
 
         findChallenge.incrementViews();
@@ -81,7 +81,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public ChallengeMember join(Long challengeSeq, Long memberSeq) {
-        Challenge findChallenge = challengeRepository.findBySeq(challengeSeq)
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
 
         Member findMember = memberRepository.findBySeq(memberSeq);
@@ -120,7 +120,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public Challenge modify(Long challengeSeq, Long memberSeq, ReqChallengeDto reqChallengeDto) {
-        Challenge findChallenge = challengeRepository.findBySeq(challengeSeq)
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
 
         if (!findChallenge.getMember().getSeq().equals(memberSeq)) {
@@ -130,6 +130,22 @@ public class ChallengeServiceImpl implements ChallengeService {
         activityService.createNewActivity(findChallenge.getSeq(), findChallenge.getMember(), CHALLENGE_UPDATE, findChallenge.getLastModifiedDate());
 
         return findChallenge.change(reqChallengeDto);
+    }
+
+    @Transactional
+    @Override
+    public void remove(Long challengeSeq, Long memberSeq) {
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        if (!findChallenge.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("다른 회원의 챌린지를 삭제할 수 없습니다.");
+        }
+
+        findChallenge.delete();
+
+        activityService.createNewActivity(findChallenge.getSeq(), findChallenge.getMember(), CHALLENGE_DELETE, findChallenge.getLastModifiedDate());
+        findChallenge.getMember().decrementPoint(1);
     }
 
 }
