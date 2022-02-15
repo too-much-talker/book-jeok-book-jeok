@@ -1,6 +1,7 @@
 package com.ssafy.bjbj.api.challenge.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 public class ResChallengeDto {
 
     private Long challengeSeq;
+
+    private Long writerSeq;
 
     private String title;
 
@@ -27,9 +30,13 @@ public class ResChallengeDto {
 
     private Integer maxMember;
 
+    private Integer views;
+
     @QueryProjection
-    public ResChallengeDto(Long challengeSeq, String title, String content, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deadline, Integer reward, Integer maxMember) {
+    @Builder
+    public ResChallengeDto(Long challengeSeq, Long writerSeq, String title, String content, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deadline, Integer reward, Integer maxMember, Integer views) {
         this.challengeSeq = challengeSeq;
+        this.writerSeq = writerSeq;
         this.title = title;
         this.content = content;
         this.startDate = startDate.toLocalDate();
@@ -37,6 +44,7 @@ public class ResChallengeDto {
         this.deadline = deadline.toLocalDate();
         this.reward = reward;
         this.maxMember = maxMember;
+        this.views = views;
     }
 
 }

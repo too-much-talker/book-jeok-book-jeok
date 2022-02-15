@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.ssafy.bjbj.api.challenge.entity.QChallenge.*;
 import static com.ssafy.bjbj.api.challenge.entity.QChallengeMember.*;
@@ -43,7 +42,8 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                         challenge.seq,
                         challenge.title,
                         challenge.deadline,
-                        challenge.challengeMembers.size().intValue()))
+                        challenge.challengeMembers.size().intValue(),
+                        challenge.views.intValue()))
                 .from(challenge)
                 .join(challenge.challengeMembers, challengeMember)
                 .where(challenge.isDeleted.isFalse())
@@ -55,23 +55,6 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
         }
 
         return query.fetch();
-    }
-
-    @Override
-    public Optional<ResChallengeDto> findResChallengeDto(Long challengeSeq) {
-        return Optional.ofNullable(queryFactory
-                .select(new QResChallengeDto(
-                        challenge.seq,
-                        challenge.title,
-                        challenge.content,
-                        challenge.startDate,
-                        challenge.endDate,
-                        challenge.deadline,
-                        challenge.reward,
-                        challenge.maxMember))
-                .from(challenge)
-                .where(challenge.seq.eq(challengeSeq).and(challenge.isDeleted.isFalse()))
-                .fetchOne());
     }
 
     @Override
