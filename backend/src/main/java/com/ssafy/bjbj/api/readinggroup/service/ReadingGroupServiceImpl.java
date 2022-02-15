@@ -103,6 +103,10 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 .stream().map(readingGroupMember -> readingGroupMember.getMember().getNickname())
                 .collect(Collectors.toList());
 
+        List<Long> participantSeqs = findReadingGroup.getReadingGroupMembers()
+                .stream().map(readingGroupMember -> readingGroupMember.getMember().getSeq())
+                .collect(Collectors.toList());
+
         /**
          * 요일 정보 세팅
          */
@@ -125,6 +129,7 @@ public class ReadingGroupServiceImpl implements ReadingGroupService {
                 .endDate(findReadingGroup.getEndDate().toLocalDate())
                 .readingGroupType(findReadingGroup.getReadingGroupType())
                 .createdDate(findReadingGroup.getCreatedDate().toLocalDate())
+                .participantSeqs(participantSeqs)
                 .participants(participants)
                 .days(days)
                 .build();
