@@ -99,7 +99,8 @@ public class ChallengeController {
         try {
             ResChallengeListPageDto resChallengeListPageDto = challengeService.getResChallengeListPageDto(all, pageable);
 
-            status = HttpStatus.OK.value();;
+            status = HttpStatus.OK.value();
+            ;
             responseData.put("msg", "챌린지 모집 포스팅 목록 조회 성공");
             responseData.put("totalCnt", resChallengeListPageDto.getTotalCnt());
             responseData.put("currentPage", resChallengeListPageDto.getCurrentPage());
@@ -323,6 +324,46 @@ public class ChallengeController {
                 responseData.put("msg", "날짜가 올바르지 않습니다.");
             }
         }
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MEMBER')")
+    @DeleteMapping("/{challengeSeq}")
+    public BaseResponseDto delete(@PathVariable Long challengeSeq, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            challengeService.remove(challengeSeq, memberSeq);
+
+            status = HttpStatus.NO_CONTENT.value();
+            responseData.put("msg", "챌린지 모집 포스팅을 삭제하였습니다.");
+        } catch (NotFoundChallengeException e) {
+            log.error("존재하지 않는 챌린지 삭제 시도");
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (NotEqualMemberException e) {
+            log.error("다른 회원의 챌린지 삭제 시도");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
 
         return BaseResponseDto.builder()
                 .status(status)

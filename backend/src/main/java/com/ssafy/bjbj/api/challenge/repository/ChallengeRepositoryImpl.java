@@ -3,12 +3,14 @@ package com.ssafy.bjbj.api.challenge.repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.challenge.dto.response.*;
+import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.common.enums.Status;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.bjbj.api.challenge.entity.QChallenge.*;
 import static com.ssafy.bjbj.api.challenge.entity.QChallengeMember.*;
@@ -79,6 +81,14 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
         }
 
         return query.fetch();
+    }
+
+    @Override
+    public Optional<Challenge> findChallengeBySeq(Long challengeSeq) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(challenge)
+                .where(challenge.seq.eq(challengeSeq).and(challenge.isDeleted.isFalse()))
+                .fetchOne());
     }
 
 }

@@ -24,4 +24,6 @@ public interface ChallengeService {
 
     Challenge modify(Long challengeSeq, Long memberSeq, ReqChallengeDto reqChallengeDto);
 
+    void remove(Long challengeSeq, Long memberSeq);
+
 }
