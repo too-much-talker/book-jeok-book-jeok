@@ -1,9 +1,7 @@
 package com.ssafy.bjbj.api.challenge.service;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ChallengeMiniDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.*;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
@@ -89,6 +87,20 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .orElseThrow(() -> new NotFoundChallengeMemberException("신청하지 않은 챌린지입니다."));
 
         challengeMemberRepository.delete(findChallengeMember);
+    }
+
+    @Override
+    public ResMyChallengeListPageDto getResMyChallengeListPageDto(boolean isEnd, Pageable pageable, Long memberSeq) {
+        Integer totalCnt = challengeMemberRepository.countAllByMemberSeq(isEnd, memberSeq);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<MyChallengeDto> myChallengeDtos = challengeRepository.findMyChallengeDtos(isEnd, pageable, memberSeq);
+
+        return ResMyChallengeListPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .myChallengeDtos(myChallengeDtos)
+                .build();
     }
 
 }
