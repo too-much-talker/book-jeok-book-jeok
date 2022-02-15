@@ -39,12 +39,14 @@ public class ResReadingGroupDetailDto {
 
     private LocalDate createdDate;
 
+    private List<Long> participantSeqs;
+
     private List<String> participants;
 
     private Set<Day> days;
 
     @Builder
-    public ResReadingGroupDetailDto(Long readingGroupSeq, String writer, String title, String content, Integer minLevel, int maxNumOfMember, int views, Status status, LocalDate deadline, LocalDate startDate, LocalDate endDate, ReadingGroupType readingGroupType, LocalDate createdDate, List<String> participants, Set<Day> days) {
+    public ResReadingGroupDetailDto(Long readingGroupSeq, String writer, String title, String content, Integer minLevel, int maxNumOfMember, int views, Status status, LocalDate deadline, LocalDate startDate, LocalDate endDate, ReadingGroupType readingGroupType, LocalDate createdDate,List<Long> participantSeqs, List<String> participants, Set<Day> days) {
         this.readingGroupSeq = readingGroupSeq;
         this.writer = writer;
         this.title = title;
@@ -58,6 +60,7 @@ public class ResReadingGroupDetailDto {
         this.endDate = endDate;
         this.readingGroupType = readingGroupType;
         this.createdDate = createdDate;
+        this.participantSeqs = participantSeqs;
         this.participants = participants;
         this.days = days;
     }
