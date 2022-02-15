@@ -7,6 +7,7 @@ import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
+import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeMemberRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -63,6 +64,31 @@ public class ChallengeServiceImpl implements ChallengeService {
     public ResChallengeDto getResChallengeDto(Long challengeSeq) {
         return challengeRepository.findResChallengeDto(challengeSeq)
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+    }
+
+    @Transactional
+    @Override
+    public ChallengeMember join(Long challengeSeq, Long memberSeq) {
+        Challenge findChallenge = challengeRepository.findBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        Member findMember = memberRepository.findBySeq(memberSeq);
+
+        challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq)
+                .ifPresent(challengeMember -> {
+                    throw new IllegalStateException("이미 신청한 챌린지입니다.");
+                });
+
+        return challengeMemberRepository.save(ChallengeMember.create(findChallenge, findMember));
+    }
+
+    @Transactional
+    @Override
+    public void unJoin(Long challengeSeq, Long memberSeq) {
+        ChallengeMember findChallengeMember = challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq)
+                .orElseThrow(() -> new NotFoundChallengeMemberException("신청하지 않은 챌린지입니다."));
+
+        challengeMemberRepository.delete(findChallengeMember);
     }
 
 }
