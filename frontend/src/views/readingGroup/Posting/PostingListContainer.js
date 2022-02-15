@@ -89,7 +89,6 @@ function PostingListContainer() {
 
   const groupList = groups.map((group) => {
     let img;
-    console.log(group.readingGroupType);
     if (group.readingGroupType === "none") {
       img = img_none;
     } else if (group.readingGroupType === "DISCUSS") {

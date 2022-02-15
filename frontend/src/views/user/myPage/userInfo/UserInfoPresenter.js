@@ -8,6 +8,7 @@ import {
   checkNameLength,
   checkPhoneNumber,
 } from "../../validCheck/ValidCheck";
+import DeleteUserContainer from "./DeleteUserContainer";
 
 const Form2 = styled.div`
   margin-left: 12rem;
@@ -171,6 +172,9 @@ const EditUserForm = (props) => {
 };
 
 const UserTable = (props) => {
+  const url = props.url;
+  const modalOpen = props.modalOpen;
+  const handleModalClose = props.handleModalClose;
   const { name, password, email, nickname } = props.user;
   return (
     <Form1>
@@ -187,9 +191,16 @@ const UserTable = (props) => {
         <p>010-5023-9161</p> */}
         <br></br>
         <br></br>
-        <button onClick={props.editUser} style={{marginRight: "30px"}}>수정하기</button>
-        <button>탈퇴하기</button>
+        <button onClick={props.editUser} style={{ marginRight: "30px" }}>
+          수정하기
+        </button>
+        <button onClick={props.handleModalOpen}>탈퇴하기</button>
       </Form2>
+      <DeleteUserContainer
+        url={url}
+        isOpen={modalOpen}
+        onCancel={handleModalClose}
+      ></DeleteUserContainer>
     </Form1>
   );
 };
@@ -207,14 +218,10 @@ const UserExpPoint = (props) => {
     margin-left: 30px;
   `;
   return (
-      <ExpPoint>
-        <Exp>
-          경험치 {props.exp}
-        </Exp>
-        <Point>
-          포인트 {props.point}
-        </Point>
-      </ExpPoint>
+    <ExpPoint>
+      <Exp>경험치 {props.exp}</Exp>
+      <Point>포인트 {props.point}</Point>
+    </ExpPoint>
   );
 };
 

@@ -48,6 +48,15 @@ function UserInfoContainer() {
   const [enteredNickName, setEnteredNickName] = useState(user.nickname);
   const [enteredPhone, setEnteredPhone] = useState("010-1234-5678");
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+  function handleModalOpen() {
+    setModalOpen(true);
+  }
+  function handleModalClose() {
+    setModalOpen(false);
+  }
+
   const dispatch = useDispatch();
   const emailChangeHandler = (event) => {
     setEnterdEmail(event.target.value);
@@ -86,7 +95,27 @@ function UserInfoContainer() {
     alert("다시 로그인 해주세요.");
     navigate("/login");
   };
+
   const deleteUser = (id) => {
+    axios
+      .delete(
+        url + `/api/v1/members/resign`,
+        {
+          email: enteredEmail,
+          password: enteredPassword,
+
+          // phoneNumber: '010-1234-5678',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ` + jwtToken,
+          },
+        }
+      )
+      .then(function (response) {})
+      .catch(function (error) {
+        console.log(error);
+      });
     navigate("/");
     // setUsers(users.filter((user) => user.id !== id));
   };
@@ -182,6 +211,10 @@ function UserInfoContainer() {
         {!editing ? (
           <div>
             <UserTable
+              url={url}
+              handleModalOpen={handleModalOpen}
+              handleModalClose={handleModalClose}
+              modalOpen={modalOpen}
               user={user}
               deleteUser={deleteUser}
               editUser={editUser}
