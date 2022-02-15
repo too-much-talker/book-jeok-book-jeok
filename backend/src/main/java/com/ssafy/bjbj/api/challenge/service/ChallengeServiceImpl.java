@@ -10,6 +10,8 @@ import com.ssafy.bjbj.api.challenge.repository.ChallengeMemberRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.service.ActivityService;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -30,6 +34,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private final MemberRepository memberRepository;
 
+    private final ActivityService activityService;
+
     @Transactional
     @Override
     public Challenge save(ReqChallengeDto reqChallengeDto, Long memberSeq) {
@@ -40,6 +46,9 @@ public class ChallengeServiceImpl implements ChallengeService {
          * 챌린지 회원 저장
          */
         challengeMemberRepository.save(ChallengeMember.create(savedChallenge, findMember));
+
+        activityService.createNewActivity(savedChallenge.getSeq(), findMember, CHALLENGE_CREATE, savedChallenge.getCreatedDate());
+        findMember.incrementPoint(1);
 
         return savedChallenge;
     }
@@ -58,10 +67,15 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .build();
     }
 
+    @Transactional
     @Override
     public ResChallengeDto getResChallengeDto(Long challengeSeq) {
-        return challengeRepository.findResChallengeDto(challengeSeq)
+        Challenge findChallenge = challengeRepository.findBySeq(challengeSeq)
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        findChallenge.incrementViews();
+
+        return findChallenge.toDto();
     }
 
     @Transactional
@@ -101,6 +115,21 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .currentPage(pageable.getPageNumber())
                 .myChallengeDtos(myChallengeDtos)
                 .build();
+    }
+
+    @Transactional
+    @Override
+    public Challenge modify(Long challengeSeq, Long memberSeq, ReqChallengeDto reqChallengeDto) {
+        Challenge findChallenge = challengeRepository.findBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        if (!findChallenge.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("다른 회원의 챌린지를 수정할 수 없습니다.");
+        }
+
+        activityService.createNewActivity(findChallenge.getSeq(), findChallenge.getMember(), CHALLENGE_UPDATE, findChallenge.getLastModifiedDate());
+
+        return findChallenge.change(reqChallengeDto);
     }
 
 }

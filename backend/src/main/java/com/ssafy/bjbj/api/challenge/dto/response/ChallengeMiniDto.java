@@ -19,12 +19,15 @@ public class ChallengeMiniDto {
 
     private int participantCount;
 
+    private int views;
+
     @QueryProjection
-    public ChallengeMiniDto(Long challengeSeq, String title, LocalDateTime deadline, int participantCount) {
+    public ChallengeMiniDto(Long challengeSeq, String title, LocalDateTime deadline, int participantCount, int views) {
         this.challengeSeq = challengeSeq;
         this.title = title;
         this.deadline = deadline.toLocalDate();
         this.participantCount = participantCount;
+        this.views = views;
     }
 
 }

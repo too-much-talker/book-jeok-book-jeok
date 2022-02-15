@@ -22,4 +22,6 @@ public interface ChallengeService {
 
     ResMyChallengeListPageDto getResMyChallengeListPageDto(boolean isEnd, Pageable pageable, Long memberSeq);
 
+    Challenge modify(Long challengeSeq, Long memberSeq, ReqChallengeDto reqChallengeDto);
+
 }
