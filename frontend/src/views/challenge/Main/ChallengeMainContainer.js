@@ -28,6 +28,12 @@ function ChallengeMainContainer() {
       views: "",
     },
   ]);
+  useEffect(() => {
+    if (jwtToken === null || jwtToken === undefined || jwtToken === "") {
+      document.location.href = `/login`;
+      alert("로그인 후 이용 가능합니다.");
+    }
+  }, [jwtToken]);
   function onRegister() {
     document.location.href = `/challenge/register`;
   }

@@ -33,6 +33,11 @@ const Order = styled.div`
 `;
 const OrderBtn = styled.button`
   width: 130px;
+  border: none;
+  margin-left: 5px;
+  &:hover {
+    cursor: pointer;
+  }
   color: ${(props) => (props.active === true ? "black" : "white")};
 `;
 const Challenges = styled.div`
@@ -48,14 +53,15 @@ const RegisterBtn = styled.button`
   float: right;
   margin-right: 10%;
   height: 30px;
-  width: 120px;
-  color: #4c4c4c;
-  background: #eaeaea;
+  width: 100px;
+  color: white;
+  background: black;
   border: none;
-  border-radius: 10px;
   &:hover {
     cursor: pointer;
   }
+  border-radius: 10px;
+  box-shadow: 2px 3px 5px 0px #c4c4c4;
 `;
 const ListBlock = styled.div`
   position: relative;
