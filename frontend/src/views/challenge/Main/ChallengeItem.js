@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Block = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  marginl
   margin-bottom: 50px;
   margin: 15px;
   &:hover {
