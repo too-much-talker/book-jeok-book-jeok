@@ -3,6 +3,7 @@ package com.ssafy.bjbj.api.challenge.controller;
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResRewardDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResMyChallengeListPageDto;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -97,6 +99,7 @@ public class ChallengeController {
         Map<String, Object> responseData = new HashMap<>();
 
         try {
+            List<ResRewardDto> rewardDtos = challengeService.getRewardDtos();
             ResChallengeListPageDto resChallengeListPageDto = challengeService.getResChallengeListPageDto(all, pageable);
 
             status = HttpStatus.OK.value();
@@ -130,6 +133,7 @@ public class ChallengeController {
 
         try {
             ResChallengeDto resChallengeDto = challengeService.getResChallengeDto(challengeSeq);
+            List<ResRewardDto> rewardDtos = challengeService.getRewardDtos();
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "챌린지 모집 포스팅 상세페이지 조회 성공");
@@ -164,6 +168,7 @@ public class ChallengeController {
 
         Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
         try {
+            List<ResRewardDto> rewardDtos = challengeService.getRewardDtos();
             ResMyChallengeListPageDto resMyChallengeListPageDto = challengeService.getResMyChallengeListPageDto(end, pageable, memberSeq);
 
             status = HttpStatus.OK.value();

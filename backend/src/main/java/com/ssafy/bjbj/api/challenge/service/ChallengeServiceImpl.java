@@ -1,10 +1,15 @@
 package com.ssafy.bjbj.api.challenge.service;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.*;
+import com.ssafy.bjbj.api.challenge.dto.response.ChallengeMiniDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResRewardDto;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
+import com.ssafy.bjbj.api.challenge.repository.ChallengeAuthRepository;
+import com.ssafy.bjbj.api.challenge.dto.response.*;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeMemberRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeRepository;
@@ -18,6 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
@@ -33,6 +41,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeMemberRepository challengeMemberRepository;
 
     private final MemberRepository memberRepository;
+
+    private final ChallengeAuthRepository challengeAuthRepository;
 
     private final ActivityService activityService;
 
@@ -148,4 +158,41 @@ public class ChallengeServiceImpl implements ChallengeService {
         findChallenge.getMember().decrementPoint(1);
     }
 
+    @Transactional
+    @Override
+    public List<ResRewardDto> getRewardDtos() {
+        List<ResRewardDto> resRewardDtos = new ArrayList<>();
+        List<ResChallengeDto> endedChallenges = challengeRepository.findEndedChallenge();
+
+        if (endedChallenges == null) {
+            return resRewardDtos;
+        }
+
+        for (ResChallengeDto endedChallenge : endedChallenges) {
+            Challenge challenge = challengeRepository.findBySeq(endedChallenge.getChallengeSeq());
+            for (ChallengeMember challengeMember : challenge.getChallengeMembers()) {
+                Member member = challengeMember.getMember();
+                Integer authCounts = challengeAuthRepository.countChallengeAuthByChallengeSeqAndMemberSeq(endedChallenge.getChallengeSeq(), member.getSeq());
+                long days = ChronoUnit.DAYS.between(endedChallenge.getStartDate(), endedChallenge.getEndDate());
+
+                int rewards;
+                if ((float) (authCounts / days) >= 0.8) {
+                    rewards = (int) (endedChallenge.getReward() / days * authCounts * 1.2);
+                } else {
+                    rewards = (int) (endedChallenge.getReward() / days * authCounts);
+                }
+                member.incrementPoint(rewards);
+                challengeMember.inclementReward(rewards);
+
+                resRewardDtos.add(ResRewardDto.builder()
+                        .challengeSeq(endedChallenge.getChallengeSeq())
+                        .memberSeq(member.getSeq())
+                        .rewards(rewards)
+                        .build());
+            }
+            challenge.rewarded();
+        }
+
+        return resRewardDtos;
+    }
 }
