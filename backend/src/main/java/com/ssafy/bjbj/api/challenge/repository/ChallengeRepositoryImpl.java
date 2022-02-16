@@ -2,10 +2,8 @@ package com.ssafy.bjbj.api.challenge.repository;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.bjbj.api.challenge.dto.response.ChallengeMiniDto;
-import com.ssafy.bjbj.api.challenge.dto.response.QChallengeMiniDto;
-import com.ssafy.bjbj.api.challenge.dto.response.QResChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
+import com.ssafy.bjbj.api.challenge.dto.response.*;
+import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.common.enums.Status;
 import org.springframework.data.domain.Pageable;
 
@@ -47,7 +45,9 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                         challenge.seq,
                         challenge.title,
                         challenge.deadline,
-                        challenge.challengeMembers.size().intValue()))
+                        challenge.challengeMembers.size().intValue(),
+                        challenge.views.intValue(),
+                        challenge.maxMember.intValue()))
                 .from(challenge)
                 .join(challenge.challengeMembers, challengeMember)
                 .where(challenge.isDeleted.isFalse())
@@ -62,18 +62,33 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
     }
 
     @Override
-    public Optional<ResChallengeDto> findResChallengeDto(Long challengeSeq) {
-        return Optional.ofNullable(queryFactory
-                .select(new QResChallengeDto(
+    public List<MyChallengeDto> findMyChallengeDtos(boolean isEnd, Pageable pageable, Long memberSeq) {
+        JPAQuery<MyChallengeDto> query = queryFactory
+                .select(new QMyChallengeDto(
                         challenge.seq,
                         challenge.title,
-                        challenge.content,
                         challenge.startDate,
-                        challenge.endDate,
-                        challenge.deadline,
-                        challenge.reward,
-                        challenge.maxMember))
+                        challenge.endDate))
                 .from(challenge)
+                .join(challenge.challengeMembers, challengeMember)
+                .where(challenge.isDeleted.isFalse().and(challengeMember.member.seq.eq(memberSeq)))
+                .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .orderBy(challenge.createdDate.desc());
+
+        if (isEnd) {
+            query.where(challenge.status.eq(Status.END));
+        } else {
+            query.where(challenge.status.in(Status.PRE, Status.ING));
+        }
+
+        return query.fetch();
+    }
+
+    @Override
+    public Optional<Challenge> findChallengeBySeq(Long challengeSeq) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(challenge)
                 .where(challenge.seq.eq(challengeSeq).and(challenge.isDeleted.isFalse()))
                 .fetchOne());
     }
@@ -82,15 +97,16 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
     public List<ResChallengeDto> findEndedChallenge() {
         return queryFactory.select(new QResChallengeDto(
                         challenge.seq,
+                        challenge.member.seq,
                         challenge.title,
                         challenge.content,
                         challenge.startDate,
                         challenge.endDate,
                         challenge.deadline,
                         challenge.reward,
-                        challenge.maxMember))
+                        challenge.maxMember,
+                        challenge.views))
                 .from(challenge)
-                .join(challenge.challengeMembers, challengeMember)
                 .where(challenge.endDate.before(LocalDateTime.now()).and(challenge.isDeleted.isFalse())
                         .and(challenge.isRewarded.isFalse()))
                 .fetch();

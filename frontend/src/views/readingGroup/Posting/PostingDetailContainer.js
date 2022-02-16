@@ -9,13 +9,22 @@ const url = "https://i6a305.p.ssafy.io:8443";
 function PostingDetailContainer() {
   const location = useLocation();
   const readingGroupSeq = location.state.logSeq;
-  console.log(readingGroupSeq);
+  // console.log(readingGroupSeq);
   const userInfo = useSelector((state) => state.authReducer).memberInfo;
   const [group, setGroup] = useState({});
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   let isParticipated;
   const [minLevel, setMinLevel] = useState(1);
   const [writer, setWriter] = useState();
+  const [detailState, setDetailState] = useState("detail");
+
+  function changeModifyState() {
+    setDetailState("modify");
+  }
+
+  function changeDetailState() {
+    setDetailState("detail");
+  }
 
   const getPage = async () => {
     const response = await axios.get(
@@ -75,19 +84,23 @@ function PostingDetailContainer() {
         console.log(error);
       });
   }
-  // const cancelSubcription = async () => {
-  //   console.log(jwtToken);
-  //   const response = await axios.delete(
-  //     url + `/api/v1/reading-groups/${readingGroupSeq}/members/${userInfo.seq}`,
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ` + jwtToken,
-  //       },
-  //     }
-  //   );
-  //   console.log(jwtToken);
-  //   console.log(response);
-  // };
+
+  function goDelete() {
+    axios
+      .delete(url + `/api/v1/reading-groups/${readingGroupSeq}`, {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        alert(response.data.data.msg);
+        document.location.href = "/postinglist";
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     getPage();
@@ -99,12 +112,20 @@ function PostingDetailContainer() {
 
   return (
     <PostingDetailPresenter
+      jwtToken={jwtToken}
+      url={url}
       userInfo={userInfo}
       writer={writer}
       isParticipated={isParticipated}
       group={group}
       subscriptionGroup={subscriptionGroup}
       cancelSubcription={cancelSubcription}
+      goDelete={goDelete}
+      detailState={detailState}
+      changeModifyState={changeModifyState}
+      changeDetailState={changeDetailState}
+      readingGroupSeq={readingGroupSeq}
+      getPage={getPage}
     />
   );
 }

@@ -33,4 +33,22 @@ async function getGroupList(info, header, success, fail) {
     .catch(fail);
 }
 
-export { getGroupDetail, checkGoMeeting, deleteGroup, getGroupList };
+async function submitReview(readingGroupSeq, params, header, success, fail) {
+  console.log(JSON.stringify(params));
+  await api
+    .post(
+      `/api/v1/reading-groups/${readingGroupSeq}/review`,
+      { params: JSON.stringify(params) },
+      header
+    )
+    .then(success)
+    .catch(fail);
+}
+
+export {
+  getGroupDetail,
+  checkGoMeeting,
+  deleteGroup,
+  getGroupList,
+  submitReview,
+};

@@ -3,7 +3,6 @@ package com.ssafy.bjbj.api.challenge.service;
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeAuthDto;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeAuth;
-import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.exception.AlreadyAuthenticateException;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
@@ -45,7 +44,7 @@ public class ChallengeAuthServiceImpl implements ChallengeAuthService {
         Member member = memberRepository.findBySeq(memberSeq);
         Challenge challenge = challengeRepository.findBySeq(challengeSeq);
 
-        if (challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq) == null) {
+        if (challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq).isEmpty()) {
             throw new NotFoundChallengeMemberException("챌린지에 참가한 회원이 아닙니다");
         }
         if (challenge == null) {
@@ -107,10 +106,6 @@ public class ChallengeAuthServiceImpl implements ChallengeAuthService {
 
         Integer days = Period.between(challenge.getStartDate().toLocalDate(), endDate.toLocalDate()).getDays();
 
-//        int rewards = challenge.getReward() / days * authCounts;
-//        member.incrementPoint(rewards);
-//
-//        return rewards;
         return null;
     }
 }

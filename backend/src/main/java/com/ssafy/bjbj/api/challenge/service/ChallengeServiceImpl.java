@@ -9,10 +9,14 @@ import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeAuthRepository;
+import com.ssafy.bjbj.api.challenge.dto.response.*;
+import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeMemberRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.api.member.repository.MemberRepository;
+import com.ssafy.bjbj.api.member.service.ActivityService;
+import com.ssafy.bjbj.common.exception.NotEqualMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
 
 @Transactional(readOnly = true)
 @Slf4j
@@ -37,6 +44,8 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private final ChallengeAuthRepository challengeAuthRepository;
 
+    private final ActivityService activityService;
+
     @Transactional
     @Override
     public Challenge save(ReqChallengeDto reqChallengeDto, Long memberSeq) {
@@ -47,6 +56,9 @@ public class ChallengeServiceImpl implements ChallengeService {
          * 챌린지 회원 저장
          */
         challengeMemberRepository.save(ChallengeMember.create(savedChallenge, findMember));
+
+        activityService.createNewActivity(savedChallenge.getSeq(), findMember, CHALLENGE_CREATE, savedChallenge.getCreatedDate());
+        findMember.incrementPoint(1);
 
         return savedChallenge;
     }
@@ -65,10 +77,85 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .build();
     }
 
+    @Transactional
     @Override
     public ResChallengeDto getResChallengeDto(Long challengeSeq) {
-        return challengeRepository.findResChallengeDto(challengeSeq)
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        findChallenge.incrementViews();
+
+        return findChallenge.toDto();
+    }
+
+    @Transactional
+    @Override
+    public ChallengeMember join(Long challengeSeq, Long memberSeq) {
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        Member findMember = memberRepository.findBySeq(memberSeq);
+
+        challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq)
+                .ifPresent(challengeMember -> {
+                    throw new IllegalStateException("이미 신청한 챌린지입니다.");
+                });
+
+        return challengeMemberRepository.save(ChallengeMember.create(findChallenge, findMember));
+    }
+
+    @Transactional
+    @Override
+    public void unJoin(Long challengeSeq, Long memberSeq) {
+        ChallengeMember findChallengeMember = challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq)
+                .orElseThrow(() -> new NotFoundChallengeMemberException("신청하지 않은 챌린지입니다."));
+
+        challengeMemberRepository.delete(findChallengeMember);
+    }
+
+    @Override
+    public ResMyChallengeListPageDto getResMyChallengeListPageDto(boolean isEnd, Pageable pageable, Long memberSeq) {
+        Integer totalCnt = challengeMemberRepository.countAllByMemberSeq(isEnd, memberSeq);
+        Integer totalPage = (int) Math.ceil((double) totalCnt / pageable.getPageSize());
+        List<MyChallengeDto> myChallengeDtos = challengeRepository.findMyChallengeDtos(isEnd, pageable, memberSeq);
+
+        return ResMyChallengeListPageDto.builder()
+                .totalCnt(totalCnt)
+                .totalPage(totalPage)
+                .currentPage(pageable.getPageNumber())
+                .myChallengeDtos(myChallengeDtos)
+                .build();
+    }
+
+    @Transactional
+    @Override
+    public Challenge modify(Long challengeSeq, Long memberSeq, ReqChallengeDto reqChallengeDto) {
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        if (!findChallenge.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("다른 회원의 챌린지를 수정할 수 없습니다.");
+        }
+
+        activityService.createNewActivity(findChallenge.getSeq(), findChallenge.getMember(), CHALLENGE_UPDATE, findChallenge.getLastModifiedDate());
+
+        return findChallenge.change(reqChallengeDto);
+    }
+
+    @Transactional
+    @Override
+    public void remove(Long challengeSeq, Long memberSeq) {
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        if (!findChallenge.getMember().getSeq().equals(memberSeq)) {
+            throw new NotEqualMemberException("다른 회원의 챌린지를 삭제할 수 없습니다.");
+        }
+
+        findChallenge.delete();
+
+        activityService.createNewActivity(findChallenge.getSeq(), findChallenge.getMember(), CHALLENGE_DELETE, findChallenge.getLastModifiedDate());
+        findChallenge.getMember().decrementPoint(1);
     }
 
     @Transactional
@@ -77,10 +164,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<ResRewardDto> resRewardDtos = new ArrayList<>();
         List<ResChallengeDto> endedChallenges = challengeRepository.findEndedChallenge();
 
-        System.out.println("endedChallenges = " + endedChallenges);
-
         if (endedChallenges == null) {
-            return null;
+            return resRewardDtos;
         }
 
         for (ResChallengeDto endedChallenge : endedChallenges) {
@@ -88,11 +173,16 @@ public class ChallengeServiceImpl implements ChallengeService {
             for (ChallengeMember challengeMember : challenge.getChallengeMembers()) {
                 Member member = challengeMember.getMember();
                 Integer authCounts = challengeAuthRepository.countChallengeAuthByChallengeSeqAndMemberSeq(endedChallenge.getChallengeSeq(), member.getSeq());
+                long days = ChronoUnit.DAYS.between(endedChallenge.getStartDate(), endedChallenge.getEndDate());
 
-                Integer days = Period.between(endedChallenge.getStartDate(), endedChallenge.getEndDate()).getDays();
-
-                int rewards = endedChallenge.getReward() / days * authCounts;
+                int rewards;
+                if ((float) (authCounts / days) >= 0.8) {
+                    rewards = (int) (endedChallenge.getReward() / days * authCounts * 1.2);
+                } else {
+                    rewards = (int) (endedChallenge.getReward() / days * authCounts);
+                }
                 member.incrementPoint(rewards);
+                challengeMember.inclementReward(rewards);
 
                 resRewardDtos.add(ResRewardDto.builder()
                         .challengeSeq(endedChallenge.getChallengeSeq())

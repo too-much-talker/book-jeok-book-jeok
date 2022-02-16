@@ -70,7 +70,7 @@ public class ReadingGroupBoardServiceImpl implements ReadingGroupBoardService {
 
         activityService.createNewActivity(savedReadingGroupBoard.getSeq(), findMember, READING_GROUP_BOARD_CREATE, savedReadingGroupBoard.getCreatedDate());
 
-        findMember.decrementExp(1);
+        findMember.incrementExp(1);
 
         return savedReadingGroupBoard.getSeq();
     }

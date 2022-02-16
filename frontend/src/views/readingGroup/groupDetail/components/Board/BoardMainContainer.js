@@ -14,7 +14,24 @@ function BoardMainContainer({
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
   const [page, setPage] = useState(1);
-  const [articles, setArticles] = useState();
+  const [articles, setArticles] = useState([
+    {
+      readingGroupBoardSeq: "",
+      title: "",
+      nickname: "",
+      createDate: "",
+      content: "",
+      views: "",
+    },
+    {
+      readingGroupBoardSeq: "",
+      title: "",
+      nickname: "",
+      createDate: "",
+      content: "",
+      views: "",
+    },
+  ]);
   const [totalCnt, setTotalCnt] = useState();
 
   useEffect(() => {
@@ -42,7 +59,28 @@ function BoardMainContainer({
         },
       })
       .then(function (response) {
-        setArticles(response.data.data.readingGroupBoards);
+        if (response.data.data.readingGroupBoards == 0) {
+          setArticles([
+            {
+              readingGroupBoardSeq: "",
+              title: "",
+              nickname: "",
+              createDate: "",
+              content: "",
+              views: "",
+            },
+            {
+              readingGroupBoardSeq: "",
+              title: "",
+              nickname: "",
+              createDate: "",
+              content: "",
+              views: "",
+            },
+          ]);
+        } else {
+          setArticles(response.data.data.readingGroupBoards);
+        }
         setTotalCnt(response.data.data.totalCnt);
       })
 

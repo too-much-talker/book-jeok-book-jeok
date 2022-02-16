@@ -7,6 +7,7 @@ import Sidebar from "../../main/Sidebar";
 import styled from "styled-components";
 import Login from "../login/LoginContainer";
 import React from "react";
+import GroupMemberReview from "./userReadingGroup/groupMemberReview/GroupMemberReview";
 
 const Center = styled.div`
   height: 90vh;
@@ -30,6 +31,11 @@ function Mypage() {
           path="/mybookclub"
           exact
           element={<UserReadingGroupContainer />}
+        />
+        <Route
+          path="/mybookclub/memberreview/:groupSeq"
+          exact
+          element={<GroupMemberReview />}
         />
       </Routes>
     </Center>

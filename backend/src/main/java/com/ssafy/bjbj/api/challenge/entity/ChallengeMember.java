@@ -27,6 +27,9 @@ public class ChallengeMember {
     @Id
     private Member member;
 
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    private Integer reward;
+
     public static ChallengeMember create(Challenge challenge, Member member) {
         return ChallengeMember.builder()
                 .challenge(challenge)
@@ -38,6 +41,11 @@ public class ChallengeMember {
     public ChallengeMember(Challenge challenge, Member member) {
         this.challenge = challenge;
         this.member = member;
+        this.reward = 0;
+    }
+
+    public void inclementReward(Integer reward) {
+        this.reward += reward;
     }
 
 }
