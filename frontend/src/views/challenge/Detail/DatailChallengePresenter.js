@@ -24,10 +24,21 @@ const Title = styled.div`
   font-size: 30px;
   text-align: left;
 `;
-const Views = styled.div`
+const RightBlock = styled.div`
   width: 15%;
-  margin-top: 9%;
+  margin-top: 5%;
 `;
+const Btn = styled.button`
+  margin-bottom: 8%;
+  height: 30px;
+  width: 80px;
+  border-radius: 10px;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const Views = styled.div``;
 
 const InfoBlock = styled.div`
   margin-top: 3%;
@@ -106,13 +117,36 @@ const Date = styled.div`
   font-weight: bold;
 `;
 
-function DatailChallengePresenter({ dday, details, participant }) {
+function DatailChallengePresenter({
+  isParticipated,
+  goRegister,
+  goDelete,
+  dday,
+  details,
+  participant,
+  writer,
+  user,
+}) {
   return (
     <>
       <Block>
         <Head>
           <Title>{details.title}</Title>
-          <Views>조회수 : {details.views}</Views>
+          <RightBlock>
+            {writer === user.memberInfo.seq ? (
+              <Btn style={{ background: "#FFD5AF", width: "120px" }}>
+                내가 만든 챌린지
+              </Btn>
+            ) : !isParticipated ? (
+              <Btn onClick={goRegister}>신청하기</Btn>
+            ) : (
+              <Btn onClick={goDelete} style={{ background: "#FFD5AF" }}>
+                신청 취소
+              </Btn>
+            )}
+
+            <Views>조회수 : {details.views}</Views>
+          </RightBlock>
         </Head>
         <InfoBlock>
           <Dday>D-{dday}</Dday>

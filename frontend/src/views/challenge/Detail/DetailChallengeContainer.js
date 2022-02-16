@@ -2,11 +2,14 @@ import DatailChallengePresenter from "./DatailChallengePresenter";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
 function DatailChallengeContainer() {
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
+  const user = useSelector((state) => state.authReducer);
+  console.log(user.memberInfo);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
-
+  let isParticipated;
   const [challengeSeq, setChallengeSeq] = useState(useParam.challengeSeq);
   const [participant, setParticipant] = useState(useParam.cnt);
   const [details, setDetails] = useState([
@@ -40,9 +43,61 @@ function DatailChallengeContainer() {
   const distance = setDate.getTime() - now.getTime();
   const dday = Math.ceil(distance / (1000 * 60 * 60 * 24));
 
+  const [isClicked, setIsClicked] = useState(false);
+  const [writer, setWriter] = useState();
+
+  function handleClick(param) {
+    setIsClicked(param);
+  }
   useEffect(() => {
     getDetail();
   }, []);
+
+  useEffect(() => {
+    getDetail();
+  }, [isClicked]);
+
+  // if (group.participants) {
+  //   isParticipated = group.participants.includes(userInfo.nickname);
+  // }
+
+  function goRegister() {
+    axios
+      .post(
+        url + `/api/v1/challenges/${challengeSeq}/join`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ` + jwtToken,
+          },
+        }
+      )
+      .then(function (response) {
+        if (response.data.status === 201) {
+          console.log(response);
+          alert(response.data.data.msg);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function goDelete() {
+    axios
+      .delete(url + `/api/v1/challenges/${challengeSeq}/join`, {
+        headers: {
+          Authorization: `Bearer ` + jwtToken,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        alert(response.data.data.msg);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   function getDetail() {
     axios
@@ -54,6 +109,7 @@ function DatailChallengeContainer() {
       .then(function (response) {
         console.log(response.data.data.challengeInfo);
         setDetails(response.data.data.challengeInfo);
+        setWriter(response.data.data.challengeInfo.writerSeq);
       })
       .catch(function (error) {
         console.log(error);
@@ -61,9 +117,14 @@ function DatailChallengeContainer() {
   }
   return (
     <DatailChallengePresenter
+      isParticipated={isParticipated}
+      goRegister={goRegister}
+      goDelete={goDelete}
       dday={dday}
       participant={participant}
       details={details}
+      writer={writer}
+      user={user}
     ></DatailChallengePresenter>
   );
 }
