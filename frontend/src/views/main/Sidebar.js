@@ -16,12 +16,13 @@ const Side = styled.div`
   text-align: left;
 `;
 const Menu = styled.div`
-  margin-top: 30px;
+  margin-top: 10px;
   width: 200px;
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
+  font-weight: bold;
 `;
 function Sidebar() {
   const [activities, setActivities] = useState([]);
@@ -32,6 +33,7 @@ function Sidebar() {
     { name: "나의 정보수정", path: "/mypage" },
     { name: "나의 북로그", path: "/mypage/mybooklog" },
     { name: "하트 누른 북로그", path: "/mypage/myheartbooklog" },
+    { name: "나의 챌린지", path: "/mypage/challenge" },
     { name: "나의 독서모임", path: "/mypage/mybookclub" },
   ];
   const getUserInfo = async () => {
@@ -45,9 +47,9 @@ function Sidebar() {
     setPoint(response.data.data.point);
     console.log(response);
   };
-  useEffect(()=>{
+  useEffect(() => {
     getUserInfo();
-  },[]);
+  }, []);
   return (
     <Side>
       <Menu>

@@ -8,6 +8,8 @@ import styled from "styled-components";
 import Login from "../login/LoginContainer";
 import React from "react";
 import GroupMemberReview from "./userReadingGroup/groupMemberReview/GroupMemberReview";
+import ChallengeListContainer from "./userChallenge/challengeList/ChallengeListContainer";
+import ChallengeDetailContainer from "./userChallenge/challengeDetail/ChallengeDetailContainer";
 
 const Center = styled.div`
   height: 90vh;
@@ -36,6 +38,11 @@ function Mypage() {
           path="/mybookclub/memberreview/:groupSeq"
           exact
           element={<GroupMemberReview />}
+        />
+        <Route path="/challenge" element={<ChallengeListContainer />} />
+        <Route
+          path="/challenge/:challengeSeq"
+          element={<ChallengeDetailContainer />}
         />
       </Routes>
     </Center>

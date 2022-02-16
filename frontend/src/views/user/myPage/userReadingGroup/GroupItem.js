@@ -18,6 +18,7 @@ const GroupBox = styled.div`
   text-align: left;
   &:hover {
     cursor: pointer;
+    transform: scale(1.1);
   }
 `;
 
