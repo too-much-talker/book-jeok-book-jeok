@@ -14,7 +14,7 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
-@ToString(of = {"seq", "title", "content", "views", "deadline", "startDate", "endDate", "maxMember", "reward", "status", "isDeleted"})
+@ToString(of = {"seq", "title", "content", "views", "deadline", "startDate", "endDate", "maxMember", "reward", "status", "isDeleted", "isRewarded"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_challenge")
 @Entity
@@ -56,6 +56,9 @@ public class Challenge extends BaseLastModifiedEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    @Column(nullable = false)
+    private boolean isRewarded;
+
     @JoinColumn(name = "member_seq", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Member member;
@@ -79,7 +82,15 @@ public class Challenge extends BaseLastModifiedEntity {
         this.reward = reward;
         this.status = Status.PRE;
         this.isDeleted = false;
+        this.isRewarded = false;
         this.member = member;
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public void rewarded() {
+        this.isRewarded = true;
+    }
 }

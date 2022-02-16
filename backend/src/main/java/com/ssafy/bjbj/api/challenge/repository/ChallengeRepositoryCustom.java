@@ -15,4 +15,6 @@ public interface ChallengeRepositoryCustom {
 
     Optional<ResChallengeDto> findResChallengeDto(Long challengeSeq);
 
+    List<ResChallengeDto> findEndedChallenge();
+
 }

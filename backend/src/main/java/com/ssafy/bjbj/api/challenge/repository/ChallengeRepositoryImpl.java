@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,4 +78,21 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                 .fetchOne());
     }
 
+    @Override
+    public List<ResChallengeDto> findEndedChallenge() {
+        return queryFactory.select(new QResChallengeDto(
+                        challenge.seq,
+                        challenge.title,
+                        challenge.content,
+                        challenge.startDate,
+                        challenge.endDate,
+                        challenge.deadline,
+                        challenge.reward,
+                        challenge.maxMember))
+                .from(challenge)
+                .join(challenge.challengeMembers, challengeMember)
+                .where(challenge.endDate.before(LocalDateTime.now()).and(challenge.isDeleted.isFalse())
+                        .and(challenge.isRewarded.isFalse()))
+                .fetch();
+    }
 }

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChallengeMemberRepository extends JpaRepository<ChallengeMember, Long> {
 
-
+    ChallengeMember findByChallengeSeqAndMemberSeq(Long challengeSeq, Long memberSeq);
 
 }

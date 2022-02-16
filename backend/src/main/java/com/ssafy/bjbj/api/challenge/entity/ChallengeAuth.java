@@ -2,10 +2,7 @@ package com.ssafy.bjbj.api.challenge.entity;
 
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -41,5 +38,15 @@ public class ChallengeAuth extends BaseLastModifiedEntity {
     @JoinColumn(name = "challenge_seq", nullable = false)
     @ManyToOne(fetch = LAZY)
     private Challenge challenge;
+
+    @Builder
+    public ChallengeAuth(String title, String content, boolean hasFile, boolean isDeleted, Member member, Challenge challenge) {
+        this.title = title;
+        this.content = content;
+        this.hasFile = hasFile;
+        this.isDeleted = isDeleted;
+        this.member = member;
+        this.challenge = challenge;
+    }
 
 }

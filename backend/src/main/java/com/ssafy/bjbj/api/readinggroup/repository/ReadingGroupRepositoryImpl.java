@@ -117,7 +117,7 @@ public class ReadingGroupRepositoryImpl implements ReadingGroupRepositoryCustom 
     @Override
     public boolean existReadingGroupByMemberSeq(Long memberSeq) {
         List<ReadingGroup> readingGroups = queryFactory.selectFrom(readingGroup)
-                .where(readingGroup.member.seq.eq(memberSeq).and(readingGroup.status.in(Status.PRE, Status.ING)))
+                .where(readingGroup.member.seq.eq(memberSeq).and(readingGroup.status.in(Status.PRE, Status.ING)).and(readingGroup.isDeleted.isFalse()))
                 .fetch();
 
         return readingGroups.size() == 0;

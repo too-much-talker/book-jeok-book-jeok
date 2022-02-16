@@ -4,9 +4,11 @@ import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ChallengeMiniDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResRewardDto;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
+import com.ssafy.bjbj.api.challenge.repository.ChallengeAuthRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeMemberRepository;
 import com.ssafy.bjbj.api.challenge.repository.ChallengeRepository;
 import com.ssafy.bjbj.api.member.entity.Member;
@@ -17,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -30,6 +34,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeMemberRepository challengeMemberRepository;
 
     private final MemberRepository memberRepository;
+
+    private final ChallengeAuthRepository challengeAuthRepository;
 
     @Transactional
     @Override
@@ -65,4 +71,38 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
     }
 
+    @Transactional
+    @Override
+    public List<ResRewardDto> getRewardDtos() {
+        List<ResRewardDto> resRewardDtos = new ArrayList<>();
+        List<ResChallengeDto> endedChallenges = challengeRepository.findEndedChallenge();
+
+        System.out.println("endedChallenges = " + endedChallenges);
+
+        if (endedChallenges == null) {
+            return null;
+        }
+
+        for (ResChallengeDto endedChallenge : endedChallenges) {
+            Challenge challenge = challengeRepository.findBySeq(endedChallenge.getChallengeSeq());
+            for (ChallengeMember challengeMember : challenge.getChallengeMembers()) {
+                Member member = challengeMember.getMember();
+                Integer authCounts = challengeAuthRepository.countChallengeAuthByChallengeSeqAndMemberSeq(endedChallenge.getChallengeSeq(), member.getSeq());
+
+                Integer days = Period.between(endedChallenge.getStartDate(), endedChallenge.getEndDate()).getDays();
+
+                int rewards = endedChallenge.getReward() / days * authCounts;
+                member.incrementPoint(rewards);
+
+                resRewardDtos.add(ResRewardDto.builder()
+                        .challengeSeq(endedChallenge.getChallengeSeq())
+                        .memberSeq(member.getSeq())
+                        .rewards(rewards)
+                        .build());
+            }
+            challenge.rewarded();
+        }
+
+        return resRewardDtos;
+    }
 }
