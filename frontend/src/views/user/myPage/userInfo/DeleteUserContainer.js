@@ -23,6 +23,8 @@ function DeleteUserContainer({ url, isOpen, onCancel }) {
   function onsubmit() {
     if (password !== confirmPassword) {
       alert("비밀번호와 비밀번호 확인이 다릅니다.");
+    } else if (email !== user.memberInfo.email) {
+      alert("이메일을 올바르게 작성해주세요.");
     } else {
       const headers = {
         Authorization: `Bearer ` + jwtToken,
@@ -32,12 +34,14 @@ function DeleteUserContainer({ url, isOpen, onCancel }) {
         password: password,
       };
 
-      axios
-        .delete(url + `/api/v1/members/resign`, { headers, data })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {});
+      console.log(jwtToken);
+      // axios
+      //   .delete(url + `/api/v1/members/resign`, { headers, data })
+      //   .then(function (response) {
+      //     console.log(response);
+      //     alert(response.data.data.msg);
+      //   })
+      //   .catch(function (error) {});
     }
   }
   return (

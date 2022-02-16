@@ -35,6 +35,10 @@ import ArticleDetailContainer from "./views/readingGroup/Board/ArticleDetailCont
 import PostingRegisterContainer from "./views/readingGroup/Posting/PostingRegisterContainer";
 import PostingDetailContainer from "./views/readingGroup/Posting/PostingDetailContainer";
 import PostingListContainer from "./views/readingGroup/Posting/PostingListContainer";
+
+import ChallengeMainContainer from "./views/challenge/Main/ChallengeMainContainer";
+import RegisterChallengeContainer from "./views/challenge/Register/RegisterChallengeContainer";
+
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
   const state = store.getState();
@@ -125,6 +129,12 @@ render(
                 element={<PostingDetailContainer />}
               />
               <Route path="/postinglist" element={<PostingListContainer />} />
+
+              <Route path="/challenge" element={<ChallengeMainContainer />} />
+              <Route
+                path="/challenge/register"
+                element={<RegisterChallengeContainer />}
+              />
             </Routes>
           </Wrapper>
         </Body>
