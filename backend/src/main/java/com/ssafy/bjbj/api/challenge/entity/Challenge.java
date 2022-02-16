@@ -1,5 +1,7 @@
 package com.ssafy.bjbj.api.challenge.entity;
 
+import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
+import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
 import com.ssafy.bjbj.api.member.entity.Member;
 import com.ssafy.bjbj.common.enums.Status;
 import com.ssafy.bjbj.common.entity.base.BaseLastModifiedEntity;
@@ -80,6 +82,43 @@ public class Challenge extends BaseLastModifiedEntity {
         this.status = Status.PRE;
         this.isDeleted = false;
         this.member = member;
+    }
+
+    public void incrementViews() {
+        this.views++;
+    }
+
+    public Challenge change(ReqChallengeDto reqChallengeDto) {
+        String time = "T00:00:00";
+
+        this.title = reqChallengeDto.getTitle();
+        this.content = reqChallengeDto.getContent();
+        this.deadline = LocalDateTime.parse(reqChallengeDto.getDeadline() + time);
+        this.startDate = LocalDateTime.parse(reqChallengeDto.getStartDate() + time);
+        this.endDate = LocalDateTime.parse(reqChallengeDto.getEndDate() + time);
+        this.maxMember = reqChallengeDto.getMaxMember();
+        this.reward = reqChallengeDto.getReward();
+
+        return this;
+    }
+
+    public ResChallengeDto toDto() {
+        return ResChallengeDto.builder()
+                .challengeSeq(this.seq)
+                .writerSeq(this.member.getSeq())
+                .title(this.title)
+                .content(this.content)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .deadline(this.deadline)
+                .reward(this.reward)
+                .maxMember(this.maxMember)
+                .views(this.views)
+                .build();
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 
 }
