@@ -185,7 +185,6 @@ function BookDetailContainer(bookInfoSeq) {
         console.log(error);
       });
   }
-  //console.log(userReview);
 
   function handleMyModalOpen() {
     if (jwtToken === "" || jwtToken === undefined || jwtToken === null) {
