@@ -107,6 +107,10 @@ public class Challenge extends BaseLastModifiedEntity {
     }
 
     public ResChallengeDto toDto() {
+        return toDto(null, null);
+    }
+
+    public ResChallengeDto toDto(List<Long> participantSeqs, List<String> participantNicknames) {
         return ResChallengeDto.builder()
                 .challengeSeq(this.seq)
                 .writerSeq(this.member.getSeq())
@@ -118,6 +122,8 @@ public class Challenge extends BaseLastModifiedEntity {
                 .reward(this.reward)
                 .maxMember(this.maxMember)
                 .views(this.views)
+                .participantSeqs(participantSeqs)
+                .participantNicknames(participantNicknames)
                 .build();
     }
 

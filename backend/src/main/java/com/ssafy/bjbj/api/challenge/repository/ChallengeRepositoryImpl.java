@@ -109,21 +109,12 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
     }
 
     @Override
-    public List<ResChallengeDto> findEndedChallenge() {
-        return queryFactory.select(new QResChallengeDto(
-                        challenge.seq,
-                        challenge.member.seq,
-                        challenge.title,
-                        challenge.content,
-                        challenge.startDate,
-                        challenge.endDate,
-                        challenge.deadline,
-                        challenge.reward,
-                        challenge.maxMember,
-                        challenge.views))
-                .from(challenge)
+    public List<Challenge> findEndedChallenge() {
+        return queryFactory
+                .selectFrom(challenge)
                 .where(challenge.endDate.before(LocalDateTime.now()).and(challenge.isDeleted.isFalse())
                         .and(challenge.isRewarded.isFalse()))
                 .fetch();
     }
+
 }

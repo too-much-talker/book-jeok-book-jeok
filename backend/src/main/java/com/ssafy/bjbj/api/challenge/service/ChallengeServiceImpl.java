@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ssafy.bjbj.api.member.enums.ActivityType.*;
 
@@ -84,7 +85,15 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         findChallenge.incrementViews();
 
-        return findChallenge.toDto();
+        List<Long> participantSeqs = findChallenge.getChallengeMembers()
+                .stream().map(challengeMember -> challengeMember.getMember().getSeq())
+                .collect(Collectors.toList());
+
+        List<String> participantNicknames = findChallenge.getChallengeMembers()
+                .stream().map(challengeMember -> challengeMember.getMember().getNickname())
+                .collect(Collectors.toList());
+
+        return findChallenge.toDto(participantSeqs, participantNicknames);
     }
 
     @Transactional
@@ -161,17 +170,17 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public List<ResRewardDto> getRewardDtos() {
         List<ResRewardDto> resRewardDtos = new ArrayList<>();
-        List<ResChallengeDto> endedChallenges = challengeRepository.findEndedChallenge();
+        List<Challenge> endedChallenges = challengeRepository.findEndedChallenge();
 
         if (endedChallenges == null) {
             return resRewardDtos;
         }
 
-        for (ResChallengeDto endedChallenge : endedChallenges) {
-            Challenge challenge = challengeRepository.findBySeq(endedChallenge.getChallengeSeq());
-            for (ChallengeMember challengeMember : challenge.getChallengeMembers()) {
+        for (Challenge endedChallenge : endedChallenges) {
+//            Challenge challenge = challengeRepository.findBySeq(endedChallenge.getChallengeSeq());
+            for (ChallengeMember challengeMember : endedChallenge.getChallengeMembers()) {
                 Member member = challengeMember.getMember();
-                Integer authCounts = challengeAuthRepository.countChallengeAuthByChallengeSeqAndMemberSeq(endedChallenge.getChallengeSeq(), member.getSeq());
+                Integer authCounts = challengeAuthRepository.countChallengeAuthByChallengeSeqAndMemberSeq(endedChallenge.getSeq(), member.getSeq());
                 long days = ChronoUnit.DAYS.between(endedChallenge.getStartDate(), endedChallenge.getEndDate());
 
                 int rewards;
@@ -184,12 +193,12 @@ public class ChallengeServiceImpl implements ChallengeService {
                 challengeMember.inclementReward(rewards);
 
                 resRewardDtos.add(ResRewardDto.builder()
-                        .challengeSeq(endedChallenge.getChallengeSeq())
+                        .challengeSeq(endedChallenge.getSeq())
                         .memberSeq(member.getSeq())
                         .rewards(rewards)
                         .build());
             }
-            challenge.rewarded();
+            endedChallenge.rewarded();
         }
 
         return resRewardDtos;

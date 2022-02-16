@@ -7,8 +7,9 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@ToString(of = {"challengeSeq", "title", "content", "startDate", "endDate", "deadline", "reward", "maxMember"})
+@ToString(of = {"challengeSeq", "title", "content", "startDate", "endDate", "deadline", "reward", "maxMember", "participantSeqs", "participantNicknames"})
 @Getter
 public class ResChallengeDto {
 
@@ -32,9 +33,13 @@ public class ResChallengeDto {
 
     private Integer views;
 
+    private List<Long> participantSeqs;
+
+    private List<String> participantNicknames;
+
     @QueryProjection
     @Builder
-    public ResChallengeDto(Long challengeSeq, Long writerSeq, String title, String content, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deadline, Integer reward, Integer maxMember, Integer views) {
+    public ResChallengeDto(Long challengeSeq, Long writerSeq, String title, String content, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deadline, Integer reward, Integer maxMember, Integer views, List<Long> participantSeqs, List<String> participantNicknames) {
         this.challengeSeq = challengeSeq;
         this.writerSeq = writerSeq;
         this.title = title;
@@ -45,6 +50,8 @@ public class ResChallengeDto {
         this.reward = reward;
         this.maxMember = maxMember;
         this.views = views;
+        this.participantSeqs = participantSeqs;
+        this.participantNicknames = participantNicknames;
     }
 
 }
