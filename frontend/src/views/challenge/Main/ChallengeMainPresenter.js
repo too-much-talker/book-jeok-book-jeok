@@ -97,10 +97,9 @@ function ChallengeMainPresenter({
           challenges.map((challenge) => (
             // <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
             <Challenge
-            // onClick={() => {
-            //   printDetail();
-            //   handleSetSelected(article.readingGroupBoardSeq);
-            // }}
+              onClick={() => {
+                document.location.href = `challenge/${challenge.challengeSeq}/${challenge.participantCount}`;
+              }}
             >
               <ChallengeItem
                 challengeSeq={challenge.challengeSeq}
