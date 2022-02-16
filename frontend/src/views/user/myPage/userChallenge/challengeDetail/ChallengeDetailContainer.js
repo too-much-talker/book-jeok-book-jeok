@@ -23,7 +23,10 @@ function ChallengeDetailContainer() {
       },
       (response) => {
         if (response.data.status === 200) {
-          setChallengeInfo(response.data.data.challengeInfo);
+          setChallengeInfo(response.data.data.myChallengeDetail);
+        } else {
+          alert("오류가 발생했습니다.");
+          navigate("/mypage/challenge");
         }
       },
       (error) => {
@@ -119,11 +122,13 @@ function ChallengeDetailContainer() {
 
   return (
     <>
-      <ChallengeDetailPresenter
-        challengeInfo={challengeInfo}
-        onSubmit={onSubmit}
-        onImageChange={onImageChange}
-      />
+      {challengeInfo !== {} && (
+        <ChallengeDetailPresenter
+          challengeInfo={challengeInfo}
+          onSubmit={onSubmit}
+          onImageChange={onImageChange}
+        />
+      )}
     </>
   );
 }
