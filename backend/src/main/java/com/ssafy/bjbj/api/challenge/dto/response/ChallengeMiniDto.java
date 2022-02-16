@@ -21,13 +21,16 @@ public class ChallengeMiniDto {
 
     private int views;
 
+    private int maxMember;
+
     @QueryProjection
-    public ChallengeMiniDto(Long challengeSeq, String title, LocalDateTime deadline, int participantCount, int views) {
+    public ChallengeMiniDto(Long challengeSeq, String title, LocalDateTime deadline, int participantCount, int views, int maxMember) {
         this.challengeSeq = challengeSeq;
         this.title = title;
         this.deadline = deadline.toLocalDate();
         this.participantCount = participantCount;
         this.views = views;
+        this.maxMember = maxMember;
     }
 
 }
