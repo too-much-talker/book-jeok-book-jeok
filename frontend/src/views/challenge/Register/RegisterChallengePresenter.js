@@ -11,8 +11,8 @@ const Block = styled.div`
 
 const Head = styled.div`
   border-bottom: 1px solid black;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 15%;
+  margin-right: 15%;
   margin-bottom: 20px;
   text-align: left;
 `;
@@ -24,7 +24,7 @@ const Msg = styled.div`
 const Word = styled.div`
   text-align: left;
 
-  margin-left: 10%;
+  margin-left: 15%;
   margin-bottom: 1%;
   margin-top: 2%;
   font-size: 18px;
@@ -35,19 +35,19 @@ const TitleBlock = styled.div`
 `;
 const TitleInput = styled.input`
   float: left;
-  margin-left: 10%;
-  width: 75%;
+  margin-left: 15%;
+  width: 65%;
 `;
 
 const ContentBlock = styled.div`
   margin-bottom: 75px;
 `;
 const ContentInput = styled.textarea`
-  width: 75%;
+  width: 65%;
   height: 10%;
   resize: none;
   float: left;
-  margin-left: 10%;
+  margin-left: 15%;
 `;
 const DeadLineBlock = styled.div`
   height: 80px;
@@ -57,7 +57,7 @@ const DeadLine = styled.input.attrs({
   type: "date",
 })`
   float: left;
-  margin-left: 10%;
+  margin-left: 15%;
 `;
 
 const DateBlock = styled.div`
@@ -67,7 +67,7 @@ const DateBlock = styled.div`
 const Dates = styled.div`
   display: flex;
   float: left;
-  margin-left: 10%;
+  margin-left: 15%;
 `;
 const StartDate = styled.input.attrs({
   type: "date",
@@ -88,7 +88,7 @@ const LimitBlock = styled.div`
 `;
 const LimitMember = styled.input`
   float: left;
-  margin-left: 10%;
+  margin-left: 15%;
   margin-right: 5px;
   width: 7%;
 `;
@@ -98,7 +98,7 @@ const RewardBlock = styled.div`
   text-align: left;
   float: left;
   display: flex;
-  margin-left: 10%;
+  margin-left: 15%;
 `;
 const Reward = styled.input`
   margin-right: 5px;
@@ -115,7 +115,7 @@ const RegisterBtn = styled.button`
 const Notice = styled.div`
   text-align: left;
 
-  margin-left: 10%;
+  margin-left: 15%;
   margin-bottom: 1%;
   font-size: 12px;
 `;
@@ -138,7 +138,7 @@ function RegisterChallengePresenter({
         <TitleBlock>
           <Word>제목</Word>
           <TitleInput
-            placeholder="제목을 입력해주세요"
+            placeholder="제목을 입력해주세요.(최대11자)"
             onChange={handleTitle}
           ></TitleInput>
         </TitleBlock>

@@ -47,7 +47,7 @@ const links = [
   "/booklogs/list/like",
   "/postinglist",
   "/search",
-  "/",
+  "/challenge",
   "/",
   "/mypage",
 ];

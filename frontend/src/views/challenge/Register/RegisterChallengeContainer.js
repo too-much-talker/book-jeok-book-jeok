@@ -18,7 +18,11 @@ function RegisterChallengeContainer() {
   const [reward, setReward] = useState();
 
   function handleTitle(event) {
-    setTitle(event.target.value);
+    if (event.target.value.length > 11) {
+      alert("최대 11자까지 가능합니다.");
+    } else {
+      setTitle(event.target.value);
+    }
   }
   function handleContent(event) {
     setContent(event.target.value);
@@ -27,13 +31,25 @@ function RegisterChallengeContainer() {
     setDeadLine(event.target.value);
   }
   function handleStartDate(event) {
-    setStartDate(event.target.value);
+    if (event.target.value < deadline) {
+      alert("모집 기한은 챌린지 시작일보다 최소 하루 빨라야 합니다");
+    } else {
+      setStartDate(event.target.value);
+    }
   }
   function handleEndDate(event) {
-    setEndDate(event.target.value);
+    if (startDate + 6 > event.target.value) {
+      alert("시작일+6 날짜가 종료일보다 빠르거나 같아야 합니다.");
+    } else {
+      setEndDate(event.target.value);
+    }
   }
   function handleLimitMember(event) {
-    setLimitMember(event.target.value);
+    if (event.target.value < 3 || event.target.value > 10) {
+      alert("인원은 최소 3명 최대 10명이어야 합니다.");
+    } else {
+      setLimitMember(event.target.value);
+    }
   }
   function handleReward(event) {
     if (event.target.value > 1000) {
