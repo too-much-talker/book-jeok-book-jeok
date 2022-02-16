@@ -1,5 +1,6 @@
 package com.ssafy.bjbj.api.challenge.repository;
 
+import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.bjbj.api.challenge.dto.response.*;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 import static com.ssafy.bjbj.api.challenge.entity.QChallenge.*;
 import static com.ssafy.bjbj.api.challenge.entity.QChallengeMember.*;
+import static com.ssafy.bjbj.api.member.entity.QMember.*;
 
 public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
 
@@ -68,10 +70,23 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                         challenge.seq,
                         challenge.title,
                         challenge.startDate,
-                        challenge.endDate))
+                        challenge.endDate,
+                        challenge.challengeMembers.size().intValue(),
+                        challenge.maxMember.intValue(),
+                        challenge.reward.intValue(),
+                        challenge.status,
+                        MathExpressions.round(
+                                member.challengeAuths.size()
+                                        .multiply(100.0)
+                                        .divide(challenge.endDate.castToNum(Double.class).subtract(challenge.startDate.castToNum(Double.class))
+                                                .add(1000000.0)
+                                                .divide(1000000.0))
+                                        .doubleValue(),
+                                2)))
                 .from(challenge)
                 .join(challenge.challengeMembers, challengeMember)
-                .where(challenge.isDeleted.isFalse().and(challengeMember.member.seq.eq(memberSeq)))
+                .join(challengeMember.member, member).on(challengeMember.member.seq.eq(memberSeq))
+                .where(challenge.isDeleted.isFalse())
                 .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
                 .limit(pageable.getPageSize())
                 .orderBy(challenge.createdDate.desc());
