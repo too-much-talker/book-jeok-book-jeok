@@ -27,7 +27,7 @@ function UserReadingGroupPresenter({ groups }) {
     <>
       <div className="container">
         <Title>
-          <h1>나의 정보수정</h1>
+          <h1>나의 독서모임</h1>
           <br></br>
           <br></br>
         </Title>

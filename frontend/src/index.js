@@ -88,6 +88,8 @@ render(
                 <Route path="myheartbooklog" />
                 <Route path="mybookclub" />
                 <Route path="mybookclub/memberreview/:groupSeq" />
+                <Route path="challenge" />
+                <Route path="challenge/:challengeSeq" />
               </Route>
               <Route
                 path="/booklogregister"
