@@ -32,8 +32,8 @@ function UserReadingGroupPresenter({ groups }) {
           <br></br>
         </Title>
         <Contents>
-          {groups.map((group) => (
-            <GroupItem group={group} />
+          {groups.map((group, index) => (
+            <GroupItem group={group} key={index} />
           ))}
         </Contents>
       </div>

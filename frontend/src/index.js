@@ -87,6 +87,7 @@ render(
                 <Route path="mybooklog" />
                 <Route path="myheartbooklog" />
                 <Route path="mybookclub" />
+                <Route path="mybookclub/memberreview/:groupSeq" />
               </Route>
               <Route
                 path="/booklogregister"
