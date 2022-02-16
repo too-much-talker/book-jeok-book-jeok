@@ -31,11 +31,11 @@ const Deadlines = styled.div`
   display: flex;
 `;
 const Deadline = styled.div`
+  color: #ff3002;
   font-weight: bolder;
   font-size: 25px;
   margin-top: 5px;
   margin-left: 15px;
-  color: #595959;
 `;
 const Deadline2 = styled.div`
   font-size: 12px;
