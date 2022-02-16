@@ -14,7 +14,7 @@ async function getChallengeList(info, header, success, fail) {
 
 async function getChallengeDetail(challengeSeq, header, success, fail) {
   await api
-    .get(`/api/v1/challenges/${challengeSeq}`, header)
+    .get(`/api/v1/challenges/me/${challengeSeq}`, header)
     .then(success)
     .catch(fail);
 }

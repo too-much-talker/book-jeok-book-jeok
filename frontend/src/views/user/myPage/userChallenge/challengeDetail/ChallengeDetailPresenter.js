@@ -18,22 +18,54 @@ const Div = styled.div`
 `;
 
 function ChallengeDetailPresenter({ challengeInfo, onSubmit }) {
+  console.log(challengeInfo);
   return (
     <>
-      <div>
-        <Title>{challengeInfo.title}</Title>
-        <hr />
-        <Contents>
-          <Div>{challengeInfo.content}</Div>
-          <Div>
-            {challengeInfo.startDate} ~ {challengeInfo.endDate}
-          </Div>
-          <Div>Reward : ${challengeInfo.reward}</Div>
-          <Div>
-            <ChallengeAuth onSubmit={onSubmit} />
-          </Div>
-        </Contents>
-      </div>
+      {challengeInfo !== {} && (
+        <div>
+          <Title>{challengeInfo.title}</Title>
+          <hr />
+          <Contents>
+            <Div>
+              <ChallengeAuth onSubmit={onSubmit} />
+            </Div>
+            <br />
+            <hr />
+            <br />
+            <h4>{challengeInfo.content}</h4>
+            <Div>
+              {challengeInfo.startDate} ~ {challengeInfo.endDate}
+            </Div>
+            <Div>Reward : ${challengeInfo.reward}</Div>
+
+            <Div>
+              <h3>나의 인증 내역</h3>
+              <div>
+                달성률 : <b>{challengeInfo.authRate}%</b>
+              </div>
+              {challengeInfo.authDates &&
+                challengeInfo.authDates.map((date, index) => (
+                  <div key={index}>{date}</div>
+                ))}
+            </Div>
+
+            <Div>
+              <h3>
+                참여자(
+                {challengeInfo.participantNicknames &&
+                  challengeInfo.participantNicknames.length}
+                )
+              </h3>
+              <ul>
+                {challengeInfo.participantNicknames &&
+                  challengeInfo.participantNicknames.map((nickname) => (
+                    <li>{nickname}</li>
+                  ))}
+              </ul>
+            </Div>
+          </Contents>
+        </div>
+      )}
     </>
   );
 }
