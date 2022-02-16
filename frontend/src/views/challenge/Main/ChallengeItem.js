@@ -1,36 +1,84 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import view from "../../../res/img/view.png";
 const Block = styled.div`
-  position: relative;
-  width: 100%;
-  marginl
+  height: 180px;
+  margin-right: 19px;
+  margin-left: 19px;
   margin-bottom: 50px;
-  margin: 15px;
   &:hover {
     cursor: pointer;
   }
-  background: red;
+  border-radius: 10px;
+  box-shadow: 4px 5px 7px 2px lightgrey;
+  text-align: center;
 `;
 
 const Challenge = styled.div`
   position: relative;
-  width: 180px;
+  width: 190px;
   margin: auto;
   text-align: left;
 `;
-const Title = styled.div``;
-const Deadline = styled.div``;
+const Title = styled.div`
+  border-bottom: 1px solid black;
+  font-size: 17px;
+  padding: 10px;
+  padding-top: 15px;
+`;
+const Deadlines = styled.div`
+  display: flex;
+`;
+const Deadline = styled.div`
+  font-weight: bolder;
+  font-size: 25px;
+  margin-top: 5px;
+  margin-left: 15px;
+`;
+const Deadline2 = styled.div`
+  font-size: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 21px;
+`;
 const Bottom = styled.div`
   display: flex;
 `;
-const Participant = styled.div``;
-const Views = styled.div``;
+
+const Participant = styled.div`
+  margin-left: 15px;
+  padding-top: 10px;
+  height: 40px;
+`;
+const ParticipantMsg = styled.div``;
+const ParticipantCnt = styled.div`
+  font-weight: bold;
+  margin-left: 2px;
+  font-size: 20px;
+`;
+const ViewIcon = styled.img`
+  width: 1.1rem;
+  text-align: left;
+  margin-right: 5px;
+  margin-left: 15px;
+`;
+const ViewMsg = styled.div`
+  width: 1.2rem;
+  text-align: left;
+  margin-right: 10px;
+`;
+const Views = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 15px;
+`;
 function ChallengeItem({
   challengeSeq,
   title,
   deadline,
   participantCount,
   views,
+  maxMember,
 }) {
   const setDate = new Date(deadline);
   const setDateYear = setDate.getFullYear();
@@ -44,11 +92,21 @@ function ChallengeItem({
     <Block>
       <Challenge>
         <Title>{title}</Title>
-        <Deadline>D-{dday}</Deadline>
-        <Bottom>
-          <Participant>{participantCount}</Participant>
-          <Views>{views}</Views>
-        </Bottom>
+        <Deadlines>
+          <Deadline>D-{dday}</Deadline>
+          {/* <Deadline2>마감 : {deadline}</Deadline2> */}
+        </Deadlines>
+
+        <Participant>
+          <ParticipantMsg> 참가자 현황 :</ParticipantMsg>
+          <ParticipantCnt>
+            {participantCount}/{maxMember}
+          </ParticipantCnt>
+        </Participant>
+        <Views>
+          <ViewIcon src={view}></ViewIcon>
+          <ViewMsg>{views}</ViewMsg>
+        </Views>
       </Challenge>
     </Block>
   );

@@ -9,13 +9,9 @@ function ChallengeMainContainer() {
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
   const [page, setPage] = useState(1);
-  const [order, serOrder] = useState(false);
-  const [challengeSeq, setChallengeSeq] = useState();
-  const [deadline, setDeadline] = useState();
-  const [participantCount, setParticipantCount] = useState();
-  const [title, setTitle] = useState();
-  const [views, setViews] = useState();
+  const [order, setOrder] = useState(false);
   const [totalCnt, setTotalCnt] = useState();
+  const [maxMember, setMaxMember] = useState();
   const [challenges, setChallenges] = useState([
     {
       challengeSeq: "",
@@ -40,6 +36,14 @@ function ChallengeMainContainer() {
     setPage(event);
   }
 
+  function orderFalse() {
+    setOrder(false);
+    console.log("false");
+  }
+  function orderTrue() {
+    setOrder(true);
+    console.log("true");
+  }
   useEffect(() => {
     getList();
   }, []);
@@ -47,12 +51,15 @@ function ChallengeMainContainer() {
   useEffect(() => {
     getList();
   }, [page]);
+  useEffect(() => {
+    getList();
+  }, [order]);
 
   function getList() {
     axios
       .get(
         url + `/api/v1/challenges`,
-        { params: { page: page, size: 8, all: order } },
+        { params: { page: page, size: 12, all: order } },
         {
           headers: {
             Authorization: `Bearer ` + jwtToken,
@@ -60,6 +67,7 @@ function ChallengeMainContainer() {
         }
       )
       .then(function (response) {
+        console.log(response.data);
         setChallenges(response.data.data.challengeMiniDtos);
         setTotalCnt(response.data.data.totalCnt);
       })
@@ -70,10 +78,14 @@ function ChallengeMainContainer() {
 
   return (
     <ChallengeMainPresenter
+      page={page}
       totalCnt={totalCnt}
       handlePageChange={handlePageChange}
       challenges={challenges}
       onRegister={onRegister}
+      orderFalse={orderFalse}
+      orderTrue={orderTrue}
+      order={order}
     ></ChallengeMainPresenter>
   );
 }
