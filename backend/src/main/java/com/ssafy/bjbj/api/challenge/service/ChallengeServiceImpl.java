@@ -23,6 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -203,4 +205,57 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         return resRewardDtos;
     }
+
+    @Transactional
+    @Override
+    public ResMyChallengeDetailDto getMyChallengeDetailDto(Long challengeSeq, Long memberSeq) {
+        Challenge findChallenge = challengeRepository.findChallengeBySeq(challengeSeq)
+                .orElseThrow(() -> new NotFoundChallengeException("존재하지 않는 챌린지입니다."));
+
+        challengeMemberRepository.findByChallengeSeqAndMemberSeq(challengeSeq, memberSeq)
+                .orElseThrow(() -> new NotFoundChallengeMemberException("참여하지 않은 챌린지입니디ㅏ."));
+
+        findChallenge.incrementViews();
+
+        List<LocalDate> authDates = challengeAuthRepository.findCreatedDateAllByChallengeSeqAndMemberSeq(challengeSeq, memberSeq)
+                .stream().map(LocalDateTime::toLocalDate)
+                .collect(Collectors.toList());
+
+        boolean isTodayAuth = false;
+        for (LocalDate authDate : authDates) {
+            if (authDate.equals(LocalDate.now())) {
+                isTodayAuth = true;
+                break;
+            }
+        }
+
+        List<Long> participantSeqs = findChallenge.getChallengeMembers()
+                .stream().map(challengeMember -> challengeMember.getMember().getSeq())
+                .collect(Collectors.toList());
+
+        List<String> participantNicknames = findChallenge.getChallengeMembers()
+                .stream().map(challengeMember -> challengeMember.getMember().getNickname())
+                .collect(Collectors.toList());
+
+        double authRate = challengeRepository.findAuthRateByMemberSeq(challengeSeq, memberSeq);
+
+        return ResMyChallengeDetailDto.builder()
+                .challengeSeq(findChallenge.getSeq())
+                .writerSeq(findChallenge.getMember().getSeq())
+                .title(findChallenge.getTitle())
+                .content(findChallenge.getContent())
+                .startDate(findChallenge.getStartDate().toLocalDate())
+                .endDate(findChallenge.getEndDate().toLocalDate())
+                .deadline(findChallenge.getDeadline().toLocalDate())
+                .reward(findChallenge.getReward())
+                .maxMember(findChallenge.getMaxMember())
+                .views(findChallenge.getViews())
+                .isTodayAuth(isTodayAuth)
+                .authRate(authRate)
+                .participantSeqs(participantSeqs)
+                .participantNicknames(participantNicknames)
+                .authDates(authDates)
+                .build();
+    }
+
 }

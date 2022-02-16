@@ -1,10 +1,7 @@
 package com.ssafy.bjbj.api.challenge.controller;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResRewardDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResMyChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.*;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeException;
 import com.ssafy.bjbj.api.challenge.exception.NotFoundChallengeMemberException;
 import com.ssafy.bjbj.api.challenge.service.ChallengeService;
@@ -357,6 +354,48 @@ public class ChallengeController {
             responseData.put("msg", e.getMessage());
         } catch (NotEqualMemberException e) {
             log.error("다른 회원의 챌린지 삭제 시도");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (Exception e) {
+            log.error("서버 에러 발생");
+            e.printStackTrace();
+
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+            responseData.put("msg", "요청을 수행할 수 없습니다.");
+        }
+
+
+        return BaseResponseDto.builder()
+                .status(status)
+                .data(responseData)
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MEMBER')")
+    @GetMapping("/me/{challengeSeq}")
+    public BaseResponseDto myChallenge(@PathVariable Long challengeSeq, Authentication authentication) {
+        log.info("Called API: {}", LogUtil.getClassAndMethodName());
+
+        Integer status = null;
+        Map<String, Object> responseData = new HashMap<>();
+
+        Long memberSeq = ((CustomUserDetails) authentication.getDetails()).getMember().getSeq();
+        try {
+            ResMyChallengeDetailDto resMyChallengeDetailDto = challengeService.getMyChallengeDetailDto(challengeSeq, memberSeq);
+
+            status = HttpStatus.OK.value();
+            responseData.put("msg", "나의 챌린지 상세페이지 조회 성공");
+            responseData.put("myChallengeDetail", resMyChallengeDetailDto);
+        } catch (NotFoundChallengeException e) {
+            log.error("존재하지 않는 챌린지를 조회하였습니다.");
+            e.printStackTrace();
+
+            status = HttpStatus.BAD_REQUEST.value();
+            responseData.put("msg", e.getMessage());
+        } catch (NotFoundChallengeMemberException e) {
+            log.error("참여하지 않은 챌린지를 조회하였습니다.");
             e.printStackTrace();
 
             status = HttpStatus.BAD_REQUEST.value();

@@ -21,4 +21,6 @@ public interface ChallengeRepositoryCustom {
 
     List<Challenge> findEndedChallenge();
 
+    Double findAuthRateByMemberSeq(Long challengeSeq, Long memberSeq);
+
 }
