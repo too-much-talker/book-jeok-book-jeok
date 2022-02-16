@@ -36,7 +36,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         member.point,
                         member.exp))
                 .from(member)
-                .where(member.email.eq(email))
+                .where(member.email.eq(email).and(member.isDeleted.isFalse()))
                 .fetchOne();
     }
 

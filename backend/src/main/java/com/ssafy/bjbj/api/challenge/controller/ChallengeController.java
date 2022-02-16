@@ -133,7 +133,6 @@ public class ChallengeController {
 
         try {
             ResChallengeDto resChallengeDto = challengeService.getResChallengeDto(challengeSeq);
-            List<ResRewardDto> rewardDtos = challengeService.getRewardDtos();
 
             status = HttpStatus.OK.value();
             responseData.put("msg", "챌린지 모집 포스팅 상세페이지 조회 성공");
