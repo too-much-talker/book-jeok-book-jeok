@@ -53,6 +53,9 @@ const RegisterBtn = styled.button`
   background: #eaeaea;
   border: none;
   border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const ListBlock = styled.div`
   position: relative;
@@ -97,10 +100,9 @@ function ChallengeMainPresenter({
           challenges.map((challenge) => (
             // <Article onClick={() => goArticle(article.readingGroupBoardSeq)}>
             <Challenge
-            // onClick={() => {
-            //   printDetail();
-            //   handleSetSelected(article.readingGroupBoardSeq);
-            // }}
+              onClick={() => {
+                document.location.href = `challenge/${challenge.challengeSeq}/${challenge.participantCount}`;
+              }}
             >
               <ChallengeItem
                 challengeSeq={challenge.challengeSeq}

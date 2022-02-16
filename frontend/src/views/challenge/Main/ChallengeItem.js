@@ -8,6 +8,7 @@ const Block = styled.div`
   margin-bottom: 50px;
   &:hover {
     cursor: pointer;
+    transform: scale(1.1);
   }
   border-radius: 10px;
   box-shadow: 4px 5px 7px 2px lightgrey;
@@ -34,6 +35,7 @@ const Deadline = styled.div`
   font-size: 25px;
   margin-top: 5px;
   margin-left: 15px;
+  color: #595959;
 `;
 const Deadline2 = styled.div`
   font-size: 12px;
@@ -49,6 +51,7 @@ const Participant = styled.div`
   margin-left: 15px;
   padding-top: 10px;
   height: 40px;
+  color: #595959;
 `;
 const ParticipantMsg = styled.div``;
 const ParticipantCnt = styled.div`
