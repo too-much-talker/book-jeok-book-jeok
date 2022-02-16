@@ -45,7 +45,8 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                         challenge.title,
                         challenge.deadline,
                         challenge.challengeMembers.size().intValue(),
-                        challenge.views.intValue()))
+                        challenge.views.intValue(),
+                        challenge.maxMember.intValue()))
                 .from(challenge)
                 .join(challenge.challengeMembers, challengeMember)
                 .where(challenge.isDeleted.isFalse())
