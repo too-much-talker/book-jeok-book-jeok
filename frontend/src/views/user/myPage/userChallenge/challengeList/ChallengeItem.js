@@ -12,6 +12,8 @@ const GroupBox = styled.div`
   margin-top: 20px;
   margin-buttom: 20px;
   padding: 20px;
+  padding-top: 10px;
+  padding-buttom: 0px;
   border-radius: 5px;
   text-align: left;
   &:hover {
@@ -39,19 +41,31 @@ const Week = styled.div`
 `;
 
 function ChallengeItem({ challenge }) {
-  console.log(challenge);
+  const status_val = ["PRE", "ING", "END", "FAIL"];
+  const status_kor = ["진행 전", "진행 중", "종료", "폐지"];
+
   return (
     <>
       <GroupBox>
         <ItemLink to={`/mypage/challenge/${challenge.challengeSeq}`}>
           <h3>{challenge.title}</h3>
+          <span>{challenge.numOfParticipants}명 참여</span>
           <Week>
             {challenge.startDate} ~ {challenge.endDate}
           </Week>
           <State>
-            {/* {status_val.map((state, index) => {
-              if (state === challenge.status) return status_kor[index];
-            })} */}
+            <span>
+              {status_val.map((state, index) => {
+                if (state === challenge.status) return status_kor[index];
+              })}
+            </span>
+          </State>
+          <div>${challenge.reward}</div>
+
+          <State>
+            {/* {challenge.status === "ING" && ( */}
+            <span>{challenge.authRate}% 달성중...</span>
+            {/* )} */}
           </State>
         </ItemLink>
       </GroupBox>{" "}
