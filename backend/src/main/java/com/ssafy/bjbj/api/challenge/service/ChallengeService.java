@@ -1,10 +1,7 @@
 package com.ssafy.bjbj.api.challenge.service;
 
 import com.ssafy.bjbj.api.challenge.dto.request.ReqChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResChallengeListPageDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResRewardDto;
-import com.ssafy.bjbj.api.challenge.dto.response.ResMyChallengeListPageDto;
+import com.ssafy.bjbj.api.challenge.dto.response.*;
 import com.ssafy.bjbj.api.challenge.entity.Challenge;
 import com.ssafy.bjbj.api.challenge.entity.ChallengeMember;
 import org.springframework.data.domain.Pageable;
@@ -30,5 +27,7 @@ public interface ChallengeService {
     Challenge modify(Long challengeSeq, Long memberSeq, ReqChallengeDto reqChallengeDto);
 
     void remove(Long challengeSeq, Long memberSeq);
+
+    ResMyChallengeDetailDto getMyChallengeDetailDto(Long challengeSeq, Long memberSeq);
 
 }

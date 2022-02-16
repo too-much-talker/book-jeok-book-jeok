@@ -101,6 +101,25 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
     }
 
     @Override
+    public Double findAuthRateByMemberSeq(Long challengeSeq, Long memberSeq) {
+        return queryFactory
+                .select(
+                        MathExpressions.round(
+                                member.challengeAuths.size()
+                                        .multiply(100.0)
+                                        .divide(challenge.endDate.castToNum(Double.class).subtract(challenge.startDate.castToNum(Double.class))
+                                                .add(1000000.0)
+                                                .divide(1000000.0))
+                                        .doubleValue(),
+                                2))
+                .from(challenge)
+                .join(challenge.challengeMembers, challengeMember)
+                .join(challengeMember.member, member).on(member.seq.eq(memberSeq))
+                .where(challenge.seq.eq(challengeSeq).and(challenge.isDeleted.isFalse()))
+                .fetchOne();
+    }
+
+    @Override
     public Optional<Challenge> findChallengeBySeq(Long challengeSeq) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(challenge)
