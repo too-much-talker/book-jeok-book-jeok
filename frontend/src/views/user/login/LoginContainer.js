@@ -22,28 +22,32 @@ function LoginContainer() {
   const dispatch = useDispatch();
 
   const onLogin = (id, pw) => {
-    const userInfo = {
-      email: id,
-      password: pw,
-    };
+    if (id !== "" && pw !== "") {
+      const userInfo = {
+        email: id,
+        password: pw,
+      };
 
-    login(
-      userInfo,
-      (response) => {
-        if (response.data.status === 200) {
-          let token = response.data.data["jwtToken"];
-          sessionStorage.setItem("jwtToken", JSON.stringify(token));
-          dispatch(setUserInfo(response.data.data));
-          console.log("로그인 성공");
-          window.location.replace("/");
-        } else {
-          alert("계정이 없습니다.");
+      login(
+        userInfo,
+        (response) => {
+          if (response.data.status === 200) {
+            let token = response.data.data["jwtToken"];
+            sessionStorage.setItem("jwtToken", JSON.stringify(token));
+            dispatch(setUserInfo(response.data.data));
+            console.log("로그인 성공");
+            window.location.replace("/");
+          } else {
+            alert("계정이 없습니다.");
+          }
+        },
+        (error) => {
+          console.log("로그인 에러발생");
         }
-      },
-      (error) => {
-        console.log("로그인 에러발생");
-      }
-    );
+      );
+    } else {
+      alert("모두 입력해주세요");
+    }
   };
 
   const [id, setId] = useState("");
@@ -61,12 +65,19 @@ function LoginContainer() {
     onLogin(id, pw);
   };
 
+  const onKeyPress = (e) => {
+    if (e.key == "Enter") {
+      onLogin(id, pw);
+    }
+  };
+
   return (
     <>
       <LoginPresenter
         onIdChange={onIdChange}
         onPwChange={onPwChange}
         onSubmit={onSubmit}
+        onKeyPress={onKeyPress}
       />
     </>
   );
