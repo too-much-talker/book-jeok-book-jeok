@@ -25,8 +25,16 @@ const Cover = styled.img`
 `;
 
 function GroupInfo({ groupInfo }) {
-  const days_val = ["MON", "TUE", "WEN", "TUR", "FRI", "SAT"];
-  const days_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+  const days_val = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const days_kor = [
+    "월요일",
+    "화요일",
+    "수요일",
+    "목요일",
+    "금요일",
+    "토요일",
+    "일요일",
+  ];
 
   const status_val = ["PRE", "ING", "END", "FAIL"];
   const status_kor = ["진행 전", "진행 중", "종료", "폐지"];
@@ -75,9 +83,9 @@ function GroupInfo({ groupInfo }) {
           <div>
             매 주{" "}
             {groupInfo.days.map((week, index) =>
-              days_val.map((day) => {
+              days_val.map((day, idx) => {
                 if (day === week) {
-                  return <span key={index}>{days_kor[index]} </span>;
+                  return <span key={idx}>{days_kor[idx]} </span>;
                 }
               })
             )}
