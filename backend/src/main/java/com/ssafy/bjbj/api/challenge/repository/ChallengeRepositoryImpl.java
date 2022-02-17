@@ -52,6 +52,7 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                         challenge.maxMember.intValue()))
                 .from(challenge)
                 .join(challenge.challengeMembers, challengeMember)
+                .groupBy(challenge)
                 .where(challenge.isDeleted.isFalse())
                 .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
                 .limit(pageable.getPageSize());
@@ -86,6 +87,7 @@ public class ChallengeRepositoryImpl implements ChallengeRepositoryCustom {
                 .from(challenge)
                 .join(challenge.challengeMembers, challengeMember)
                 .join(challengeMember.member, member).on(challengeMember.member.seq.eq(memberSeq))
+                .groupBy(challenge)
                 .where(challenge.isDeleted.isFalse())
                 .offset((long) (pageable.getPageNumber() - 1) * pageable.getPageSize())
                 .limit(pageable.getPageSize())
