@@ -36,6 +36,8 @@ class MemberRepositoryTest {
     @BeforeEach
     public void setUp() {
         memberRepository.deleteAll();
+        em.flush();
+        em.clear();
     }
 
     @DisplayName("이메일 중복 확인 테스트")

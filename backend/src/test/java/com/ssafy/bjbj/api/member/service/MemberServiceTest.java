@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -27,9 +29,14 @@ public class MemberServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EntityManager em;
+
     @BeforeEach
     public void setUp() {
         memberRepository.deleteAll();
+        em.flush();
+        em.clear();
     }
 
     @DisplayName("응답용 회원 Dto 조회 서비스 메서드 테스트")

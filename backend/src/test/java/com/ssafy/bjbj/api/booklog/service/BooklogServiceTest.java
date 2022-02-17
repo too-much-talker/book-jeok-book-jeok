@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
@@ -46,6 +47,9 @@ class BooklogServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private EntityManager em;
+
     private BookInfo bookInfo1;
 
     private ReqMemberDto reqMemberDto1, reqMemberDto2;
@@ -54,6 +58,8 @@ class BooklogServiceTest {
     public void setUp() throws InterruptedException {
         memberRepository.deleteAll();
         bookInfoRepository.deleteAll();
+        em.flush();
+        em.clear();
 
         reqMemberDto1 = ReqMemberDto.builder()
                 .email("test1@test.com")
