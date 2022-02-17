@@ -95,6 +95,12 @@ function PostingListContainer() {
     console.log(page);
   }, [page]);
 
+  function cutText(content, size) {
+    if (content !== null && content.length > size) {
+      return content.substr(0, size - 1) + "...";
+    } else return content;
+  }
+
   const groupList = groups.map((group) => {
     let img;
     if (group.readingGroupType === "none") {
@@ -136,7 +142,7 @@ function PostingListContainer() {
             <table width="500px">
               <tr>
                 <td>모임 제목</td>
-                <td>{group.title}</td>
+                <td>{cutText(group.title, 22)}</td>
               </tr>
               <tr>
                 <td>모임 날짜</td>
