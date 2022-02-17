@@ -50,6 +50,8 @@ public class ReadingGroupBoardRepositoryTests {
     public void setUp() throws InterruptedException {
         memberRepository.deleteAll();
         bookInfoRepository.deleteAll();
+        em.flush();
+        em.clear();
 
         member1 = Member.builder()
                 .email("member1@bjbj.com")

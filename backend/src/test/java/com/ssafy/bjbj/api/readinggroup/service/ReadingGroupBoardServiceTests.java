@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 @Transactional
 @SpringBootTest
 public class ReadingGroupBoardServiceTests {
@@ -20,11 +22,16 @@ public class ReadingGroupBoardServiceTests {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private EntityManager em;
+
     private ReqMemberDto reqMemberDto1;
 
     @BeforeEach
     public void setUp() throws InterruptedException {
         memberRepository.deleteAll();
+        em.flush();
+        em.clear();
 
         reqMemberDto1 = ReqMemberDto.builder()
                 .email("test1@test.com")

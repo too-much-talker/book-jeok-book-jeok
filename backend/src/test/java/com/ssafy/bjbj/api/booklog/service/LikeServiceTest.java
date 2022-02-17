@@ -10,6 +10,7 @@ import com.ssafy.bjbj.api.booklog.exception.NotFoundLikeException;
 import com.ssafy.bjbj.api.booklog.repository.LikeRepository;
 import com.ssafy.bjbj.api.member.dto.request.ReqMemberDto;
 import com.ssafy.bjbj.api.member.entity.Member;
+import com.ssafy.bjbj.api.member.repository.MemberRepository;
 import com.ssafy.bjbj.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
@@ -25,6 +27,12 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 @SpringBootTest
 class LikeServiceTest {
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private BookInfoRepository bookInfoRepositoryp;
 
     @Autowired
     private BooklogService booklogService;
@@ -41,12 +49,20 @@ class LikeServiceTest {
     @Autowired
     private BookInfoRepository bookInfoRepository;
 
+    @Autowired
+    private EntityManager em;
+
     private BookInfo bookInfo1;
 
     private ReqMemberDto reqMemberDto1;
 
     @BeforeEach
     public void setUp() {
+        memberRepository.deleteAll();
+        bookInfoRepository.deleteAll();
+        em.flush();
+        em.clear();
+
         reqMemberDto1 = ReqMemberDto.builder()
                 .email("test1@test.com")
                 .password("password1")
