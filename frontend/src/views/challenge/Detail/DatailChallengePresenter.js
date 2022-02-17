@@ -158,7 +158,7 @@ function DatailChallengePresenter({
               </Date>{" "}
             </Deadline>
             <DateBlock>
-              <StartDate>
+              {/* <StartDate>
                 <MiniWord>챌린지 기한 : </MiniWord>
                 <Date>{details.startDate}</Date>
                 <MiniWord>부터</MiniWord>
@@ -166,7 +166,15 @@ function DatailChallengePresenter({
               <EndDate>
                 <Date>{details.endDate}</Date>
                 <MiniWord>까지</MiniWord>
-              </EndDate>
+              </EndDate> */}
+              <div>
+                챌린지 기한 :
+                <div>
+                  <b>
+                    {details.startDate} ~ {details.endDate}
+                  </b>
+                </div>
+              </div>
             </DateBlock>
             <Reward>
               <MiniWord>리워드 : </MiniWord> <Date>{details.reward}</Date>

@@ -24,9 +24,26 @@ const StyledLink = styled(Link)`
   color: ${(props) => (props.active ? "black" : "white")};
 `;
 
+const Button = styled.button`
+  float: right;
+  padding: 10px;
+  padding-top: 5px;
+  padding-buttom: 5px;
+  background: grey;
+  color: white;
+  &:hover {
+    cursor: pointer;
+    background: black;
+  }
+  border-radius: 5px;
+`;
+
 function BooklogNavi({ isPopular }) {
   return (
     <TabWrapper>
+      <Button>
+        <StyledLink to="/booklogregister">북로그 작성</StyledLink>
+      </Button>
       <Tab active={isPopular}>
         <StyledLink to="/booklogs/list/like" active={isPopular}>
           #인기순
