@@ -38,7 +38,8 @@ const OrderBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
-  color: ${(props) => (props.active === true ? "black" : "white")};
+  // color: ${(props) => (props.active === true ? "black" : "white")};
+  font-weight: ${(props) => (props.active === true ? "bold" : "regular")};
 `;
 const Challenges = styled.div`
   position: relative;

@@ -8,7 +8,7 @@ import DISCUSS from "../../../../res/img/img_discuss.jpg";
 import { Link } from "react-router-dom";
 
 const GroupBox = styled.div`
-  border: solid 1px;
+  border: solid 1px #c4c4c4;
   width: 200px;
   display: inline-block;
   float: left;

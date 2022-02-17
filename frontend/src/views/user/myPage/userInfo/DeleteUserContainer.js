@@ -34,14 +34,17 @@ function DeleteUserContainer({ url, isOpen, onCancel }) {
         password: password,
       };
 
-      console.log(jwtToken);
-      // axios
-      //   .delete(url + `/api/v1/members/resign`, { headers, data })
-      //   .then(function (response) {
-      //     console.log(response);
-      //     alert(response.data.data.msg);
-      //   })
-      //   .catch(function (error) {});
+      axios
+        .delete(url + `/api/v1/members/resign`, { headers, data })
+        .then(function (response) {
+          console.log(jwtToken);
+          if (response.data.status === 204) {
+            sessionStorage.clear();
+            document.location.href = `/`;
+          }
+          alert(response.data.data.msg);
+        })
+        .catch(function (error) {});
     }
   }
   return (

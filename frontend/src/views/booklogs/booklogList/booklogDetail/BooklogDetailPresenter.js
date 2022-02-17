@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   .summary {
     margin-bottom: 0;
   }
+  margin-bottom: 4%;
 `;
 
 const Wrapper2 = styled.div`
@@ -20,11 +21,13 @@ const Wrapper2 = styled.div`
 `;
 
 const BooklogInfo = styled.div`
-  width: 100%;
+  margin-left: 60px;
+  display: flex;
 `;
 
 const Writer = styled.span`
   float: right;
+  margin-left: 380px;
 `;
 
 const Like = styled.span`
@@ -56,6 +59,15 @@ const Box = styled.div`
   margin: 0 auto;
 `;
 
+const Line = styled.div`
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  border-bottom: 1px solid #595959;
+`;
+
 function DetailForm({ isLike, likes, onClickHeart, booklog }) {
   return (
     <Box>
@@ -74,11 +86,13 @@ function DetailForm({ isLike, likes, onClickHeart, booklog }) {
       <Wrapper>
         <BooklogDetailBookInfo booklog={booklog} />
       </Wrapper>
-      <hr></hr>
+      <Line></Line>
       <Wrapper2>
         <BooklogInfo>
-          <span>{booklog.createdDate}</span>
-          <Writer>{booklog.nickname}</Writer>
+          <span style={{ marginRight: "20px", marginLeft: "20px" }}>
+            {booklog.createdDate}
+          </span>
+
           <div>
             <span>
               <Like>
@@ -91,15 +105,16 @@ function DetailForm({ isLike, likes, onClickHeart, booklog }) {
               </Like>
             </span>
             <Like>
-              <Icon src={view} />
+              <Icon width="10px" height="20px" src={view} />
               {booklog.views + 1}
             </Like>
           </div>
+          <Writer>작성자 : {booklog.nickname}</Writer>
         </BooklogInfo>
-        <hr />
-        <div>
+        <Line></Line>
+        <div style={{ marginLeft: "80px" }}>
           <h3>{booklog.title}</h3>
-          <br></br>
+
           <p>{booklog.content}</p>
         </div>
       </Wrapper2>

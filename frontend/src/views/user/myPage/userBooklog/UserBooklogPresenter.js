@@ -19,22 +19,19 @@ const Header = styled.div`
     display: inline-block;
   }
 `;
-const Title = styled.div`
-  margin-left: 170px;
-  `
+const Title = styled.div``;
 function UserBooklogList({
   isOpen,
   checkBoxHandler,
   context,
   page,
   totalCnt,
-  handlePageChange
-}
-) {
+  handlePageChange,
+}) {
   return (
     <div>
       <Title>
-      <h1>나의 북로그</h1>
+        <h1>나의 북로그</h1>
       </Title>
       <br></br>
       <div>
@@ -44,10 +41,8 @@ function UserBooklogList({
           </Register>
         </Link>
         <Header>
-
-            <label>공개된 북로그만 보기</label>
-            <input value={isOpen} onChange={checkBoxHandler} type="checkbox" />
-
+          <label>공개된 북로그만 보기</label>
+          <input value={isOpen} onChange={checkBoxHandler} type="checkbox" />
         </Header>
         <br></br>
         <BookLog>{context}</BookLog>

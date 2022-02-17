@@ -8,15 +8,13 @@ import Pagination from "react-js-pagination";
 const url = "https://i6a305.p.ssafy.io:8443";
 
 const BookLog = styled.div`
-  width: 100%;
-  text-align: center;
+  width: 800px;
+  float: center;
 `;
 const Button = styled.div`
   margin-left: 700px;
 `;
-const Title = styled.div`
-  margin-left: 150px;
-  `
+const Title = styled.div``;
 function UserHeartBooklogPresenter({
   context,
   page,
@@ -26,7 +24,7 @@ function UserHeartBooklogPresenter({
   return (
     <div>
       <Title>
-      <h1>하트 누른 북로그</h1>
+        <h1>하트 누른 북로그</h1>
       </Title>
       <br></br>
       <div>

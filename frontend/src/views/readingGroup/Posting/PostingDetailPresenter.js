@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
-  margin-top: 50px;
+  margin-top: 20px;
 `;
 
 const Wrapper2 = styled.div`
@@ -21,7 +21,7 @@ const Wrapper2 = styled.div`
   border-radius: 1.5rem;
   padding-left: 10rem;
   border: 1px solid #cccccc;
-  padding-top: 40px;
+  padding-top: 20px;
   padding-bottom: 40px;
 `;
 

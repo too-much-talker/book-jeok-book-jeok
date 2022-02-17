@@ -9,6 +9,7 @@ const Card = styled.div`
   height: 300px;
   float: left;
   margin-left: 75px;
+  margin-bottom: 10px;
 `;
 
 const Img = styled.img`
@@ -74,7 +75,7 @@ function BooklogCard(props) {
   return (
     <Card>
       <Title>{title}</Title>
-      <Img src={imgUrl} alt="book img"></Img>
+      <Img src={imgUrl} width="120px" height="170px" alt="book img"></Img>
       <Date>{createdDate}</Date>
       <Private
         active={!open}

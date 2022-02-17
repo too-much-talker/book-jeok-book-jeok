@@ -12,6 +12,11 @@ function ChallengeDetailContainer() {
 
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   const [challengeInfo, setChallengeInfo] = useState({});
+  const [title, setTitle] = useState();
+  const [content, setContent] = useState();
+  const [todayAuth, setTodayAuth] = useState();
+  // const [challengeState, setChallengeState] = useState(params.status);
+  // console.log(challengeState);
 
   useEffect(() => {
     getChallengeDetail(
@@ -23,7 +28,9 @@ function ChallengeDetailContainer() {
       },
       (response) => {
         if (response.data.status === 200) {
+          console.log(response.data.data.myChallengeDetail);
           setChallengeInfo(response.data.data.myChallengeDetail);
+          setTodayAuth(response.data.data.myChallengeDetail.todayAuth);
         } else {
           alert("오류가 발생했습니다.");
           navigate("/mypage/challenge");
@@ -40,65 +47,54 @@ function ChallengeDetailContainer() {
     previewURL: "",
   });
 
-  // const onImageChange = async (e) => {
-  //   e.stopPropagation();
-  //   let reader = new FileReader();
-  //   let file = e.target.files[0];
-  //   if (e.target.files.length > 5) {
-  //     alert("사진은 최대 5장까지 업로드 가능합니다.");
-  //     // setButton(true);
-  //   } else {
-  //     // setButton(false);
-  //     const filesInArr = Array.from(e.target.files);
+  const [files, setFiles] = useState();
+  const [button, setButton] = useState(false);
+  const uploadFile = (e) => {
+    e.stopPropagation();
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    if (e.target.files.length > 5) {
+      alert("사진은 최대 5장까지 업로드 가능합니다.");
+      setButton(true);
+    } else {
+      setButton(false);
+      const filesInArr = Array.from(e.target.files);
 
-  //     reader.onloadend = () => {
-  //       setPostfiles({
-  //         file: filesInArr,
-  //         previewURL: reader.result,
-  //       });
-  //     };
+      reader.onloadend = () => {
+        setPostfiles({
+          file: filesInArr,
+          previewURL: reader.result,
+        });
+      };
 
-  //     if (file) {
-  //       reader.readAsDataURL(file);
-  //     }
-  //   }
-  // };
-
-  // function onSubmit() {
-  //   alert("인증합니다.");
-
-  //   let formData = new FormData();
-  //   postfiles.file.map((eachfile) => formData.append("files", eachfile));
-
-  //   axios
-  //     .post(URL + `/api/v1/reading-groups/boards`, formData, {
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: `Bearer ${jwtToken}`,
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       console.log(response.data);
-  //       alert("인증이 완료 되었습니다..");
-  //       navigate("/mypage/challenge");
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }
-
-  const [files, setFiles] = useState("");
-
-  const onImageChange = (e) => {
-    const file = e.target.files;
-    console.log(file);
-    setFiles(file);
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
   };
 
+  function handleTitle(event) {
+    setTitle(event.target.value);
+  }
+  function handleContent(event) {
+    setContent(event.target.value);
+  }
+
   const onSubmit = (e) => {
-    const formdata = new FormData();
-    formdata.append("uploadImage", files[0]);
+    console.log("ee");
+    let formData = new FormData();
+    postfiles.file.map((eachfile) => formData.append("files", eachfile));
+
+    let reqChallengeAuth = {
+      title: title,
+      content: content,
+    };
+    formData.append(
+      "reqChallengeAuth",
+      new Blob([JSON.stringify(reqChallengeAuth)], {
+        type: "application/json",
+      })
+    );
 
     const config = {
       headers: {
@@ -111,12 +107,16 @@ function ChallengeDetailContainer() {
     axios
       .post(
         URL + `/api/v1/challengeauths/${params.challengeSeq}`,
-        formdata,
+        formData,
         config
       )
-      .then(() => {
+      .then(function (response) {
+        console.log(response);
         alert("인증 완료");
         navigate("/mypage/challenge");
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   };
 
@@ -124,9 +124,15 @@ function ChallengeDetailContainer() {
     <>
       {challengeInfo !== {} && (
         <ChallengeDetailPresenter
+          button={button}
+          postfiles={postfiles}
+          uploadFile={uploadFile}
           challengeInfo={challengeInfo}
+          todayAuth={todayAuth}
           onSubmit={onSubmit}
-          onImageChange={onImageChange}
+          handleTitle={handleTitle}
+          handleContent={handleContent}
+          // onImageChange={onImageChange}
         />
       )}
     </>

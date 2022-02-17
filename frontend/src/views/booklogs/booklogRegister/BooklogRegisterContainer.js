@@ -50,7 +50,7 @@ function BooklogRegisterContainer() {
             memberSeq: user.memberInfo.seq,
             bookInfoSeq: selectedBook.seq,
             title: TitleValue,
-            isOpen: !toggle,
+            isOpen: toggle,
             content: ContentValue,
             summary: oneSentence,
             starRating: rating,
