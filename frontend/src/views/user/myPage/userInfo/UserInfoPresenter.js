@@ -227,7 +227,7 @@ const UserExpPoint = (props) => {
   `;
   return (
     <ExpPoint>
-      <Exp>경험치 {props.exp}</Exp>
+      <Exp>레벨 {props.exp}</Exp>
       <Point>포인트 {props.point}</Point>
     </ExpPoint>
   );
