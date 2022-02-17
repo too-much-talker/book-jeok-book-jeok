@@ -20,14 +20,8 @@ function ChallengeMainContainer() {
       participantCount: "",
       views: "",
     },
-    {
-      challengeSeq: "",
-      title: "",
-      deadline: "",
-      participantCount: "",
-      views: "",
-    },
   ]);
+
   useEffect(() => {
     if (jwtToken === null || jwtToken === undefined || jwtToken === "") {
       document.location.href = `/login`;
