@@ -34,13 +34,8 @@ async function getGroupList(info, header, success, fail) {
 }
 
 async function submitReview(readingGroupSeq, params, header, success, fail) {
-  console.log(JSON.stringify(params));
   await api
-    .post(
-      `/api/v1/reading-groups/${readingGroupSeq}/review`,
-      { params: JSON.stringify(params) },
-      header
-    )
+    .post(`/api/v1/reading-groups/${readingGroupSeq}/review`, params, header)
     .then(success)
     .catch(fail);
 }

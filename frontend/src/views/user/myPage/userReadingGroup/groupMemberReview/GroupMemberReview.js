@@ -4,8 +4,8 @@ import {
   getGroupDetail,
   submitReview,
 } from "../../../../../common/api/readingGroup";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const Title = styled.div`
   height: 60px;
@@ -26,6 +26,8 @@ const FormBox = styled.div`
 `;
 
 function GroupMemberReview() {
+  const memberInfo = useSelector((state) => state.authReducer).memberInfo;
+
   const [groupInfo, setGroupInfo] = useState("");
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
@@ -57,6 +59,7 @@ function GroupMemberReview() {
   }, []);
 
   const onSubmitReview = () => {
+    console.log(review);
     submitReview(
       params.groupSeq,
       review,
@@ -67,9 +70,15 @@ function GroupMemberReview() {
       },
       (response) => {
         console.log(response);
-        navigate("/mypage/mybookclub");
+        if (response.data.status === 200) {
+          alert("리뷰 완료");
+          navigate("/mypage/mybookclub");
+        }
       },
-      (error) => {}
+      (error) => {
+        alert("오류가 발생했습니다.");
+        // navigate("/mypage")
+      }
     );
   };
 
@@ -101,21 +110,24 @@ function GroupMemberReview() {
                 {groupInfo.startDate} ~ {groupInfo.endDate}
               </div>
               <hr />
-              {groupInfo.participants.map((p, index) => (
-                <FormBox key={index}>
-                  <form onChange={onChange}>
-                    <div>{p}</div>
-                    <span>
-                      <input type="radio" value="GOOD" name={index} />
-                      <label for="GOOD">GOOD</label>
-                    </span>
-                    <span>
-                      <input type="radio" value="BAD" name={index} />
-                      <label for="BAD">BAD</label>
-                    </span>
-                  </form>
-                </FormBox>
-              ))}
+              {groupInfo.participants.map(
+                (p, index) =>
+                  p !== memberInfo.nickname && (
+                    <FormBox key={index}>
+                      <form onChange={onChange}>
+                        <div>{p}</div>
+                        <span>
+                          <input type="radio" value="GOOD" name={index} />
+                          <label for="GOOD">GOOD</label>
+                        </span>
+                        <span>
+                          <input type="radio" value="BAD" name={index} />
+                          <label for="BAD">BAD</label>
+                        </span>
+                      </form>
+                    </FormBox>
+                  )
+              )}
             </Contents>
             <button type="button" onClick={onSubmitReview}>
               리뷰 완료

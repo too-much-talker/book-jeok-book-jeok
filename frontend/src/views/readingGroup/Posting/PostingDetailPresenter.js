@@ -122,10 +122,13 @@ function PostingDetailPresenter({
               <Button onClick={changeModifyState}>독서모임 수정하기</Button>
             </>
           )
-        ) : !isParticipated ? (
-          <Button onClick={subscriptionGroup}>신청하기</Button>
         ) : (
-          <Button onClick={cancelSubcription}>신청취소</Button>
+          group.status === "PRE" &&
+          (!isParticipated ? (
+            <Button onClick={subscriptionGroup}>신청하기</Button>
+          ) : (
+            <Button onClick={cancelSubcription}>신청취소</Button>
+          ))
         )}
         {/* <h2>독서모임 포스팅 자세히보기</h2> */}
 
