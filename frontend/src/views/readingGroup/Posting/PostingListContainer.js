@@ -71,6 +71,7 @@ function PostingListContainer() {
       alert("로그인 후 이용 가능합니다.");
     }
   }, [jwtToken]);
+
   const getList = async () => {
     const response = await axios.get(
       url + `/api/v1/reading-groups?size=5&page=${page}`,
@@ -91,6 +92,7 @@ function PostingListContainer() {
 
   useEffect(() => {
     getList();
+    console.log(page);
   }, [page]);
 
   const groupList = groups.map((group) => {
@@ -161,12 +163,18 @@ function PostingListContainer() {
     );
   });
   return (
-    <PostingListPresenter
-      groupList={groupList}
-      page={page}
-      totalCnt={totalCnt}
-      handlePageChange={handlePageChange}
-    />
+    <div>
+      <PostingListPresenter groupList={groupList} />
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={5}
+        totalItemsCount={totalCnt}
+        pageRangeDisplayed={5}
+        prevPageText={"‹"}
+        nextPageText={"›"}
+        onChange={handlePageChange}
+      />
+    </div>
   );
 }
 

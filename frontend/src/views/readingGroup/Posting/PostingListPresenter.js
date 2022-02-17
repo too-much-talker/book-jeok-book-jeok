@@ -10,7 +10,7 @@ const Button1 = styled.div`
   margin-bottom: 30px;
 `;
 
-function PostingListPresenter({ groupList, page, totalCnt, handlePageChange }) {
+function PostingListPresenter({ groupList }) {
   return (
     <>
       <h1>독서모임 회원을 모집합니다.</h1>
@@ -20,14 +20,6 @@ function PostingListPresenter({ groupList, page, totalCnt, handlePageChange }) {
         </Button1>
       </Link>
       {groupList}
-      <Pagination
-        activePage={page}
-        totalItemsCount={totalCnt}
-        pageRangeDisplayed={5}
-        prevPageText={"‹"}
-        nextPageText={"›"}
-        onChange={handlePageChange}
-      />
     </>
   );
 }
