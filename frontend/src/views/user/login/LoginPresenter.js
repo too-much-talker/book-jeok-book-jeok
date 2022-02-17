@@ -29,13 +29,23 @@ const Button = styled.button`
   }
 `;
 
-function LoginPresenter({ onIdChange, onPwChange, onSubmit }) {
+function LoginPresenter({ onIdChange, onPwChange, onSubmit, onKeyPress }) {
   return (
     <div>
       <h2>Login</h2>
       <Form>
-        <Input onChange={onIdChange} placeholder="email" type="text" />
-        <Input onChange={onPwChange} placeholder="password" type="password" />
+        <Input
+          onChange={onIdChange}
+          onKeyPress={onKeyPress}
+          placeholder="email"
+          type="text"
+        />
+        <Input
+          onChange={onPwChange}
+          onKeyPress={onKeyPress}
+          placeholder="password"
+          type="password"
+        />
         <Button type="button" onClick={onSubmit}>
           로그인
         </Button>
