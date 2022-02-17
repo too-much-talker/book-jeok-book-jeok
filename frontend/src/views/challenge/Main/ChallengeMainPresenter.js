@@ -100,6 +100,7 @@ function ChallengeMainPresenter({
       <RegisterBtn onClick={onRegister}>챌린지 만들기</RegisterBtn>
       <ListBlock>
         {challenges &&
+          challenges.length > 0 &&
           challenges[0].challengeSeq !== "" &&
           challenges[0].challengeSeq !== null &&
           challenges[0].challengeSeq !== undefined &&

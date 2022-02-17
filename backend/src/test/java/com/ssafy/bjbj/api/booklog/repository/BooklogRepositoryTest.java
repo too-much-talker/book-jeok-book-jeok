@@ -54,6 +54,8 @@ class BooklogRepositoryTest {
     public void setUp() {
         memberRepository.deleteAll();
         bookInfoRepository.deleteAll();
+        em.flush();
+        em.clear();
 
         member1 = Member.builder()
                 .email("test1@test.com")

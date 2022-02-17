@@ -7,6 +7,7 @@ function DatailChallengeContainer() {
   let useParam = useParams();
   const url = "https://i6a305.p.ssafy.io:8443";
   const user = useSelector((state) => state.authReducer);
+  const userInfo = user.memberInfo;
   console.log(user.memberInfo);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   let isParticipated;
@@ -57,10 +58,10 @@ function DatailChallengeContainer() {
     getDetail();
   }, [isClicked]);
 
-  // if (group.participants) {
-  //   isParticipated = group.participants.includes(userInfo.nickname);
-  // }
-
+  if (details.participantNicknames) {
+    isParticipated = details.participantNicknames.includes(userInfo.nickname);
+  }
+  console.log(isParticipated);
   function goRegister() {
     axios
       .post(
@@ -76,6 +77,7 @@ function DatailChallengeContainer() {
         if (response.data.status === 201) {
           console.log(response);
           alert(response.data.data.msg);
+          getDetail();
         }
       })
       .catch(function (error) {
@@ -93,6 +95,7 @@ function DatailChallengeContainer() {
       .then(function (response) {
         console.log(response);
         alert(response.data.data.msg);
+        getDetail();
       })
       .catch(function (error) {
         console.log(error);

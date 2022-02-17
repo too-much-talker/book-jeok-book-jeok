@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -44,6 +45,9 @@ public class BookReviewServiceTests {
     @Autowired
     private BookInfoRepository bookInfoRepository;
 
+    @Autowired
+    private EntityManager em;
+
     private ReqMemberDto reqMemberDto1;
 
     private ReqBookReviewDto reqBookReviewDto1;
@@ -54,6 +58,8 @@ public class BookReviewServiceTests {
     public void setUp() {
         memberRepository.deleteAll();
         bookInfoRepository.deleteAll();
+        em.flush();
+        em.clear();
 
         reqMemberDto1 = ReqMemberDto.builder()
                 .email("test1@test.com")
