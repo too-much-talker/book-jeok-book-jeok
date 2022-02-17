@@ -20,7 +20,7 @@ function BooklogDetailContainer(props) {
   const bookLogSeq = location.state.logSeq;
   const [enteredRating, setEnteredRating] = useState(0);
 
-  let bookLogData,bookInfoData,tmpSeq;
+  let bookLogData, bookInfoData, tmpSeq;
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
   const user = useSelector((state) => state.authReducer);
 
@@ -63,7 +63,7 @@ function BooklogDetailContainer(props) {
         booklogSeq: bookLogSeq,
         bookInfoSeq: bookInfoSeq,
         title: enteredTitle,
-        isOpen: !enteredToggle,
+        isOpen: enteredToggle,
         content: enteredContent,
         summary: enteredSummary,
         starRating: enteredRating,
@@ -82,14 +82,11 @@ function BooklogDetailContainer(props) {
   const onDeleteArticle = async (event) => {
     event.preventDefault();
     axios
-      .delete(
-        url + `/api/v1/booklogs/${bookLogSeq}`,
-        {
-          headers: {
-            Authorization: "Bearer " + jwtToken,
-          },
-        }
-      )
+      .delete(url + `/api/v1/booklogs/${bookLogSeq}`, {
+        headers: {
+          Authorization: "Bearer " + jwtToken,
+        },
+      })
       .then(function (response) {
         console.log(response.status);
         if (response.status === 200) {

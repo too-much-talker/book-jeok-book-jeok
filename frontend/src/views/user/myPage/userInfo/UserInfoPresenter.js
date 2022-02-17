@@ -11,18 +11,18 @@ import {
 import DeleteUserContainer from "./DeleteUserContainer";
 
 const Form2 = styled.div`
-  margin-left: 12rem;
-  text-align: left;
+  text-align: center;
   font-size: large;
 `;
 
 const Form1 = styled.div`
-  margin-left: 10rem;
-  padding-top: 5rem;
+  margin-left: 50px;
+  margin-right: 50px;
+  padding-top: 50px;
   padding-bottom: 5rem;
   border-radius: 3rem;
   border: 2px solid #cccccc;
-  width: 600px;
+  width: 800px;
 `;
 const EditUserForm = (props) => {
   // useEffect(() => {
@@ -180,13 +180,21 @@ const UserTable = (props) => {
     <Form1>
       <Form2>
         <label>이름</label>
-        <p>{name}</p>
+        <p>
+          <b>{name}</b>
+        </p>
         <label>비밀번호</label>
-        <p>*********</p>
+        <p>
+          <b>*********</b>
+        </p>
         <label>이메일</label>
-        <p>{email}</p>
+        <p>
+          <b>{email}</b>
+        </p>
         <label>닉네임</label>
-        <p>{nickname}</p>
+        <p>
+          <b>{nickname}</b>
+        </p>
         {/* <label>핸드폰번호</label>
         <p>010-5023-9161</p> */}
         <br></br>
@@ -208,6 +216,7 @@ const UserTable = (props) => {
 const UserExpPoint = (props) => {
   const ExpPoint = styled.div`
     font-size: 0.5rem;
+    margin-left: 10px;
   `;
   const Point = styled.div`
     display: inline-block;
@@ -215,7 +224,6 @@ const UserExpPoint = (props) => {
   `;
   const Exp = styled.div`
     display: inline-block;
-    margin-left: 30px;
   `;
   return (
     <ExpPoint>

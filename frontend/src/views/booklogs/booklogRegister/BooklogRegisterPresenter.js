@@ -42,7 +42,7 @@ function RegisterForm({
   onTitleChange,
   TitleValue,
   onContentChange,
-  ContentValue
+  ContentValue,
 }) {
   return (
     <div>

@@ -68,7 +68,6 @@ function Sidebar() {
         })}
       </Menu>
       <br></br>
-      <br></br>
       <UserExpPoint exp={exp} point={point} />
       <Weeds datas={activities} />
     </Side>

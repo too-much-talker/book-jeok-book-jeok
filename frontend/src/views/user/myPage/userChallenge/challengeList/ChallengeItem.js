@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 
 const GroupBox = styled.div`
   //   border: solid 1px;
-  box-shadow: 5px 5px 10px grey;
+  box-shadow: 5px 5px 10px #c4c4c4;
   width: 500px;
   display: inline-block;
   float: center;
   margin: 10px;
   margin-top: 20px;
-  margin-buttom: 20px;
+  margin-bottom: 10px;
+  margin-right: 50px;
   padding: 20px;
   padding-top: 10px;
   padding-buttom: 0px;
@@ -47,7 +48,7 @@ function ChallengeItem({ challenge }) {
   return (
     <>
       <GroupBox>
-        <ItemLink to={`/mypage/challenge/${challenge.challengeSeq}`}>
+        <ItemLink to={`/mypage/challenge/${challenge.challengeSeq}/`}>
           <h3>{challenge.title}</h3>
           <span>{challenge.numOfParticipants}명 참여</span>
           <Week>
@@ -60,7 +61,7 @@ function ChallengeItem({ challenge }) {
               })}
             </span>
           </State>
-          <div>${challenge.reward}</div>
+          <div>{challenge.reward} Points</div>
 
           <State>
             {/* {challenge.status === "ING" && ( */}

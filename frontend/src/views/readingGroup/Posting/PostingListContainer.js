@@ -65,6 +65,12 @@ function PostingListContainer() {
   const [groups, setGroups] = useState([]);
   const jwtToken = JSON.parse(sessionStorage.getItem("jwtToken"));
 
+  useEffect(() => {
+    if (jwtToken === null || jwtToken === undefined || jwtToken === "") {
+      document.location.href = `/login`;
+      alert("로그인 후 이용 가능합니다.");
+    }
+  }, [jwtToken]);
   const getList = async () => {
     const response = await axios.get(
       url + `/api/v1/reading-groups?size=5&page=${page}`,

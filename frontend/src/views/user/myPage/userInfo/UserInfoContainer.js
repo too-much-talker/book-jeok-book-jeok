@@ -195,9 +195,7 @@ function UserInfoContainer() {
       });
   };
 
-  const Title = styled.div`
-    margin-left: 150px;
-  `;
+  const Title = styled.div``;
   return (
     <div className="container">
       <Title>

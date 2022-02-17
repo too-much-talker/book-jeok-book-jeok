@@ -91,6 +91,7 @@ const ReviewTitle = styled.div`
   font-size: 23px;
   margin-left: 10px;
   width: 30%;
+  margin-bottom: 10px;
 `;
 const REVIEWS = styled.div`
   margin-top: 1%;
@@ -151,6 +152,7 @@ const BooklogText = styled.div`
   font-size: 23px;
   margin-left: 10px;
   width: 35%;
+  margin-bottom: 5px;
 `;
 
 const Blank2 = styled.div`

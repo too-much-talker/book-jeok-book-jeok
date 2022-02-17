@@ -6,7 +6,7 @@ import React from "react";
 const StyledWeeds = styled.div`
   width: 8rem;
   height: 12rem;
-  margin-left: 30px;
+  margin-left: 10px;
 `;
 
 const Weeds = (props) => {

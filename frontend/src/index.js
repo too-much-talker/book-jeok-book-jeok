@@ -38,7 +38,7 @@ import PostingListContainer from "./views/readingGroup/Posting/PostingListContai
 
 import ChallengeMainContainer from "./views/challenge/Main/ChallengeMainContainer";
 import RegisterChallengeContainer from "./views/challenge/Register/RegisterChallengeContainer";
-
+import DetailChallengeContainer from "./views/challenge/Detail/DetailChallengeContainer";
 const store = createStore(rootReducer, composeWithDevTools()); // 스토어를 만듭니다.
 const listener = () => {
   const state = store.getState();
@@ -134,9 +134,14 @@ render(
               <Route path="/postinglist" element={<PostingListContainer />} />
 
               <Route path="/challenge" element={<ChallengeMainContainer />} />
+
               <Route
                 path="/challenge/register"
                 element={<RegisterChallengeContainer />}
+              />
+              <Route
+                path="/challenge/:challengeSeq/:cnt"
+                element={<DetailChallengeContainer />}
               />
             </Routes>
           </Wrapper>
