@@ -103,6 +103,16 @@
   ```
     npm install
   ```
+- /frontend/src/common/config/key에 reading_group.js 파일 생성해 아래 코드 추가
+
+  ```
+  const OPENVIDU_URL = "https://i6a305.p.ssafy.io:7443";
+  const OPENVIDU_SECRET = "MY_SECRET";
+
+  export { OPENVIDU_SECRET, OPENVIDU_URL };
+
+  ```
+
 - React 어플리케이션 실행
   ```
     npm start
