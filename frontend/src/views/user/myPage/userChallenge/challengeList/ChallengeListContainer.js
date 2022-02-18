@@ -30,7 +30,6 @@ function ChallengeListContainer() {
         },
       },
       (response) => {
-        console.log(response);
         setChallengeList(response.data.data.myChallenges);
         setTotalCnt(response.data.data.totalCnt);
         setIsLoading(false);

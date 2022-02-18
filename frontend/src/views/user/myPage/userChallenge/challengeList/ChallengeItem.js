@@ -44,7 +44,7 @@ const Week = styled.div`
 function ChallengeItem({ challenge }) {
   const status_val = ["PRE", "ING", "END", "FAIL"];
   const status_kor = ["진행 전", "진행 중", "종료", "폐지"];
-
+  console.log(challenge.status);
   return (
     <>
       <GroupBox>
@@ -62,12 +62,19 @@ function ChallengeItem({ challenge }) {
             </span>
           </State>
           <div>{challenge.reward} Points</div>
-
-          <State>
-            {/* {challenge.status === "ING" && ( */}
-            <span>{challenge.authRate}% 달성중...</span>
-            {/* )} */}
-          </State>
+          {challenge.status === "PRE" ? (
+            <State>
+              {/* {challenge.status === "ING" && ( */}
+              <span>0% 달성중...</span>
+              {/* )} */}
+            </State>
+          ) : (
+            <State>
+              {/* {challenge.status === "ING" && ( */}
+              <span>{challenge.authRate}% 달성중...</span>
+              {/* )} */}
+            </State>
+          )}
         </ItemLink>
       </GroupBox>{" "}
     </>

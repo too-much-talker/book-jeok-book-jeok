@@ -100,7 +100,6 @@ const EditUserForm = (props) => {
         <br></br>
         <input
           type="password"
-          // value={props.password}
           name="password"
           onChange={props.passwordChange}
           onBlur={passwordBlurHandler}

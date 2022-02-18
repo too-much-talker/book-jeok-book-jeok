@@ -64,7 +64,7 @@ function BooklogRegisterContainer() {
           }
         )
         .then(function (response) {
-          console.log(response.status);
+          console.log(response.data);
           if (response.status === 200) {
             alert(response.data.data.msg);
             document.location.href = "/mypage/mybooklog";

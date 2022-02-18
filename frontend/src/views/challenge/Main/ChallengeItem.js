@@ -79,6 +79,13 @@ const Views = styled.div`
   margin-top: 15px;
 `;
 
+const Start = styled.div`
+  font-size: 20px;
+  margin-left: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
+
 function cutText(content, size) {
   if (content !== null && content.length > size) {
     return content.substr(0, size - 1) + "...";
@@ -106,7 +113,12 @@ function ChallengeItem({
       <Challenge>
         <Title>{cutText(title, 18)}</Title>
         <Deadlines>
-          <Deadline>D-{dday}</Deadline>
+          {dday > 0 ? (
+            <Deadline>D-{dday}</Deadline>
+          ) : (
+            <Start>진행 중인 챌린지</Start>
+          )}
+
           {/* <Deadline2>마감 : {deadline}</Deadline2> */}
         </Deadlines>
 

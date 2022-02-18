@@ -16,11 +16,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 const url = "https://i6a305.p.ssafy.io:8443";
 
-// const Profile = styled.img`
-//   width: 150px;
-//   height: 150px;
-//   border-radius: 100%;
-// `;
 const Wrapper = styled.div`
   text-align: center;
   width: 100%;
