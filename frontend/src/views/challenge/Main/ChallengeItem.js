@@ -78,14 +78,13 @@ const Views = styled.div`
   margin-bottom: 20px;
   margin-top: 15px;
 `;
-<<<<<<< HEAD
+
 const Start = styled.div`
   font-size: 20px;
   margin-left: 15px;
   margin-top: 5px;
   margin-bottom: 5px;
 `;
-=======
 
 function cutText(content, size) {
   if (content !== null && content.length > size) {
@@ -93,7 +92,6 @@ function cutText(content, size) {
   } else return content;
 }
 
->>>>>>> 023adb0c40b6a3246105c05bc976c014f1c52a2a
 function ChallengeItem({
   challengeSeq,
   title,
