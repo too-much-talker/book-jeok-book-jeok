@@ -75,6 +75,12 @@ const Views = styled.div`
   margin-bottom: 20px;
   margin-top: 15px;
 `;
+const Start = styled.div`
+  font-size: 20px;
+  margin-left: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+`;
 function ChallengeItem({
   challengeSeq,
   title,
@@ -96,7 +102,12 @@ function ChallengeItem({
       <Challenge>
         <Title>{title}</Title>
         <Deadlines>
-          <Deadline>D-{dday}</Deadline>
+          {dday > 0 ? (
+            <Deadline>D-{dday}</Deadline>
+          ) : (
+            <Start>진행 중인 챌린지</Start>
+          )}
+
           {/* <Deadline2>마감 : {deadline}</Deadline2> */}
         </Deadlines>
 
