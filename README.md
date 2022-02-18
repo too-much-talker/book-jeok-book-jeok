@@ -120,6 +120,25 @@
 
 ### Backend
 
+- 시스템 버전
+
+  - JVM: AWS Corretto 11
+  - mysql: 8.0.28
+
+- 소스코드 pull
+
+  ```
+  git pull origin develop
+  ```
+
+- 빌드, 배포 스크립트 실행
+
+  ```
+  sh ~/S06P12A305/scripts/deploy.sh
+  ```
+
+  
+
 ---
 
 ## 개발 스프린트
