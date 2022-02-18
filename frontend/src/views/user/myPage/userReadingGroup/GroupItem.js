@@ -40,9 +40,23 @@ const Week = styled.div`
   font-size: 0.85rem;
 `;
 
+function cutText(content, size) {
+  if (content !== null && content.length > size) {
+    return content.substr(0, size - 1) + "...";
+  } else return content;
+}
+
 function GroupItem({ group }) {
-  const days_val = ["MON", "TUE", "WEN", "TUR", "FRI", "SAT"];
-  const days_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+  const days_val = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const days_kor = [
+    "월요일",
+    "화요일",
+    "수요일",
+    "목요일",
+    "금요일",
+    "토요일",
+    "일요일",
+  ];
 
   const status_val = ["PRE", "ING", "END", "FAIL"];
   const status_kor = ["진행 전", "진행 중", "종료", "폐지"];
@@ -55,13 +69,13 @@ function GroupItem({ group }) {
           {group.readingGroupType === "DISCUSS" && <Img src={DISCUSS} />}
           {group.readingGroupType === "SEMINAR" && <Img src={SEMINAR} />}
           {group.readingGroupType === "STUDY" && <Img src={STUDY} />}
-          <div>{group.title}</div>
+          <div>{cutText(group.title, 15)}</div>
           <Week>
             매 주{" "}
             {group.days.map((week, index) =>
-              days_val.map((day) => {
+              days_val.map((day, idx) => {
                 if (day === week) {
-                  return <span key={index}>{days_kor[index]} </span>;
+                  return <span key={idx}>{days_kor[idx]} </span>;
                 }
               })
             )}

@@ -5,7 +5,8 @@ import ChallengeAuth from "./ChallengeAuth";
 const Info = styled.div`
   width: 100%;
   margin-left: 10%;
-  height: 50%;
+  padding-top: 20px;
+  padding-bottom: 20px;
   box-shadow: 5px 5px 10px #c4c4c4;
 `;
 const Title = styled.h2`

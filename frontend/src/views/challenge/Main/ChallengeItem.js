@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import view from "../../../res/img/view.png";
 const Block = styled.div`
-  height: 180px;
+  height: 200px;
   margin-right: 19px;
   margin-left: 19px;
   margin-bottom: 50px;
@@ -26,6 +26,9 @@ const Title = styled.div`
   font-size: 17px;
   padding: 10px;
   padding-top: 15px;
+  height: 40px;
+  font-weight: bold;
+  text-align: center;
 `;
 const Deadlines = styled.div`
   display: flex;
@@ -75,12 +78,22 @@ const Views = styled.div`
   margin-bottom: 20px;
   margin-top: 15px;
 `;
+<<<<<<< HEAD
 const Start = styled.div`
   font-size: 20px;
   margin-left: 15px;
   margin-top: 5px;
   margin-bottom: 5px;
 `;
+=======
+
+function cutText(content, size) {
+  if (content !== null && content.length > size) {
+    return content.substr(0, size - 1) + "...";
+  } else return content;
+}
+
+>>>>>>> 023adb0c40b6a3246105c05bc976c014f1c52a2a
 function ChallengeItem({
   challengeSeq,
   title,
@@ -100,7 +113,7 @@ function ChallengeItem({
   return (
     <Block>
       <Challenge>
-        <Title>{title}</Title>
+        <Title>{cutText(title, 18)}</Title>
         <Deadlines>
           {dday > 0 ? (
             <Deadline>D-{dday}</Deadline>

@@ -64,8 +64,8 @@ function BooklogDetailContainer() {
         setLoading(false);
       },
       (error) => {
-        alert("접근이 불가능한 페이지입니다.");
-        navigate("/");
+        alert("로그인 후 사용 해주세요.");
+        navigate("/login");
       }
     );
   }, [params]);

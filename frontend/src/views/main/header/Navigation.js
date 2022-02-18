@@ -48,14 +48,13 @@ const links = [
   "/postinglist",
   "/search",
   "/challenge",
-  "/",
   "/mypage",
 ];
 
 function Navigation({ isLogin }) {
   const menus = isLogin
-    ? ["북로그", "독서모임", "책정보", "챌린지", "공지", "마이페이지"]
-    : ["북로그", "독서모임", "책정보", "챌린지", "공지"];
+    ? ["북로그", "독서모임", "책정보", "챌린지", "마이페이지"]
+    : ["북로그", "독서모임", "책정보", "챌린지"];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
