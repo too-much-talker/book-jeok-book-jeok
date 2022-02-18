@@ -72,9 +72,7 @@
 <li>Lombok</li>
 <li>Mysql</li>
 <li>EC2 Ubuntu Server</li>
-<li>InjelliJ, Postman, Datagrip, Mysql workbench, Nortion, Sourcetree, VS Code, Slack, Mattermost, Discord, Git, Gitlab, Jira</li>
-  <li>Styled-components</li>
-  <li>Redux</li>
+<li>InjelliJ, Postman, Datagrip, Mysql workbench, Nortion, Sourcetree</li>
   </ul>
 </div>
 </details>
