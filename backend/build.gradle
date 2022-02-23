@@ -36,9 +36,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	// guava 추가
 	implementation("com.google.guava:guava:29.0-jre")
+	annotationProcessor("com.google.guava:guava:29.0-jre")
 	// jwt 추가
 	implementation("com.auth0:java-jwt:3.10.3")
-	annotationProcessor("com.google.guava:guava:29.0-jre")
 
 	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -50,19 +50,12 @@ dependencies {
 	// p6spy 추가
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
 
-	// swagger 추가
-	implementation("io.springfox:springfox-swagger2:3.0.0")
-	implementation("io.springfox:springfox-swagger-ui:3.0.0")
-
 	// spring web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-
-	// devtools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	// mysql connector
 	runtimeOnly 'mysql:mysql-connector-java'
