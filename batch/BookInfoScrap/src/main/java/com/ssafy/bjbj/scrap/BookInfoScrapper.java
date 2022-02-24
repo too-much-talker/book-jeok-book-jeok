@@ -20,17 +20,16 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class BookInfoScrapper {
 
-    static String yourDatabaseUsername = "kskim";
-    static String yourDatabasePassword = "qnrwjrqnrwjr";
+    static String yourDatabaseUsername = "";
+    static String yourDatabasePassword = "";
 
-//    static String url = "jdbc:mysql://i6a305.p.ssafy.io:3306/bjbj?serverTimezone=UTC";
     static String url = "jdbc:mysql://localhost:3306/bjbj?serverTimezone=UTC";
     static String username = yourDatabaseUsername;
     static String password = yourDatabasePassword;
     static String driverName = "com.mysql.cj.jdbc.Driver";
 
     static final String BASE_URL = "https://book.interpark.com/api/bestSeller.api";
-    static final String KEY = "537FCC46AF602A4DF0885D63D18F642A9B65DD8B174CA9F22F43DF50B2FF485D";
+    static final String KEY = "";
     static final String EQUAL = "=";
     static final String OUTPUT = "json";
 
