@@ -17,17 +17,17 @@
 
 ---
 
-![image](/uploads/c3c82af65799a3cf0427f55150237b96/image.png)
-![image](/uploads/9337991ef1303da755aca4ac7645f6ae/image.png)
-![image](/uploads/77613a0f236338964376a63b726f912e/image.png)
-![image](https://user-images.githubusercontent.com/28949166/154533287-aff77690-1ac8-4d7e-9f0b-a3ee49c9b573.png)
-![image](/uploads/c90fa73b6c14ddb10302995bf9fadccc/image.png)
+![image](https://user-images.githubusercontent.com/28949166/155871243-f59a22e2-4cbb-4ad9-be1d-05dc421ab17d.png)
+![image](https://user-images.githubusercontent.com/28949166/155871253-ebf876c5-8ae7-4f59-8ade-5706b6ae4d73.png)
+![image](https://user-images.githubusercontent.com/28949166/155871268-c91d0b6d-180d-48bc-91f6-121b2814fe20.png)
+![image](https://user-images.githubusercontent.com/28949166/155871272-e105b07b-e0b0-4400-ae95-e478277cb3de.png)
+![image](https://user-images.githubusercontent.com/28949166/155871275-38d830b5-958b-4e91-af0e-5efcf13b88e3.png)
 
 ---
 
 ## Development Stack
 
-![image](/uploads/c301c37fd67df30171a5bc08d94497d8/image.png)
+![image](https://user-images.githubusercontent.com/28949166/155871280-905d2cd5-8a1f-46b9-b331-116f5253c2b3.png)
 
 <details>
 <summary>협업</summary>
@@ -79,7 +79,7 @@
 
 ## Deployment Flow
 
-![image](/uploads/8ecb9a71f5a13c7dd2f1537e1c4cf664/image.png)
+![image](https://user-images.githubusercontent.com/28949166/155871284-14ca93ed-3930-48f2-bb65-6199033bba6e.png)
 
 ---
 
