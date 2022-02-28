@@ -13,7 +13,7 @@
 | Git     | [@0xe82de](https://github.com/0xe82de)                                                                                                       | [@sumini97](https://github.com/sumini97)                                                                                                       | [@aucro](https://github.com/aucro)                                                                                                       | [@aletsire](https://github.com/aletsire)                                                                                                       | [@unain-dev](https://github.com/unain-dev)                                | [@rohhy1120](https://github.com/rohhy1120)                                                                                                       |
 
 ## 💡 [북적북적 서비스 소개 보러가기](https://youtu.be/TIrq-nJfRB8) 💡
-## 🎞 [북적북적 서비스 시연 보러가기](https://youtu.be/aAUdACz40JM) 🎞
+## 🎞 [북적북적 서비스 시연 보러가기](https://youtu.be/vEb6qaOjevI) 🎞
 
 ---
 
